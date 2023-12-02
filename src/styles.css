@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;0,1000;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900;1,1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;0,1000;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900;1,1000&display=swap');
+
+@keyframes customBounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);  /* Increased from -5px */
+  }
+  60% {
+    transform: translateY(-5px);   /* Increased from -2.5px */
+  }
+}
+
+@tailwind base;
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(162, 174, 185, 0.7);
+  border-radius: 14px;
+}
+
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background-color: #FEFEFE;
+  --primary: #0177FB;
+  --secondary: #66CCB3;
+  --alert: #F71111;
+  --dark: #001529;
+
+  --gray_9: #1F272E;
+  --gray_8: #3D4852;
+  --gray_7: #43576B;
+  --gray_6: #606F7B;
+  --gray_5: #8795A1;
+  --gray_4: #A2AEB9;
+  --gray_3: #B8C2CC;
+  --gray_2: #DAE1E7;
+  --gray_1_2: #E6EBEF;
+  --gray_1: #EFF2F5;
+  --gray_0: #F5F7F9;
+
+  --dark-background-color: #2f3136;
+  /* --dark-gray_1: #1F272E;
+  --dark-gray_1_2: #2F3842;
+  --dark-gray_2: #3D4852;
+  --dark-gray_3: #43576B;
+  --dark-gray_4: #606F7B;
+  --dark-gray_5: #8795A1;
+  --dark-gray_6: #A2AEB9;
+  --dark-gray_7: #B8C2CC;
+  --dark-gray_8: #DAE1E7;
+  --dark-gray_9: #EFF2F5; */
+  --dark-gray_1: #2F3842;
+  --dark-gray_1_2: #3D4852;
+  --dark-gray_2: #43576B;
+  --dark-gray_3: #606F7B;
+  --dark-gray_4: #8795A1;
+  --dark-gray_5: #A2AEB9;
+  --dark-gray_6: #B8C2CC;
+  --dark-gray_7: #DAE1E7;
+  --dark-gray_8: #EFF2F5;
+  --dark-gray_9: #FEFEFE;
+}
+
+body {
+  background-color: var(--gray_0);
+}
+
+body, nav, div {
+  margin: 0;
+}
