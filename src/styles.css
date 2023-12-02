@@ -35,6 +35,8 @@
 
 :root {
   --background: #FAFBFD;
+  --primary: #009AFF;
+  --secondary: #B84CEB;
 }
 
 body {

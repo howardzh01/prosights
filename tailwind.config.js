@@ -13,22 +13,20 @@ module.exports = {
     backgroundColor: (theme) => ({
       ...theme("colors"),
       background: "#FAFBFD",
-      primary: "#009AFF",
     }),
     extend: {
+      colors: {
+        primary: "#009AFF",
+        secondary: "#B84CEB",
+        primaryInfusion: "#E0EFFF",
+        "customGray-600": "#606F7B",
+      },
       fontFamily: {
         // nunito: ["Nunito", "sans-serif"],
         // nunitoSans: ["Nunito Sans", "sans-serif"],
       },
       borderWidth: {
         0.5: "0.5px",
-      },
-      textColor: {
-        primary: "#009AFF",
-        secondary: "#B84CEB",
-      },
-      borderColor: {
-        primary: "#009AFF",
       },
     },
   },

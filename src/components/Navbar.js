@@ -4,7 +4,7 @@ import React from "react";
 
 function Navbar() {
   return (
-    <nav className="bg-background border-b-0.5 border-gray-400">
+    <nav className="bg-transparent border-b-0.5 border-gray-400">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between">
           <div className="flex space-x-4">
