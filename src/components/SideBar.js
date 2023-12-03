@@ -4,8 +4,6 @@ import React from "react";
 import UserProfileButton from "./UserProfileButton";
 
 function SideBar() {
-  var user = "Justin Wu";
-  var avatar_path = "/assets/avatar_jw.png";
   return (
     <div className="relative flex flex-col text-white h-full w-full px-4">
       <div className="flex flex-row items-center ">
@@ -26,13 +24,6 @@ function SideBar() {
         <div>Recent</div>
       </div>
       <div className="flex flex-row items-center absolute bottom-0">
-        <Image
-          src={avatar_path}
-          alt="User Avatar"
-          width={40}
-          height={40}
-          className="rounded-full"
-        />
         <UserProfileButton />
       </div>
     </div>
