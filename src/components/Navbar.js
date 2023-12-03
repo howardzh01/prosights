@@ -4,15 +4,12 @@ import React from "react";
 
 function Navbar() {
   return (
-    <nav className="bg-transparent border-b-0.5 border-gray-400">
+    <nav className="bg-transparent ">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between">
           <div className="flex space-x-4">
             <div>
-              <Link
-                href="/"
-                className="flex items-center py-5 px-2 text-gray-700 hover:text-gray-900"
-              >
+              <Link href="/" className="flex items-center py-5 px-2 text-black">
                 <Image
                   src="/logo.png"
                   alt="ProSights logo"
