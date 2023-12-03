@@ -43,6 +43,22 @@
   background-color: var(--primary);
 }
 
+/* .cl-userButtonOuterIdentifier {
+  color: var(--background);
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.cl-userButtonBox {
+  display: flex;
+  flex-direction: row-reverse;
+} */
+
+.cl-userButtonAvatarBox {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
 body {
   background-color: var(--background);
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { SignUp } from "@clerk/nextjs";
 
-function SignUpPage() {
+function Page() {
   return (
     <div
       className="relative flex justify-center items-center h-screen w-full bg-gradient-to-br from-primaryInfusion via-white to-primaryInfusion bg-contain bg-repeat bg-center"
@@ -16,11 +16,11 @@ function SignUpPage() {
       <SignUp
         path="/sign-up"
         routing="path"
-        signInUrl="/login"
+        signInUrl="/sign-in"
         redirectUrl="/"
       />
     </div>
   );
 }
 
-export default SignUpPage;
+export default Page;

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import React from "react";
+import UserProfileButton from "./UserProfileButton";
 
 function SideBar() {
   var user = "Justin Wu";
@@ -32,7 +33,7 @@ function SideBar() {
           height={40}
           className="rounded-full"
         />
-        <div className="ml-2">{user}</div>
+        <UserProfileButton />
       </div>
     </div>
   );
