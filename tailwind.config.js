@@ -28,6 +28,8 @@ module.exports = {
         "customGray-700": "#43576B",
         "customGray-800": "#3D4852",
         "customGray-900": "#1F272E",
+        "customPurple-100": "#070522",
+        "customTeal-100": "#003B66",
       },
       fontFamily: {
         // nunito: ["Nunito", "sans-serif"],
