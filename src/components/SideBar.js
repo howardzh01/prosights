@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import React from "react";
+import UserProfileButton from "./UserProfileButton";
 
 function SideBar() {
   return (
@@ -16,14 +17,15 @@ function SideBar() {
         <div>Recent</div>
       </div>
       <div className="flex flex-row items-center absolute bottom-0">
-        <Image
+        {/* <Image
           src="/assets/avatar_jw.png"
           alt="User Avatar"
           width={40}
           height={40}
           className="rounded-full"
         />
-        <div className="ml-2">Justin Wu</div>
+        <div className="ml-2">Justin Wu</div> */}
+        <UserProfileButton />
       </div>
     </div>
   );

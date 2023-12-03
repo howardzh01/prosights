@@ -30,7 +30,7 @@ function Navbar() {
               </Link>
             </div>
             <Link
-              href="/login"
+              href="/sign-in"
               className="py-2 px-6 font-bold bg-primary hover:bg-blue-600 text-white rounded-lg transition duration-300"
             >
               Login
