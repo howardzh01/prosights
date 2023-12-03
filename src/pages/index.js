@@ -2,7 +2,6 @@ import Link from "next/link";
 import React from "react";
 import Image from "next/image";
 import Navbar from "../components/Navbar";
-import styles from "./index.module.css";
 import { useInView } from "react-intersection-observer";
 
 function App() {
@@ -11,9 +10,14 @@ function App() {
   });
 
   return (
-    <div className="bg-gradient-to-br from-primaryInfusion via-white to-primaryInfusion h-full pb-48">
+    <div
+      className="bg-gradient-to-br from-primaryInfusion via-white to-primaryInfusion pb-48 bg-repeat bg-center"
+      style={{
+        backgroundImage: "url('/assets/backgroundPattern.svg')",
+      }}
+    >
       <Navbar />
-      <div className="flex flex-col items-center text-black mt-16">
+      <div className="flex flex-col items-center text-black mt-16 bg-background bg-opacity-60 pb-16">
         <div className="mb-6">
           <p className="text-primary border border-primary px-6 py-2 rounded-3xl font-medium">
             Insight to Action ⚡️
@@ -67,9 +71,9 @@ function App() {
           </Link>
         </div>
       </div>
-      <div className="relative mt-48">
-        <div className={styles.ellipseWrapper}>
-          <div className={styles.ellipse} />
+      <div className="relative mt-24">
+        <div className="absolute top-0 left-0 flex justify-center items-center w-full h-full">
+          <div className="w-full h-full bg-gradient-to-br from-primary to-secondary opacity-50 rounded-full filter blur-[100px]" />
         </div>
         <div
           ref={ref}
@@ -78,7 +82,7 @@ function App() {
           }`}
         >
           <Image
-            src="/assets/preview.png"
+            src="/assets/preview.svg"
             alt="Play"
             className="w-full h-full drop-shadow-2xl px-16 object-contain"
             width={4096}
