@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import SearchBox from "../components/SearchBox";
 import SideBar from "../components/SideBar";
-import styles from "./index.module.css";
 import Head from "next/head";
 
 function App() {
