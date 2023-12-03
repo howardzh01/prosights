@@ -17,7 +17,7 @@ function App() {
       }}
     >
       <Navbar />
-      <div className="flex flex-col items-center text-black mt-16 bg-background bg-opacity-60 pb-16">
+      <div className="flex flex-col items-center text-black mt-16 bg-background bg-opacity-50 pb-16">
         <div className="mb-6">
           <p className="text-primary border border-primary px-6 py-2 rounded-3xl font-medium">
             Insight to Action ⚡️
@@ -45,21 +45,21 @@ function App() {
               src="/assets/topRightArrow.png"
               alt="Go"
               className="w-3 h-3"
-              width={12}
-              height={12}
+              width={64}
+              height={64}
             />
           </Link>
           <Link
             href="#"
             className="group flex flex-row items-center px-4 rounded-md"
           >
-            <div className="bg-primary group-hover:bg-blue-600 rounded-full p-3 mr-3 drop-shadow-md transition duration-300">
+            <div className="bg-primary group-hover:bg-blue-600 rounded-full flex items-center justify-center w-10 h-10 mr-3 drop-shadow-md transition duration-300">
               <Image
                 src="/assets/play.png"
                 alt="Play"
-                className="w-4 h-4 object-contain"
-                width={16}
-                height={16}
+                className="w-3 h-4"
+                width={110}
+                height={150}
               />
             </div>
             <div className="flex flex-col">
