@@ -16,7 +16,7 @@ function Navbar() {
                   width={32}
                   height={32}
                 />
-                <span className="font-bold">ProSights</span>
+                <span className="font-bold text-lg">ProSights</span>
               </Link>
             </div>
           </div>
