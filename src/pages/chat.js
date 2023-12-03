@@ -5,38 +5,31 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import SearchBox from "../components/SearchBox";
 import SideBar from "../components/SideBar";
+import ChatEmptyState from "../components/ChatEmptyState";
 import Head from "next/head";
 
 function App() {
   return (
-    <div className="bg-customPurple-100">
+    <div className="bg-customPurple-100 ">
       <Head>
         <title>ProSights Chat</title>
       </Head>
 
-      <div className="flex h-screen ">
+      <div className="flex h-screen relative overflow-hidden">
         {/* Sidebar */}
-        <div className="flex flex-row justify-center w-1/4 my-5 border-right">
-          {/* <div className="w-full"> */}
+        <div className="absolute top-[-2%] left-[-8%] flex justify-center items-center w-[116%] h-[104%] ">
+          <div className="w-full h-full bg-gradient-to-br from-primary to-secondary opacity-25 rounded-full filter blur-[100px]" />
+        </div>
+        <div className="flex flex-row justify-center w-48 my-5 border-right">
           <SideBar />
-          {/* </div> */}
         </div>
         {/* Main content */}
-        <div className="relative w-3/4 bg-white my-4 rounded-xl">
-          <div className="flex justify-center items-center mb-6 pt-4">
-            <h2 className="font-semibold text-lg">Justin Wu</h2>
-            <div>{/* Settings or other icons */}</div>
-          </div>
-
+        <div className="relative w-full bg-white mx-2 my-4 rounded-xl opacity-100">
           {/* Chat content */}
-          <div className="bg-white rounded-lg shadow p-6 overflow-y-scroll">
-            {/* Chat messages */}
-
-            {/* ... */}
-          </div>
+          <ChatEmptyState />
 
           {/* Search area */}
-          <div className="flex flex-row justify-center w-full my-5 absolute bottom-0">
+          <div className="flex flex-row justify-center w-full my-5 absolute bottom-4">
             <div className="w-96">
               <SearchBox />
             </div>
