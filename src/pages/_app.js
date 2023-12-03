@@ -1,6 +1,7 @@
 import "../styles.css";
 import Script from "next/script";
 import Head from "next/head";
+import { ClerkProvider } from "@clerk/nextjs";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { useState, useEffect } from "react";
@@ -59,7 +60,7 @@ export default function MyApp({ Component, pageProps }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#000000" />
         {/* Doesn't seem to actually work? */}
-        <meta name="description" content="Create and Play AI Simulations" />
+        <meta name="description" content="AI Copilot for Investors" />
         <link rel="apple-touch-icon" href="/favicon.ico" />
         {/* <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -75,7 +76,7 @@ export default function MyApp({ Component, pageProps }) {
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     --> */}
-        <title>Simulation Labs</title>
+        <title>ProSights</title>
       </Head>
       {/* <Script
         src="https://www.googletagmanager.com/gtag/js?id=AW-11292521844"
@@ -95,8 +96,10 @@ export default function MyApp({ Component, pageProps }) {
           supabaseClient={supabaseClient}
           initialSession={pageProps.initialSession}
         > */}
+      <ClerkProvider {...pageProps}>
         <Component {...pageProps} />
-        {/* </SessionContextProvider>
+      </ClerkProvider>
+      {/* </SessionContextProvider>
       </PostHogProvider> */}
     </>
   );
