@@ -10,7 +10,7 @@ import Head from "next/head";
 
 function App() {
   return (
-    <div className="bg-customPurple-100 ">
+    <div className="bg-customPurple-100">
       <Head>
         <title>ProSights Chat</title>
       </Head>
@@ -29,8 +29,8 @@ function App() {
           <ChatEmptyState />
 
           {/* Search area */}
-          <div className="flex flex-row justify-center w-full my-5 absolute bottom-4">
-            <div className="w-96">
+          <div className="flex flex-row justify-center px-24 w-full my-5 absolute bottom-4">
+            <div className="w-full">
               <SearchBox />
             </div>
           </div>
