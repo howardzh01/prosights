@@ -21,14 +21,14 @@ function Navbar() {
             </div>
           </div>
           <div className="flex items-center">
-            <div className="flex items-center mr-4">
+            {/* <div className="flex items-center mr-4">
               <Link
                 href="/about"
                 className="py-5 px-3 text-gray-700 hover:text-gray-900"
               >
                 About Us
               </Link>
-            </div>
+            </div> */}
             <Link
               href="/sign-in"
               className="py-2 px-6 font-bold bg-primary hover:bg-blue-600 text-white rounded-lg transition duration-300"
