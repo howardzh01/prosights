@@ -7,6 +7,7 @@ import SearchBox from "../components/SearchBox";
 import SideBar from "../components/SideBar";
 import ChatEmptyState from "../components/ChatEmptyState";
 import HelpButton from "../components/HelpButton";
+import ChatFullState from "../components/ChatFullState";
 import Head from "next/head";
 
 function App() {
@@ -18,23 +19,26 @@ function App() {
 
       <div className="flex h-screen relative overflow-hidden">
         {/* Sidebar */}
+<<<<<<< Updated upstream
+        <div className="absolute top-[-2%] left-[-8%] flex justify-center items-center w-[116%] h-[104%]">
+          <div className="w-full h-full bg-gradient-to-br from-primary to-secondary opacity-25 rounded-full filter blur-[100px]" />
+=======
         <div className="absolute top-[-2%] left-[-8%] flex justify-center items-center w-[116%] h-[104%] ">
-          <div className="w-full h-full bg-gradient-to-br from-primary to-secondary opacity-25 rounded-full filter blur-[72px]" />
+          <div className="w-full h-full bg-gradient-to-br from-primary to-secondary opacity-30 rounded-full filter blur-[100px]" />
+>>>>>>> Stashed changes
         </div>
 
         <div className="flex flex-row justify-center w-64 my-5 border-right">
           <SideBar />
         </div>
         {/* Main content */}
-        <div className="relative w-full bg-white mx-2 my-4 rounded-xl opacity-100">
+        <div className="flex flex-col justify-between w-full bg-background mx-2 my-4 px-24 rounded-xl opacity-100 z-10">
           {/* Chat content */}
-          <ChatEmptyState />
-          <div className="absolute top-8 right-8">
-            <HelpButton />
-          </div>
+          {/* <ChatEmptyState /> */}
+          <ChatFullState />
 
           {/* Search area */}
-          <div className="flex flex-row justify-center px-24 w-full my-5 absolute bottom-4">
+          <div className="flex flex-row justify-center w-full my-5">
             <div className="w-full">
               <SearchBox />
             </div>
