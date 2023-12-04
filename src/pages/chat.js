@@ -33,6 +33,11 @@ function App() {
           {/* <ChatEmptyState /> */}
           {isEmptyState ? <ChatEmptyState /> : <ChatFullState />}
 
+          {/* Help Button */}
+          <div className="absolute top-8 right-8">
+            <HelpButton />
+          </div>
+
           {/* Search area */}
           <div className="flex flex-row justify-center w-full my-5">
             <div className="w-full">
