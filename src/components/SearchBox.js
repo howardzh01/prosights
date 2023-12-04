@@ -48,7 +48,7 @@ function SearchBox() {
         <TextareaAutosize
           type="text"
           placeholder="Message"
-          className={`w-full border-none font-nunito text-base text-dark px-0 py-0 pr-2 mr-2 resize-none placeholder:text-customLightGray focus:ring-0 caret-primary`}
+          className={`w-full border-none font-nunito text-base text-dark px-0 py-0 pr-2 mr-2 resize-none placeholder:text-customLightGray focus:ring-0`}
           value={searchTerm}
           maxRows={8}
           minRows={1}
