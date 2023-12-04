@@ -4,7 +4,7 @@ import React from "react";
 import { useState, useEffect, useRef } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 
-function UserMessage({ avatarURL, message }) {
+function UserMessage({ avatarURL, content }) {
   return (
     <div className="flex flex-row items-start">
       <Image
@@ -14,7 +14,7 @@ function UserMessage({ avatarURL, message }) {
         height={64}
         className="rounded-full mr-6 w-12"
       />
-      <p className="pt-3">{message}</p>
+      <p className="pt-3">{content}</p>
     </div>
   );
 }

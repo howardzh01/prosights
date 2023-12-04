@@ -4,7 +4,7 @@ import React from "react";
 import { useState, useEffect, useRef } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 
-function SearchBox() {
+function SearchBox({ setMessages, getAIResponse }) {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = (event) => {
@@ -16,29 +16,23 @@ function SearchBox() {
       event.preventDefault();
       // if (searchTerm !== "" && resultRef.current === "" && !thinking) {
       if (searchTerm !== "") {
-        send(searchTerm);
+        send();
       }
     }
   };
 
-  const send = async (text) => {
-    // setMessages((oldMessages) => {
-    //   const newMessages = [
-    //     ...oldMessages,
-    //     {
-    //       sender: "self",
-    //       text: text,
-    //       review: false,
-    //     },
-    //   ];
-    //   return newMessages;
-    // });
-
-    // getResponse(messages, text);
-
+  const send = async () => {
+    setMessages((oldMessages) => {
+      const newMessages = [
+        ...oldMessages,
+        { role: "user", content: searchTerm },
+      ];
+      getAIResponse(newMessages);
+      return newMessages;
+    });
     setSearchTerm("");
     // const container = messagesContainerRef.current;
-    // shouldBeSnapping.current = true;ß
+    // shouldBeSnapping.current = true;
     // container.scrollTop = container.scrollHeight;
   };
 
@@ -48,7 +42,7 @@ function SearchBox() {
         <TextareaAutosize
           type="text"
           placeholder="Message"
-          className={`w-full border-none font-nunito text-base text-dark px-0 py-0 pr-2 mr-2 resize-none placeholder:text-customLightGray focus:ring-0`}
+          className={`bg-background w-full border-none font-nunito text-base text-dark px-0 py-0 pr-2 mr-2 resize-none placeholder:text-customLightGray focus:ring-0`}
           value={searchTerm}
           maxRows={8}
           minRows={1}

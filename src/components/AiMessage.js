@@ -4,7 +4,7 @@ import React from "react";
 import { useState, useEffect, useRef } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 
-function AiMessage({ message, embeds, suggestions, finishedGenerating }) {
+function AiMessage({ content, embeds, suggestions, finishedGenerating }) {
   return (
     <div className="flex flex-row items-start">
       <Image
@@ -15,8 +15,8 @@ function AiMessage({ message, embeds, suggestions, finishedGenerating }) {
         className="rounded-full mr-6 w-12"
       />
       <div className="pt-3">
-        <p className="">{message}</p>
-        <div className="flex flex-row space-x-4">
+        <p className="">{content}</p>
+        <div className="flex flex-row space-x-4 mt-4">
           {suggestions.map((suggestion) => (
             <div className="text-primary border border-primary rounded-xl py-2 px-4 font-semibold text-xs">
               {suggestion}

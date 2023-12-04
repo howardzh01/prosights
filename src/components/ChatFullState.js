@@ -7,25 +7,34 @@ import { useUser } from "@clerk/clerk-react";
 import UserMessage from "./UserMessage";
 import AiMessage from "./AiMessage";
 
-function ChatFullState() {
+function ChatFullState({ messages }) {
   const { isSignedIn, user, isLoaded } = useUser();
+
   return (
     <div className="w-full">
-      <UserMessage
-        avatarURL={"/assets/defaultProfilePicture.png"}
-        message={
-          "hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie hungry howie "
-        }
-      />
-      <AiMessage
-        message={"hungry howie wants a pizza"}
-        embed={["?"]}
-        suggestions={[
-          "Show me the company momentum",
-          "What are the comps valued at?",
-        ]}
-        finishedGenerating={true}
-      />
+      {messages &&
+        messages.map((message) => {
+          if (message.role === "user") {
+            return (
+              <UserMessage
+                avatarURL={"/assets/defaultProfilePicture.png"}
+                content={message.content}
+              />
+            );
+          } else {
+            return (
+              <AiMessage
+                content={message.content}
+                embed={["?"]}
+                suggestions={[
+                  "Show me the company momentum",
+                  "What are the comps valued at?",
+                ]}
+                finishedGenerating={true}
+              />
+            );
+          }
+        })}
     </div>
   );
 }
