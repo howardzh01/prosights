@@ -3,23 +3,37 @@ import React, { Fragment } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState, useEffect, useRef } from "react";
-import SearchBox from "../components/SearchBox";
-import SideBar from "../components/SideBar";
-import ChatEmptyState from "../components/ChatEmptyState";
-import HelpButton from "../components/HelpButton";
-import ChatFullState from "../components/ChatFullState";
+import SearchBox from "../../components/SearchBox";
+import SideBar from "../../components/SideBar";
+import ChatEmptyState from "../../components/ChatEmptyState";
+import HelpButton from "../../components/HelpButton";
+import ChatFullState from "../../components/ChatFullState";
 import Head from "next/head";
 import { useUser } from "@clerk/clerk-react";
+import ErrorToast from "../../components/ErrorToast";
 
 function Chat() {
   // messages = [ { content: "hello", role: "user | assistant" }, ...]
+  const router = useRouter();
   const [messages, setMessages] = useState([]);
   const { isSignedIn, user, isLoaded } = useUser();
   const [isEmptyState, setIsEmptyState] = useState(true);
+
   const [reset, setReset] = useState(false);
   const [result, setResult] = useState("");
   const [chatId, setChatId] = useState(null);
+  const [isInvalidChatId, setIsInvalidChatId] = useState(false);
   const resultRef = useRef();
+
+  useEffect(() => {
+    if (router.query.id) {
+      setChatId(router.query.id[0]);
+    }
+
+    if (router.query.id && isLoaded) {
+      getChat();
+    }
+  }, [router, isLoaded]);
 
   useEffect(() => {
     resultRef.current = result;
@@ -40,6 +54,28 @@ function Chat() {
     }
   }, [messages]);
 
+  const getChat = async () => {
+    console.log(user.id);
+    const response = await fetch(`/api/private/getChat`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: user.id,
+        chatId: chatId,
+      }),
+      // signal: controller.signal,
+    });
+    const data = await response.json();
+    console.log(response.status);
+    if (response.status == 404) {
+      setIsInvalidChatId(true);
+    }
+    console.log(data);
+    setMessages(data.messages);
+  };
+
   const saveChat = async () => {
     const response = await fetch(`/api/private/saveChat`, {
       method: "POST",
@@ -53,7 +89,11 @@ function Chat() {
       }),
       // signal: controller.signal,
     });
-    setChatId(response.chatId);
+    const data = await response.json();
+    console.log(data);
+    console.log(chatId);
+    console.log(`Frontend chatid ${data.chatId}`);
+    setChatId(data.chatId);
   };
 
   const getAIResponse = async (messages) => {
@@ -135,10 +175,10 @@ function Chat() {
 
   return (
     <div className="bg-customPurple-100">
+      {isInvalidChatId && <ErrorToast />}
       <Head>
         <title>ProSights Chat</title>
       </Head>
-
       <div className="flex h-screen relative overflow-hidden">
         {/* Sidebar */}
         <div className="absolute top-[-2%] left-[-8%] flex justify-center items-center w-[116%] h-[104%] ">
@@ -170,6 +210,9 @@ function Chat() {
                 setMessages={setMessages}
                 getAIResponse={getAIResponse}
               />
+              <p>
+                {chatId} {isInvalidChatId ? "404" : ""}
+              </p>
             </div>
           </div>
         </div>
