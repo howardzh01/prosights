@@ -9,13 +9,16 @@ import ChatEmptyState from "../components/ChatEmptyState";
 import HelpButton from "../components/HelpButton";
 import ChatFullState from "../components/ChatFullState";
 import Head from "next/head";
+import { useUser } from "@clerk/clerk-react";
 
 function Chat() {
   // messages = [ { content: "hello", role: "user | assistant" }, ...]
   const [messages, setMessages] = useState([]);
+  const { isSignedIn, user, isLoaded } = useUser();
   const [isEmptyState, setIsEmptyState] = useState(true);
   const [reset, setReset] = useState(false);
   const [result, setResult] = useState("");
+  const [chatId, setChatId] = useState(null);
   const resultRef = useRef();
 
   useEffect(() => {
@@ -36,6 +39,22 @@ function Chat() {
       setIsEmptyState(false);
     }
   }, [messages]);
+
+  const saveChat = async () => {
+    const response = await fetch(`/api/private/saveChat`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: user.id,
+        messages: messages,
+        chatId: chatId,
+      }),
+      // signal: controller.signal,
+    });
+    setChatId(response.chatId);
+  };
 
   const getAIResponse = async (messages) => {
     const fetchResponse = async () => {
@@ -111,7 +130,7 @@ function Chat() {
       };
       processStream();
     };
-    fetchResponse();
+    fetchResponse().then(() => saveChat());
   };
 
   return (

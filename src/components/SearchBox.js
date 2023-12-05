@@ -28,6 +28,7 @@ function SearchBox({ setMessages, getAIResponse }) {
         { role: "user", content: searchTerm },
       ];
       getAIResponse(newMessages);
+
       return newMessages;
     });
     setSearchTerm("");
