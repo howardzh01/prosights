@@ -49,7 +49,7 @@ function App() {
           </p>
           <div className="flex items-center">
             <Link
-              href="#"
+              href="/sign-up"
               className="flex flex-row items-center bg-primary text-white py-2 px-6 rounded-md hover:bg-blue-600 drop-shadow-lg mr-12 transition duration-300"
             >
               <p className="mr-4 text-lg">Try for Free</p>
