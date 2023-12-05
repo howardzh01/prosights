@@ -9,14 +9,14 @@ function Navbar() {
         <div className="flex justify-between">
           <div className="flex space-x-4">
             <div>
-              <Link href="/" className="flex items-center py-5 px-2 text-black">
+              <Link href="/" className="flex items-center py-5 text-black">
                 <Image
-                  src="/logo.png"
+                  src="/assets/fullLogoBlack.png"
                   alt="ProSights logo"
-                  width={32}
-                  height={32}
+                  width={1024}
+                  height={1024}
+                  className="w-28"
                 />
-                <span className="font-bold text-lg">ProSights</span>
               </Link>
             </div>
           </div>

@@ -10,8 +10,8 @@ function AiMessage({ content, embeds, suggestions, finishedGenerating }) {
       <Image
         src={"/logo.png"}
         alt="ProSights AI"
-        width={64}
-        height={64}
+        width={1024}
+        height={1024}
         className="rounded-full mr-6 w-12"
       />
       <div className="pt-3">
