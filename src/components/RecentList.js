@@ -12,7 +12,9 @@ function RecentList() {
     <div className="space-y-4">
       <div className="font-medium text-xs">Recent</div>
       {recentList.map((title, index) => (
-        <div className="text-sm"> {title} </div>
+        <div key={index} className="text-sm">
+          {title}
+        </div>
       ))}
     </div>
   );

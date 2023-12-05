@@ -15,7 +15,7 @@ function CompanySuggestions() {
   return (
     <div className="grid grid-cols-3 gap-4">
       {suggestions.slice(0, 6).map((companyName, index) => (
-        <CompanySuggestionButton companyName={companyName} />
+        <CompanySuggestionButton key={index} companyName={companyName} />
       ))}
     </div>
   );

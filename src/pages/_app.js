@@ -7,7 +7,7 @@ import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { useState, useEffect } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
-import LogRocket from "logrocket";
+// import LogRocket from "logrocket";
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import { useRouter } from "next/router";
