@@ -2,11 +2,14 @@ import Link from "next/link";
 import Image from "next/image";
 import React from "react";
 import { Divider } from "@mui/material";
+import { useRouter } from "next/router";
 
 function NewChatButton({ setIsEmptyState }) {
+  const router = useRouter();
   const handleClick = () => {
     // handle the click event here
     console.log("CLICK");
+    router.push("/chat");
     setIsEmptyState(true);
   };
   return (

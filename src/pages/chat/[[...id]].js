@@ -29,8 +29,9 @@ function Chat() {
     if (router.query.id) {
       setChatId(router.query.id[0]);
     }
-
+    console.log(router.query.id);
     if (router.query.id && isLoaded) {
+      console.log("we here");
       getChat();
     }
   }, [router, isLoaded]);
