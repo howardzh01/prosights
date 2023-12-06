@@ -13,12 +13,13 @@ function ChatFullState({ messages }) {
   return (
     <div className="w-full space-y-4 mt-6">
       {messages &&
-        messages.map((message) => {
+        messages.map((message, index) => {
           if (message.role === "user") {
             return (
               <UserMessage
                 avatarURL={"/assets/defaultProfilePicture.png"}
                 content={message.content}
+                key={index}
               />
             );
           } else {
@@ -31,6 +32,7 @@ function ChatFullState({ messages }) {
                   "What are the comps valued at?",
                 ]}
                 finishedGenerating={true}
+                key={index}
               />
             );
           }

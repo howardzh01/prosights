@@ -1,4 +1,5 @@
 import { OpenAIStream } from "../../../utils/OpenAIStream.js";
+import { CONSTANTS } from "../../../constants.js";
 
 export const config = {
   runtime: "edge",
@@ -27,7 +28,7 @@ const handler = async (req) => {
 
   const payload = {
     // TODO: Put this into constants
-    model: "gpt-4-1106-preview",
+    model: CONSTANTS.MODEL_VERSION,
     messages: formattedMessages,
     stream: true,
   };

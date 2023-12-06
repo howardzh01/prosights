@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { Fragment } from "react";
+import React, { Fragment, use } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState, useEffect, useRef } from "react";
@@ -21,16 +21,18 @@ function Chat() {
   // const [reset, setReset] = useState(false);
   const [chatId, setChatId] = useState(null);
   const [isInvalidChatId, setIsInvalidChatId] = useState(false);
+  const [recentChats, setRecentChats] = useState([]);
   const resultRef = useRef();
 
   useEffect(() => {
     if (router.query.id) {
+      if (chatId === router.query.id[0]) {
+        return;
+      }
       setChatId(router.query.id[0]);
     }
-    console.log(router.query.id);
     if (router.query.id && isLoaded) {
-      console.log("we here");
-      getChat();
+      getChat(user, chatId);
     }
   }, [router, isLoaded]);
 
@@ -50,7 +52,6 @@ function Chat() {
   }, [messages]);
 
   useEffect(() => {
-    console.log(isEmptyState);
     if (isEmptyState) {
       setMessages([]);
       setIsInvalidChatId(false);
@@ -58,8 +59,42 @@ function Chat() {
     }
   }, [isEmptyState]);
 
-  const getChat = async () => {
-    console.log(user.id);
+  // when messages change, save chat and push to router.
+  useEffect(() => {
+    if (messages.length % 2 === 0 && isLoaded && resultRef.current === "") {
+      saveChat(user, messages, chatId).then((retChatId) => {
+        if (messages.length === 2) {
+          setChatId(retChatId);
+          router.push(`/chat/${retChatId}`);
+        }
+      });
+    }
+  }, [messages]);
+
+  // when page loads, retreive recent chats
+  useEffect(() => {
+    if (isLoaded) {
+      loadRecentChats(user);
+    }
+  }, [isLoaded]);
+
+  const loadRecentChats = async (user) => {
+    const response = await fetch(`/api/private/getRecentChats`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: user.id,
+      }),
+      // signal: controller.signal,
+    });
+    const data = await response.json();
+    setRecentChats(data.chatsData);
+    console.log(data.chatsData);
+  };
+
+  const getChat = async (user, chatId) => {
     const response = await fetch(`/api/private/getChat`, {
       method: "POST",
       headers: {
@@ -72,15 +107,13 @@ function Chat() {
       // signal: controller.signal,
     });
     const data = await response.json();
-    console.log(response.status);
     if (response.status == 404) {
       setIsInvalidChatId(true);
     }
-    console.log(data);
     setMessages(data.messages);
   };
 
-  const saveChat = async () => {
+  const saveChat = async (user, messages, chatId) => {
     const response = await fetch(`/api/private/saveChat`, {
       method: "POST",
       headers: {
@@ -91,13 +124,9 @@ function Chat() {
         messages: messages,
         chatId: chatId,
       }),
-      // signal: controller.signal,
     });
     const data = await response.json();
-    console.log(data);
-    console.log(chatId);
-    console.log(`Frontend chatid ${data.chatId}`);
-    setChatId(data.chatId);
+    return data.chatId;
   };
 
   const getAIResponse = async (messages) => {
@@ -174,7 +203,7 @@ function Chat() {
       };
       processStream();
     };
-    fetchResponse().then(() => saveChat());
+    fetchResponse();
   };
 
   return (
@@ -190,7 +219,10 @@ function Chat() {
         </div>
 
         <div className="hidden md:flex md:flex-row justify-center w-64 my-5 border-right">
-          <SideBar setIsEmptyState={setIsEmptyState} />
+          <SideBar
+            setIsEmptyState={setIsEmptyState}
+            recentChatTitles={recentChats.map((chatData) => chatData.id)}
+          />
         </div>
         {/* Main content */}
         <div className="flex flex-col justify-between w-full bg-background mx-2 my-4 px-4 md:px-8 lg:px-24 rounded-xl opacity-100 z-10">

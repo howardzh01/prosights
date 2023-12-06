@@ -32,11 +32,7 @@ const handler = async (req) => {
         .update({ chat_ids: [...profileData[0].chat_ids, chatData[0].id] })
         .select()
         .eq("id", userId);
-    console.log("Hi");
-    console.log(chatData);
     finalChatId = chatData[0].id;
-    console.log(chatData[0].id);
-    console.log(finalChatId);
   }
 
   console.log(messages);

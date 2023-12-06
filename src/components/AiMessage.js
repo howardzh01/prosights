@@ -17,8 +17,11 @@ function AiMessage({ content, embeds, suggestions, finishedGenerating }) {
       <div className="pt-1 md:pt-3">
         <p className="text-sm md:text-base">{content}</p>
         <div className="flex flex-row space-x-4 mt-4">
-          {suggestions.map((suggestion) => (
-            <div className="text-primary border border-primary rounded-xl py-2 px-4 md:font-semibold text-xs">
+          {suggestions.map((suggestion, index) => (
+            <div
+              className="text-primary border border-primary rounded-xl py-2 px-4 md:font-semibold text-xs"
+              key={index}
+            >
               {suggestion}
             </div>
           ))}

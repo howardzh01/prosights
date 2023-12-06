@@ -2,16 +2,16 @@ import Link from "next/link";
 import Image from "next/image";
 import React from "react";
 
-function RecentList() {
-  var recentList = [
-    "Hopper Investment Analysis",
-    "Etsy: Online Marketplace",
-    "Line Chart",
-  ];
+function RecentList({ recentChatTitles }) {
+  // var recentList = [
+  //   "Hopper Investment Analysis",
+  //   "Etsy: Online Marketplace",
+  //   "Line Chart",
+  // ];
+  console.log(recentChatTitles);
   return (
-    <div className="space-y-4">
-      <div className="font-medium text-xs">Recent</div>
-      {recentList.map((title, index) => (
+    <div className="space-y-4 h-full">
+      {recentChatTitles.map((title, index) => (
         <div key={index} className="text-sm">
           {title}
         </div>
