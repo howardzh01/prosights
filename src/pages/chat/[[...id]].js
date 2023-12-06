@@ -25,14 +25,12 @@ function Chat() {
   const resultRef = useRef();
 
   useEffect(() => {
-    if (router.query.id) {
+    if (router.query.id && isLoaded) {
       if (chatId === router.query.id[0]) {
         return;
       }
       setChatId(router.query.id[0]);
-    }
-    if (router.query.id && isLoaded) {
-      getChat(user, chatId);
+      getChat(user, router.query.id[0]);
     }
   }, [router, isLoaded]);
 
@@ -55,6 +53,7 @@ function Chat() {
     if (isEmptyState) {
       setMessages([]);
       setIsInvalidChatId(false);
+      setChatId(null);
       resultRef.current = "";
     }
   }, [isEmptyState]);
@@ -221,7 +220,7 @@ function Chat() {
         <div className="hidden md:flex md:flex-row justify-center w-64 my-5 border-right">
           <SideBar
             setIsEmptyState={setIsEmptyState}
-            recentChatTitles={recentChats.map((chatData) => chatData.id)}
+            recentChatData={recentChats}
           />
         </div>
         {/* Main content */}

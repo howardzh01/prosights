@@ -5,7 +5,7 @@ import UserProfileButton from "./UserProfileButton";
 import NewChatButton from "./NewChatButton";
 import RecentList from "./RecentList";
 
-function SideBar({ setIsEmptyState, recentChatTitles }) {
+function SideBar({ setIsEmptyState, recentChatData }) {
   return (
     <div className="relative flex flex-col text-white h-full w-full pl-4 items-left">
       <Image
@@ -32,7 +32,7 @@ function SideBar({ setIsEmptyState, recentChatTitles }) {
       </div> */}
       <div className="mt-12 font-medium text-xs">Recent</div>
       <div className="my-4 overflow-y-auto flex-grow">
-        <RecentList recentChatTitles={recentChatTitles} />
+        <RecentList recentChatData={recentChatData} />
       </div>
 
       <div className={`flex flex-row items-center`}>
