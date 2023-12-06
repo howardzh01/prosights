@@ -11,7 +11,7 @@ function ChatFullState({ messages }) {
   const { isSignedIn, user, isLoaded } = useUser();
 
   return (
-    <div className="w-full">
+    <div className="w-full space-y-4 mt-6">
       {messages &&
         messages.map((message) => {
           if (message.role === "user") {

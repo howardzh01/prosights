@@ -189,11 +189,11 @@ function Chat() {
           <div className="w-full h-full bg-gradient-to-br from-primary to-secondary opacity-30 rounded-full filter blur-[100px]" />
         </div>
 
-        <div className="flex flex-row justify-center w-64 my-5 border-right">
+        <div className="hidden md:flex md:flex-row justify-center w-64 my-5 border-right">
           <SideBar setIsEmptyState={setIsEmptyState} />
         </div>
         {/* Main content */}
-        <div className="flex flex-col justify-between w-full bg-background mx-2 my-4 px-24 rounded-xl opacity-100 z-10">
+        <div className="flex flex-col justify-between w-full bg-background mx-2 my-4 px-4 md:px-8 lg:px-24 rounded-xl opacity-100 z-10">
           {/* Chat content */}
           {/* <ChatEmptyState /> */}
           {isEmptyState ? (

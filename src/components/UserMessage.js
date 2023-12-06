@@ -12,9 +12,9 @@ function UserMessage({ avatarURL, content }) {
         alt="User Avatar"
         width={64}
         height={64}
-        className="rounded-full mr-6 w-12"
+        className="rounded-full mr-4 md:mr-6 w-8 md:w-12"
       />
-      <p className="pt-3">{content}</p>
+      <p className="pt-1 md:pt-3 text-sm md:text-base">{content}</p>
     </div>
   );
 }

@@ -14,7 +14,7 @@ function NewChatButton({ setIsEmptyState }) {
   };
   return (
     <div
-      className="flex justify-center space-x-2 mt-8 mr-16 p-2 rounded-xl bg-customTeal-100 hover:cursor-pointer"
+      className="flex justify-center space-x-2 mt-8  p-2 rounded-xl bg-customTeal-100 hover:cursor-pointer"
       onClick={handleClick}
     >
       <Image
@@ -25,7 +25,7 @@ function NewChatButton({ setIsEmptyState }) {
         className="rounded-full object-contain w-3"
       />
 
-      <span className="font-semibold text-sm">New Chat</span>
+      <span className="font-semibold text-xs md:text-sm">New Chat</span>
     </div>
   );
 }

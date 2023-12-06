@@ -12,13 +12,13 @@ function AiMessage({ content, embeds, suggestions, finishedGenerating }) {
         alt="ProSights AI"
         width={1024}
         height={1024}
-        className="rounded-full mr-6 w-12"
+        className="rounded-full mr-4 md:mr-6 w-8 md:w-12"
       />
-      <div className="pt-3">
-        <p className="">{content}</p>
+      <div className="pt-1 md:pt-3">
+        <p className="text-sm md:text-base">{content}</p>
         <div className="flex flex-row space-x-4 mt-4">
           {suggestions.map((suggestion) => (
-            <div className="text-primary border border-primary rounded-xl py-2 px-4 font-semibold text-xs">
+            <div className="text-primary border border-primary rounded-xl py-2 px-4 md:font-semibold text-xs">
               {suggestion}
             </div>
           ))}

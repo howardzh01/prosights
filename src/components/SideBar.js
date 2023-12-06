@@ -15,7 +15,10 @@ function SideBar({ setIsEmptyState }) {
         height={1024}
         className="w-28"
       />
-      <NewChatButton setIsEmptyState={setIsEmptyState} />
+      <div className="w-32">
+        <NewChatButton setIsEmptyState={setIsEmptyState} />
+      </div>
+
       {/* <div className="flex justify-center space-x-2 mt-8 mr-16 p-2 rounded-xl bg-customTeal-100">
         <Image
           src="/assets/plus.png"

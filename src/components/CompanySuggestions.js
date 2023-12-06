@@ -13,7 +13,7 @@ function CompanySuggestions() {
     "Y-Combinator",
   ];
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
       {suggestions.slice(0, 6).map((companyName, index) => (
         <CompanySuggestionButton key={index} companyName={companyName} />
       ))}
