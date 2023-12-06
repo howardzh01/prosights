@@ -5,7 +5,7 @@ import React from "react";
 function Navbar() {
   return (
     <nav className="bg-transparent ">
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="flex justify-between">
           <div className="flex space-x-4">
             <div>
@@ -15,7 +15,7 @@ function Navbar() {
                   alt="ProSights logo"
                   width={1024}
                   height={1024}
-                  className="w-28"
+                  className="w-24 md:w-28"
                 />
               </Link>
             </div>
@@ -31,7 +31,7 @@ function Navbar() {
             </div> */}
             <Link
               href="/sign-in"
-              className="py-2 px-6 font-medium bg-primary hover:bg-blue-600 text-white rounded-lg transition duration-300"
+              className="py-2 px-6 text-sm md:text-base font-medium bg-primary hover:bg-blue-600 text-white rounded-lg transition duration-300"
             >
               Login
             </Link>
