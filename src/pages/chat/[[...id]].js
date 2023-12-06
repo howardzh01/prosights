@@ -18,9 +18,7 @@ function Chat() {
   const [messages, setMessages] = useState([]);
   const { isSignedIn, user, isLoaded } = useUser();
   const [isEmptyState, setIsEmptyState] = useState(true);
-
-  const [reset, setReset] = useState(false);
-  const [result, setResult] = useState("");
+  // const [reset, setReset] = useState(false);
   const [chatId, setChatId] = useState(null);
   const [isInvalidChatId, setIsInvalidChatId] = useState(false);
   const resultRef = useRef();
@@ -37,10 +35,6 @@ function Chat() {
   }, [router, isLoaded]);
 
   useEffect(() => {
-    resultRef.current = result;
-  }, [result]);
-
-  useEffect(() => {
     // Check if current is false in all messages
     if (messages.filter((message) => message.current).length === 0) {
       resultRef.current = "";
@@ -54,6 +48,15 @@ function Chat() {
       setIsEmptyState(false);
     }
   }, [messages]);
+
+  useEffect(() => {
+    console.log(isEmptyState);
+    if (isEmptyState) {
+      setMessages([]);
+      setIsInvalidChatId(false);
+      resultRef.current = "";
+    }
+  }, [isEmptyState]);
 
   const getChat = async () => {
     console.log(user.id);
