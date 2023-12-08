@@ -24,6 +24,7 @@ function Chat() {
   const [recentChats, setRecentChats] = useState([]);
   const resultRef = useRef();
 
+  // After user loads, set chatid if specified and get chat
   useEffect(() => {
     if (router.query.id && isLoaded) {
       if (chatId === router.query.id[0]) {
@@ -34,6 +35,7 @@ function Chat() {
     }
   }, [router, isLoaded]);
 
+  // Clear typing box
   useEffect(() => {
     // Check if current is false in all messages
     if (messages.filter((message) => message.current).length === 0) {
@@ -43,12 +45,14 @@ function Chat() {
     }
   }, [messages]);
 
+  // When message is submitted, ensure empty state is no longer there
   useEffect(() => {
     if (isEmptyState && messages.length > 0) {
       setIsEmptyState(false);
     }
   }, [messages]);
 
+  // Reset states if forced to empty state
   useEffect(() => {
     if (isEmptyState) {
       setMessages([]);
