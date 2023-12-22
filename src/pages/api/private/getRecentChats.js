@@ -12,7 +12,6 @@ const serviceSup = serviceSupabase();
 const handler = async (req) => {
   // Extract the messages parameter from the request query
   // reqJSON.userId, reqJSON.messages
-  console.log("HI");
   const reqJSON = await req.json();
   const { userId } = reqJSON;
 

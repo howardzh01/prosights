@@ -11,10 +11,8 @@ function RecentList({ recentChatData }) {
   return (
     <div className="space-y-4 h-full">
       {recentChatData.map((chatData, index) => (
-        <div className="text-sm truncate">
-          <Link key={index} href={`/chat/${chatData.id}`}>
-            {chatData.id}
-          </Link>
+        <div className="text-sm truncate" key={index}>
+          <Link href={`/chat/${chatData.id}`}>{chatData.id}</Link>
         </div>
       ))}
     </div>

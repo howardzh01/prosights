@@ -17,7 +17,6 @@ function Chat() {
   const router = useRouter();
   const [messages, setMessages] = useState([]);
   const { isSignedIn, user, isLoaded } = useUser();
-  const [isEmptyState, setIsEmptyState] = useState(true);
   // const [reset, setReset] = useState(false);
   const [chatId, setChatId] = useState(null);
   const [isInvalidChatId, setIsInvalidChatId] = useState(false);
@@ -46,29 +45,38 @@ function Chat() {
   }, [messages]);
 
   // When message is submitted, ensure empty state is no longer there
-  useEffect(() => {
-    if (isEmptyState && messages.length > 0) {
-      setIsEmptyState(false);
-    }
-  }, [messages]);
+  // useEffect(() => {
+  //   if (isEmptyState && messages.length > 0) {
+  //     setIsEmptyState(false);
+  //   }
+  // }, [messages]);
 
   // Reset states if forced to empty state
   useEffect(() => {
-    if (isEmptyState) {
-      setMessages([]);
+    if (messages.length === 0) {
       setIsInvalidChatId(false);
       setChatId(null);
       resultRef.current = "";
     }
-  }, [isEmptyState]);
+  }, [messages]);
 
   // when messages change, save chat and push to router.
   useEffect(() => {
-    if (messages.length % 2 === 0 && isLoaded && resultRef.current === "") {
+    if (
+      messages.length > 0 &&
+      messages.length % 2 === 0 &&
+      isLoaded &&
+      resultRef.current === ""
+    ) {
       saveChat(user, messages, chatId).then((retChatId) => {
         if (messages.length === 2) {
           setChatId(retChatId);
           router.push(`/chat/${retChatId}`);
+          if (
+            recentChats.filter((chat) => chat.id === retChatId).length === 0
+          ) {
+            loadRecentChats(user);
+          }
         }
       });
     }
@@ -222,16 +230,13 @@ function Chat() {
         </div>
 
         <div className="hidden md:flex md:flex-row justify-center w-64 my-5 border-right">
-          <SideBar
-            setIsEmptyState={setIsEmptyState}
-            recentChatData={recentChats}
-          />
+          <SideBar setMessages={setMessages} recentChatData={recentChats} />
         </div>
         {/* Main content */}
         <div className="flex flex-col justify-between w-full bg-background mx-2 my-4 px-4 md:px-8 lg:px-24 rounded-xl opacity-100 z-10">
           {/* Chat content */}
           {/* <ChatEmptyState /> */}
-          {isEmptyState ? (
+          {messages.length === 0 ? (
             <ChatEmptyState />
           ) : (
             <ChatFullState messages={messages} />

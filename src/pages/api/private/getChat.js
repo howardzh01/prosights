@@ -34,8 +34,6 @@ const handler = async (req) => {
     );
   }
 
-  console.log(messageData);
-
   return new Response(messageData, {
     status: 200,
     headers: {

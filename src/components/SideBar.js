@@ -5,7 +5,7 @@ import UserProfileButton from "./UserProfileButton";
 import NewChatButton from "./NewChatButton";
 import RecentList from "./RecentList";
 
-function SideBar({ setIsEmptyState, recentChatData }) {
+function SideBar({ setMessages, recentChatData }) {
   return (
     <div className="relative flex flex-col text-white h-full w-full pl-4 items-left">
       <Image
@@ -16,7 +16,7 @@ function SideBar({ setIsEmptyState, recentChatData }) {
         className="w-28"
       />
       <div className="w-32">
-        <NewChatButton setIsEmptyState={setIsEmptyState} />
+        <NewChatButton setMessages={setMessages} />
       </div>
 
       {/* <div className="flex justify-center space-x-2 mt-8 mr-16 p-2 rounded-xl bg-customTeal-100">
