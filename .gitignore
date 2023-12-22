@@ -33,3 +33,5 @@ package-lock.json
 
 public/assets/ProSights_files
 public/assets/ProSights.html
+
+.vscode/

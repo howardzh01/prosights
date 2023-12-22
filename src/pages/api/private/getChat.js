@@ -15,11 +15,6 @@ const handler = async (req) => {
   const reqJSON = await req.json();
   const { userId, chatId } = reqJSON;
 
-  const { data: profileData, error: profileError } = await serviceSup
-    .from("profiles")
-    .select()
-    .eq("id", userId);
-
   const { data: messageData, error: messageError } = await serviceSup.storage
     .from("messages")
     .download(`${chatId}.json`);

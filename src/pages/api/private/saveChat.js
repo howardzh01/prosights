@@ -25,7 +25,7 @@ const handler = async (req) => {
       .from("profiles")
       .select()
       .eq("id", userId);
-
+    console.log(profileData);
     const { data: updateProfileData, error: updateProfileError } =
       await serviceSup
         .from("profiles")

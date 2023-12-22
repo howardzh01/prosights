@@ -16,16 +16,20 @@ const handler = async (req) => {
   const reqJSON = await req.json();
   const { userId } = reqJSON;
 
+  // const { data: profileData, error: profileError } = await serviceSup
+  //   .from("profiles")
+  //   .select()
+  //   .eq("id", userId);
+
   const { data: profileData, error: profileError } = await serviceSup
     .from("profiles")
-    .select()
-    .eq("id", userId);
+    .upsert({ id: userId }, { ignooreDuplicates: true })
+    .select();
 
-  if (profileError || profileData.length == 0) {
-    console.log(profileError);
+  if (profileError) {
     return new Response(
       JSON.stringify({
-        messages: [],
+        chatsData: [],
       }),
       {
         status: 404,
