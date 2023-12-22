@@ -44,13 +44,6 @@ function Chat() {
     }
   }, [messages]);
 
-  // When message is submitted, ensure empty state is no longer there
-  // useEffect(() => {
-  //   if (isEmptyState && messages.length > 0) {
-  //     setIsEmptyState(false);
-  //   }
-  // }, [messages]);
-
   // Reset states if forced to empty state
   useEffect(() => {
     if (messages.length === 0) {
@@ -102,7 +95,6 @@ function Chat() {
     });
     const data = await response.json();
     setRecentChats(data.chatsData);
-    console.log(data.chatsData);
   };
 
   const getChat = async (user, chatId) => {
@@ -119,12 +111,16 @@ function Chat() {
     });
     const data = await response.json();
     if (response.status == 404) {
+      console.log("404");
       setIsInvalidChatId(true);
     }
     setMessages(data.messages);
   };
 
   const saveChat = async (user, messages, chatId) => {
+    if (messages.length < 2) {
+      return;
+    }
     const response = await fetch(`/api/private/saveChat`, {
       method: "POST",
       headers: {

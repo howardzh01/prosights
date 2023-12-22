@@ -63,6 +63,7 @@ function SearchBox({ setMessages, getAIResponse }) {
           <Image
             src="/assets/upArrow.png"
             className="w-3 h-auto"
+            onClick={send}
             alt="Send"
             width={32}
             height={32}
