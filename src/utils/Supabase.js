@@ -14,3 +14,9 @@ export const serviceSupabase = () => {
     // { auth: { persistSession: CONSTANTS.SUPABASE_PERSIST_SESSION } }
   );
 };
+
+export const serviceSup = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_KEY
+  // { auth: { persistSession: CONSTANTS.SUPABASE_PERSIST_SESSION } }
+);

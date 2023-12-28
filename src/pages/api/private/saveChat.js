@@ -1,10 +1,8 @@
-import { serviceSupabase } from "../../../utils/Supabase.js";
+import { serviceSup } from "../../../utils/Supabase.js";
 
 export const config = {
   runtime: "edge",
 };
-
-const serviceSup = serviceSupabase();
 
 // TODO: UNSECURE, add errors
 const handler = async (req) => {
@@ -25,7 +23,7 @@ const handler = async (req) => {
       .from("profiles")
       .select()
       .eq("id", userId);
-    console.log(profileData);
+    console.log(profileData[0].chat_ids);
     const { data: updateProfileData, error: updateProfileError } =
       await serviceSup
         .from("profiles")
@@ -34,8 +32,6 @@ const handler = async (req) => {
         .eq("id", userId);
     finalChatId = chatData[0].id;
   }
-
-  console.log(messages);
 
   const { data, error } = await serviceSup.storage
     .from("messages")

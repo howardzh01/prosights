@@ -1,12 +1,10 @@
 // getChat based on id. If not exist, null
 
-import { serviceSupabase } from "../../../utils/Supabase.js";
+import { serviceSup } from "../../../utils/Supabase.js";
 
 export const config = {
   runtime: "edge",
 };
-
-const serviceSup = serviceSupabase();
 
 // TODO: UNSECURE, add errors
 const handler = async (req) => {
