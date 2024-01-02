@@ -1,5 +1,8 @@
 export const dateToQuarters = (date) => {
   // Convert Date object 2023-01-01 to 1Q23
+  if (date.constructor === String) {
+    date = new Date(date);
+  }
   const quarter = Math.floor(date.getMonth() / 3) + 1;
   const quarterString = `${quarter}Q${date.getFullYear().toString().slice(2)}`;
   return quarterString;
@@ -37,7 +40,13 @@ export async function cachedFetch(
   if (error || !rows || rows.length === 0) {
     const new_response = await fetch(url, options);
     if (!new_response.ok) {
-      console.log("cachedFetch Error", url, new_response.status);
+      console.log(
+        "cachedFetch Error",
+        url,
+        new_response.status,
+        new_response.statusText
+      );
+      return;
     }
     let data;
     if (responseFormat === "json") {

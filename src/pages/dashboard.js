@@ -5,29 +5,34 @@ import { useUser } from "@clerk/clerk-react";
 import { useRouter } from "next/router";
 import HeadCountChart from "../components/charts/HeadCountChart";
 import WebTrafficChart from "../components/charts/WebTrafficChart";
+import SearchBoxDashboard from "../components/SearchBoxDashboard";
 
 function Dashboard() {
   const { isSignedIn, user, isLoaded } = useUser();
   const router = useRouter();
-  //   const [company, setCompany] = useState(null);
+  const [company, setCompany] = useState("stockx");
 
   // stockx, goat, grailed, flight-club,
-  const company = "grailed";
+  //   const company = "zillow";
   return (
-    <div className="mx-12 my-12 w-1/2 space-y-8">
-      <div className="text-4xl font-bold">{company + ".com"}</div>
+    <div>
+      <div className="mx-12 my-12 w-1/2 space-y-8">
+        <SearchBoxDashboard setCompany={setCompany}></SearchBoxDashboard>
 
-      {user && company ? (
-        <HeadCountChart user={user} companyName={company} />
-      ) : (
-        <p>loading</p>
-      )}
+        <div className="text-4xl font-bold">{company + ".com"}</div>
 
-      {user && company ? (
-        <WebTrafficChart user={user} companyName={company + ".com"} />
-      ) : (
-        <p>loading</p>
-      )}
+        {user && company ? (
+          <HeadCountChart user={user} companyName={company} />
+        ) : (
+          <p>loading</p>
+        )}
+
+        {user && company ? (
+          <WebTrafficChart user={user} companyName={company + ".com"} />
+        ) : (
+          <p>loading</p>
+        )}
+      </div>
     </div>
   );
 }

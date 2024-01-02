@@ -26,8 +26,9 @@ function HeadCountChart({ user, companyName }) {
         companyName: companyName,
       }),
     });
-    if (response.status == 404) {
-      console.log("404");
+    if (!response.ok) {
+      console.log(response.status);
+      setChartData(null);
     }
     var data = await response.json();
     data = data.reverse();
