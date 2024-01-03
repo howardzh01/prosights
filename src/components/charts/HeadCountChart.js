@@ -4,11 +4,16 @@ import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { Bar } from "react-chartjs-2";
 import Chart from "chart.js/auto";
-import { dateToQuarters } from "../../utils/Utils";
-import GenericBar from "./GenericBar";
+import {
+  dateToQuarters,
+  convertToGrowthData,
+  aggregateData,
+} from "../../utils/Utils";
+import GenericBar from "./templates/GenericBar";
+import TwoColumnView from "./templates/TwoColumnView";
 
 function HeadCountChart({ user, companyName }) {
-  const [chartData, setChartData] = useState(null);
+  const [headCountData, setHeadCountData] = useState(null);
 
   useEffect(() => {
     console.log("companyName", companyName, user.id);
@@ -28,40 +33,63 @@ function HeadCountChart({ user, companyName }) {
     });
     if (!response.ok) {
       console.log(response.status);
-      setChartData(null);
+      setHeadCountData(null);
     }
     var data = await response.json();
     data = data.reverse();
-    const formattedData = {
-      created: data.map((item) => new Date(item.created)),
-      headcount: data.map((item) => item.headcount),
-    };
-    const quarterlyHeadcounts = formattedData.created.reduce((acc, date, i) => {
-      const quarter = dateToQuarters(date);
-      acc[quarter] = formattedData.headcount[i]; // use most recent month's headcount. Ex: 2021Q1 = 2021-03-01 if possible otherwise 2021-02-01 ...
+    // transform to  {month: {key:value}}
+    const formattedData = data.reduce((acc, item, i) => {
+      const month = new Date(item.created);
+      acc[month] = {
+        headcount: item.headcount,
+      };
       return acc;
     }, {});
 
-    setChartData({
-      labels: Object.keys(quarterlyHeadcounts),
+    setHeadCountData(formattedData);
+  };
+  function convertToChartData(data) {
+    // input: {time_key: output_key}
+    if (!data) {
+      return;
+    }
+    return {
+      labels: Object.keys(data),
       datasets: [
         {
           // label: "Total Employee (#)",
-          data: Object.values(quarterlyHeadcounts), // assuming headCountData.headcount is an array of headcounts
+          data: Object.values(data),
           // backgroundColor: "rgba(75, 192, 192, 0.2)",
           // borderColor: "rgba(75, 192, 192, 1)",
           borderWidth: 1,
         },
       ],
-    });
-  };
+    };
+  }
+
+  const quarterHeadCountGraph = headCountData && (
+    <GenericBar
+      chartData={convertToChartData(
+        aggregateData(headCountData, "headcount", "last", "quarterYear")
+      )}
+      title={"Total Employee (#)"}
+    />
+  );
+  const yearHeadCountGraph = headCountData && (
+    <GenericBar
+      chartData={convertToChartData(
+        aggregateData(headCountData, "headcount", "last", "year")
+      )}
+    />
+  );
 
   return (
     <div className="h-48">
-      <p className="text-2xl font-bold">Employee Count</p>
-      {chartData && (
-        <GenericBar chartData={chartData} title={"Total Employee (#)"} />
-      )}
+      <TwoColumnView
+        title={"Employee Count"}
+        quarterGraph={quarterHeadCountGraph}
+        yearGraph={yearHeadCountGraph}
+      ></TwoColumnView>
     </div>
   );
 }

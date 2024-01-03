@@ -1,7 +1,6 @@
 // Get HeadCount data from coresignal
 
-import { serviceSup } from "../../../utils/Supabase.js";
-import { cachedFetch } from "../../../utils/Utils.js";
+import { serviceSup, cachedFetch } from "../../../utils/Supabase.js";
 
 export const config = {
   runtime: "edge",

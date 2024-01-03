@@ -22,52 +22,61 @@ export const generateMonths = (startYear) => {
   }
   return dates;
 };
-
-export async function cachedFetch(
-  url,
-  options,
-  serviceSup,
-  responseFormat = "json"
-) {
-  const cacheKey = url.toString() + JSON.stringify(options);
-
-  let { data: rows, error: error } = await serviceSup
-    .from("api_calls")
-    .select()
-    .eq("query", cacheKey);
-  console.log(rows, error);
-
-  if (error || !rows || rows.length === 0) {
-    const new_response = await fetch(url, options);
-    if (!new_response.ok) {
-      console.log(
-        "cachedFetch Error",
-        url,
-        new_response.status,
-        new_response.statusText
-      );
-      return;
-    }
-    let data;
-    if (responseFormat === "json") {
-      data = JSON.stringify(await new_response.json());
-    } else if (responseFormat === "text") {
-      data = await new_response.text();
-    } else {
-      return;
-    }
-
-    const { error: insertError } = await serviceSup.from("api_calls").insert({
-      query: cacheKey,
-      response: data,
-    });
-
-    if (insertError) {
-      console.error("Error inserting data into cache:", insertError);
-      return;
-    }
-    return data;
+export function convertToGrowthData(data) {
+  // input: {time_key: output_key}
+  // output: [-, %, % ...]
+  if (!data) {
+    return;
   }
-  console.log("HIT CACHE");
-  return rows[0].response;
+  const values = Object.values(data);
+  const percentGrowth = values.slice(1).map((value, index) => {
+    const previousValue = values[index];
+    const growth = ((value - previousValue) / previousValue) * 100;
+    return growth.toFixed(0); // to keep 2 decimal places
+  });
+  return ["-", ...percentGrowth];
 }
+
+export const aggregateData = (
+  data,
+  output_key,
+  agg = "sum",
+  timescale = "quarterYear"
+) => {
+  // inputs: expected data in monthly format {Date(): {'visits': x, 'users': x}}
+  // outputs: {time_key: output_key}
+  if (!data) {
+    return;
+  }
+  const aggData = Object.entries(data).reduce((acc, [date, dic]) => {
+    var timeInput;
+    if (timescale === "quarterYear") {
+      timeInput = dateToQuarters(date);
+    } else if (timescale === "year") {
+      timeInput = new Date(date).getFullYear();
+    }
+    acc[timeInput] = acc[timeInput] || { sum: 0, count: 0, last: 0 };
+    acc[timeInput].sum += dic[output_key];
+    acc[timeInput].count += 1;
+    acc[timeInput].last = dic[output_key];
+
+    return acc;
+  }, {});
+
+  return Object.entries(aggData).reduce(
+    (acc, [timeInput, { sum, count, last }]) => {
+      if (agg === "sum") {
+        acc[timeInput] = sum;
+      }
+
+      if (agg === "mean") {
+        acc[timeInput] = sum / count;
+      }
+      if (agg === "last") {
+        acc[timeInput] = last;
+      }
+      return acc;
+    },
+    {}
+  );
+};

@@ -3,14 +3,12 @@
 // process.env.OPENAI_API_KEY ?? "";
 const assert = require("assert");
 
-import { serviceSupabase } from "../../../utils/Supabase.js";
-import { generateMonths, cachedFetch } from "../../../utils/Utils";
+import { serviceSup, cachedFetch } from "../../../utils/Supabase.js";
+import { generateMonths } from "../../../utils/Utils";
 
 export const config = {
   runtime: "edge",
 };
-
-const serviceSup = serviceSupabase();
 
 function parseSemrushOutput(output) {
   if (!output) {
