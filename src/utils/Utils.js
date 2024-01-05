@@ -1,27 +1,17 @@
 export const dateToQuarters = (date) => {
-  // Convert Date object 2023-01-01 to 1Q23
+  // Convert Date object 2023-01-01 to 1Q23)
   if (date.constructor === String) {
     date = new Date(date);
   }
-  const quarter = Math.floor(date.getMonth() / 3) + 1;
-  const quarterString = `${quarter}Q${date.getFullYear().toString().slice(2)}`;
+  const quarter = Math.floor(date.getUTCMonth() / 3) + 1;
+  const quarterString = `${quarter}Q${date
+    .getUTCFullYear()
+    .toString()
+    .slice(2)}`;
+
   return quarterString;
 };
 
-export const generateMonths = (startYear) => {
-  const dates = [];
-  const today = new Date();
-  const currentYear = today.getFullYear();
-  for (let year = startYear; year <= currentYear; year++) {
-    let endMonth = year === currentYear ? today.getMonth() : 12;
-    for (let month = 1; month <= endMonth; month++) {
-      // Pad the month with a leading zero if necessary
-      const monthString = String(month).padStart(2, "0");
-      dates.push(`${year}-${monthString}-01`);
-    }
-  }
-  return dates;
-};
 export function convertToGrowthData(data) {
   // input: {time_key: output_key}
   // output: [-, %, % ...]
@@ -53,7 +43,7 @@ export const aggregateData = (
     if (timescale === "quarterYear") {
       timeInput = dateToQuarters(date);
     } else if (timescale === "year") {
-      timeInput = new Date(date).getFullYear();
+      timeInput = new Date(date).getUTCFullYear();
     }
     acc[timeInput] = acc[timeInput] || { sum: 0, count: 0, last: 0 };
     acc[timeInput].sum += dic[output_key];

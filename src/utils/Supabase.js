@@ -33,14 +33,14 @@ export async function cachedFetch(
     .from("api_calls")
     .select()
     .eq("query", cacheKey);
-  console.log(rows, error);
+  console.log("Pre-fetch Supabase INFO", rows, error);
 
   if (error || !rows || rows.length === 0) {
     const new_response = await fetch(url, options);
     if (!new_response.ok) {
       console.log(
         "cachedFetch Error",
-        url,
+        url.toString(),
         new_response.status,
         new_response.statusText
       );
@@ -51,7 +51,15 @@ export async function cachedFetch(
       data = JSON.stringify(await new_response.json());
     } else if (responseFormat === "text") {
       data = await new_response.text();
+      if (data.includes("ERROR")) {
+        // semrush will sometimes output ERRORs as strings
+        return;
+      }
     } else {
+      return;
+    }
+
+    if (!data || data.length === 0) {
       return;
     }
 

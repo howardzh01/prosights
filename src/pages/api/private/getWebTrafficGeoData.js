@@ -1,7 +1,6 @@
 // Get HeadCount data from coresignal
 
 // process.env.OPENAI_API_KEY ?? "";
-const assert = require("assert");
 
 import { serviceSup, cachedFetch } from "../../../utils/Supabase.js";
 import {
@@ -13,24 +12,19 @@ export const config = {
   runtime: "edge",
 };
 
-const getSemrushWebTraffic = async (
-  companiesUrl,
-  exportColumns,
+const getSemrushGeoTraffic = async (
+  companyUrl,
   displayDate,
-  country = "global"
+  geoType = "country"
 ) => {
-  // monthly headcount data in reverse chronological order
-  //   console.log(companiesUrl, exportColumns, displayDate);
-  const url = new URL("https://api.semrush.com/analytics/ta/api/v3/summary");
+  // export all columns. will yield traffic + users
+  const url = new URL("https://api.semrush.com/analytics/ta/api/v3/geo");
   url.search = new URLSearchParams({
-    targets: companiesUrl,
-    export_columns: exportColumns,
+    target: companyUrl,
     key: process.env.SEMRUSH_API_KEY,
     display_date: displayDate,
+    geo_type: geoType,
   });
-  if (country !== "global") {
-    url.searchParams.append("country", country);
-  }
   const output = await cachedFetch(
     url,
     {
@@ -45,23 +39,22 @@ const getSemrushWebTraffic = async (
 const handler = async (req) => {
   // Extract the messages parameter from the request query
   // reqJSON.userId, reqJSON.messages
+  // console.log(req.companyName);
   const reqJSON = await req.json();
-  const { userId, companiesUrl, exportColumns, country, don } = reqJSON;
+  const { userId, companyUrl, geoType } = reqJSON;
   const displayDates = generateMonths(2019);
   //   const displayDates = ["2023-10-01"];
-  // "categories" cannot be in  exportColumns due to parseSemrushOutput handling ;
   const promises = displayDates.map(async (date) => {
-    const webTrafficData = await getSemrushWebTraffic(
-      companiesUrl,
-      exportColumns,
+    const webTrafficData = await getSemrushGeoTraffic(
+      companyUrl,
       date,
-      country
+      geoType
     );
     return parseSemrushOutput(webTrafficData);
   });
 
   const webTrafficHistoricalData = await Promise.all(promises);
-
+  console.log(webTrafficHistoricalData);
   return new Response(JSON.stringify(webTrafficHistoricalData), {
     status: 200,
     headers: {

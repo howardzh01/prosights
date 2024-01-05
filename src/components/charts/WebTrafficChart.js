@@ -6,29 +6,35 @@ import GenericBar from "./templates/GenericBar";
 import GenericPercentGrowth from "./templates/GenericPercentGrowth";
 import TwoColumnView from "./templates/TwoColumnView";
 import { convertToGrowthData, aggregateData } from "../../utils/Utils";
+import GenericStackedBar from "./templates/GenericStackedBar";
 
-function WebTrafficChart({ user, companyName }) {
+function WebTrafficChart({ user, companyUrl, country = "global" }) {
   const [trafficData, setTrafficData] = useState(null);
 
   const exportColumns =
-    "target,display_date,visits,direct,referral,social,search,paid,mail,display_ad,users,mobile_users,desktop_users";
-
+    "target,rank,visits,desktop_visits,mobile_visits,users,desktop_users,mobile_users,desktop_hits,mobile_hits,direct,search_organic,search_paid,social_organic,social_paid,referral,mail,display_ad,search,social,paid,unknown_channel,time_on_site,desktop_time_on_site,mobile_time_on_site,pages_per_visit,desktop_pages_per_visit,mobile_pages_per_visit,bounce_rate,desktop_bounce_rate,mobile_bounce_rate,desktop_share,mobile_share,accuracy,display_date,country,device_type";
+  // const channelLabelsDic = {
+  //   direct: "Direct",
+  //   mail: "Email",
+  //   social: "Social",
+  // };
   useEffect(() => {
-    console.log("companyName", companyName, user.id);
-    updateTrafficData(user, companyName);
-  }, [companyName]);
+    updateTrafficData(user, companyUrl);
+  }, [companyUrl]);
 
-  const updateTrafficData = async (user, companyName) => {
+  const updateTrafficData = async (user, companyUrl) => {
+    const bodyObj = {
+      userId: user.id,
+      companiesUrl: companyUrl,
+      exportColumns: exportColumns,
+      country: country,
+    };
     const response = await fetch(`/api/private/getWebTrafficData`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        userId: user.id,
-        companiesUrl: companyName,
-        exportColumns: exportColumns,
-      }),
+      body: JSON.stringify(bodyObj),
     });
     if (!response.ok) {
       console.log(response.status);
@@ -43,10 +49,14 @@ function WebTrafficChart({ user, companyName }) {
       }
       const month = new Date(item[0]["display_date"]);
 
-      acc[month] = {
-        visits: parseInt(item[0]["visits"], 10),
-        users: parseInt(item[0]["users"], 10),
-      };
+      // acc[month] = {
+      //   visits: parseInt(item[0]["visits"], 10),
+      //   users: parseInt(item[0]["users"], 10),
+      // };
+      acc[month] = Object.keys(item[0]).reduce((obj, key) => {
+        obj[key] = parseInt(item[0][key], 10);
+        return obj;
+      }, {});
       return acc;
     }, {});
 
@@ -66,6 +76,27 @@ function WebTrafficChart({ user, companyName }) {
           borderWidth: 1,
         },
       ],
+    };
+  }
+
+  function convertToChannelChartData(trafficData) {
+    const relevant_keys = ["direct", "mail", "social"];
+
+    if (!trafficData) {
+      return;
+    }
+    const aggData = relevant_keys.reduce((acc, key) => {
+      acc[key] = aggregateData(trafficData, key, "sum", "quarterYear");
+      return acc;
+    }, {});
+    console.log(aggData);
+    return {
+      labels: Object.keys(aggData[relevant_keys[0]]),
+      datasets: relevant_keys.map((key) => ({
+        data: Object.values(aggData[key]).map((number) => number / 1e6),
+        borderWidth: 1,
+        label: key,
+      })),
     };
   }
 
@@ -104,6 +135,7 @@ function WebTrafficChart({ user, companyName }) {
     ></GenericBar>
   );
 
+  console.log(convertToChannelChartData(trafficData));
   return (
     <div>
       <div className="h-64">
@@ -119,6 +151,15 @@ function WebTrafficChart({ user, companyName }) {
           quarterGraph={quarterUserGraph}
           yearGraph={yearUserGraph}
         ></TwoColumnView>
+      </div>
+      <p className="text-2xl font-bold">Website Traffic by Channel</p>
+      <div className="h-96">
+        {trafficData && (
+          <GenericStackedBar
+            data={convertToChannelChartData(trafficData)}
+            title={"% Share"}
+          ></GenericStackedBar>
+        )}
       </div>
     </div>
   );

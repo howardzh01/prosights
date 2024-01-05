@@ -23,6 +23,7 @@ function GenericBar({ chartData, title = undefined }) {
       //     enabled: false, // Hides the tooltip
       //   },
       datalabels: {
+        display: true,
         anchor: "end",
         align: "top",
         formatter: Math.round,
