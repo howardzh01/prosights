@@ -4,10 +4,8 @@
 const assert = require("assert");
 
 import { serviceSup, cachedFetch } from "../../../utils/Supabase.js";
-import {
-  generateMonths,
-  parseSemrushOutput,
-} from "../../../utils/BackendUtils.js";
+import { parseSemrushOutput } from "../../../utils/BackendUtils.js";
+import { generateMonths } from "../../../utils/Utils.js";
 
 export const config = {
   runtime: "edge",

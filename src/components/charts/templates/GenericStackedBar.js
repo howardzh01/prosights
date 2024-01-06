@@ -4,18 +4,19 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 
 // Chart.unregister(ChartDataLabels);
 function StackedBarChart({ data, title = undefined }) {
+  // Normailize values to sum to 100 so bars have equal height
   const totals = data.datasets.reduce((acc, curArr) => {
     curArr.data.forEach((value, index) => {
-      //   console.log(value, index);
-      acc[index] = (acc[index] || 0) + value;
+      acc[index] = (acc[index] || 0) + (value || 0);
     });
     return acc;
   }, []);
   data.datasets.forEach((dataset) => {
     dataset.data = dataset.data.map((value, i) =>
-      ((value / totals[i]) * 100).toFixed(1)
+      (((value || 0) / totals[i]) * 100).toFixed(1)
     );
   });
+  //   console.log("normalized", data);
 
   const options = {
     plugins: {
@@ -61,6 +62,7 @@ function StackedBarChart({ data, title = undefined }) {
         max: 102,
       },
     },
+
     // maintainAspectRatio: false,
     // responsive: true,
     // other options...

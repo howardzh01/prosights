@@ -8,9 +8,12 @@ import TwoColumnView from "./templates/TwoColumnView";
 import { convertToGrowthData, aggregateData } from "../../utils/Utils";
 import GenericStackedBar from "./templates/GenericStackedBar";
 import { UN_M49_CONTINENTS } from "../../constants.js";
+import { generateMonths, generateQuarters } from "../../utils/Utils";
 
-function WebGeoTrafficChart({ user, companyUrl }) {
+function WebGeoTrafficChart({ user, companyUrl, startDate = "2019" }) {
   const [geoTrafficData, setGeoTrafficData] = useState(null);
+  const [startDateState, setStartDateState] = useState(startDate);
+  const displayedMonths = generateQuarters(startDateState);
   const geoType = "continent";
 
   const relevant_keys = [
@@ -105,16 +108,21 @@ function WebGeoTrafficChart({ user, companyUrl }) {
       return acc;
     }, {});
     console.log(aggData);
+
     return {
-      labels: Object.keys(aggData[relevant_keys[0]]),
-      datasets: relevant_keys.map((key) => ({
-        data: Object.values(aggData[key]).map((number) => number / 1e6),
-        borderWidth: 1,
-        label: key,
-      })),
+      labels: displayedMonths,
+      datasets: relevant_keys.map((key) => {
+        console.log(key, aggData[key]);
+        return {
+          data: displayedMonths.map((quarter) =>
+            aggData[key] ? aggData[key][quarter] / 1e6 : 0
+          ),
+          borderWidth: 1,
+          label: key,
+        };
+      }),
     };
   }
-
   return (
     <div>
       <p className="text-2xl font-bold">Website Traffic by Geo</p>
@@ -123,6 +131,7 @@ function WebGeoTrafficChart({ user, companyUrl }) {
           <GenericStackedBar
             data={convertToGeoChartData(geoTrafficData, "traffic")}
             title={"% Share"}
+            dataType={"dict"}
           ></GenericStackedBar>
         )}
       </div>

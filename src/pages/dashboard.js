@@ -11,7 +11,7 @@ import WebGeoTrafficChart from "../components/charts/WebGeoTrafficChart";
 function Dashboard() {
   const { isSignedIn, user, isLoaded } = useUser();
   const router = useRouter();
-  const [company, setCompany] = useState("ebay");
+  const [company, setCompany] = useState("deepmind");
   const [country, setCountry] = useState("US");
   const regions = {
     global: "Global",

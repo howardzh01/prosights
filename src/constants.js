@@ -1,6 +1,7 @@
 export const CONSTANTS = {
   MODEL_VERSION: "gpt-4-1106-preview",
   // MODEL_VERSION: "gpt-3.5-turbo",
+  cutoffDate: new Date("2024-01-01"),
 };
 
 export const UN_M49_CONTINENTS = {

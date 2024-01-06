@@ -1,3 +1,4 @@
+import { CONSTANTS } from "../constants";
 export const dateToQuarters = (date) => {
   // Convert Date object 2023-01-01 to 1Q23)
   if (date.constructor === String) {
@@ -69,4 +70,33 @@ export const aggregateData = (
     },
     {}
   );
+};
+
+export const generateMonths = (startYear) => {
+  const dates = [];
+  const today = CONSTANTS.cutoffDate;
+  const currentYear = today.getUTCFullYear();
+  for (let year = startYear; year <= currentYear; year++) {
+    let endMonth = year === currentYear ? today.getUTCMonth() : 12;
+    for (let month = 1; month <= endMonth; month++) {
+      // Pad the month with a leading zero if necessary
+      const monthString = String(month).padStart(2, "0");
+      dates.push(`${year}-${monthString}-01`);
+    }
+  }
+  return dates;
+};
+
+export const generateQuarters = (startYear) => {
+  let quarters = [];
+  const today = CONSTANTS.cutoffDate;
+  const currentYear = today.getUTCFullYear();
+  const currentQuarter = Math.floor((today.getUTCMonth() - 1) / 3) + 1; // -1 month to ensure quarter outputs after month ends
+  for (let year = startYear; year <= currentYear; year++) {
+    let endQuarter = year === currentYear ? currentQuarter : 4;
+    for (let quarter = 1; quarter <= endQuarter; quarter++) {
+      quarters.push(`${quarter}Q${year % 100}`);
+    }
+  }
+  return quarters;
 };

@@ -21,18 +21,3 @@ export function parseSemrushOutput(output) {
   }
   return ret;
 }
-
-export const generateMonths = (startYear) => {
-  const dates = [];
-  const today = new Date();
-  const currentYear = today.getUTCFullYear();
-  for (let year = startYear; year <= currentYear; year++) {
-    let endMonth = year === currentYear ? today.getUTCMonth() : 12;
-    for (let month = 1; month <= endMonth; month++) {
-      // Pad the month with a leading zero if necessary
-      const monthString = String(month).padStart(2, "0");
-      dates.push(`${year}-${monthString}-01`);
-    }
-  }
-  return dates;
-};
