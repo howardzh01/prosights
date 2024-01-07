@@ -79,8 +79,36 @@ function WebTrafficChart({ user, companyUrl, country = "global" }) {
     };
   }
 
-  function convertToChannelChartData(trafficData) {
-    const relevant_keys = ["direct", "mail", "social"];
+  function convertToChannelChartData(trafficData, type = "traffic_by_channel") {
+    let relevant_keys;
+    if (type === "traffic_by_channel") {
+      relevant_keys = [
+        "direct",
+        "mail",
+        "social",
+        "search",
+        "referral",
+        "display_ad",
+      ];
+    } else if (type === "traffic_by_device") {
+      relevant_keys = ["mobile_visits", "desktop_visits"];
+    } else if (type === "users_by_device") {
+      relevant_keys = ["mobile_users", "desktop_users"];
+    } else if (type === "traffic_by_organic_paid") {
+      relevant_keys = [
+        "search_organic",
+        "social_organic",
+        "search_paid",
+        "social_paid",
+      ];
+    } else {
+      relevant_keys = [
+        "search_organic",
+        "social_organic",
+        "search_paid",
+        "social_paid",
+      ];
+    }
 
     if (!trafficData) {
       return;
@@ -156,7 +184,39 @@ function WebTrafficChart({ user, companyUrl, country = "global" }) {
       <div className="h-96">
         {trafficData && (
           <GenericStackedBar
-            data={convertToChannelChartData(trafficData)}
+            data={convertToChannelChartData(trafficData, "traffic_by_channel")}
+            title={"% Share"}
+          ></GenericStackedBar>
+        )}
+      </div>
+
+      <p className="text-2xl font-bold">Website Traffic by Device</p>
+      <div className="h-96">
+        {trafficData && (
+          <GenericStackedBar
+            data={convertToChannelChartData(trafficData, "traffic_by_device")}
+            title={"% Share"}
+          ></GenericStackedBar>
+        )}
+      </div>
+      <p className="text-2xl font-bold">Users by Device</p>
+      <div className="h-96">
+        {trafficData && (
+          <GenericStackedBar
+            data={convertToChannelChartData(trafficData, "users_by_device")}
+            title={"% Share"}
+          ></GenericStackedBar>
+        )}
+      </div>
+
+      <p className="text-2xl font-bold">Website Traffic by Organic vs Paid </p>
+      <div className="h-96">
+        {trafficData && (
+          <GenericStackedBar
+            data={convertToChannelChartData(
+              trafficData,
+              "traffic_by_organic_paid"
+            )}
             title={"% Share"}
           ></GenericStackedBar>
         )}

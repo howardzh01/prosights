@@ -15,7 +15,7 @@ function App() {
 
   useEffect(() => {
     if (isSignedIn) {
-      router.push("/chat");
+      router.push("/dashboard");
     }
   }, [isLoaded, router]);
 

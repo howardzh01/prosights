@@ -11,7 +11,7 @@ import WebGeoTrafficChart from "../components/charts/WebGeoTrafficChart";
 function Dashboard() {
   const { isSignedIn, user, isLoaded } = useUser();
   const router = useRouter();
-  const [company, setCompany] = useState("deepmind");
+  const [company, setCompany] = useState("stockx");
   const [country, setCountry] = useState("US");
   const regions = {
     global: "Global",
@@ -38,13 +38,13 @@ function Dashboard() {
           {company + ".com"} for {country}
         </div>
 
-        {/* {user && company ? (
+        {user && company ? (
           <HeadCountChart user={user} companyName={company} />
         ) : (
           <p>loading</p>
-        )} */}
+        )}
 
-        {/* {user && company ? (
+        {user && company ? (
           <WebTrafficChart
             user={user}
             companyUrl={company + ".com"}
@@ -52,7 +52,7 @@ function Dashboard() {
           />
         ) : (
           <p>loading</p>
-        )} */}
+        )}
 
         {user && company ? (
           <WebGeoTrafficChart
