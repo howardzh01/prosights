@@ -128,6 +128,7 @@ function WebGeoTrafficChart({ user, companyUrl, startDate = "2019" }) {
             data={convertToGeoChartData(geoTrafficData, "traffic")}
             title={"% Share"}
             dataType={"dict"}
+            showDataLabels={false}
           ></GenericStackedBar>
         )}
       </div>

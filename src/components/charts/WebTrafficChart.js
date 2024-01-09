@@ -188,6 +188,7 @@ function WebTrafficChart({ user, companyUrl, country = "global" }) {
           <GenericStackedBar
             data={convertToChannelChartData(trafficData, "traffic_by_channel")}
             title={"% Share"}
+            showDataLabels={false}
           ></GenericStackedBar>
         )}
       </div>
@@ -227,6 +228,7 @@ function WebTrafficChart({ user, companyUrl, country = "global" }) {
               "traffic_by_organic_paid"
             )}
             title={"% Share"}
+            showDataLabels={false}
           ></GenericStackedBar>
         )}
       </div>

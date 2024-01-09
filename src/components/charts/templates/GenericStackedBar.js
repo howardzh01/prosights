@@ -3,7 +3,7 @@ import Chart from "chart.js/auto";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 
 // Chart.unregister(ChartDataLabels);
-function StackedBarChart({ data, title = undefined }) {
+function StackedBarChart({ data, title = undefined, showDataLabels = true }) {
   // Normailize values to sum to 100 so bars have equal height
   const totals = data.datasets.reduce((acc, curArr) => {
     curArr.data.forEach((value, index) => {
@@ -37,7 +37,7 @@ function StackedBarChart({ data, title = undefined }) {
       //     enabled: false, // Hides the tooltip
       //   },
       datalabels: {
-        display: true,
+        display: showDataLabels,
         // anchor: "end",
         // align: "top",
         formatter: Math.round,
