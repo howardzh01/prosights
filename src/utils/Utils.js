@@ -1,4 +1,17 @@
 import { CONSTANTS } from "../constants";
+
+// convert date to months
+export const dateToMonths = (date) => {
+  // Convert Date object 2023-01-01 to Jan 23)
+  if (date.constructor === String) {
+    date = new Date(date);
+  }
+  const month = date.toLocaleString("default", { month: "short" });
+  const monthString = `${month} ${date.getUTCFullYear().toString().slice(2)}`;
+
+  return monthString;
+};
+
 export const dateToQuarters = (date) => {
   // Convert Date object 2023-01-01 to 1Q23)
   if (date.constructor === String) {
@@ -41,7 +54,9 @@ export const aggregateData = (
   }
   const aggData = Object.entries(data).reduce((acc, [date, dic]) => {
     var timeInput;
-    if (timescale === "quarterYear") {
+    if (timescale === "month") {
+      timeInput = dateToMonths(date);
+    } else if (timescale === "quarterYear") {
       timeInput = dateToQuarters(date);
     } else if (timescale === "year") {
       timeInput = new Date(date).getUTCFullYear();

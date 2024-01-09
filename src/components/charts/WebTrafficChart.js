@@ -7,6 +7,18 @@ import GenericStackedBar from "./templates/GenericStackedBar";
 function WebTrafficChart({ user, companyUrl, country = "global" }) {
   const [trafficData, setTrafficData] = useState(null);
 
+  // TODO: make this more compact later - probably 1 useState with an object containing all timescale states, or useReducer
+  const [trafficTimescale, setTrafficTimescale] = useState("quarterYear");
+  const [mauTimescale, setMauTimescale] = useState("quarterYear");
+  const [trafficByChannelTimescale, setTrafficByChannelTimescale] =
+    useState("quarterYear");
+  const [trafficByDeviceTimescale, setTrafficByDeviceTimescale] =
+    useState("quarterYear");
+  const [usersByDeviceTimescale, setUsersByDeviceTimescale] =
+    useState("quarterYear");
+  const [trafficByOrganicVsPaidTimescale, setTrafficByOrganicVsPaidTimescale] =
+    useState("quarterYear");
+
   const exportColumns =
     "target,rank,visits,desktop_visits,mobile_visits,users,desktop_users,mobile_users,desktop_hits,mobile_hits,direct,search_organic,search_paid,social_organic,social_paid,referral,mail,display_ad,search,social,paid,unknown_channel,time_on_site,desktop_time_on_site,mobile_time_on_site,pages_per_visit,desktop_pages_per_visit,mobile_pages_per_visit,bounce_rate,desktop_bounce_rate,mobile_bounce_rate,desktop_share,mobile_share,accuracy,display_date,country,device_type";
   // const channelLabelsDic = {
@@ -75,7 +87,11 @@ function WebTrafficChart({ user, companyUrl, country = "global" }) {
     };
   }
 
-  function convertToChannelChartData(trafficData, type = "traffic_by_channel") {
+  function convertToChannelChartData(
+    trafficData,
+    type = "traffic_by_channel",
+    timescale
+  ) {
     let relevant_keys;
     if (type === "traffic_by_channel") {
       relevant_keys = [
@@ -110,7 +126,7 @@ function WebTrafficChart({ user, companyUrl, country = "global" }) {
       return;
     }
     const aggData = relevant_keys.reduce((acc, key) => {
-      acc[key] = aggregateData(trafficData, key, "sum", "quarterYear");
+      acc[key] = aggregateData(trafficData, key, "sum", timescale);
       return acc;
     }, {});
     console.log(aggData);
@@ -124,12 +140,15 @@ function WebTrafficChart({ user, companyUrl, country = "global" }) {
     };
   }
 
-  const quarterTafficGraph = trafficData && (
+  const quarterTrafficGraph = trafficData && (
     <GenericBar
       chartData={convertToChartData(
-        aggregateData(trafficData, "visits", "sum", "quarterYear")
+        aggregateData(trafficData, "visits", "sum", trafficTimescale)
       )}
       title={"Total Visits (millions)"}
+      showDataLabels={trafficTimescale === "quarterYear"}
+      timescale={trafficTimescale}
+      setTimescale={setTrafficTimescale}
     ></GenericBar>
   );
   const yearTrafficGraph = trafficData && (
@@ -138,15 +157,19 @@ function WebTrafficChart({ user, companyUrl, country = "global" }) {
         aggregateData(trafficData, "visits", "sum", "year")
       )}
       // title={"Total Visits (millions)"}
+      showTimescaleButtons={false}
     ></GenericBar>
   );
 
   const quarterUserGraph = trafficData && (
     <GenericBar
       chartData={convertToChartData(
-        aggregateData(trafficData, "users", "mean", "quarterYear")
+        aggregateData(trafficData, "users", "mean", mauTimescale)
       )}
       title={"Web Users (millions)"}
+      showDataLabels={mauTimescale === "quarterYear"}
+      timescale={mauTimescale}
+      setTimescale={setMauTimescale}
     ></GenericBar>
   );
 
@@ -156,6 +179,7 @@ function WebTrafficChart({ user, companyUrl, country = "global" }) {
         aggregateData(trafficData, "users", "mean", "year")
       )}
       // title={"Web Users (millions)"}
+      showTimescaleButtons={false}
     ></GenericBar>
   );
 
@@ -166,7 +190,7 @@ function WebTrafficChart({ user, companyUrl, country = "global" }) {
         <TwoColumnView
           titleId="traffic"
           title={"Website Traffic"}
-          quarterGraph={quarterTafficGraph}
+          quarterGraph={quarterTrafficGraph}
           yearGraph={yearTrafficGraph}
         ></TwoColumnView>
       </div>
@@ -186,9 +210,15 @@ function WebTrafficChart({ user, companyUrl, country = "global" }) {
       <div className="h-96">
         {trafficData && (
           <GenericStackedBar
-            data={convertToChannelChartData(trafficData, "traffic_by_channel")}
+            data={convertToChannelChartData(
+              trafficData,
+              "traffic_by_channel",
+              trafficByChannelTimescale
+            )}
             title={"% Share"}
             showDataLabels={false}
+            timescale={trafficByChannelTimescale}
+            setTimescale={setTrafficByChannelTimescale}
           ></GenericStackedBar>
         )}
       </div>
@@ -199,8 +229,14 @@ function WebTrafficChart({ user, companyUrl, country = "global" }) {
       <div className="h-96">
         {trafficData && (
           <GenericStackedBar
-            data={convertToChannelChartData(trafficData, "traffic_by_device")}
+            data={convertToChannelChartData(
+              trafficData,
+              "traffic_by_device",
+              trafficByDeviceTimescale
+            )}
             title={"% Share"}
+            timescale={trafficByDeviceTimescale}
+            setTimescale={setTrafficByDeviceTimescale}
           ></GenericStackedBar>
         )}
       </div>
@@ -211,8 +247,14 @@ function WebTrafficChart({ user, companyUrl, country = "global" }) {
       <div className="h-96">
         {trafficData && (
           <GenericStackedBar
-            data={convertToChannelChartData(trafficData, "users_by_device")}
+            data={convertToChannelChartData(
+              trafficData,
+              "users_by_device",
+              usersByDeviceTimescale
+            )}
             title={"% Share"}
+            timescale={usersByDeviceTimescale}
+            setTimescale={setUsersByDeviceTimescale}
           ></GenericStackedBar>
         )}
       </div>
@@ -225,10 +267,13 @@ function WebTrafficChart({ user, companyUrl, country = "global" }) {
           <GenericStackedBar
             data={convertToChannelChartData(
               trafficData,
-              "traffic_by_organic_paid"
+              "traffic_by_organic_paid",
+              trafficByOrganicVsPaidTimescale
             )}
             title={"% Share"}
             showDataLabels={false}
+            timescale={trafficByOrganicVsPaidTimescale}
+            setTimescale={setTrafficByOrganicVsPaidTimescale}
           ></GenericStackedBar>
         )}
       </div>

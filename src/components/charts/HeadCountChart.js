@@ -5,6 +5,7 @@ import TwoColumnView from "./templates/TwoColumnView";
 
 function HeadCountChart({ user, companyName }) {
   const [headCountData, setHeadCountData] = useState(null);
+  const [timescale, setTimescale] = useState("quarterYear");
 
   useEffect(() => {
     console.log("companyName", companyName, user.id);
@@ -61,9 +62,12 @@ function HeadCountChart({ user, companyName }) {
   const quarterHeadCountGraph = headCountData && (
     <GenericBar
       chartData={convertToChartData(
-        aggregateData(headCountData, "headcount", "last", "quarterYear")
+        aggregateData(headCountData, "headcount", "last", timescale)
       )}
       title={"Total Employee (#)"}
+      showDataLabels={timescale === "quarterYear"}
+      timescale={timescale}
+      setTimescale={setTimescale}
     />
   );
   const yearHeadCountGraph = headCountData && (
@@ -71,11 +75,12 @@ function HeadCountChart({ user, companyName }) {
       chartData={convertToChartData(
         aggregateData(headCountData, "headcount", "last", "year")
       )}
+      showTimescaleButtons={false}
     />
   );
 
   return (
-    <div className="h-48">
+    <div className="h-64">
       <TwoColumnView
         titleId="employeeCount"
         title={"Employee Count"}

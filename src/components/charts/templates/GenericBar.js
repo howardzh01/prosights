@@ -1,13 +1,18 @@
-import Link from "next/link";
-import Image from "next/image";
 import React from "react";
-import { useState, useEffect, useRef } from "react";
 import { Bar } from "react-chartjs-2";
 import Chart from "chart.js/auto";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 Chart.register(ChartDataLabels);
 
-function GenericBar({ chartData, title = undefined }) {
+function GenericBar({
+  chartData,
+  title = undefined,
+  showDataLabels = true,
+  showTimescaleButtons = true,
+  timescale,
+  setTimescale,
+}) {
   const options = {
     plugins: {
       title: {
@@ -23,7 +28,7 @@ function GenericBar({ chartData, title = undefined }) {
       //     enabled: false, // Hides the tooltip
       //   },
       datalabels: {
-        display: true,
+        display: showDataLabels,
         anchor: "end",
         align: "top",
         formatter: Math.round,
@@ -38,6 +43,7 @@ function GenericBar({ chartData, title = undefined }) {
           display: false, // Hides x-axis gridlines
         },
       },
+      // TODO: maybe display y-axis if timeline === "month" as data labels are turned off on monthly
       y: {
         display: false, // Hides the y-axis
         grid: {
@@ -51,8 +57,40 @@ function GenericBar({ chartData, title = undefined }) {
   };
 
   return (
-    <div className="">
-      {chartData && <Bar data={chartData} options={options}></Bar>}
+    <div className="flex flex-col">
+      {showTimescaleButtons && (
+        // TODO: can make this into component as it is reused in GenericStackedBar
+        <div className="flex items-center gap-1 self-end">
+          <button
+            type="button"
+            disabled={timescale === "month"}
+            onClick={() => setTimescale("month")}
+          >
+            <MinusCircleIcon
+              className={`w-6 h-6 ${
+                timescale === "month"
+                  ? "text-customGray-200"
+                  : "text-customGray-800"
+              }`}
+            />
+          </button>
+          <button
+            type="button"
+            disabled={timescale === "quarterYear"}
+            onClick={() => setTimescale("quarterYear")}
+          >
+            <PlusCircleIcon
+              className={`w-6 h-6 ${
+                timescale === "quarterYear"
+                  ? "text-customGray-200"
+                  : "text-customGray-800"
+              }`}
+            />
+          </button>
+        </div>
+      )}
+
+      <div>{chartData && <Bar data={chartData} options={options}></Bar>}</div>
     </div>
   );
 }
