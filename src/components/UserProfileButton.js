@@ -1,10 +1,14 @@
-import { SignedIn, UserButton } from "@clerk/nextjs";
+import { SignedIn, UserButton, useUser } from "@clerk/nextjs";
 
-function UserProfileButton() {
+function UserProfileButton({ textColor = "text-white" }) {
+  const { user } = useUser();
+
   return (
-    <div className="flex text-white">
+    <div className={`flex ${textColor}`}>
       <SignedIn>
-        <UserButton showName={false} afterSignOutUrl={"/"} />
+        <div className="flex items-center gap-2">
+          <UserButton showName afterSignOutUrl={"/"} />
+        </div>
       </SignedIn>
     </div>
   );

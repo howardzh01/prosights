@@ -1,14 +1,8 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
-import { Bar } from "react-chartjs-2";
-import Chart from "chart.js/auto";
-import GenericBar from "./templates/GenericBar";
-import GenericPercentGrowth from "./templates/GenericPercentGrowth";
-import TwoColumnView from "./templates/TwoColumnView";
-import { convertToGrowthData, aggregateData } from "../../utils/Utils";
+import { useState, useEffect } from "react";
+import { aggregateData } from "../../utils/Utils";
 import GenericStackedBar from "./templates/GenericStackedBar";
 import { UN_M49_CONTINENTS } from "../../constants.js";
-import { generateMonths, generateQuarters } from "../../utils/Utils";
+import { generateQuarters } from "../../utils/Utils";
 
 function WebGeoTrafficChart({ user, companyUrl, startDate = "2019" }) {
   const [geoTrafficData, setGeoTrafficData] = useState(null);
@@ -125,7 +119,9 @@ function WebGeoTrafficChart({ user, companyUrl, startDate = "2019" }) {
   }
   return (
     <div>
-      <p className="text-2xl font-bold">Website Traffic by Geo</p>
+      <h2 id="trafficByGeo" className="text-2xl font-bold">
+        Website Traffic by Geo
+      </h2>
       <div className="h-96">
         {geoTrafficData && (
           <GenericStackedBar

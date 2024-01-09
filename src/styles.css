@@ -67,3 +67,13 @@ body {
 body, nav, div {
   margin: 0;
 }
+
+/* for subsections in table of contents, head2 is for main section titles */
+.head3{
+  margin-left: 10px;
+  list-style-type: circle;
+}
+.head4{
+  margin-left: 20px;
+  list-style-type: square;
+}

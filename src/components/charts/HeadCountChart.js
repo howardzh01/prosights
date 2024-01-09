@@ -1,14 +1,5 @@
-import Link from "next/link";
-import Image from "next/image";
-import React from "react";
-import { useState, useEffect, useRef } from "react";
-import { Bar } from "react-chartjs-2";
-import Chart from "chart.js/auto";
-import {
-  dateToQuarters,
-  convertToGrowthData,
-  aggregateData,
-} from "../../utils/Utils";
+import { useState, useEffect } from "react";
+import { aggregateData } from "../../utils/Utils";
 import GenericBar from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
 
@@ -86,6 +77,7 @@ function HeadCountChart({ user, companyName }) {
   return (
     <div className="h-48">
       <TwoColumnView
+        titleId="employeeCount"
         title={"Employee Count"}
         quarterGraph={quarterHeadCountGraph}
         yearGraph={yearHeadCountGraph}

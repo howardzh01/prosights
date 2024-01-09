@@ -1,11 +1,7 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
-import { Bar } from "react-chartjs-2";
-import Chart from "chart.js/auto";
+import { useState, useEffect } from "react";
 import GenericBar from "./templates/GenericBar";
-import GenericPercentGrowth from "./templates/GenericPercentGrowth";
 import TwoColumnView from "./templates/TwoColumnView";
-import { convertToGrowthData, aggregateData } from "../../utils/Utils";
+import { aggregateData } from "../../utils/Utils";
 import GenericStackedBar from "./templates/GenericStackedBar";
 
 function WebTrafficChart({ user, companyUrl, country = "global" }) {
@@ -168,19 +164,25 @@ function WebTrafficChart({ user, companyUrl, country = "global" }) {
     <div>
       <div className="h-64">
         <TwoColumnView
+          titleId="traffic"
           title={"Website Traffic"}
           quarterGraph={quarterTafficGraph}
           yearGraph={yearTrafficGraph}
         ></TwoColumnView>
       </div>
+
       <div className="h-64">
         <TwoColumnView
+          titleId="mau"
           title={"Website MAU"}
           quarterGraph={quarterUserGraph}
           yearGraph={yearUserGraph}
         ></TwoColumnView>
       </div>
-      <p className="text-2xl font-bold">Website Traffic by Channel</p>
+
+      <h2 id="trafficByChannel" className="text-2xl font-bold">
+        Website Traffic by Channel
+      </h2>
       <div className="h-96">
         {trafficData && (
           <GenericStackedBar
@@ -190,7 +192,9 @@ function WebTrafficChart({ user, companyUrl, country = "global" }) {
         )}
       </div>
 
-      <p className="text-2xl font-bold">Website Traffic by Device</p>
+      <h2 id="trafficByDevice" className="text-2xl font-bold">
+        Website Traffic by Device
+      </h2>
       <div className="h-96">
         {trafficData && (
           <GenericStackedBar
@@ -199,7 +203,10 @@ function WebTrafficChart({ user, companyUrl, country = "global" }) {
           ></GenericStackedBar>
         )}
       </div>
-      <p className="text-2xl font-bold">Users by Device</p>
+
+      <h2 id="usersByDevice" className="text-2xl font-bold">
+        Users by Device
+      </h2>
       <div className="h-96">
         {trafficData && (
           <GenericStackedBar
@@ -209,7 +216,9 @@ function WebTrafficChart({ user, companyUrl, country = "global" }) {
         )}
       </div>
 
-      <p className="text-2xl font-bold">Website Traffic by Organic vs Paid </p>
+      <h2 id="trafficByOrganicVsPaid" className="text-2xl font-bold">
+        Website Traffic by Organic vs Paid{" "}
+      </h2>
       <div className="h-96">
         {trafficData && (
           <GenericStackedBar

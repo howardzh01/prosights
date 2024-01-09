@@ -17,6 +17,7 @@ module.exports = {
     extend: {
       colors: {
         primary: "#009AFF",
+        primaryHover: "#008ae5",
         secondary: "#B84CEB",
         primaryInfusion: "#E0EFFF",
         "customGray-100": "#EFF2F5",

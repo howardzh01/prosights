@@ -39,14 +39,14 @@ function SearchBoxDashboard({ setCompany }) {
   };
 
   return (
-    <div className="flex items-stretch flex-row border border-customGray-300 rounded-2xl px-6 py-3">
+    <div className="flex w-1/2 items-stretch flex-row border border-customGray-300 rounded-2xl px-6 py-3">
       <div className="flex flex-row items-center w-full">
         <TextareaAutosize
           type="text"
           placeholder="Search for a Company"
-          className={`bg-background w-full border-none font-nunito text-base text-dark px-0 py-0 pr-2 mr-2 resize-none placeholder:text-customLightGray focus:ring-0`}
+          className={`w-full border-none font-nunito text-base text-dark px-0 py-0 pr-2 mr-2 resize-none placeholder:text-customLightGray focus:ring-0`}
           value={searchTerm}
-          maxRows={8}
+          maxRows={1} // set to 1 so the textarea doesn't overflow
           minRows={1}
           // maxLength={2500}
           onChange={handleSearch}
