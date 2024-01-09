@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 
 function SearchBoxDashboard({ setCompany }) {
+  // always converts company to lowercase
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = (event) => {
@@ -31,7 +32,7 @@ function SearchBoxDashboard({ setCompany }) {
 
     //   return newMessages;
     // });
-    setCompany(searchTerm);
+    setCompany(searchTerm.toLowerCase());
     setSearchTerm("");
     // const container = messagesContainerRef.current;
     // shouldBeSnapping.current = true;

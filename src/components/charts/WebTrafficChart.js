@@ -50,6 +50,9 @@ function WebTrafficChart({ user, companyUrl, country = "global" }) {
     var data = await response.json();
     console.log(data);
     // transform data into {month: {key:value}}
+    if (!data) {
+      return;
+    }
     data = data.reduce((acc, item, i) => {
       if (!item || item.length === 0) {
         //no information for this month

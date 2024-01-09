@@ -9,6 +9,7 @@ import WebGeoTrafficChart from "../components/charts/WebGeoTrafficChart";
 import { Dialog, Transition } from "@headlessui/react";
 import UserProfileButton from "../components/UserProfileButton";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import CompanySummaryView from "../components/CompanySummaryView";
 
 // id is the id of the heading, level is the header level e.g. 2 = h2
 const headings = [
@@ -301,6 +302,15 @@ function Dashboard() {
             </div>
 
             {user && company ? (
+              <CompanySummaryView
+                user={user}
+                companyName={company}
+              ></CompanySummaryView>
+            ) : (
+              <p>Crunchbase loading</p>
+            )}
+
+            {/* {user && company ? (
               <HeadCountChart user={user} companyName={company} />
             ) : (
               <p>loading</p>
@@ -324,7 +334,7 @@ function Dashboard() {
               />
             ) : (
               <p>loading</p>
-            )}
+            )} */}
           </div>
         </main>
       </div>

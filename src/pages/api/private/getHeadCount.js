@@ -63,7 +63,6 @@ const handler = async (req) => {
       },
     });
   }
-  console.log("headcount", headcountData);
   const unwrap = ({ created, headcount }) => ({ created, headcount });
   return new Response(
     JSON.stringify(headcountData.map((monthData) => unwrap(monthData))),

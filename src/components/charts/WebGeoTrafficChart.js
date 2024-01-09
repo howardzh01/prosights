@@ -42,6 +42,10 @@ function WebGeoTrafficChart({ user, companyUrl, startDate = "2019" }) {
     var data = await response.json();
     console.log(data);
     // transform data into {month: {key:value}}
+    if (!data) {
+      console.log("No data for geotraffic", companyUrl);
+      return;
+    }
     data = data.reduce((acc, monthItem, i) => {
       if (!monthItem || monthItem.length === 0) {
         //no information for this month
