@@ -71,7 +71,7 @@ function CompanySummaryView({ user, companyName }) {
       </h2>
       {/* <div>{cbfields["website_url"]}</div> */}
 
-      <div className="flex gap-6">
+      <div className="flex gap-6 h-64">
         <DescriptionTable
           descriptionData={{
             logo: cbfields["image_url"],

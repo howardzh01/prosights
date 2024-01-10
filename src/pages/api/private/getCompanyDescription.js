@@ -8,6 +8,7 @@ export const config = {
 const handler = async (req) => {
   const reqJSON = await req.json();
   const { companyName, crunchbaseDescription } = reqJSON;
+  return new Response(crunchbaseDescription);
 
   const payload = {
     model: CONSTANTS.MODEL_VERSION,

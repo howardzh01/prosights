@@ -40,7 +40,6 @@ function WebGeoTrafficChart({ user, companyUrl, startDate = "2019" }) {
       console.log(response.status);
     }
     var data = await response.json();
-    console.log(data);
     // transform data into {month: {key:value}}
     if (!data) {
       console.log("No data for geotraffic", companyUrl);
@@ -105,7 +104,6 @@ function WebGeoTrafficChart({ user, companyUrl, startDate = "2019" }) {
       );
       return acc;
     }, {});
-    console.log(aggData);
 
     return {
       labels: displayedMonths,
