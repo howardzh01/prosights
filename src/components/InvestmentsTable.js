@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 
-function InvestorTable({ fundingData }) {
-  console.log(fundingData);
-  if (!fundingData) {
+function InvestmentsTable({ investmentsData }) {
+  console.log(investmentsData);
+  if (!investmentsData) {
     return <div>Loading</div>;
   }
+
   function TableHeader({ text, is_header = true }) {
     if (is_header) {
       return <th className="border px-2 py-2 text-center">{text}</th>;
@@ -14,25 +15,50 @@ function InvestorTable({ fundingData }) {
     }
   }
 
+  // date
+  // type
+  // amount
+  // valuation
+
+  const combinedData = [];
+
+  investmentsData.investments.forEach((investment) => {
+    combinedData.push({
+      // date: investment.,
+      // type: investment.,
+      // amount: investment.,
+      // valuation: investment.
+    });
+  });
+
+  investmentsData.acquisitions.forEach((acquisition) => {
+    combinedData.push({
+      // date: acquisition.,
+      type: acquisition.acquisition_type,
+      amount:
+        acquisition.acquiree_funding_total.value_usd !== 0
+          ? `$${investment.acquiree_funding_total.value_usd}`
+          : "-",
+      // valuation: acquisition.
+    });
+  });
+
   return (
-    <div className="w-1/2 overflow-x-auto">
+    <div className="w-1/4 overflow-x-auto">
       <table className="bg-white text-sm">
         <thead>
           <tr>
-            <TableHeader text="Announced Date" />
-            <TableHeader text="Rounds" />
-            <TableHeader text="Number of Investors" />
-            <TableHeader text="Money Raised" />
-            <TableHeader text="Post-Money Valuation" />
-            <TableHeader text="Lead Investors" />
+            <TableHeader text="Date" />
+            <TableHeader text="Type" />
+            <TableHeader text="Amount" />
+            <TableHeader text="Valuation" />
           </tr>
         </thead>
         <tbody>
-          {fundingData.map((row, index) => (
+          {combinedData.map((row, index) => (
             <tr key={index}>
               <TableHeader text={row["announced_on"]} is_header={false} />
               <TableHeader text={row["investment_type"]} is_header={false} />
-              <TableHeader text={row["num_investors"]} is_header={false} />
               <TableHeader
                 text={
                   row["money_raised"]
@@ -68,16 +94,6 @@ function InvestorTable({ fundingData }) {
                 }
                 is_header={false}
               />
-              <TableHeader
-                text={
-                  row["lead_investor_identifiers"]
-                    ? row["lead_investor_identifiers"]
-                        .map((item) => item["value"])
-                        .join(", ")
-                    : "No Lead Investors"
-                }
-                is_header={false}
-              />
             </tr>
           ))}
         </tbody>
@@ -86,4 +102,4 @@ function InvestorTable({ fundingData }) {
   );
 }
 
-export default InvestorTable;
+export default InvestmentsTable;

@@ -14,6 +14,11 @@ import CompanySummaryView from "../components/CompanySummaryView";
 // id is the id of the heading, level is the header level e.g. 2 = h2
 const headings = [
   {
+    id: "companyOverview",
+    text: "Company Overview",
+    level: 2,
+  },
+  {
     id: "employeeCount",
     text: "Employee Count",
     level: 2,
@@ -257,7 +262,7 @@ function Dashboard() {
 
       <div className="flex h-full overflow-auto">
         {/* Static sidebar for desktop */}
-        <div className="hidden h-full shrink-0 grow-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
+        <div className="hidden shrink-0 grow-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-primary px-6 py-5">
             <nav className="flex flex-1 flex-col">
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -295,7 +300,10 @@ function Dashboard() {
           </div>
         </div>
 
-        <main id="mainSection" className="py-10 overflow-y-auto w-full">
+        <main
+          id="mainSection"
+          className="py-10 overflow-y-auto overflow-x-hidden"
+        >
           <div className="px-4 sm:px-6 lg:px-8">
             <div className="text-4xl font-bold">
               {company + ".com"} for {country}
@@ -309,7 +317,7 @@ function Dashboard() {
             ) : (
               <p>Crunchbase loading</p>
             )}
-            {/* 
+
             {user && company ? (
               <HeadCountChart user={user} companyName={company} />
             ) : (
@@ -334,7 +342,7 @@ function Dashboard() {
               />
             ) : (
               <p>loading</p>
-            )} */}
+            )}
           </div>
         </main>
       </div>
