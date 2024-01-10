@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import InvestorTable from "./InvestorTable";
 
 function CompanySummaryView({ user, companyName }) {
   const [crunchbaseData, setCrunchbaseData] = useState(null);
@@ -70,6 +71,9 @@ function CompanySummaryView({ user, companyName }) {
         {cbfields["location_identifiers"][1]["value"]}
       </div>
       <div>{cbfields["website_url"]}</div>
+      <InvestorTable
+        fundingData={crunchbaseData["raised_funding_rounds"]}
+      ></InvestorTable>
     </div>
   );
 }
