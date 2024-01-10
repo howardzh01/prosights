@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import InvestorTable from "./InvestorTable";
 import DescriptionTable from "./DescriptionTable";
 import InvestmentsTable from "./InvestmentsTable";
@@ -65,13 +64,13 @@ function CompanySummaryView({ user, companyName }) {
   }
   let cbfields = crunchbaseData["fields"];
   return (
-    <div>
-      <h2 className="text-2xl font-bold my-3" id="companyOverview">
+    <div className="flex flex-col">
+      <h2 className="text-2xl font-bold" id="companyOverview">
         Company Overview
       </h2>
       {/* <div>{cbfields["website_url"]}</div> */}
 
-      <div className="flex gap-6 h-64">
+      <div className="flex gap-6 h-64 mt-2">
         <DescriptionTable
           descriptionData={{
             logo: cbfields["image_url"],
@@ -92,6 +91,36 @@ function CompanySummaryView({ user, companyName }) {
             acquisitions: crunchbaseData["acquiree_acquisitions"],
           }}
         />
+      </div>
+
+      <div className="grid gap-6 grid-cols-3 h-64 mt-4">
+        <div className="flex flex-col items-start gap-2">
+          <p className="text-xl font-semibold">Headcount</p>
+          <div className="border border-primary w-full h-full"></div>
+        </div>
+        <div className="flex flex-col items-start gap-2">
+          <p className="text-xl font-semibold">Website Traffic</p>
+          <div className="border border-primary w-full h-full"></div>
+        </div>
+        <div className="flex flex-col items-start gap-2">
+          <p className="text-xl font-semibold">App Usage</p>
+          <div className="border border-primary w-full h-full"></div>
+        </div>
+      </div>
+
+      <div className="grid gap-6 grid-cols-3 h-64 mt-4">
+        <div className="flex flex-col items-start gap-2">
+          <p className="text-xl font-semibold">Revenue Momentum</p>
+          <div className="border border-primary w-full h-full"></div>
+        </div>
+        <div className="flex flex-col items-start gap-2">
+          <p className="text-xl font-semibold">Ad Spend</p>
+          <div className="border border-primary w-full h-full"></div>
+        </div>
+        <div className="flex flex-col items-start gap-2">
+          <p className="text-xl font-semibold">Section</p>
+          <div className="border border-primary w-full h-full"></div>
+        </div>
       </div>
     </div>
   );
