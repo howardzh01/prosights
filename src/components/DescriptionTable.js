@@ -44,7 +44,9 @@ function DescriptionTable({ descriptionData }) {
               Funding
             </td>
             <td className="border px-2 py-2 text-center">
-              ${descriptionData.funding / 1000000}M
+              {descriptionData.funding
+                ? `$${descriptionData.funding / 1000000}M`
+                : "-"}
             </td>
           </tr>
 

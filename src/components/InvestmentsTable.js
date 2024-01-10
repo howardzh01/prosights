@@ -17,6 +17,7 @@ function InvestmentsTable({ investmentsData }) {
 
   const combinedData = [];
 
+  // TODO: need some investment data from crunchbase to see the structure
   investmentsData.investments.forEach((investment) => {
     combinedData.push({
       // date: investment.,
@@ -27,14 +28,21 @@ function InvestmentsTable({ investmentsData }) {
   });
 
   investmentsData.acquisitions.forEach((acquisition) => {
+    const wholeAmount = acquisition.acquirer_funding_total.value_usd;
+
     combinedData.push({
-      // date: acquisition.,
+      date: acquisition.announced_on.value,
       type: acquisition.acquisition_type,
       amount:
-        acquisition.acquiree_funding_total.value_usd !== 0
-          ? `$${investment.acquiree_funding_total.value_usd}`
+        wholeAmount !== 0
+          ? // check if money raised > 1 billion and if not then just use millions
+            `$${
+              wholeAmount > 1000000000
+                ? wholeAmount / 1000000000
+                : wholeAmount / 1000000
+            }${wholeAmount > 1000000000 ? "B" : "M"}`
           : "-",
-      // valuation: acquisition.
+      valuation: "_", // TODO: not sure if this data is returned for acquisitions
     });
   });
 
@@ -52,43 +60,10 @@ function InvestmentsTable({ investmentsData }) {
         <tbody>
           {combinedData.map((row, index) => (
             <tr key={index}>
-              <TableHeader text={row["announced_on"]} is_header={false} />
-              <TableHeader text={row["investment_type"]} is_header={false} />
-              <TableHeader
-                text={
-                  row["money_raised"]
-                    ? // check if money raised > 1 billion and if not then just use millions
-                      `$${
-                        row["money_raised"]["value_usd"] > 1000000000
-                          ? row["money_raised"]["value_usd"] / 1000000000
-                          : row["money_raised"]["value_usd"] / 1000000
-                      }${
-                        row["money_raised"]["value_usd"] > 1000000000
-                          ? "B"
-                          : "M"
-                      }`
-                    : "-"
-                }
-                is_header={false}
-              />
-              <TableHeader
-                text={
-                  row["post_money_valuation"]
-                    ? // check if valuation > 1 billion and if not then just use millions
-                      `$${
-                        row["post_money_valuation"]["value_usd"] > 1000000000
-                          ? row["post_money_valuation"]["value_usd"] /
-                            1000000000
-                          : row["post_money_valuation"]["value_usd"] / 1000000
-                      }${
-                        row["post_money_valuation"]["value_usd"] > 1000000000
-                          ? "B"
-                          : "M"
-                      }`
-                    : "-"
-                }
-                is_header={false}
-              />
+              <TableHeader text={row.date} is_header={false} />
+              <TableHeader text={row.type} is_header={false} />
+              <TableHeader text={row.amount} is_header={false} />
+              <TableHeader text={row.valuation} is_header={false} />
             </tr>
           ))}
         </tbody>

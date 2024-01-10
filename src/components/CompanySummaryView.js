@@ -73,11 +73,16 @@ function CompanySummaryView({ user, companyName }) {
       <div className="flex gap-6 h-64 mt-2">
         <DescriptionTable
           descriptionData={{
-            logo: cbfields["image_url"],
+            // TODO: pass in a placeholder image URL if there is no image for some companies (got no image from flight-club)
+            logo: cbfields["image_url"] || "",
             description: cbfields["description"],
             founded: cbfields["founded_on"]["value"],
-            funding: cbfields["funding_total"]["value_usd"],
-            location: `${cbfields["location_identifiers"][0]["value"]} ${cbfields["location_identifiers"][1]["value"]}`,
+            funding: cbfields["funding_total"]
+              ? cbfields["funding_total"]["value_usd"]
+              : null,
+            location: cbfields["location_identifiers"]
+              ? `${cbfields["location_identifiers"][0]["value"]} ${cbfields["location_identifiers"][1]["value"]}`
+              : "",
           }}
         ></DescriptionTable>
 
