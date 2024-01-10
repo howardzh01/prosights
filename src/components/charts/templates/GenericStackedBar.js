@@ -1,10 +1,12 @@
 import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 import { Bar } from "react-chartjs-2";
+import GenericTimeScale from "./GenericTimeScale";
 
 function StackedBarChart({
   data,
   title = undefined,
   showDataLabels = true,
+  showTimescaleButtons = true,
   timescale,
   setTimescale,
 }) {
@@ -32,6 +34,7 @@ function StackedBarChart({
       },
       legend: {
         display: true, // Hides the legend
+        position: "right",
         labels: {
           boxWidth: 12, // Set the width of the color box next to the legend text
           // ... other label options
@@ -74,35 +77,12 @@ function StackedBarChart({
   };
   return (
     <div className="flex flex-col h-full">
-      {/* // TODO: can make this into component as it is reused in GenericBar */}
-      <div className="flex items-center gap-1 self-end">
-        <button
-          type="button"
-          disabled={timescale === "month"}
-          onClick={() => setTimescale("month")}
-        >
-          <MinusCircleIcon
-            className={`w-6 h-6 ${
-              timescale === "month"
-                ? "text-customGray-200"
-                : "text-customGray-800"
-            }`}
-          />
-        </button>
-        <button
-          type="button"
-          disabled={timescale === "quarterYear"}
-          onClick={() => setTimescale("quarterYear")}
-        >
-          <PlusCircleIcon
-            className={`w-6 h-6 ${
-              timescale === "quarterYear"
-                ? "text-customGray-200"
-                : "text-customGray-800"
-            }`}
-          />
-        </button>
-      </div>
+      {showTimescaleButtons && (
+        <GenericTimeScale
+          timescale={timescale}
+          setTimescale={setTimescale}
+        ></GenericTimeScale>
+      )}
 
       <div className="h-full">
         <Bar data={data} options={options} />

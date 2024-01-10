@@ -327,14 +327,14 @@ function Dashboard() {
               {company + ".com"} for {country}
             </div>
 
-            {user && company ? (
+            {/* {user && company ? (
               <CompanySummaryView
                 user={user}
                 companyName={company}
               ></CompanySummaryView>
             ) : (
               <p>Crunchbase loading</p>
-            )}
+            )} */}
 
             {user && company ? (
               <HeadCountChart user={user} companyName={company} />

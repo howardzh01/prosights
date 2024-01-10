@@ -13,3 +13,9 @@ export const UN_M49_CONTINENTS = {
   202: "Sub-Saharan Africa",
   2: "Africa",
 };
+
+export const TIMESCALE_TRANSITION_DIC = {
+  month: [undefined, "quarterYear"],
+  quarterYear: ["month", "year"],
+  year: ["quarterYear", undefined],
+};
