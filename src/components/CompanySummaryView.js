@@ -35,6 +35,26 @@ function CompanySummaryView({ user, companyName }) {
     //   return acc;
     // }, {});
 
+    // Make request to refine the company description
+    const descriptionResponse = await fetch(
+      `/api/private/getCompanyDescription`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          companyName: companyName,
+          crunchbaseDescription: data["fields"]["description"],
+        }),
+      }
+    );
+    if (!descriptionResponse.ok) {
+      console.log(descriptionResponse.status);
+    }
+    data["fields"]["description"] = await descriptionResponse.text();
+    console.log("WHAT", data);
+
     setCrunchbaseData(data);
   };
   console.log(crunchbaseData);
