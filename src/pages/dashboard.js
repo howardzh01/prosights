@@ -255,7 +255,7 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className="flex h-full overflow-hidden">
+      <div className="flex h-full overflow-auto">
         {/* Static sidebar for desktop */}
         <div className="hidden h-full shrink-0 grow-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-primary px-6 py-5">
@@ -309,8 +309,8 @@ function Dashboard() {
             ) : (
               <p>Crunchbase loading</p>
             )}
-
-            {/* {user && company ? (
+            {/* 
+            {user && company ? (
               <HeadCountChart user={user} companyName={company} />
             ) : (
               <p>loading</p>
