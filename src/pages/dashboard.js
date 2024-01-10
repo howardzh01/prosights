@@ -320,7 +320,7 @@ function Dashboard() {
 
         <main
           id="mainSection"
-          className="py-10 overflow-y-auto overflow-x-hidden"
+          className="py-10 overflow-y-auto overflow-x-hidden w-screen"
         >
           <div className="px-4 sm:px-6 lg:px-8">
             <div className="text-4xl font-bold">
