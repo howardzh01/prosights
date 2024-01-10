@@ -94,40 +94,51 @@ function Dashboard() {
   // stockx, goat, grailed, flight-club,
   //   const company = "zillow";
 
+  // State to keep track of all fully visible elements
+  const [fullyVisibleElements, setFullyVisibleElements] = useState(new Set());
+
   const { activeId } = useHeadsObserver();
 
   function useHeadsObserver() {
     const observer = useRef();
     const [activeId, setActiveId] = useState("");
-    // State to keep track of all fully visible elements
-    const [fullyVisibleElements, setFullyVisibleElements] = useState(new Set());
 
     useEffect(() => {
       const handleObsever = (entries) => {
-        // Update the set of fully visible elements
+        let hasVisibleElementsChanged = false;
         const newFullyVisibleElements = new Set(fullyVisibleElements);
 
         entries.forEach((entry) => {
           if (entry.intersectionRatio === 1) {
+            if (!newFullyVisibleElements.has(entry.target.id)) {
+              hasVisibleElementsChanged = true;
+            }
             newFullyVisibleElements.add(entry.target.id);
           } else {
+            if (newFullyVisibleElements.has(entry.target.id)) {
+              hasVisibleElementsChanged = true;
+            }
             newFullyVisibleElements.delete(entry.target.id);
           }
         });
 
-        setFullyVisibleElements(newFullyVisibleElements);
+        if (hasVisibleElementsChanged) {
+          setFullyVisibleElements(newFullyVisibleElements);
 
-        // Convert the set to an array and sort it based on the DOM order
-        const sortedFullyVisibleEntries = Array.from(newFullyVisibleElements)
-          .map((id) => document.getElementById(id))
-          .sort(
-            (a, b) =>
-              a.getBoundingClientRect().top - b.getBoundingClientRect().top
-          );
+          // Convert the set to an array and sort it based on the DOM order
+          const sortedFullyVisibleEntries = Array.from(newFullyVisibleElements)
+            .map((id) => document.getElementById(id))
+            .sort(
+              (a, b) =>
+                a.getBoundingClientRect().top - b.getBoundingClientRect().top
+            );
 
-        // Set the activeId to the first element in the sorted array
-        if (sortedFullyVisibleEntries.length > 0) {
-          setActiveId(sortedFullyVisibleEntries[0].id);
+          // Set the activeId to the first element in the sorted array
+          if (sortedFullyVisibleEntries.length > 0) {
+            setActiveId(sortedFullyVisibleEntries[0].id);
+          } else {
+            setActiveId("");
+          }
         }
       };
 

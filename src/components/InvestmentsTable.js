@@ -15,11 +15,6 @@ function InvestmentsTable({ investmentsData }) {
     }
   }
 
-  // date
-  // type
-  // amount
-  // valuation
-
   const combinedData = [];
 
   investmentsData.investments.forEach((investment) => {
@@ -45,7 +40,7 @@ function InvestmentsTable({ investmentsData }) {
 
   return (
     <div className="w-1/4 overflow-x-auto">
-      <table className="bg-white text-sm">
+      <table className="bg-white text-sm w-full">
         <thead>
           <tr>
             <TableHeader text="Date" />

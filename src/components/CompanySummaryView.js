@@ -66,7 +66,7 @@ function CompanySummaryView({ user, companyName }) {
   let cbfields = crunchbaseData["fields"];
   return (
     <div>
-      <h2 className="text-2xl font-bold" id="companyOverview">
+      <h2 className="text-2xl font-bold my-3" id="companyOverview">
         Company Overview
       </h2>
       {/* <div>{cbfields["website_url"]}</div> */}

@@ -7,7 +7,7 @@ function DescriptionTable({ descriptionData }) {
 
   return (
     <div className="w-1/4 overflow-x-auto">
-      <table className="bg-white text-sm">
+      <table className="bg-white text-sm w-full">
         <thead>
           <tr>
             <th className="border px-2 py-2 text-center">About</th>
@@ -25,7 +25,7 @@ function DescriptionTable({ descriptionData }) {
                 height={50}
               ></Image>
             </td>
-            <td className="border px-2 py-2 line-clamp-3 text-center">
+            <td className="border px-2 py-2 text-center">
               {descriptionData.description}
             </td>
           </tr>

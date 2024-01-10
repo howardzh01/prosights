@@ -16,7 +16,7 @@ function InvestorTable({ fundingData }) {
 
   return (
     <div className="w-1/2 overflow-x-auto">
-      <table className="bg-white text-sm">
+      <table className="bg-white text-sm w-full">
         <thead>
           <tr>
             <TableHeader text="Announced Date" />
