@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import InvestorTable from "./InvestorTable";
 import DescriptionTable from "./DescriptionTable";
 import InvestmentsTable from "./InvestmentsTable";
+import Link from "next/link";
 
 function CompanySummaryView({ user, companyName }) {
   const [crunchbaseData, setCrunchbaseData] = useState(null);
@@ -37,24 +38,24 @@ function CompanySummaryView({ user, companyName }) {
     // }, {});
 
     // Make request to refine the company description
-    // const descriptionResponse = await fetch(
-    //   `/api/private/getCompanyDescription`,
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       companyName: companyName,
-    //       crunchbaseDescription: data["fields"]["description"],
-    //     }),
-    //   }
-    // );
-    // if (!descriptionResponse.ok) {
-    //   console.log(descriptionResponse.status);
-    // }
-    // data["fields"]["description"] = await descriptionResponse.text();
-    // console.log("WHAT", data);
+    const descriptionResponse = await fetch(
+      `/api/private/getCompanyDescription`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          companyName: companyName,
+          crunchbaseDescription: data["fields"]["description"],
+        }),
+      }
+    );
+    if (!descriptionResponse.ok) {
+      console.log(descriptionResponse.status);
+    }
+    data["fields"]["description"] = await descriptionResponse.text();
+    console.log("WHAT", data);
 
     setCrunchbaseData(data);
   };
@@ -65,9 +66,20 @@ function CompanySummaryView({ user, companyName }) {
   let cbfields = crunchbaseData["fields"];
   return (
     <div className="flex flex-col">
-      <h2 className="text-2xl font-bold" id="companyOverview">
-        Company Overview
-      </h2>
+      <div className="flex w-full justify-between">
+        <h2 className="text-2xl font-bold" id="companyOverview">
+          Company Overview
+        </h2>
+
+        {/* Attribution Requirements from https://data.crunchbase.com/docs/using-the-api */}
+        <Link
+          href={`https://www.crunchbase.com/organization/${companyName}`}
+          target="_blank"
+          className="text-sm italic"
+        >
+          Powered by Crunchbase
+        </Link>
+      </div>
       {/* <div>{cbfields["website_url"]}</div> */}
 
       <div className="flex gap-6 h-64 mt-2">
