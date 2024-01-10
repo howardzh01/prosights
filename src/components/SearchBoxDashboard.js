@@ -40,7 +40,7 @@ function SearchBoxDashboard({ setCompany }) {
   };
 
   return (
-    <div className="flex w-1/2 items-stretch flex-row border border-customGray-300 rounded-2xl px-6 py-3">
+    <div className="flex w-full flex-row bg-white border items-center border-customGray-300 rounded-2xl px-6 py-3">
       <div className="flex flex-row items-center w-full">
         <TextareaAutosize
           type="text"

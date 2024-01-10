@@ -210,22 +210,27 @@ function Dashboard() {
                   </div>
                 </Transition.Child>
                 {/* Sidebar component, swap this element with another sidebar if you like */}
-                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-primary px-6 pb-4">
+                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-primary px-6 py-5">
+                  <SearchBoxDashboard
+                    setCompany={setCompany}
+                  ></SearchBoxDashboard>
+
                   <nav className="flex flex-1 flex-col">
                     <ul role="list" className="flex flex-1 flex-col gap-y-7">
                       <li>
                         <ul role="list" className="-mx-2 space-y-1">
                           {headings.map((heading) => (
-                            <li key={heading.id}>
+                            <li
+                              key={heading.id}
+                              className={getClassName(heading.level)}
+                            >
                               <a
                                 href={`#${heading.id}`}
-                                // TODO
-                                // heading.current
-                                //   ? "bg-primaryHover text-white"
-                                //   : "text-gray-200 hover:text-white hover:bg-primaryHover",
-                                className={`
-                                  "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
-                                `}
+                                className={`${
+                                  activeId === heading.id
+                                    ? "bg-primaryHover"
+                                    : ""
+                                } group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold text-white w-full`}
                               >
                                 {heading.text}
                               </a>
@@ -261,11 +266,13 @@ function Dashboard() {
             alt="ProSights logo"
             width={112}
             height={(112 * 361) / 1421}
-            // className="w-24 md:w-28 aspect-[1421/361]"
           />
-          <SearchBoxDashboard setCompany={setCompany}></SearchBoxDashboard>
+
+          <div className="w-2/5 hidden lg:block">
+            <SearchBoxDashboard setCompany={setCompany}></SearchBoxDashboard>
+          </div>
+
           <div className="flex items-center gap-x-4 lg:gap-x-6">
-            {/* Profile dropdown */}
             <UserProfileButton textColor="text-black" />
           </div>
         </div>

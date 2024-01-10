@@ -47,7 +47,7 @@ function InvestmentsTable({ investmentsData }) {
   });
 
   return (
-    <div className="w-1/4 overflow-x-auto">
+    <div className="w-full overflow-x-auto">
       <table className="bg-white text-sm w-full">
         <thead>
           <tr>
