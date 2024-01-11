@@ -95,7 +95,7 @@ function CompanySummaryView({ user, companyName }) {
                 ? cbfields["funding_total"]["value_usd"]
                 : null,
               location: cbfields["location_identifiers"]
-                ? `${cbfields["location_identifiers"][0]["value"]} ${cbfields["location_identifiers"][1]["value"]}`
+                ? `${cbfields["location_identifiers"][0]["value"]}, ${cbfields["location_identifiers"][1]["value"]}`
                 : "",
             }}
           ></DescriptionTable>

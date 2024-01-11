@@ -8,14 +8,14 @@ function InvestorTable({ fundingData }) {
   }
   function TableHeader({ text, is_header = true }) {
     if (is_header) {
-      return <th className="border px-2 py-2 text-center">{text}</th>;
+      return <th className="border px-2 py-1 text-center">{text}</th>;
     } else {
-      return <td className="border px-2 py-2 text-center">{text}</td>;
+      return <td className="border px-2 py-1 text-center">{text}</td>;
     }
   }
 
   return (
-    <div className="w-full overflow-x-auto">
+    <div className="w-full overflow-auto">
       <table className="bg-white text-sm w-full">
         <thead>
           <tr>

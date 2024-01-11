@@ -158,11 +158,11 @@ function Dashboard() {
 
   return (
     <div className="flex flex-col h-screen">
-      {user && company && (
+      {/* {user && company && (
         <ChartModal
           chart={<HeadCountChart user={user} companyName={company} />}
         />
-      )}
+      )} */}
 
       <Transition.Root show={sidebarOpen} as={Fragment}>
         <Dialog
@@ -268,12 +268,26 @@ function Dashboard() {
         <div className="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true" />
 
         <div className="flex items-center w-full justify-between gap-x-4 self-stretch lg:gap-x-6">
-          <Image
-            src="/assets/fullLogoBlack.png"
-            alt="ProSights logo"
-            width={112}
-            height={(112 * 361) / 1421}
-          />
+          <button
+            type="button"
+            aria-label="Scroll to top"
+            onClick={() => {
+              const mainSection = document.getElementById("mainSection");
+              if (mainSection) {
+                mainSection.scrollTo({
+                  top: 0,
+                  behavior: "smooth",
+                });
+              }
+            }}
+          >
+            <Image
+              src="/assets/fullLogoBlack.png"
+              alt="ProSights logo"
+              width={112}
+              height={(112 * 361) / 1421}
+            />
+          </button>
 
           <div className="w-2/5 hidden lg:block">
             <SearchBoxDashboard setCompany={setCompany}></SearchBoxDashboard>
@@ -334,14 +348,14 @@ function Dashboard() {
               {company + ".com"} for {country}
             </div>
 
-            {/* {user && company ? (
+            {user && company ? (
               <CompanySummaryView
                 user={user}
                 companyName={company}
               ></CompanySummaryView>
             ) : (
               <p>Crunchbase loading</p>
-            )} */}
+            )}
 
             {user && company ? (
               <HeadCountChart user={user} companyName={company} />
