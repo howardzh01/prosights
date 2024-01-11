@@ -96,40 +96,48 @@ function Dashboard() {
 
   // API Data
   const { data: headCountData, error: headCountError } = useSWR(
-    user && company ? `/api/private/getHeadCount` : null,
-    (url) => {
-      return getHeadCount(url, user, company);
-    }
+    user && company ? [`/api/private/getHeadCount`, user.id, company] : null,
+    getHeadCount
   );
+  // const { data: webTrafficData, error: webTrafficError } = useSWR(
+  //   user && company && country
+  //     ? [`/api/private/getWebTrafficData`, company + ".com", country]
+  //     : null,
+  //   (url, companyUrl, country) => {
+  //     console.log(companyUrl);
+  //     return getTrafficData(url, user, companyUrl, country);
+  //   }
+  // );
   const { data: webTrafficData, error: webTrafficError } = useSWR(
-    user && company && country ? `/api/private/getWebTrafficData` : null,
-    (url) => {
-      return getTrafficData(url, user, company + ".com", country);
-    }
+    user && company && country
+      ? [`/api/private/getWebTrafficData`, user.id, company + ".com", country]
+      : null,
+
+    getTrafficData
   );
   const { data: webTrafficGeoData, error: webTrafficGeoError } = useSWR(
-    user && company ? `/api/private/getWebTrafficGeoData` : null,
-    (url) => {
-      return getGeoTrafficData(
-        url,
-        user,
-        company + ".com",
-        relevant_continents
-      );
-    }
+    user && company
+      ? [
+          `/api/private/getWebTrafficGeoData`,
+          user.id,
+          company + ".com",
+          relevant_continents,
+        ]
+      : null,
+    getGeoTrafficData
   );
 
   const { data: crunchbaseData, error: crunchbaseError } = useSWR(
-    user && company ? `/api/private/getCrunchbaseData` : null,
-    (url) => {
-      return getCrunchbaseData(url, user, company);
-    }
+    user && company
+      ? [`/api/private/getCrunchbaseData`, user.id, company]
+      : null,
+    getCrunchbaseData
   );
   const { data: companyDescription, error: companyDescriptionError } = useSWR(
     user && company && crunchbaseData
-      ? `/api/private/getCompanyDescription`
+      ? [`/api/private/getCompanyDescription`, company]
       : null,
-    (url) => {
+    ([url, company]) => {
       let crunchbaseCompanyDescription;
       try {
         crunchbaseCompanyDescription = crunchbaseData["fields"]["description"];
@@ -137,12 +145,12 @@ function Dashboard() {
         crunchbaseCompanyDescription = "";
       }
 
-      return getCompanyDescription(
+      return getCompanyDescription([
         url,
-        user,
+        user.id,
         company,
-        crunchbaseCompanyDescription
-      );
+        crunchbaseCompanyDescription,
+      ]);
     }
   );
   console.log(companyDescription);

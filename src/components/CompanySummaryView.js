@@ -13,8 +13,6 @@ function CompanySummaryView({
   if (!crunchbaseData) {
     return <div>Loading</div>;
   }
-  console.log(crunchbaseData["fields"]);
-  console.log(companyDescription);
   let cbfields = crunchbaseData["fields"];
   return (
     <div className="flex flex-col mt-3">

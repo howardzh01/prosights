@@ -1,7 +1,7 @@
 import api from "gpt-tokenizer/esm/encoding/cl100k_base";
 import { UN_M49_CONTINENTS } from "./constants";
 
-export const getHeadCount = async (api_url, user, companyName) => {
+export const getHeadCount = async ([api_url, userId, companyName]) => {
   // expect `/api/private/getHeadCount`
   const response = await fetch(api_url, {
     method: "POST",
@@ -9,7 +9,7 @@ export const getHeadCount = async (api_url, user, companyName) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      userId: user.id,
+      userId: userId,
       companyName: companyName,
     }),
   });
@@ -30,13 +30,18 @@ export const getHeadCount = async (api_url, user, companyName) => {
   return formattedData;
 };
 
-export const getTrafficData = async (api_url, user, companyUrl, country) => {
+export const getTrafficData = async ([
+  api_url,
+  userId,
+  companyUrl,
+  country,
+]) => {
   // expect `/api/private/getWebTrafficData`
   const exportColumns =
     "target,rank,visits,desktop_visits,mobile_visits,users,desktop_users,mobile_users,desktop_hits,mobile_hits,direct,search_organic,search_paid,social_organic,social_paid,referral,mail,display_ad,search,social,paid,unknown_channel,time_on_site,desktop_time_on_site,mobile_time_on_site,pages_per_visit,desktop_pages_per_visit,mobile_pages_per_visit,bounce_rate,desktop_bounce_rate,mobile_bounce_rate,desktop_share,mobile_share,accuracy,display_date,country,device_type";
 
   const bodyObj = {
-    userId: user.id,
+    userId: userId,
     companiesUrl: companyUrl,
     exportColumns: exportColumns,
     country: country,
@@ -77,12 +82,12 @@ export const getTrafficData = async (api_url, user, companyUrl, country) => {
   return data;
 };
 
-export const getGeoTrafficData = async (
+export const getGeoTrafficData = async ([
   api_url,
-  user,
+  userId,
   companyUrl,
-  relevant_continents
-) => {
+  relevant_continents,
+]) => {
   //`/api/private/getWebTrafficGeoData`
   function getContinentName(continentItem) {
     // return continent name if exists and in relevant_continents else null
@@ -99,7 +104,7 @@ export const getGeoTrafficData = async (
   const geoType = "continent";
 
   const bodyObj = {
-    userId: user.id,
+    userId: userId,
     companyUrl: companyUrl,
     geoType: geoType,
   };
@@ -153,7 +158,7 @@ export const getGeoTrafficData = async (
   return data;
 };
 
-export const getCrunchbaseData = async (api_url, user, companyName) => {
+export const getCrunchbaseData = async ([api_url, userId, companyName]) => {
   // `/api/private/getCrunchbaseData`;
   const response = await fetch(api_url, {
     method: "POST",
@@ -161,7 +166,7 @@ export const getCrunchbaseData = async (api_url, user, companyName) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      userId: user.id,
+      userId: userId,
       companyName: companyName,
     }),
   });
@@ -175,12 +180,12 @@ export const getCrunchbaseData = async (api_url, user, companyName) => {
   return data;
 };
 
-export const getCompanyDescription = async (
+export const getCompanyDescription = async ([
   api_url,
-  user,
+  userId,
   companyName,
-  crunchbaseDescription = ""
-) => {
+  crunchbaseDescription = "",
+]) => {
   //`/api/private/getCompanyDescription`
   // data["fields"]["description"]
   const descriptionResponse = await fetch(api_url, {
