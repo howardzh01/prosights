@@ -10,6 +10,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import UserProfileButton from "../components/UserProfileButton";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import CompanySummaryView from "../components/CompanySummaryView";
+import ChartModal from "../components/ChartModal";
 
 // id is the id of the heading, level is the header level e.g. 2 = h2
 const headings = [
@@ -157,6 +158,12 @@ function Dashboard() {
 
   return (
     <div className="flex flex-col h-screen">
+      {user && company && (
+        <ChartModal
+          chart={<HeadCountChart user={user} companyName={company} />}
+        />
+      )}
+
       <Transition.Root show={sidebarOpen} as={Fragment}>
         <Dialog
           as="div"
