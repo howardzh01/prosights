@@ -9,7 +9,7 @@ function WebTrafficChart({ user, companyUrl, country = "global" }) {
   const [trafficData, setTrafficData] = useState(null);
 
   // TODO: make this more compact later - probably 1 useState with an object containing all timescale states, or useReducer
-  const [trafficTimescale, setTrafficTimescale] = useState("quarterYear");
+  const [trafficTimescale, setTrafficTimescale] = useState("year");
   const [mauTimescale, setMauTimescale] = useState("year");
   const [trafficByChannelTimescale, setTrafficByChannelTimescale] =
     useState("year");

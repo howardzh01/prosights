@@ -1,3 +1,5 @@
+import ChartModal from "../../ChartModal";
+
 function TwoColumnView({ titleId, title, quarterGraph, yearGraph }) {
   return (
     <div className="h-64">

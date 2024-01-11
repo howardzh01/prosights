@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { aggregateData } from "../../utils/Utils";
 import GenericBar from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
+import ChartModal from "../ChartModal";
 
 function HeadCountChart({ user, companyName }) {
   const [headCountData, setHeadCountData] = useState(null);
@@ -81,6 +82,8 @@ function HeadCountChart({ user, companyName }) {
 
   return (
     <div className="h-64">
+      <ChartModal chart={quarterHeadCountGraph} title={"Employee Count"} />
+
       <TwoColumnView
         titleId="employeeCount"
         title={"Employee Count"}

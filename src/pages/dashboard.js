@@ -10,7 +10,6 @@ import { Dialog, Transition } from "@headlessui/react";
 import UserProfileButton from "../components/UserProfileButton";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import CompanySummaryView from "../components/CompanySummaryView";
-import ChartModal from "../components/ChartModal";
 
 // id is the id of the heading, level is the header level e.g. 2 = h2
 const headings = [
@@ -158,16 +157,10 @@ function Dashboard() {
 
   return (
     <div className="flex flex-col h-screen">
-      {/* {user && company && (
-        <ChartModal
-          chart={<HeadCountChart user={user} companyName={company} />}
-        />
-      )} */}
-
       <Transition.Root show={sidebarOpen} as={Fragment}>
         <Dialog
           as="div"
-          className="relative z-50 lg:hidden"
+          className="relative z-40 lg:hidden"
           onClose={setSidebarOpen}
         >
           <Transition.Child
@@ -301,7 +294,7 @@ function Dashboard() {
 
       <div className="flex h-full overflow-auto">
         {/* Static sidebar for desktop */}
-        <div className="hidden shrink-0 grow-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
+        <div className="hidden shrink-0 grow-0 lg:z-40 lg:flex lg:w-72 lg:flex-col">
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-primary px-6 py-5">
             <nav className="flex flex-1 flex-col">
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
