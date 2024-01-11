@@ -4,65 +4,17 @@ import DescriptionTable from "./DescriptionTable";
 import InvestmentsTable from "./InvestmentsTable";
 import Link from "next/link";
 
-function CompanySummaryView({ user, companyName }) {
-  const [crunchbaseData, setCrunchbaseData] = useState(null);
-
-  useEffect(() => {
-    updateCrunchbaseData(user, companyName);
-  }, [companyName]);
-
-  const updateCrunchbaseData = async (user, companyName) => {
-    const response = await fetch(`/api/private/getCrunchbaseData`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: user.id,
-        companyName: companyName,
-      }),
-    });
-    if (!response.ok) {
-      console.log(response.status);
-      setCrunchbaseData(null);
-    }
-    var data = await response.json();
-    // data = data.reverse();
-    // // transform to  {month: {key:value}}
-    // const formattedData = data.reduce((acc, item, i) => {
-    //   const month = new Date(item.created);
-    //   acc[month] = {
-    //     headcount: item.headcount,
-    //   };
-    //   return acc;
-    // }, {});
-
-    // Make request to refine the company description
-    const descriptionResponse = await fetch(
-      `/api/private/getCompanyDescription`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          companyName: companyName,
-          crunchbaseDescription: data["fields"]["description"],
-        }),
-      }
-    );
-    if (!descriptionResponse.ok) {
-      console.log(descriptionResponse.status);
-    }
-    data["fields"]["description"] = await descriptionResponse.text();
-    console.log("WHAT", data);
-
-    setCrunchbaseData(data);
-  };
-  console.log(crunchbaseData);
+function CompanySummaryView({
+  user,
+  companyName,
+  crunchbaseData,
+  companyDescription,
+}) {
   if (!crunchbaseData) {
     return <div>Loading</div>;
   }
+  console.log(crunchbaseData["fields"]);
+  console.log(companyDescription);
   let cbfields = crunchbaseData["fields"];
   return (
     <div className="flex flex-col mt-3">
@@ -89,7 +41,9 @@ function CompanySummaryView({ user, companyName }) {
             descriptionData={{
               // TODO: pass in a placeholder image URL if there is no image for some companies (got no image from flight-club)
               logo: cbfields["image_url"] || "",
-              description: cbfields["description"],
+              description: companyDescription
+                ? companyDescription
+                : "Loading...",
               founded: cbfields["founded_on"]["value"],
               funding: cbfields["funding_total"]
                 ? cbfields["funding_total"]["value_usd"]

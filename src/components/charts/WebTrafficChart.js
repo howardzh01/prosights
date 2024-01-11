@@ -5,9 +5,7 @@ import ThreeColumnView from "./templates/ThreeColumnView";
 import { aggregateData } from "../../utils/Utils";
 import GenericStackedBar from "./templates/GenericStackedBar";
 
-function WebTrafficChart({ user, companyUrl, country = "global" }) {
-  const [trafficData, setTrafficData] = useState(null);
-
+function WebTrafficChart({ trafficData }) {
   // TODO: make this more compact later - probably 1 useState with an object containing all timescale states, or useReducer
   const [trafficTimescale, setTrafficTimescale] = useState("year");
   const [mauTimescale, setMauTimescale] = useState("year");
@@ -18,61 +16,6 @@ function WebTrafficChart({ user, companyUrl, country = "global" }) {
   const [usersByDeviceTimescale, setUsersByDeviceTimescale] = useState("year");
   const [trafficByOrganicVsPaidTimescale, setTrafficByOrganicVsPaidTimescale] =
     useState("year");
-
-  const exportColumns =
-    "target,rank,visits,desktop_visits,mobile_visits,users,desktop_users,mobile_users,desktop_hits,mobile_hits,direct,search_organic,search_paid,social_organic,social_paid,referral,mail,display_ad,search,social,paid,unknown_channel,time_on_site,desktop_time_on_site,mobile_time_on_site,pages_per_visit,desktop_pages_per_visit,mobile_pages_per_visit,bounce_rate,desktop_bounce_rate,mobile_bounce_rate,desktop_share,mobile_share,accuracy,display_date,country,device_type";
-  // const channelLabelsDic = {
-  //   direct: "Direct",
-  //   mail: "Email",
-  //   social: "Social",
-  // };
-  useEffect(() => {
-    updateTrafficData(user, companyUrl);
-  }, [companyUrl]);
-
-  const updateTrafficData = async (user, companyUrl) => {
-    const bodyObj = {
-      userId: user.id,
-      companiesUrl: companyUrl,
-      exportColumns: exportColumns,
-      country: country,
-    };
-    const response = await fetch(`/api/private/getWebTrafficData`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(bodyObj),
-    });
-    if (!response.ok) {
-      console.log(response.status);
-    }
-    var data = await response.json();
-    console.log(data);
-    // transform data into {month: {key:value}}
-    if (!data) {
-      return;
-    }
-    data = data.reduce((acc, item, i) => {
-      if (!item || item.length === 0) {
-        //no information for this month
-        return acc;
-      }
-      const month = new Date(item[0]["display_date"]);
-
-      // acc[month] = {
-      //   visits: parseInt(item[0]["visits"], 10),
-      //   users: parseInt(item[0]["users"], 10),
-      // };
-      acc[month] = Object.keys(item[0]).reduce((obj, key) => {
-        obj[key] = parseInt(item[0][key], 10);
-        return obj;
-      }, {});
-      return acc;
-    }, {});
-
-    setTrafficData(data);
-  };
 
   function convertToChartData(data) {
     // input: {time_key: output_key}

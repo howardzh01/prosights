@@ -4,43 +4,9 @@ import GenericBar from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
 import ChartModal from "../ChartModal";
 
-function HeadCountChart({ user, companyName }) {
-  const [headCountData, setHeadCountData] = useState(null);
+function HeadCountChart({ headCountData }) {
   const [timescale, setTimescale] = useState("quarterYear");
 
-  useEffect(() => {
-    console.log("companyName", companyName, user.id);
-    updateHeadCount(user, companyName);
-  }, [companyName]);
-
-  const updateHeadCount = async (user, companyName) => {
-    const response = await fetch(`/api/private/getHeadCount`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: user.id,
-        companyName: companyName,
-      }),
-    });
-    if (!response.ok) {
-      console.log(response.status);
-      setHeadCountData(null);
-    }
-    var data = await response.json();
-    data = data.reverse();
-    // transform to  {month: {key:value}}
-    const formattedData = data.reduce((acc, item, i) => {
-      const month = new Date(item.created);
-      acc[month] = {
-        headcount: item.headcount,
-      };
-      return acc;
-    }, {});
-
-    setHeadCountData(formattedData);
-  };
   function convertToChartData(data) {
     // input: {time_key: output_key}
     if (!data) {
@@ -82,7 +48,7 @@ function HeadCountChart({ user, companyName }) {
 
   return (
     <div className="h-64">
-      <ChartModal chart={quarterHeadCountGraph} title={"Employee Count"} />
+      {/* <ChartModal chart={quarterHeadCountGraph} title={"Employee Count"} /> */}
 
       <TwoColumnView
         titleId="employeeCount"

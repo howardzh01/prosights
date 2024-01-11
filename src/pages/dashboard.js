@@ -10,6 +10,14 @@ import { Dialog, Transition } from "@headlessui/react";
 import UserProfileButton from "../components/UserProfileButton";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import CompanySummaryView from "../components/CompanySummaryView";
+import useSWR from "swr";
+import {
+  getGeoTrafficData,
+  getHeadCount,
+  getTrafficData,
+  getCrunchbaseData,
+  getCompanyDescription,
+} from "../api";
 
 // id is the id of the heading, level is the header level e.g. 2 = h2
 const headings = [
@@ -77,6 +85,73 @@ function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [company, setCompany] = useState("stockx");
   const [country, setCountry] = useState("US");
+  const relevant_continents = [
+    "North America",
+    "South America",
+    "Asia",
+    "Europe",
+    "Africa",
+    "Australia",
+  ];
+
+  // API Data
+  const { data: headCountData, error: headCountError } = useSWR(
+    user && company ? `/api/private/getHeadCount` : null,
+    (url) => {
+      return getHeadCount(url, user, company);
+    }
+  );
+  const { data: webTrafficData, error: webTrafficError } = useSWR(
+    user && company && country ? `/api/private/getWebTrafficData` : null,
+    (url) => {
+      return getTrafficData(url, user, company + ".com", country);
+    }
+  );
+  const { data: webTrafficGeoData, error: webTrafficGeoError } = useSWR(
+    user && company ? `/api/private/getWebTrafficGeoData` : null,
+    (url) => {
+      return getGeoTrafficData(
+        url,
+        user,
+        company + ".com",
+        relevant_continents
+      );
+    }
+  );
+
+  const { data: crunchbaseData, error: crunchbaseError } = useSWR(
+    user && company ? `/api/private/getCrunchbaseData` : null,
+    (url) => {
+      return getCrunchbaseData(url, user, company);
+    }
+  );
+  const { data: companyDescription, error: companyDescriptionError } = useSWR(
+    user && company && crunchbaseData
+      ? `/api/private/getCompanyDescription`
+      : null,
+    (url) => {
+      let crunchbaseCompanyDescription;
+      try {
+        crunchbaseCompanyDescription = crunchbaseData["fields"]["description"];
+      } catch {
+        crunchbaseCompanyDescription = "";
+      }
+
+      return getCompanyDescription(
+        url,
+        user,
+        company,
+        crunchbaseCompanyDescription
+      );
+    }
+  );
+  console.log(companyDescription);
+  // useEffect(() => {
+  //   console.log("companyName", companyName, user.id);
+  //   setHeadCountData(user, companyName);
+  // }, [companyName]);
+
+  useEffect(() => {});
   const regions = {
     global: "Global",
     US: "United States",
@@ -345,32 +420,29 @@ function Dashboard() {
               <CompanySummaryView
                 user={user}
                 companyName={company}
+                crunchbaseData={crunchbaseData}
+                companyDescription={companyDescription}
               ></CompanySummaryView>
             ) : (
               <p>Crunchbase loading</p>
             )}
 
             {user && company ? (
-              <HeadCountChart user={user} companyName={company} />
+              <HeadCountChart headCountData={headCountData} />
             ) : (
               <p>loading</p>
             )}
 
             {user && company ? (
-              <WebTrafficChart
-                user={user}
-                companyUrl={company + ".com"}
-                country={country}
-              />
+              <WebTrafficChart trafficData={webTrafficData} />
             ) : (
               <p>loading</p>
             )}
 
             {user && company ? (
               <WebGeoTrafficChart
-                user={user}
-                companyUrl={company + ".com"}
-                country={country}
+                geoTrafficData={webTrafficGeoData}
+                relevant_continents={relevant_continents}
               />
             ) : (
               <p>loading</p>

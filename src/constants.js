@@ -19,3 +19,8 @@ export const TIMESCALE_TRANSITION_DIC = {
   quarterYear: ["month", "year"],
   year: ["quarterYear", undefined],
 };
+
+export const TIME_IN_MS = {
+  "1_hour": 60 * 60 * 1000,
+  "1_day": 24 * 60 * 60 * 1000,
+};
