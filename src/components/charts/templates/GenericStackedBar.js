@@ -1,4 +1,3 @@
-import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 import { Bar } from "react-chartjs-2";
 import GenericTimeScale from "./GenericTimeScale";
 
