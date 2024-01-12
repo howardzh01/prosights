@@ -17,6 +17,8 @@ function WebTrafficChart({ trafficData }) {
   const [trafficByOrganicVsPaidTimescale, setTrafficByOrganicVsPaidTimescale] =
     useState("year");
 
+  if (!trafficData) return null;
+
   function convertToChartData(data) {
     // input: {time_key: output_key}
     if (!data) {
@@ -68,9 +70,6 @@ function WebTrafficChart({ trafficData }) {
       ];
     }
 
-    if (!trafficData) {
-      return;
-    }
     const aggData = relevant_keys.reduce((acc, key) => {
       acc[key] = aggregateData(trafficData, key, "sum", timescale);
       return acc;
@@ -86,7 +85,7 @@ function WebTrafficChart({ trafficData }) {
     };
   }
 
-  const yearTrafficGraph = trafficData && (
+  const yearTrafficGraph = (
     <GenericBar
       chartData={convertToChartData(
         aggregateData(trafficData, "visits", "sum", trafficTimescale)
@@ -98,7 +97,7 @@ function WebTrafficChart({ trafficData }) {
     ></GenericBar>
   );
 
-  const yearUserGraph = trafficData && (
+  const yearUserGraph = (
     <GenericBar
       chartData={convertToChartData(
         aggregateData(trafficData, "users", "mean", mauTimescale)
@@ -111,7 +110,7 @@ function WebTrafficChart({ trafficData }) {
     ></GenericBar>
   );
 
-  const trafficByChannel = trafficData && (
+  const trafficByChannel = (
     <GenericStackedBar
       data={convertToChannelChartData(
         trafficData,
@@ -125,7 +124,7 @@ function WebTrafficChart({ trafficData }) {
     ></GenericStackedBar>
   );
 
-  const trafficByDevice = trafficData && (
+  const trafficByDevice = (
     <GenericStackedBar
       data={convertToChannelChartData(
         trafficData,
@@ -138,7 +137,8 @@ function WebTrafficChart({ trafficData }) {
       setTimescale={setTrafficByDeviceTimescale}
     ></GenericStackedBar>
   );
-  const usersByDevice = trafficData && (
+
+  const usersByDevice = (
     <GenericStackedBar
       data={convertToChannelChartData(
         trafficData,
@@ -152,7 +152,7 @@ function WebTrafficChart({ trafficData }) {
     ></GenericStackedBar>
   );
 
-  const trafficByOrganicVsPaid = trafficData && (
+  const trafficByOrganicVsPaid = (
     <GenericStackedBar
       data={convertToChannelChartData(
         trafficData,

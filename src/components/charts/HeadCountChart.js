@@ -7,11 +7,10 @@ import ChartModal from "../ChartModal";
 function HeadCountChart({ user, companyName, headCountData }) {
   const [timescale, setTimescale] = useState("quarterYear");
 
+  if (!headCountData) return null;
+
   function convertToChartData(data) {
     // input: {time_key: output_key}
-    if (!data) {
-      return;
-    }
     return {
       labels: Object.keys(data),
       datasets: [
@@ -26,7 +25,7 @@ function HeadCountChart({ user, companyName, headCountData }) {
     };
   }
 
-  const quarterHeadCountGraph = headCountData && (
+  const quarterHeadCountGraph = (
     <GenericBar
       chartData={convertToChartData(
         aggregateData(headCountData, "headcount", "last", timescale)
@@ -37,7 +36,8 @@ function HeadCountChart({ user, companyName, headCountData }) {
       setTimescale={setTimescale}
     />
   );
-  const yearHeadCountGraph = headCountData && (
+
+  const yearHeadCountGraph = (
     <GenericBar
       chartData={convertToChartData(
         aggregateData(headCountData, "headcount", "last", "year")
@@ -48,8 +48,6 @@ function HeadCountChart({ user, companyName, headCountData }) {
 
   return (
     <div className="">
-      {/* <ChartModal chart={quarterHeadCountGraph} title={"Employee Count"} /> */}
-
       <TwoColumnView
         titleId="employeeCount"
         title={"Employee Count"}

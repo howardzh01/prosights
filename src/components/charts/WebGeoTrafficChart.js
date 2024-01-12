@@ -11,11 +11,9 @@ function WebGeoTrafficChart({
   const [startDateState, setStartDateState] = useState(startDate);
   const displayedQuarters = generateQuarters(startDateState);
 
-  function convertToGeoChartData(trafficData, outputKey = "traffic") {
-    if (!trafficData) {
-      return;
-    }
+  if (!geoTrafficData) return null;
 
+  function convertToGeoChartData(trafficData, outputKey = "traffic") {
     const aggData = relevant_continents.reduce((acc, key) => {
       acc[key] = aggregateData(
         trafficData[key],
@@ -45,14 +43,12 @@ function WebGeoTrafficChart({
         Website Traffic by Geo
       </h2>
       <div className="h-96">
-        {geoTrafficData && (
-          <GenericStackedBar
-            data={convertToGeoChartData(geoTrafficData, "traffic")}
-            title={"% Share"}
-            dataType={"dict"}
-            showDataLabels={false}
-          ></GenericStackedBar>
-        )}
+        <GenericStackedBar
+          data={convertToGeoChartData(geoTrafficData, "traffic")}
+          title={"% Share"}
+          dataType={"dict"}
+          showDataLabels={false}
+        ></GenericStackedBar>
       </div>
     </div>
   );
