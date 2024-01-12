@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, Fragment } from "react";
+import { useState, useEffect, useRef, Fragment, useContext } from "react";
 import Image from "next/image";
 import { useUser } from "@clerk/clerk-react";
 import { useRouter } from "next/router";
@@ -18,6 +18,9 @@ import {
   getCrunchbaseData,
   getCompanyDescription,
 } from "../api";
+import ChartModal from "../components/ChartModal";
+import { createContext } from "react";
+import { RELEVANT_CONTINENTS } from "../constants";
 
 // id is the id of the heading, level is the header level e.g. 2 = h2
 const headings = [
@@ -79,20 +82,18 @@ const getClassName = (level) => {
   }
 };
 
+export const SelectedChartContext = createContext();
+export const ChartDataContext = createContext();
+
 function Dashboard() {
   const { isSignedIn, user, isLoaded } = useUser();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [company, setCompany] = useState("stockx");
   const [country, setCountry] = useState("US");
-  const relevant_continents = [
-    "North America",
-    "South America",
-    "Asia",
-    "Europe",
-    "Africa",
-    "Australia",
-  ];
+
+  const [selectedChart, setSelectedChart] = useState("");
+  const [chartData, setChartData] = useState();
 
   // API Data
   const { data: headCountData, error: headCountError } = useSWR(
@@ -121,7 +122,7 @@ function Dashboard() {
           `/api/private/getWebTrafficGeoData`,
           user.id,
           company + ".com",
-          relevant_continents,
+          RELEVANT_CONTINENTS,
         ]
       : null,
     getGeoTrafficData
@@ -159,7 +160,6 @@ function Dashboard() {
   //   setHeadCountData(user, companyName);
   // }, [companyName]);
 
-  useEffect(() => {});
   const regions = {
     global: "Global",
     US: "United States",
@@ -239,65 +239,169 @@ function Dashboard() {
   }
 
   return (
-    <div className="flex flex-col h-screen">
-      <Transition.Root show={sidebarOpen} as={Fragment}>
-        <Dialog
-          as="div"
-          className="relative z-40 lg:hidden"
-          onClose={setSidebarOpen}
-        >
-          <Transition.Child
-            as={Fragment}
-            enter="transition-opacity ease-linear duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="transition-opacity ease-linear duration-300"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div className="fixed inset-0 bg-gray-900/80" />
-          </Transition.Child>
+    <>
+      <SelectedChartContext.Provider
+        value={{ selectedChart, setSelectedChart }}
+      >
+        <ChartDataContext.Provider value={{ chartData, setChartData }}>
+          <ChartModal
+            open={!!selectedChart && !!chartData}
+            setOpen={() => {
+              setSelectedChart("");
+              setChartData(null);
+            }}
+            selectedChart={selectedChart}
+            chartData={chartData}
+          />
 
-          <div className="fixed inset-0 flex">
-            <Transition.Child
-              as={Fragment}
-              enter="transition ease-in-out duration-300 transform"
-              enterFrom="-translate-x-full"
-              enterTo="translate-x-0"
-              leave="transition ease-in-out duration-300 transform"
-              leaveFrom="translate-x-0"
-              leaveTo="-translate-x-full"
-            >
-              <Dialog.Panel className="relative mr-16 flex w-full max-w-xs flex-1">
+          <div className="flex flex-col h-screen">
+            <Transition.Root show={sidebarOpen} as={Fragment}>
+              <Dialog
+                as="div"
+                className="relative z-40 lg:hidden"
+                onClose={setSidebarOpen}
+              >
                 <Transition.Child
                   as={Fragment}
-                  enter="ease-in-out duration-300"
+                  enter="transition-opacity ease-linear duration-300"
                   enterFrom="opacity-0"
                   enterTo="opacity-100"
-                  leave="ease-in-out duration-300"
+                  leave="transition-opacity ease-linear duration-300"
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
                 >
-                  <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
-                    <button
-                      type="button"
-                      className="-m-2.5 p-2.5"
-                      onClick={() => setSidebarOpen(false)}
-                    >
-                      <span className="sr-only">Close sidebar</span>
-                      <XMarkIcon
-                        className="h-6 w-6 text-white"
-                        aria-hidden="true"
-                      />
-                    </button>
-                  </div>
+                  <div className="fixed inset-0 bg-gray-900/80" />
                 </Transition.Child>
-                {/* Sidebar component, swap this element with another sidebar if you like */}
-                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-primary px-6 py-5">
+
+                <div className="fixed inset-0 flex">
+                  <Transition.Child
+                    as={Fragment}
+                    enter="transition ease-in-out duration-300 transform"
+                    enterFrom="-translate-x-full"
+                    enterTo="translate-x-0"
+                    leave="transition ease-in-out duration-300 transform"
+                    leaveFrom="translate-x-0"
+                    leaveTo="-translate-x-full"
+                  >
+                    <Dialog.Panel className="relative mr-16 flex w-full max-w-xs flex-1">
+                      <Transition.Child
+                        as={Fragment}
+                        enter="ease-in-out duration-300"
+                        enterFrom="opacity-0"
+                        enterTo="opacity-100"
+                        leave="ease-in-out duration-300"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                      >
+                        <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
+                          <button
+                            type="button"
+                            className="-m-2.5 p-2.5"
+                            onClick={() => setSidebarOpen(false)}
+                          >
+                            <span className="sr-only">Close sidebar</span>
+                            <XMarkIcon
+                              className="h-6 w-6 text-white"
+                              aria-hidden="true"
+                            />
+                          </button>
+                        </div>
+                      </Transition.Child>
+                      {/* Sidebar component, swap this element with another sidebar if you like */}
+                      <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-primary px-6 py-5">
+                        <SearchBoxDashboard
+                          setCompany={setCompany}
+                        ></SearchBoxDashboard>
+
+                        <nav className="flex flex-1 flex-col">
+                          <ul
+                            role="list"
+                            className="flex flex-1 flex-col gap-y-7"
+                          >
+                            <li>
+                              <ul role="list" className="-mx-2 space-y-1">
+                                {headings.map((heading) => (
+                                  <li
+                                    key={heading.id}
+                                    className={getClassName(heading.level)}
+                                  >
+                                    <a
+                                      href={`#${heading.id}`}
+                                      className={`${
+                                        activeId === heading.id
+                                          ? "bg-primaryHover"
+                                          : ""
+                                      } group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold text-white w-full`}
+                                    >
+                                      {heading.text}
+                                    </a>
+                                  </li>
+                                ))}
+                              </ul>
+                            </li>
+                          </ul>
+                        </nav>
+                      </div>
+                    </Dialog.Panel>
+                  </Transition.Child>
+                </div>
+              </Dialog>
+            </Transition.Root>
+
+            <div className="z-40 flex w-full h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+              <button
+                type="button"
+                className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
+                onClick={() => setSidebarOpen(true)}
+              >
+                <span className="sr-only">Open sidebar</span>
+                <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+              </button>
+
+              {/* Separator */}
+              <div
+                className="h-6 w-px bg-gray-900/10 lg:hidden"
+                aria-hidden="true"
+              />
+
+              <div className="flex items-center w-full justify-between gap-x-4 self-stretch lg:gap-x-6">
+                <button
+                  type="button"
+                  aria-label="Scroll to top"
+                  onClick={() => {
+                    const mainSection = document.getElementById("mainSection");
+                    if (mainSection) {
+                      mainSection.scrollTo({
+                        top: 0,
+                        behavior: "smooth",
+                      });
+                    }
+                  }}
+                >
+                  <Image
+                    src="/assets/fullLogoBlack.png"
+                    alt="ProSights logo"
+                    width={112}
+                    height={(112 * 361) / 1421}
+                  />
+                </button>
+
+                <div className="w-2/5 hidden lg:block">
                   <SearchBoxDashboard
                     setCompany={setCompany}
                   ></SearchBoxDashboard>
+                </div>
 
+                <div className="flex items-center gap-x-4 lg:gap-x-6">
+                  <UserProfileButton textColor="text-black" />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex h-full overflow-auto">
+              {/* Static sidebar for desktop */}
+              <div className="hidden shrink-0 grow-0 lg:z-40 lg:flex lg:w-72 lg:flex-col">
+                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-primary px-6 py-5">
                   <nav className="flex flex-1 flex-col">
                     <ul role="list" className="flex flex-1 flex-col gap-y-7">
                       <li>
@@ -309,10 +413,18 @@ function Dashboard() {
                             >
                               <a
                                 href={`#${heading.id}`}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  document
+                                    .querySelector(`#${heading.id}`)
+                                    .scrollIntoView({
+                                      behavior: "smooth",
+                                    });
+                                }}
                                 className={`${
                                   activeId === heading.id
                                     ? "bg-primaryHover"
-                                    : ""
+                                    : "hover:bg-primaryHover"
                                 } group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold text-white w-full`}
                               >
                                 {heading.text}
@@ -324,141 +436,44 @@ function Dashboard() {
                     </ul>
                   </nav>
                 </div>
-              </Dialog.Panel>
-            </Transition.Child>
-          </div>
-        </Dialog>
-      </Transition.Root>
+              </div>
 
-      <div className="z-40 flex w-full h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
-        <button
-          type="button"
-          className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
-          onClick={() => setSidebarOpen(true)}
-        >
-          <span className="sr-only">Open sidebar</span>
-          <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-        </button>
+              <main
+                id="mainSection"
+                className="py-10 overflow-y-auto overflow-x-hidden w-screen"
+              >
+                {user && company ? (
+                  <div className="px-4 sm:px-6 lg:px-8">
+                    <div className="text-4xl font-bold">
+                      {company + ".com"} for {country}
+                    </div>
 
-        {/* Separator */}
-        <div className="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true" />
+                    <CompanySummaryView
+                      user={user}
+                      companyName={company}
+                      crunchbaseData={crunchbaseData}
+                      companyDescription={companyDescription}
+                    ></CompanySummaryView>
 
-        <div className="flex items-center w-full justify-between gap-x-4 self-stretch lg:gap-x-6">
-          <button
-            type="button"
-            aria-label="Scroll to top"
-            onClick={() => {
-              const mainSection = document.getElementById("mainSection");
-              if (mainSection) {
-                mainSection.scrollTo({
-                  top: 0,
-                  behavior: "smooth",
-                });
-              }
-            }}
-          >
-            <Image
-              src="/assets/fullLogoBlack.png"
-              alt="ProSights logo"
-              width={112}
-              height={(112 * 361) / 1421}
-            />
-          </button>
+                    <HeadCountChart headCountData={headCountData} />
 
-          <div className="w-2/5 hidden lg:block">
-            <SearchBoxDashboard setCompany={setCompany}></SearchBoxDashboard>
-          </div>
+                    <WebTrafficChart trafficData={webTrafficData} />
 
-          <div className="flex items-center gap-x-4 lg:gap-x-6">
-            <UserProfileButton textColor="text-black" />
-          </div>
-        </div>
-      </div>
-
-      <div className="flex h-full overflow-auto">
-        {/* Static sidebar for desktop */}
-        <div className="hidden shrink-0 grow-0 lg:z-40 lg:flex lg:w-72 lg:flex-col">
-          <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-primary px-6 py-5">
-            <nav className="flex flex-1 flex-col">
-              <ul role="list" className="flex flex-1 flex-col gap-y-7">
-                <li>
-                  <ul role="list" className="-mx-2 space-y-1">
-                    {headings.map((heading) => (
-                      <li
-                        key={heading.id}
-                        className={getClassName(heading.level)}
-                      >
-                        <a
-                          href={`#${heading.id}`}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            document
-                              .querySelector(`#${heading.id}`)
-                              .scrollIntoView({
-                                behavior: "smooth",
-                              });
-                          }}
-                          className={`${
-                            activeId === heading.id
-                              ? "bg-primaryHover"
-                              : "hover:bg-primaryHover"
-                          } group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold text-white w-full`}
-                        >
-                          {heading.text}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-
-        <main
-          id="mainSection"
-          className="py-10 overflow-y-auto overflow-x-hidden w-screen"
-        >
-          <div className="px-4 sm:px-6 lg:px-8">
-            <div className="text-4xl font-bold">
-              {company + ".com"} for {country}
+                    <WebGeoTrafficChart
+                      geoTrafficData={webTrafficGeoData}
+                      relevant_continents={RELEVANT_CONTINENTS}
+                    />
+                  </div>
+                ) : (
+                  // TODO: add a loading spinner later from another codebase
+                  <p>loading</p>
+                )}
+              </main>
             </div>
-
-            {user && company ? (
-              <CompanySummaryView
-                user={user}
-                companyName={company}
-                crunchbaseData={crunchbaseData}
-                companyDescription={companyDescription}
-              ></CompanySummaryView>
-            ) : (
-              <p>Crunchbase loading</p>
-            )}
-
-            {user && company ? (
-              <HeadCountChart headCountData={headCountData} />
-            ) : (
-              <p>loading</p>
-            )}
-
-            {user && company ? (
-              <WebTrafficChart trafficData={webTrafficData} />
-            ) : (
-              <p>loading</p>
-            )}
-
-            {user && company ? (
-              <WebGeoTrafficChart
-                geoTrafficData={webTrafficGeoData}
-                relevant_continents={relevant_continents}
-              />
-            ) : (
-              <p>loading</p>
-            )}
           </div>
-        </main>
-      </div>
-    </div>
+        </ChartDataContext.Provider>
+      </SelectedChartContext.Provider>
+    </>
   );
 }
 

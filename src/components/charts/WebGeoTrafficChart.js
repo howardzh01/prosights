@@ -1,7 +1,13 @@
-import { useState, useEffect } from "react";
-import { aggregateData } from "../../utils/Utils";
+import { useState, useEffect, useMemo } from "react";
+import {
+  aggregateData,
+  convertMonthFormat,
+  generateMonths,
+  generateYears,
+} from "../../utils/Utils";
 import GenericStackedBar from "./templates/GenericStackedBar";
 import { generateQuarters } from "../../utils/Utils";
+import { CHARTS } from "../../constants";
 
 function WebGeoTrafficChart({
   geoTrafficData,
@@ -9,27 +15,52 @@ function WebGeoTrafficChart({
   startDate = "2019",
 }) {
   const [startDateState, setStartDateState] = useState(startDate);
-  const displayedQuarters = generateQuarters(startDateState);
+  const [timescale, setTimescale] = useState("year");
+
+  const monthLabels = useMemo(
+    () => generateMonths(startDateState),
+    [startDateState]
+  ).map((date) => convertMonthFormat(date));
+
+  const quarterLabels = useMemo(
+    () => generateQuarters(startDateState),
+    [startDateState]
+  );
+
+  const yearLabels = useMemo(
+    () => generateYears(startDateState),
+    [startDateState]
+  );
+
+  let displayedLabels;
+  switch (timescale) {
+    case "month":
+      displayedLabels = monthLabels;
+      break;
+    case "quarterYear":
+      displayedLabels = quarterLabels;
+      break;
+    case "year":
+      displayedLabels = yearLabels;
+      break;
+    default:
+      displayedLabels = yearLabels;
+  }
 
   if (!geoTrafficData) return null;
 
   function convertToGeoChartData(trafficData, outputKey = "traffic") {
     const aggData = relevant_continents.reduce((acc, key) => {
-      acc[key] = aggregateData(
-        trafficData[key],
-        outputKey,
-        "sum",
-        "quarterYear"
-      );
+      acc[key] = aggregateData(trafficData[key], outputKey, "sum", timescale);
       return acc;
     }, {});
 
     return {
-      labels: displayedQuarters,
+      labels: displayedLabels,
       datasets: relevant_continents.map((key) => {
         return {
-          data: displayedQuarters.map((quarter) =>
-            aggData[key] ? aggData[key][quarter] / 1e6 : 0
+          data: displayedLabels.map((time) =>
+            aggData[key] ? aggData[key][time] / 1e6 : 0
           ),
           borderWidth: 1,
           label: key,
@@ -46,8 +77,11 @@ function WebGeoTrafficChart({
         <GenericStackedBar
           data={convertToGeoChartData(geoTrafficData, "traffic")}
           title={"% Share"}
-          dataType={"dict"}
           showDataLabels={false}
+          timescale={timescale}
+          setTimescale={setTimescale}
+          selectedChart={CHARTS.trafficByGeo}
+          rawChartData={geoTrafficData}
         ></GenericStackedBar>
       </div>
     </div>

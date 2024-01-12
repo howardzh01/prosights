@@ -8,6 +8,8 @@ function StackedBarChart({
   showTimescaleButtons = true,
   timescale,
   setTimescale,
+  selectedChart,
+  rawChartData,
 }) {
   // Normailize values to sum to 100 so bars have equal height
   const totals = data.datasets.reduce((acc, curArr) => {
@@ -80,6 +82,8 @@ function StackedBarChart({
         <GenericTimeScale
           timescale={timescale}
           setTimescale={setTimescale}
+          selectedChart={selectedChart}
+          rawChartData={rawChartData}
         ></GenericTimeScale>
       )}
 

@@ -4,8 +4,9 @@ import TwoColumnView from "./templates/TwoColumnView";
 import ThreeColumnView from "./templates/ThreeColumnView";
 import { aggregateData } from "../../utils/Utils";
 import GenericStackedBar from "./templates/GenericStackedBar";
+import { CHARTS } from "../../constants";
 
-function WebTrafficChart({ trafficData }) {
+function WebTrafficChart({ trafficData, selectedChart = null }) {
   // TODO: make this more compact later - probably 1 useState with an object containing all timescale states, or useReducer
   const [trafficTimescale, setTrafficTimescale] = useState("year");
   const [mauTimescale, setMauTimescale] = useState("year");
@@ -94,6 +95,8 @@ function WebTrafficChart({ trafficData }) {
       showDataLabels={trafficTimescale !== "month"}
       timescale={trafficTimescale}
       setTimescale={setTrafficTimescale}
+      selectedChart={CHARTS.traffic}
+      rawChartData={trafficData}
     ></GenericBar>
   );
 
@@ -106,7 +109,9 @@ function WebTrafficChart({ trafficData }) {
       showDataLabels={mauTimescale !== "month"}
       timescale={mauTimescale}
       setTimescale={setMauTimescale}
+      selectedChart={CHARTS.mau}
       // showTimescaleButtons={false}
+      rawChartData={trafficData}
     ></GenericBar>
   );
 
@@ -121,6 +126,8 @@ function WebTrafficChart({ trafficData }) {
       showDataLabels={false}
       timescale={trafficByChannelTimescale}
       setTimescale={setTrafficByChannelTimescale}
+      selectedChart={CHARTS.trafficByChannel}
+      rawChartData={trafficData}
     ></GenericStackedBar>
   );
 
@@ -135,6 +142,8 @@ function WebTrafficChart({ trafficData }) {
       showDataLabels={trafficByDeviceTimescale === "year"}
       timescale={trafficByDeviceTimescale}
       setTimescale={setTrafficByDeviceTimescale}
+      selectedChart={CHARTS.trafficByDevice}
+      rawChartData={trafficData}
     ></GenericStackedBar>
   );
 
@@ -149,6 +158,8 @@ function WebTrafficChart({ trafficData }) {
       title={"% Share of Users by Device"}
       timescale={usersByDeviceTimescale}
       setTimescale={setUsersByDeviceTimescale}
+      selectedChart={CHARTS.usersByDevice}
+      rawChartData={trafficData}
     ></GenericStackedBar>
   );
 
@@ -163,34 +174,52 @@ function WebTrafficChart({ trafficData }) {
       showDataLabels={false}
       timescale={trafficByOrganicVsPaidTimescale}
       setTimescale={setTrafficByOrganicVsPaidTimescale}
+      selectedChart={CHARTS.trafficByOrganicVsPaid}
+      rawChartData={trafficData}
     ></GenericStackedBar>
   );
 
-  return (
-    <div>
-      <h2 id="WebsiteTraffic" className="text-2xl font-bold">
-        Website Traffic
-      </h2>
-      <div className="h-fit">
-        <ThreeColumnView
-          titleId="traffic"
-          title={""}
-          graph1={yearTrafficGraph}
-          graph2={yearUserGraph}
-          graph3={trafficByChannel}
-        ></ThreeColumnView>
-      </div>
-      <div className="h-64">
-        <ThreeColumnView
-          titleId="traffic"
-          title={""}
-          graph1={trafficByDevice}
-          graph2={usersByDevice}
-          graph3={trafficByOrganicVsPaid}
-        ></ThreeColumnView>
-      </div>
-    </div>
-  );
+  switch (selectedChart) {
+    case CHARTS.traffic:
+      return yearTrafficGraph;
+    case CHARTS.mau:
+      return yearUserGraph;
+    case CHARTS.trafficByChannel:
+      return trafficByChannel;
+    case CHARTS.trafficByDevice:
+      return trafficByDevice;
+    case CHARTS.usersByDevice:
+      return usersByDevice;
+    case CHARTS.trafficByOrganicVsPaid:
+      return trafficByOrganicVsPaid;
+    // if no selected chart, return all charts
+    default:
+      return (
+        <div>
+          <h2 id="WebsiteTraffic" className="text-2xl font-bold">
+            Website Traffic
+          </h2>
+          <div className="h-fit">
+            <ThreeColumnView
+              titleId="traffic"
+              title={""}
+              graph1={yearTrafficGraph}
+              graph2={yearUserGraph}
+              graph3={trafficByChannel}
+            ></ThreeColumnView>
+          </div>
+          <div className="h-64">
+            <ThreeColumnView
+              titleId="traffic"
+              title={""}
+              graph1={trafficByDevice}
+              graph2={usersByDevice}
+              graph3={trafficByOrganicVsPaid}
+            ></ThreeColumnView>
+          </div>
+        </div>
+      );
+  }
 }
 
 export default WebTrafficChart;

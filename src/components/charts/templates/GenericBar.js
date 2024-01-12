@@ -13,6 +13,8 @@ function GenericBar({
   showTimescaleButtons = true,
   timescale,
   setTimescale,
+  selectedChart,
+  rawChartData,
 }) {
   const options = {
     plugins: {
@@ -63,6 +65,8 @@ function GenericBar({
         <GenericTimeScale
           timescale={timescale}
           setTimescale={setTimescale}
+          selectedChart={selectedChart}
+          rawChartData={rawChartData}
         ></GenericTimeScale>
       )}
 

@@ -115,3 +115,20 @@ export const generateQuarters = (startYear) => {
   }
   return quarters;
 };
+
+export const generateYears = (startYear) => {
+  const years = [];
+  const today = CONSTANTS.cutoffDate;
+  const currentYear = today.getUTCFullYear();
+  for (let year = startYear; year <= currentYear; year++) {
+    years.push(year);
+  }
+  return years;
+};
+
+export const convertMonthFormat = (date) => {
+  const newDate = new Date(date);
+  const month = newDate.toLocaleString("default", { month: "short" });
+  const year = newDate.getUTCFullYear().toString().slice(2);
+  return `${month} ${year}`;
+};

@@ -1,10 +1,79 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import HeadCountChart from "./charts/HeadCountChart";
+import { CHARTS, RELEVANT_CONTINENTS } from "../constants";
+import WebGeoTrafficChart from "./charts/WebGeoTrafficChart";
+import WebTrafficChart from "./charts/WebTrafficChart";
 
-export default function ChartModal({ chart, title }) {
-  const [open, setOpen] = useState(true);
+export default function ChartModal({
+  open,
+  setOpen,
+  selectedChart,
+  chartData,
+}) {
+  let chart;
+
+  switch (selectedChart) {
+    case CHARTS.employeeCount:
+      chart = <HeadCountChart headCountData={chartData} />;
+      break;
+    case CHARTS.trafficByGeo:
+      chart = (
+        <WebGeoTrafficChart
+          geoTrafficData={chartData}
+          relevant_continents={RELEVANT_CONTINENTS}
+        />
+      );
+      break;
+    case CHARTS.traffic:
+      chart = (
+        <WebTrafficChart
+          trafficData={chartData}
+          selectedChart={CHARTS.traffic}
+        />
+      );
+      break;
+    case CHARTS.mau:
+      chart = (
+        <WebTrafficChart trafficData={chartData} selectedChart={CHARTS.mau} />
+      );
+      break;
+    case CHARTS.trafficByChannel:
+      chart = (
+        <WebTrafficChart
+          trafficData={chartData}
+          selectedChart={CHARTS.trafficByChannel}
+        />
+      );
+      break;
+    case CHARTS.trafficByDevice:
+      chart = (
+        <WebTrafficChart
+          trafficData={chartData}
+          selectedChart={CHARTS.trafficByDevice}
+        />
+      );
+      break;
+    case CHARTS.usersByDevice:
+      chart = (
+        <WebTrafficChart
+          trafficData={chartData}
+          selectedChart={CHARTS.usersByDevice}
+        />
+      );
+      break;
+    case CHARTS.trafficByOrganicVsPaid:
+      chart = (
+        <WebTrafficChart
+          trafficData={chartData}
+          selectedChart={CHARTS.trafficByOrganicVsPaid}
+        />
+      );
+      break;
+    default:
+      return null;
+  }
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -32,7 +101,7 @@ export default function ChartModal({ chart, title }) {
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-3xl sm:p-6 sm:pt-16">
+              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-[80%] sm:p-6 sm:pt-16">
                 <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
                   <button
                     type="button"
@@ -43,8 +112,6 @@ export default function ChartModal({ chart, title }) {
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
                 </div>
-
-                <span className="text-2xl font-bold">{title}</span>
 
                 {chart}
               </Dialog.Panel>

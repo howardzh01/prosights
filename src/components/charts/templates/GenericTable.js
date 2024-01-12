@@ -1,9 +1,6 @@
 import React from "react";
-import { Bar } from "react-chartjs-2";
 import Chart from "chart.js/auto";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import GenericTimeScale from "./GenericTimeScale";
-import { data } from "autoprefixer";
 Chart.register(ChartDataLabels);
 
 // function GenericTable({
@@ -66,7 +63,7 @@ function GenericTable({
   // Expect chartData of same format as GenericBar
   // TableCell.js
   const TableCell = ({ children, isHeader = false, colSpan = 1 }) => {
-    const classes = "border px-4 py-2 text-center";
+    const classes = "border px-4 py-2 text-center whitespace-nowrap";
     return isHeader ? (
       <th className={classes} colSpan={colSpan}>
         {children}

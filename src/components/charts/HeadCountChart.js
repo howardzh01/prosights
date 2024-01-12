@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { aggregateData } from "../../utils/Utils";
 import GenericBar from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
-import ChartModal from "../ChartModal";
+import { CHARTS } from "../../constants";
 
-function HeadCountChart({ user, companyName, headCountData }) {
-  const [timescale, setTimescale] = useState("quarterYear");
+function HeadCountChart({ headCountData }) {
+  const [timescale, setTimescale] = useState("year");
 
   if (!headCountData) return null;
 
@@ -31,9 +31,11 @@ function HeadCountChart({ user, companyName, headCountData }) {
         aggregateData(headCountData, "headcount", "last", timescale)
       )}
       title={"Total Employee (#)"}
-      showDataLabels={timescale === "quarterYear"}
+      showDataLabels={timescale !== "month"}
       timescale={timescale}
       setTimescale={setTimescale}
+      selectedChart={CHARTS.employeeCount}
+      rawChartData={headCountData}
     />
   );
 
@@ -47,10 +49,11 @@ function HeadCountChart({ user, companyName, headCountData }) {
   );
 
   return (
-    <div className="">
+    <div>
+      <h2 id="employeeCount" className="text-2xl font-bold">
+        Employee Count
+      </h2>
       <TwoColumnView
-        titleId="employeeCount"
-        title={"Employee Count"}
         quarterGraph={quarterHeadCountGraph}
         yearGraph={yearHeadCountGraph}
       ></TwoColumnView>

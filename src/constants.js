@@ -24,3 +24,23 @@ export const TIME_IN_MS = {
   "1_hour": 60 * 60 * 1000,
   "1_day": 24 * 60 * 60 * 1000,
 };
+
+export const CHARTS = {
+  employeeCount: "Employee Count",
+  traffic: "Traffic",
+  mau: "MAU",
+  trafficByChannel: "Traffic by Channel",
+  trafficByDevice: "Traffic by Device",
+  usersByDevice: "Users by Device",
+  trafficByOrganicVsPaid: "Traffic by Organic vs Paid",
+  trafficByGeo: "Traffic by Geo",
+};
+
+export const RELEVANT_CONTINENTS = [
+  "North America",
+  "South America",
+  "Asia",
+  "Europe",
+  "Africa",
+  "Australia",
+];
