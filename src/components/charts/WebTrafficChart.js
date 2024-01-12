@@ -171,7 +171,7 @@ function WebTrafficChart({ trafficData }) {
       <h2 id="WebsiteTraffic" className="text-2xl font-bold">
         Website Traffic
       </h2>
-      <div className="h-64">
+      <div className="h-fit">
         <ThreeColumnView
           titleId="traffic"
           title={""}

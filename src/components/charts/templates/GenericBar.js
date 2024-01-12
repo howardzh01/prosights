@@ -4,6 +4,7 @@ import Chart from "chart.js/auto";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import GenericTimeScale from "./GenericTimeScale";
 Chart.register(ChartDataLabels);
+import GenericTable from "./GenericTable";
 
 function GenericBar({
   chartData,
@@ -66,6 +67,9 @@ function GenericBar({
       )}
 
       <div>{chartData && <Bar data={chartData} options={options}></Bar>}</div>
+      <div>
+        {chartData && <GenericTable chartData={chartData}></GenericTable>}
+      </div>
     </div>
   );
 }

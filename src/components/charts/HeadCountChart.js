@@ -4,7 +4,7 @@ import GenericBar from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
 import ChartModal from "../ChartModal";
 
-function HeadCountChart({ headCountData }) {
+function HeadCountChart({ user, companyName, headCountData }) {
   const [timescale, setTimescale] = useState("quarterYear");
 
   function convertToChartData(data) {
@@ -47,7 +47,7 @@ function HeadCountChart({ headCountData }) {
   );
 
   return (
-    <div className="h-64">
+    <div className="">
       {/* <ChartModal chart={quarterHeadCountGraph} title={"Employee Count"} /> */}
 
       <TwoColumnView

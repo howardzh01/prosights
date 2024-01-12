@@ -2,7 +2,7 @@ import ChartModal from "../../ChartModal";
 
 function TwoColumnView({ titleId, title, quarterGraph, yearGraph }) {
   return (
-    <div className="h-64">
+    <div className="">
       <h2 id={titleId} className="text-2xl font-bold">
         {title}
       </h2>
