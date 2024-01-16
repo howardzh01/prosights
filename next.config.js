@@ -27,6 +27,7 @@ module.exports = {
       "ohozahtshujfrigjhysp.supabase.co",
       "api.simulationlabs.ai",
       "images.crunchbase.com",
+      "imgtr.ee",
     ],
   },
   reactStrictMode: false,
