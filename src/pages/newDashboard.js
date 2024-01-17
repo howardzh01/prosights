@@ -15,6 +15,7 @@ import {
 import { RELEVANT_CONTINENTS } from "../constants";
 import { createContext } from "react";
 import ChartModal from "../components/ChartModal";
+import HeadCountChart from "../components/charts/HeadCountChart";
 
 export const SelectedChartContext = createContext();
 export const ChartDataContext = createContext();
@@ -120,7 +121,7 @@ function NewDashboard() {
             <NewSideBar />
           </div>
           {/* Main Content */}
-          <div className="flex-grow bg-white flex flex-col items-center px-10">
+          <div className="bg-white flex flex-col items-center px-10">
             {/* Search Bar */}
             <div className="w-[36rem] mt-2">
               <SearchBar />
@@ -171,11 +172,12 @@ function NewDashboard() {
               headCountData={headCountData}
             />
             {/* Headcount; TODO: MAKE THIS A SEPARATE COMPONENT */}
-            <div className="w-full mt-12">
+            <div className="flex w-full mt-12">
               <p className="text-2xl font-semibold text-gray-800 ml-2">
                 Headcount
               </p>
-              <hr className="border-t border-customGray-50 mt-2" />
+              <hr className="border-t border-customGray-50 mt-2 mb-4" />
+              <HeadCountChart headCountData={headCountData} />
             </div>
           </div>
         </div>

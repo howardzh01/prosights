@@ -49,14 +49,14 @@ function HeadCountChart({ headCountData }) {
   );
 
   return (
-    <div>
+    <div className="flex flex-col w-full">
       <h2 id="employeeCount" className="text-2xl font-bold">
-        Employee Count
+        Employees
       </h2>
       <TwoColumnView
         quarterGraph={quarterHeadCountGraph}
         yearGraph={yearHeadCountGraph}
-      ></TwoColumnView>
+      />
     </div>
   );
 }
