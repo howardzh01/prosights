@@ -35,7 +35,7 @@ function HeadCountSignal({ headCountData }) {
       showDataLabels={timescale === "year"}
       timescale={timescale}
       setTimescale={setTimescale}
-      // selectedChart={CHARTS.employeeCount}
+      selectedChart={CHARTS.employeeCount}
       showTable={false}
       rawChartData={headCountData}
       showTimescaleButtons={false}

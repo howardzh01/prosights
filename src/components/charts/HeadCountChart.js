@@ -5,7 +5,7 @@ import TwoColumnView from "./templates/TwoColumnView";
 import { CHARTS } from "../../constants";
 
 function HeadCountChart({ headCountData }) {
-  const [timescale, setTimescale] = useState("year");
+  const [timescale, setTimescale] = useState("quarterYear");
 
   if (!headCountData) return null;
 
