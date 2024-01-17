@@ -3,6 +3,7 @@ import InvestorTable from "./InvestorTable";
 import DescriptionTable from "./DescriptionTable";
 import InvestmentsTable from "./InvestmentsTable";
 import Link from "next/link";
+import { fromUnderscoreCase } from "../utils/Utils";
 
 function CompanySummaryView({
   user,
@@ -41,7 +42,7 @@ function CompanySummaryView({
               // TODO: pass in a placeholder image URL if there is no image for some companies (got no image from flight-club)
               logo: cbfields["image_url"] || "",
               description: companyDescription
-                ? companyDescription
+                ? companyDescription["company_description"]
                 : "Loading...",
               founded: cbfields["founded_on"]["value"],
               funding: cbfields["funding_total"]
@@ -52,6 +53,17 @@ function CompanySummaryView({
                 : "",
             }}
           ></DescriptionTable>
+          {companyDescription && (
+            <div>
+              <ul className="list-disc">
+                {Object.entries(companyDescription?.["business_model"]).map(
+                  ([key, value]) => (
+                    <li key={key}>{`${fromUnderscoreCase(key)}: ${value}`}</li>
+                  )
+                )}
+              </ul>
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col items-start gap-2 w-full xl:w-1/2 max-h-64 xl:max-h-none">

@@ -4,7 +4,8 @@
   "private": true,
   "dependencies": {
     "@chengsokdara/use-whisper": "^0.2.0",
-    "@clerk/nextjs": "^4.27.2",
+    "@clerk/clerk-js": "^4.68.4",
+    "@clerk/nextjs": "^4.29.3",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@ffmpeg/core": "^0.12.3",

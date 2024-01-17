@@ -132,3 +132,16 @@ export const convertMonthFormat = (date) => {
   const year = newDate.getUTCFullYear().toString().slice(2);
   return `${month} ${year}`;
 };
+
+export function assert(condition, message) {
+  if (!condition) {
+    throw new Error(message || "Assertion failed");
+  }
+}
+
+export function fromUnderscoreCase(underscoreString) {
+  let normalString = underscoreString
+    .replace(/_/g, " ") // Replace underscores with spaces
+    .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize the first letter of each word
+  return normalString;
+}

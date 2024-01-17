@@ -135,22 +135,13 @@ function Dashboard() {
     getCrunchbaseData
   );
   const { data: companyDescription, error: companyDescriptionError } = useSWR(
-    user && company && crunchbaseData
-      ? [`/api/private/getCompanyDescription`, company]
-      : null,
+    user && company ? [`/api/private/getCompanyDescription`, company] : null,
     ([url, company]) => {
-      let crunchbaseCompanyDescription;
-      try {
-        crunchbaseCompanyDescription = crunchbaseData["fields"]["description"];
-      } catch {
-        crunchbaseCompanyDescription = "";
-      }
-
       return getCompanyDescription([
         url,
         user.id,
         company,
-        crunchbaseCompanyDescription,
+        // crunchbaseCompanyDescription,
       ]);
     }
   );

@@ -35,7 +35,7 @@ export async function cachedFetch(
     .from(table_name)
     .select()
     .eq("query", cacheKey);
-  console.log("Pre-fetch Supabase INFO", rows, error);
+  // console.log("Pre-fetch Supabase INFO", rows, error);
 
   if (error || !rows || rows.length === 0) {
     const new_response = await fetch(url, options);
@@ -76,7 +76,7 @@ export async function cachedFetch(
     }
     return data;
   }
-  console.log("HIT CACHE");
+
   return rows[0].response;
 }
 
@@ -151,7 +151,6 @@ export async function cachedBucketFetch(
 
     return data;
   }
-  console.log("HIT CACHE");
 
   const { data: apiCallData, error: apiCallError } = await serviceSup.storage
     .from("api_calls")

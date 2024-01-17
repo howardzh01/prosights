@@ -9,25 +9,6 @@ export const config = {
 const getCSignalHeadCount = async (company) => {
   // monthly headcount data in reverse chronological order
 
-  // const response = await fetch(
-  //   `https://api.coresignal.com/cdapi/v1/linkedin/historical_headcount/collect/${company}`,
-  //   {
-  //     method: "GET",
-  //     headers: {
-  //       accept: "application/json",
-  //       Authorization: `Bearer ${process.env.CORESIGNAL_API_KEY ?? ""}`,
-  //     },
-  //     // body: JSON.stringify({}),
-  //     // signal: controller.signal,
-  //   }
-  // );
-
-  // if (!response.ok) {
-  //   console.log("error", response.status);
-  // }
-  // // console.log("hi", response);
-  // return response.json();
-
   const output = await cachedFetch(
     `https://api.coresignal.com/cdapi/v1/linkedin/historical_headcount/collect/${company}`,
     {

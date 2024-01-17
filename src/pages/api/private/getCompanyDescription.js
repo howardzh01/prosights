@@ -1,27 +1,41 @@
 import { CONSTANTS } from "../../../constants.js";
-
+import { assert } from "../../../utils/Utils.js";
+import { serviceSup } from "../../../utils/Supabase.js";
+import { text } from "micro";
 export const config = {
   runtime: "edge",
 };
+const VERSION = "v1";
+const table_name = "companies";
+const FORCE_REFETCH = false; // FOR TESTING
+const getGPTDescriptions = async (companyName, crunchbaseDescription) => {
+  // retrieve cards for a specific company
+  // cardName is an array
+  // Providing crunchbaseDescription is optional.
+  let systemPrompt;
+  if (crunchbaseDescription) {
+    systemPrompt = `You are a private equity analyst and have two tasks. Give a company called "${companyName}" with a description from Crunchbase: "${crunchbaseDescription}".`;
+  } else {
+    systemPrompt = `You are a private equity analyst and have two tasks. Given a company called "${companyName}",`;
+  }
+  systemPrompt += `\n\n1. What's the company description in 1 sentence. Keep it as concise as possible. Never include date or where it was founded\n
+  2. What is the business model in 2 or 3 concise bullet points? Each point should describe distinct core revenue streams of the company. Only the top 10% most complex companies should have 3 bullet points.\n
 
-// TODO: UNSECURE, add errors
-const handler = async (req) => {
-  const reqJSON = await req.json();
-  const { companyName, crunchbaseDescription } = reqJSON;
-  return new Response(crunchbaseDescription);
+  Return this as a JSON of with keys company_description and business_model. Bullet points for business_model should be representents as key value pairs.
+`;
 
   const payload = {
     model: CONSTANTS.MODEL_VERSION,
+    response_format: { type: "json_object" },
+    temperature: 0.1,
     messages: [
       {
         role: "system",
-        content: `Here is the description of the company "${companyName}" by Crunchbase: "${crunchbaseDescription}".
-
-    Using this information and what you know, give me a 2 sentence description of ${companyName} in layman terms so that anyone can understand what the company does:`,
+        content: systemPrompt,
       },
     ],
   };
-
+  console.log("GPT REFETCH", payload);
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     headers: {
       "Content-Type": "application/json",
@@ -32,8 +46,84 @@ const handler = async (req) => {
   });
 
   const responseJSON = await res.json();
+  // try {
+  const content = responseJSON.choices[0].message.content.replace("\n", "");
+  assert(
+    content.includes("company_description") &&
+      content.includes("business_model"),
+    "Missing company_description or business_model"
+  );
+  return [content, payload];
+};
+// TODO: UNSECURE, add errors
+const retrieveAndUpload = async (companyName, crunchbaseDescription, rows) => {
+  const [content, payload] =
+    (await getGPTDescriptions(companyName, crunchbaseDescription)) || [];
 
-  return new Response(responseJSON.choices[0].message.content);
+  if (content) {
+    const { data: bucketData, error: bucketError } = await serviceSup.storage
+      .from("company_descriptions")
+      .upload(
+        `${VERSION}/${rows[0].id}.json`,
+        JSON.stringify({ payload: payload, content: content }),
+        {
+          cacheControl: "3600",
+          upsert: true,
+        }
+      );
+
+    if (bucketError) {
+      console.log("BUCKET ERROR", bucketError);
+    }
+    return content;
+  }
+};
+const handler = async (req) => {
+  const reqJSON = await req.json();
+  const { companyName, crunchbaseDescription } = reqJSON;
+  let { data: rows, error: error } = await serviceSup
+    .from(table_name)
+    .select()
+    .eq("name", companyName);
+  if (error || !rows || rows.length === 0) {
+    const { data: insertedRows, error: insertedError } = await serviceSup
+      .from(table_name)
+      .insert({
+        name: companyName,
+        // url: company_url, // for debugging only
+      })
+      .select();
+
+    if (insertedError) {
+      console.error("Error inserting data into cache:", insertedError);
+      return; //TODO: make it return data. Left it like this so more apparent of cache errors for testing
+    }
+    const content = await retrieveAndUpload(
+      companyName,
+      crunchbaseDescription,
+      insertedRows
+    );
+    return new Response(content);
+  }
+
+  const { data: gptContent, error: gptContentError } = await serviceSup.storage
+    .from("company_descriptions")
+    .download(`${VERSION}/${rows[0].id}.json`);
+  const textGPTContent = await gptContent.text();
+  const parsedGPTContent = JSON.parse(textGPTContent);
+  if (gptContentError || !("content" in parsedGPTContent) || FORCE_REFETCH) {
+    console.log(
+      `${VERSION}/${rows[0].id}.json not in company_descriptions bucket`,
+      gptContentError
+    );
+    const content = await retrieveAndUpload(
+      companyName,
+      crunchbaseDescription,
+      rows
+    );
+    return new Response(content);
+  }
+  return new Response(parsedGPTContent["content"]);
 };
 
 export default handler;

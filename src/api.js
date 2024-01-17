@@ -1,5 +1,6 @@
 import api from "gpt-tokenizer/esm/encoding/cl100k_base";
 import { UN_M49_CONTINENTS } from "./constants";
+import { assert } from "./utils/Utils";
 
 export const getHeadCount = async ([api_url, userId, companyName]) => {
   // expect `/api/private/getHeadCount`
@@ -188,6 +189,7 @@ export const getCompanyDescription = async ([
 ]) => {
   //`/api/private/getCompanyDescription`
   // data["fields"]["description"]
+  // Should include company_description + business_model
   const descriptionResponse = await fetch(api_url, {
     method: "POST",
     headers: {
@@ -201,5 +203,11 @@ export const getCompanyDescription = async ([
   if (!descriptionResponse.ok) {
     console.log(descriptionResponse.status);
   }
-  return await descriptionResponse.text();
+  const content = await descriptionResponse.text();
+  const json_content = JSON.parse(content);
+  assert(
+    "company_description" in json_content && "business_model" in json_content,
+    "Missing company_description or business_model"
+  );
+  return json_content;
 };

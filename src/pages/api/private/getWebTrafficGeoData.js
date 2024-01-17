@@ -52,7 +52,7 @@ const handler = async (req) => {
   });
 
   const webTrafficHistoricalData = await Promise.all(promises);
-  console.log(webTrafficHistoricalData);
+  // console.log(webTrafficHistoricalData);
   return new Response(JSON.stringify(webTrafficHistoricalData), {
     status: 200,
     headers: {

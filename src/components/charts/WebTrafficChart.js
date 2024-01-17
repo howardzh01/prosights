@@ -75,7 +75,7 @@ function WebTrafficChart({ trafficData, selectedChart = null }) {
       acc[key] = aggregateData(trafficData, key, "sum", timescale);
       return acc;
     }, {});
-    console.log(aggData);
+
     return {
       labels: Object.keys(aggData[relevant_keys[0]]),
       datasets: relevant_keys.map((key) => ({
