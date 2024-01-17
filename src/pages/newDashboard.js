@@ -69,33 +69,33 @@ function NewDashboard() {
             <p className="text-base text-customGray-500">Compare</p>
           </div>
         </div>
-        {/* Company overview section */}
-        <div className="mt-12 w-full">
+        {/* Company overview section; TODO: MAKE THIS A SEPARATE COMPONENT */}
+        <div className="mt-10 w-full">
           <p className="text-2xl font-semibold text-gray-800 ml-2">
             Company Overview
           </p>
           <hr className="border-t border-customGray-50 mt-2" />
-          <div className="flex flex-row mt-6 mx-4">
-            {/* Left Side */}
+          <div className="flex flex-row mt-4 mx-4">
+            {/* About & Business Model */}
             <div className="flex flex-col w-1/2 mr-12">
               <div className="text-lg font-semibold text-gray-800">About</div>
               <p className="text-sm text-customGray-800 mt-2 leading-relaxed">
                 {companyAbout}
               </p>
-              <div className="text-lg font-semibold text-gray-800 mt-8">
+              <div className="text-lg font-semibold text-gray-800 mt-4">
                 Business Model
               </div>
               <p className="text-sm text-customGray-800 mt-2 whitespace-pre-line leading-relaxed">
                 {companyBusinessModel}
               </p>
             </div>
-            {/* Right Side */}
+            {/* Basic Stats */}
             <div
               style={{
                 display: "grid",
                 gridTemplateColumns: "min-content max-content 1fr",
                 gridTemplateRows: "auto auto",
-                gap: "2.5rem",
+                columnGap: "2.5rem",
               }}
             >
               <div
@@ -166,6 +166,7 @@ function NewDashboard() {
               </div>
             </div>
           </div>
+          {/* Funding and M&A Tables */}
           <div className="flex space-x-4 mx-4">
             <div className="w-1/2 mr-8">
               <p className="text-lg font-semibold text-gray-800 mt-8 mb-4">
@@ -249,6 +250,17 @@ function NewDashboard() {
               </div>
             </div>
           </div>
+          {/* Signals */}
+          <div className="flex flex-col mt-8 mx-4">
+            <div className="text-lg font-semibold text-gray-800">Signals</div>
+          </div>
+        </div>
+        {/* Detailed Graphs; TODO: MAKE THIS A SEPARATE COMPONENT */}
+        <div className="w-full mt-12">
+          <p className="text-2xl font-semibold text-gray-800 ml-2">
+            Detailed Graphs
+          </p>
+          <hr className="border-t border-customGray-50 mt-2" />
         </div>
       </div>
     </div>
