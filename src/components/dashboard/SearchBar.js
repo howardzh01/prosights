@@ -40,7 +40,7 @@ function SearchBar({ setCompany }) {
   };
 
   return (
-    <div className="flex w-full flex-row bg-white border items-center border-customGray-50 rounded-lg px-4 py-1">
+    <div className="flex w-full flex-row bg-white border items-center border-customGray-50 rounded-lg px-4 py-1 drop-shadow-sm">
       <div className="flex flex-row items-center w-full">
         <Image
           src="/assets/search.svg"
