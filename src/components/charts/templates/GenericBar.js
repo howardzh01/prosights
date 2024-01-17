@@ -11,6 +11,7 @@ function GenericBar({
   title = undefined,
   showDataLabels = true,
   showTimescaleButtons = true,
+  showTable = true,
   timescale,
   setTimescale,
   selectedChart,
@@ -60,7 +61,7 @@ function GenericBar({
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-full">
       {showTimescaleButtons && (
         <GenericTimeScale
           timescale={timescale}
@@ -70,10 +71,15 @@ function GenericBar({
         ></GenericTimeScale>
       )}
 
-      <div>{chartData && <Bar data={chartData} options={options}></Bar>}</div>
-      <div>
-        {chartData && <GenericTable chartData={chartData}></GenericTable>}
+      <div className="h-full">
+        {chartData && <Bar data={chartData} options={options}></Bar>}
       </div>
+
+      {showTable && (
+        <div>
+          {chartData && <GenericTable chartData={chartData}></GenericTable>}
+        </div>
+      )}
     </div>
   );
 }

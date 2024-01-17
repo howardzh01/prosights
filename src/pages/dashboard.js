@@ -98,7 +98,8 @@ function Dashboard() {
   // API Data
   const { data: headCountData, error: headCountError } = useSWR(
     user && company ? [`/api/private/getHeadCount`, user.id, company] : null,
-    getHeadCount
+    getHeadCount,
+    { revalidateOnFocus: false }
   );
   // const { data: webTrafficData, error: webTrafficError } = useSWR(
   //   user && company && country
@@ -114,7 +115,8 @@ function Dashboard() {
       ? [`/api/private/getWebTrafficData`, user.id, company + ".com", country]
       : null,
 
-    getTrafficData
+    getTrafficData,
+    { revalidateOnFocus: false }
   );
   const { data: webTrafficGeoData, error: webTrafficGeoError } = useSWR(
     user && company
@@ -125,14 +127,16 @@ function Dashboard() {
           RELEVANT_CONTINENTS,
         ]
       : null,
-    getGeoTrafficData
+    getGeoTrafficData,
+    { revalidateOnFocus: false }
   );
 
   const { data: crunchbaseData, error: crunchbaseError } = useSWR(
     user && company
       ? [`/api/private/getCrunchbaseData`, user.id, company]
       : null,
-    getCrunchbaseData
+    getCrunchbaseData,
+    { revalidateOnFocus: false }
   );
   const { data: companyDescription, error: companyDescriptionError } = useSWR(
     user && company ? [`/api/private/getCompanyDescription`, company] : null,
@@ -143,9 +147,9 @@ function Dashboard() {
         company,
         // crunchbaseCompanyDescription,
       ]);
-    }
+    },
+    { revalidateOnFocus: false }
   );
-  console.log(companyDescription);
   // useEffect(() => {
   //   console.log("companyName", companyName, user.id);
   //   setHeadCountData(user, companyName);
