@@ -9,19 +9,23 @@ function NewSideBar() {
       level: 1,
     },
     {
-      title: "Detailed Graphs",
+      title: "Headcount",
       level: 1,
     },
     {
-      title: "Headcount",
+      title: "Website Traffic",
+      level: 1,
+    },
+    {
+      title: "Visits Breakdown",
       level: 2,
     },
     {
-      title: "Web Traffic",
+      title: "Traffic Momentum",
       level: 2,
     },
     {
-      title: "App Usage",
+      title: "Traffic Quality",
       level: 2,
     },
     {
