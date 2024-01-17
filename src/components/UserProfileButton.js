@@ -5,7 +5,7 @@ function UserProfileButton({ textColor = "text-white" }) {
     <div className={`flex ${textColor}`}>
       <SignedIn>
         <div className="items-center gap-2 hidden md:flex">
-          <UserButton showName afterSignOutUrl={"/"} />
+          <UserButton showName={false} afterSignOutUrl={"/"} />
         </div>
 
         <div className="flex items-center gap-2 md:hidden">
