@@ -10,7 +10,7 @@ function NewDashboard() {
   );
   const [companyLocation, setCompanyLocation] = useState("US");
   const [companyAbout, setCompanyAbout] = useState(
-    "StockX is an e-commerce platform specializing in authenticated resale of limited-edition sneakers and streetwear."
+    "StockX is an e-commerce platform specializing in authenticated resale of limited edition sneakers and streetwear."
   );
   const [companyBusinessModel, setCompanyBusinessModel] =
     useState(`Transaction Fees: Charges sellers a percentage fee on each sale.
@@ -27,7 +27,7 @@ function NewDashboard() {
   return (
     <div className="flex flex-row">
       {/* Sidebar */}
-      <div className="w-64 h-screen">
+      <div className="w-60 h-screen">
         <NewSideBar />
       </div>
       {/* Main Content */}
@@ -79,60 +79,85 @@ function NewDashboard() {
             {/* Left Side */}
             <div className="flex flex-col w-1/2 mr-12">
               <div className="text-lg font-semibold text-gray-800">About</div>
-              <p className="text-base text-customGray-800 mt-2">
+              <p className="text-sm text-customGray-800 mt-2 leading-relaxed">
                 {companyAbout}
               </p>
               <div className="text-lg font-semibold text-gray-800 mt-8">
                 Business Model
               </div>
-              <p className="text-base text-customGray-800 mt-2 whitespace-pre-line">
+              <p className="text-sm text-customGray-800 mt-2 whitespace-pre-line leading-relaxed">
                 {companyBusinessModel}
               </p>
             </div>
             {/* Right Side */}
-            <div className="grid grid-cols-3">
-              <div className="flex flex-col items-start">
-                <div className="text-primary font-bold text-3xl">
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "min-content max-content 1fr",
+                gridTemplateRows: "auto auto",
+                gap: "2.5rem",
+              }}
+            >
+              <div
+                className="flex flex-col items-start"
+                style={{ gridRow: "1", gridColumn: "1" }}
+              >
+                <div className="text-primary font-semibold text-4xl">
                   {companyFoundedYear}
                 </div>
                 <div className="text-sm text-customGray-500 font-light mt-1">
                   Founded
                 </div>
               </div>
-              <div className="flex flex-col items-start">
-                <div className="text-primary font-bold text-3xl">
+              <div
+                className="flex flex-col items-start"
+                style={{ gridRow: "1", gridColumn: "2" }}
+              >
+                <div className="text-primary font-semibold text-4xl">
                   {companyHeadcount}
                 </div>
                 <div className="text-sm text-customGray-500 font-light mt-1">
                   Headcount
                 </div>
               </div>
-              <div className="flex flex-col items-start">
-                <div className="text-primary font-bold text-3xl">
+              <div
+                className="flex flex-col items-start"
+                style={{ gridRow: "1", gridColumn: "3" }}
+              >
+                <div className="text-primary font-semibold text-4xl">
                   {companyHeadquarters}
                 </div>
                 <div className="text-sm text-customGray-500 font-light mt-1">
                   Headquarters
                 </div>
               </div>
-              <div className="flex flex-col items-start">
-                <div className="text-primary font-bold text-3xl">
+              <div
+                className="flex flex-col items-start"
+                style={{ gridRow: "2", gridColumn: "1" }}
+              >
+                <div className="text-primary font-semibold text-4xl">
                   ${companyValuation}
                 </div>
                 <div className="text-sm text-customGray-500 font-light mt-1">
                   Valuation
                 </div>
               </div>
-              <div className="flex flex-col items-start">
-                <div className="text-primary font-bold text-3xl">
+              <div
+                className="flex flex-col items-start"
+                style={{ gridRow: "2", gridColumn: "2" }}
+              >
+                <div className="text-primary font-semibold text-4xl">
                   ${companyLastRoundSize}
                 </div>
                 <div className="text-sm text-customGray-500 font-light mt-1">
                   Last Round
                 </div>
               </div>
-              <div className="flex flex-col items-start">
-                <div className="text-primary font-bold text-3xl">
+              <div
+                className="flex flex-col items-start"
+                style={{ gridRow: "2", gridColumn: "3" }}
+              >
+                <div className="text-primary font-semibold text-4xl">
                   {companyLastDealType}
                 </div>
                 <div className="text-sm text-customGray-500 font-light mt-1">
