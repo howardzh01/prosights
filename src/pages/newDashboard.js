@@ -123,8 +123,12 @@ function NewDashboard() {
             </div>
             {/* Main Content */}
             <div className="flex-grow bg-white flex flex-col items-center px-10">
+              {/* Search Bar */}
+              <div className="w-[36rem] mt-2">
+                <SearchBar />
+              </div>
               {/* Company name, country, and comparing section */}
-              <div className="mt-8 flex flex-row justify-between w-full items-center">
+              <div className="mt-6 flex flex-row justify-between w-full items-center">
                 <div className="flex flex-row items-center">
                   <Image
                     src={companyLogo}
@@ -145,10 +149,6 @@ function NewDashboard() {
                     <option value="asia">Asia</option>
                   </select>
                 </div>
-                {/* Search Bar */}
-                <div className="w-[36rem] mr-40 h-10">
-                  <SearchBar />
-                </div>
                 <div className="flex flex-row items-center">
                   <Image
                     src="/assets/compare.svg"
@@ -161,24 +161,24 @@ function NewDashboard() {
                 </div>
               </div>
               {/* Company overview section; TODO: MAKE THIS A SEPARATE COMPONENT */}
-              <div className="mt-10 w-full mx-4">
+              <div className="mt-8 w-full mx-4">
                 <p className="text-2xl font-semibold text-gray-800 ml-2">
-                  Company Overview
+                  Overview
                 </p>
                 <hr className="border-t border-customGray-50 mt-2" />
-                <div className="flex flex-row mt-2 mx-4">
+                <div className="flex flex-row mt-4 mx-4">
                   {/* About & Business Model */}
                   <div className="flex flex-col w-1/2 mr-12">
-                    <div className="text-lg font-semibold text-gray-800">
+                    <div className="text-base font-semibold text-gray-800">
                       About
                     </div>
-                    <p className="text-sm text-customGray-800 leading-relaxed">
+                    <p className="text-sm text-customGray-800 leading-relaxed mt-1">
                       {companyAbout}
                     </p>
-                    <div className="text-lg font-semibold text-gray-800 mt-4">
+                    <div className="text-base font-semibold text-gray-800 mt-6">
                       Business Model
                     </div>
-                    <p className="text-sm text-customGray-800 whitespace-pre-line leading-relaxed">
+                    <p className="text-sm text-customGray-800 whitespace-pre-line leading-relaxed mt-1">
                       {companyBusinessModel}
                     </p>
                   </div>
@@ -192,10 +192,10 @@ function NewDashboard() {
                     }}
                   >
                     <div
-                      className="flex flex-col items-start"
+                      className="flex flex-col items-start mr-8"
                       style={{ gridRow: "1", gridColumn: "1" }}
                     >
-                      <div className="text-primary font-semibold text-4xl">
+                      <div className="text-primary font-bold text-4xl">
                         {companyFoundedYear}
                       </div>
                       <div className="text-sm text-customGray-500 font-light mt-1">
@@ -203,10 +203,10 @@ function NewDashboard() {
                       </div>
                     </div>
                     <div
-                      className="flex flex-col items-start"
+                      className="flex flex-col items-start mr-8"
                       style={{ gridRow: "1", gridColumn: "2" }}
                     >
-                      <div className="text-primary font-semibold text-4xl">
+                      <div className="text-primary font-bold text-4xl">
                         {companyHeadcount}
                       </div>
                       <div className="text-sm text-customGray-500 font-light mt-1">
@@ -217,7 +217,7 @@ function NewDashboard() {
                       className="flex flex-col items-start"
                       style={{ gridRow: "1", gridColumn: "3" }}
                     >
-                      <div className="text-primary font-semibold text-4xl">
+                      <div className="text-primary font-bold text-4xl">
                         {companyHeadquarters}
                       </div>
                       <div className="text-sm text-customGray-500 font-light mt-1">
@@ -228,7 +228,7 @@ function NewDashboard() {
                       className="flex flex-col items-start"
                       style={{ gridRow: "2", gridColumn: "1" }}
                     >
-                      <div className="text-primary font-semibold text-4xl">
+                      <div className="text-primary font-bold text-4xl">
                         ${companyValuation}
                       </div>
                       <div className="text-sm text-customGray-500 font-light mt-1">
@@ -239,7 +239,7 @@ function NewDashboard() {
                       className="flex flex-col items-start"
                       style={{ gridRow: "2", gridColumn: "2" }}
                     >
-                      <div className="text-primary font-semibold text-4xl">
+                      <div className="text-primary font-bold text-4xl">
                         ${companyLastRoundSize}
                       </div>
                       <div className="text-sm text-customGray-500 font-light mt-1">
@@ -250,7 +250,7 @@ function NewDashboard() {
                       className="flex flex-col items-start"
                       style={{ gridRow: "2", gridColumn: "3" }}
                     >
-                      <div className="text-primary font-semibold text-4xl">
+                      <div className="text-primary font-bold text-4xl">
                         {companyLastDealType}
                       </div>
                       <div className="text-sm text-customGray-500 font-light mt-1">
@@ -260,9 +260,9 @@ function NewDashboard() {
                   </div>
                 </div>
                 {/* Funding and M&A Tables */}
-                <div className="flex space-x-4 mx-4">
-                  <div className="w-1/2 mr-8">
-                    <p className="text-lg font-semibold text-gray-800 mt-4 mb-2">
+                <div className="flex space-x-4 mx-4 mt-6">
+                  <div className="w-3/5 mr-8">
+                    <p className="text-base font-semibold text-gray-800 mb-3">
                       Funding
                     </p>
                     <div className="bg-white drop-shadow-sm rounded-md">
@@ -314,7 +314,7 @@ function NewDashboard() {
                   </div>
 
                   <div className="">
-                    <p className="text-lg font-semibold text-gray-800 mt-4 mb-2">
+                    <p className="text-base font-semibold text-gray-800 mb-3">
                       M&A
                     </p>
                     <div className="bg-white drop-shadow-sm rounded-md">
@@ -346,21 +346,21 @@ function NewDashboard() {
                   </div>
                 </div>
                 {/* Signals */}
-                <div className="flex flex-col mt-4 mx-4">
+                <div className="flex flex-col mt-6 mx-4">
                   <div className="text-lg font-semibold text-gray-800">
                     Signals
                   </div>
-                  <div className="space-x-8 items-align flex h-48 mt-2">
-                    <div className="w-64 p-4 rounded-lg shadow border border-customGray-75">
+                  <div className="space-x-8 items-align flex mt-4">
+                    <div className="w-64 px-6 py-4 rounded-lg drop-shadow-sm border border-customGray-50">
                       <HeadCountSignal headCountData={headCountData} />
                     </div>
-                    <div className="w-64 p-4 rounded-lg shadow border border-customGray-75">
+                    <div className="w-64 px-6 py-4 rounded-lg drop-shadow-sm border border-customGray-50">
                       <HeadCountSignal headCountData={headCountData} />
                     </div>
-                    <div className="w-64 p-4 rounded-lg shadow border border-customGray-75">
+                    <div className="w-64 px-6 py-4 rounded-lg drop-shadow-sm border border-customGray-50">
                       <HeadCountSignal headCountData={headCountData} />
                     </div>
-                    <div className="w-64 p-4 rounded-lg shadow border border-customGray-75">
+                    <div className="w-64 px-6 py-4 rounded-lg drop-shadow-sm border border-customGray-50">
                       <HeadCountSignal headCountData={headCountData} />
                     </div>
                   </div>

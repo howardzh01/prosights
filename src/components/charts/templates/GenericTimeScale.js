@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import Image from "next/image";
 import {
   ArrowsPointingOutIcon,
   MinusCircleIcon,
@@ -27,7 +28,7 @@ function GenericTimeScale({
   return (
     <div className="flex justify-between">
       <div className="items-center gap-1 text-md font-semibold">{title}</div>
-      <div className="flex items-center gap-1 self-end">
+      <div className="flex items-center gap-1">
         {showTimescaleButtons && (
           <>
             <button
@@ -71,7 +72,14 @@ function GenericTimeScale({
               setChartData(rawChartData);
             }}
           >
-            <ArrowsPointingOutIcon className="w-6 h-6 text-customGray-800" />
+            {/* <ArrowsPointingOutIcon className="w-6 h-6 text-customGray-800" /> */}
+            <Image
+              src="/assets/expand.svg"
+              alt="Company Logo"
+              className="w-4 h-4 object-contain"
+              width={128}
+              height={128}
+            />
           </button>
         )}
       </div>

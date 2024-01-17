@@ -5,7 +5,7 @@ import UserProfileButton from "../UserProfileButton";
 function NewSideBar() {
   const sections = [
     {
-      title: "Company Overview",
+      title: "Overview",
       level: 1,
     },
     {
