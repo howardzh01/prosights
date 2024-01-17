@@ -26,36 +26,27 @@ function HeadCountSignal({ headCountData }) {
     };
   }
 
-  const quarterHeadCountGraph = (
+  const yearHeadCountGraph = (
     <GenericBar
       chartData={convertToChartData(
         aggregateData(headCountData, "headcount", "last", timescale)
       )}
-      title={"Total Employee (#)"}
-      showDataLabels={timescale !== "month"}
+      title={"Headcount"}
+      showDataLabels={timescale === "year"}
       timescale={timescale}
       setTimescale={setTimescale}
       // selectedChart={CHARTS.employeeCount}
       showTable={false}
       rawChartData={headCountData}
-    />
-  );
-
-  const yearHeadCountGraph = (
-    <GenericBar
-      chartData={convertToChartData(
-        aggregateData(headCountData, "headcount", "last", "year")
-      )}
-      showTable={false}
       showTimescaleButtons={false}
     />
   );
 
   return (
     <div>
-      <h2 id="employeeCount" className="text-md font-semibold">
+      {/* <h2 id="employeeCount" className="text-md font-semibold">
         Headcount
-      </h2>
+      </h2> */}
       {yearHeadCountGraph}
     </div>
   );

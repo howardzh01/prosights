@@ -11,6 +11,7 @@ function GenericBar({
   title = undefined,
   showDataLabels = true,
   showTimescaleButtons = true,
+  showModalButtons = true,
   showTable = true,
   timescale,
   setTimescale,
@@ -21,7 +22,7 @@ function GenericBar({
     plugins: {
       title: {
         display: true,
-        text: title,
+        // text: title,
         align: "start", // Aligns title to the left
         position: "top", // Positions title at the top
       },
@@ -62,12 +63,15 @@ function GenericBar({
 
   return (
     <div className="flex flex-col h-full">
-      {showTimescaleButtons && (
+      {(showTimescaleButtons || showModalButtons) && (
         <GenericTimeScale
           timescale={timescale}
           setTimescale={setTimescale}
           selectedChart={selectedChart}
           rawChartData={rawChartData}
+          title={title}
+          showTimescaleButtons={showTimescaleButtons}
+          showModalButtons={showModalButtons}
         ></GenericTimeScale>
       )}
 
