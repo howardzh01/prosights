@@ -38,8 +38,9 @@ function GenericBar({
         align: "top",
         formatter: Math.round,
         font: {
-          weight: "bold",
+          weight: "light",
         },
+        color: "#828BA4",
       },
     },
     scales: {
@@ -56,13 +57,14 @@ function GenericBar({
         },
       },
     },
+    devicePixelRatio: 2,
     maintainAspectRatio: false,
     responsive: true,
     // other options...
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full w-full">
       {(showTimescaleButtons || showModalButtons) && (
         <GenericTimeScale
           timescale={timescale}
@@ -72,16 +74,16 @@ function GenericBar({
           title={title}
           showTimescaleButtons={showTimescaleButtons}
           showModalButtons={showModalButtons}
-        ></GenericTimeScale>
+        />
       )}
 
-      <div className="h-full">
-        {chartData && <Bar data={chartData} options={options}></Bar>}
+      <div className="h-full w-full">
+        {chartData && <Bar data={chartData} options={options} />}
       </div>
 
       {showTable && (
-        <div>
-          {chartData && <GenericTable chartData={chartData}></GenericTable>}
+        <div className="w-full">
+          {chartData && <GenericTable chartData={chartData} />}
         </div>
       )}
     </div>

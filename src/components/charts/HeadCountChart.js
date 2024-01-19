@@ -17,6 +17,7 @@ function HeadCountChart({ headCountData }) {
         {
           // label: "Total Employee (#)",
           data: Object.values(data),
+          backgroundColor: "rgba(0, 154, 255, 1)",
           // backgroundColor: "rgba(75, 192, 192, 0.2)",
           // borderColor: "rgba(75, 192, 192, 1)",
           borderWidth: 1,
@@ -30,7 +31,7 @@ function HeadCountChart({ headCountData }) {
       chartData={convertToChartData(
         aggregateData(headCountData, "headcount", "last", timescale)
       )}
-      title={"Total Employee (#)"}
+      title={"Total Headcount"}
       showDataLabels={timescale !== "month"}
       timescale={timescale}
       setTimescale={setTimescale}
@@ -49,14 +50,19 @@ function HeadCountChart({ headCountData }) {
   );
 
   return (
-    <div className="flex flex-col w-full">
-      <h2 id="employeeCount" className="text-2xl font-bold">
+    <div className="flex flex-col">
+      <p
+        id="employeeCount"
+        className="text-base font-semibold text-gray-800 mb-3"
+      >
         Employees
-      </h2>
-      <TwoColumnView
-        quarterGraph={quarterHeadCountGraph}
-        yearGraph={yearHeadCountGraph}
-      />
+      </p>
+      <div className="px-6 py-4 rounded-lg drop-shadow-sm bg-white border border-customGray-50">
+        <TwoColumnView
+          quarterGraph={quarterHeadCountGraph}
+          yearGraph={yearHeadCountGraph}
+        />
+      </div>
     </div>
   );
 }

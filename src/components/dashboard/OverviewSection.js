@@ -17,7 +17,7 @@ function OverviewSection({
   headCountData,
 }) {
   return (
-    <div className="mt-8 w-full mx-4">
+    <div className="mt-8 w-full">
       <p className="text-2xl font-semibold text-gray-800 ml-2">Overview</p>
       <hr className="border-t border-customGray-50 mt-2" />
       <div className="flex flex-row mt-4 mx-4">
@@ -192,16 +192,16 @@ function OverviewSection({
       <div className="flex flex-col mt-6 mx-4">
         <div className="text-lg font-semibold text-gray-800">Signals</div>
         <div className="space-x-8 items-align flex mt-4">
-          <div className="w-64 px-6 py-4 rounded-lg drop-shadow-sm border border-customGray-25">
+          <div className="w-64 px-6 py-4 rounded-lg drop-shadow-sm bg-white border border-customGray-50">
             <HeadCountSignal headCountData={headCountData} />
           </div>
-          <div className="w-64 px-6 py-4 rounded-lg drop-shadow-sm border border-customGray-25">
+          <div className="w-64 px-6 py-4 rounded-lg drop-shadow-sm bg-white border border-customGray-50">
             <HeadCountSignal headCountData={headCountData} />
           </div>
-          <div className="w-64 px-6 py-4 rounded-lg drop-shadow-sm border border-customGray-25">
+          <div className="w-64 px-6 py-4 rounded-lg drop-shadow-sm bg-white border border-customGray-50">
             <HeadCountSignal headCountData={headCountData} />
           </div>
-          <div className="w-64 px-6 py-4 rounded-lg drop-shadow-sm border border-customGray-25">
+          <div className="w-64 px-6 py-4 rounded-lg drop-shadow-sm bg-white border border-customGray-50">
             <HeadCountSignal headCountData={headCountData} />
           </div>
         </div>

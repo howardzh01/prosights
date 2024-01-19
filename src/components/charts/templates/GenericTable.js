@@ -96,11 +96,12 @@ function GenericTable({
       />
     </thead>
   );
+
   const { labels, datasets } = chartData;
-  console.log(datasets);
+  console.log("datasets", datasets);
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full">
+    <div className="overflow-x-auto w-full min-w-0">
+      {/* <table className="">
         <TableHeader labels={labels} />
         <tbody>
           {datasets.map((dataset, index) => (
@@ -113,7 +114,7 @@ function GenericTable({
             />
           ))}
         </tbody>
-      </table>
+      </table> */}
     </div>
   );
 }

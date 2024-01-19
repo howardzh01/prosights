@@ -121,7 +121,12 @@ function NewDashboard() {
             <NewSideBar />
           </div>
           {/* Main Content */}
-          <div className="bg-white flex flex-col items-center px-10">
+          <div
+            className="flex-grow flex flex-col items-center px-10 bg-white bg-repeat bg-center"
+            style={{
+              backgroundImage: "url('/assets/backgroundPatternUltraLight.svg')",
+            }}
+          >
             {/* Search Bar */}
             <div className="w-[36rem] mt-2">
               <SearchBar />
@@ -172,12 +177,21 @@ function NewDashboard() {
               headCountData={headCountData}
             />
             {/* Headcount; TODO: MAKE THIS A SEPARATE COMPONENT */}
-            <div className="flex w-full mt-12">
+            <div className="flex flex-col w-full mt-12">
               <p className="text-2xl font-semibold text-gray-800 ml-2">
                 Headcount
               </p>
               <hr className="border-t border-customGray-50 mt-2 mb-4" />
-              <HeadCountChart headCountData={headCountData} />
+              <div className="mx-4">
+                <HeadCountChart headCountData={headCountData} />
+              </div>
+            </div>
+            {/* Web Traffic */}
+            <div className="flex flex-col w-full mt-12">
+              <p className="text-2xl font-semibold text-gray-800 ml-2">
+                Web Traffic
+              </p>
+              <hr className="border-t border-customGray-50 mt-2 mb-4" />
             </div>
           </div>
         </div>

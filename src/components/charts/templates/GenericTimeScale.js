@@ -27,22 +27,23 @@ function GenericTimeScale({
 
   return (
     <div className="flex justify-between">
-      <div className="items-center gap-1 text-md font-semibold">{title}</div>
+      <div className="items-center gap-1 text-sm font-medium">{title}</div>
       <div className="flex items-center gap-1">
         {showTimescaleButtons && (
-          <>
+          <div className="mr-2 flex items-center">
             <button
               type="button"
               disabled={timescale === "year"}
               onClick={() =>
                 setTimescale(TIMESCALE_TRANSITION_DIC[timescale][1])
               }
+              className="mr-1"
             >
               <MinusCircleIcon
                 className={`w-6 h-6 ${
                   timescale === "year"
-                    ? "text-customGray-200"
-                    : "text-customGray-800"
+                    ? "text-customGray-100"
+                    : "text-customGray-400"
                 }`}
               />
             </button>
@@ -56,12 +57,12 @@ function GenericTimeScale({
               <PlusCircleIcon
                 className={`w-6 h-6 ${
                   timescale === "month"
-                    ? "text-customGray-200"
-                    : "text-customGray-800"
+                    ? "text-customGray-100"
+                    : "text-customGray-400"
                 }`}
               />
             </button>
-          </>
+          </div>
         )}
         {/* don't show the expand button in the modal */}
         {!chart && showModalButtons && (
