@@ -82,9 +82,7 @@ function GenericBar({
       </div>
 
       {showTable && (
-        <div className="w-full">
-          {chartData && <GenericTable chartData={chartData} />}
-        </div>
+        <div>{chartData && <GenericTable chartData={chartData} />}</div>
       )}
     </div>
   );

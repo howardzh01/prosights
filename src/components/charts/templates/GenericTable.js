@@ -62,59 +62,108 @@ function GenericTable({
 }) {
   // Expect chartData of same format as GenericBar
   // TableCell.js
-  const TableCell = ({ children, isHeader = false, colSpan = 1 }) => {
-    const classes = "border px-4 py-2 text-center whitespace-nowrap";
-    return isHeader ? (
-      <th className={classes} colSpan={colSpan}>
-        {children}
-      </th>
-    ) : (
-      <td className={classes}>{children}</td>
-    );
-  };
+  // const TableCell = ({
+  //   children,
+  //   isHeader = false,
+  //   colSpan = 1,
+  //   customClasses = "",
+  // }) => {
+  //   const baseClasses = "border px-4 py-2 text-center whitespace-nowrap";
+  //   const classes = `${baseClasses} ${customClasses}`;
+  //   return isHeader ? (
+  //     <th colSpan={colSpan} className={classes}>
+  //       {children}
+  //     </th>
+  //   ) : (
+  //     <td className={classes}>{children}</td>
+  //   );
+  // };
 
   // TableRow.js
-  const TableRow = ({ rowData, isHeader = false }) => (
-    <tr>
-      {rowData.map((cellData, index) => (
-        <TableCell key={index} isHeader={isHeader} {...cellData}>
-          {cellData.content}
-        </TableCell>
-      ))}
-    </tr>
-  );
+  // const TableRow = ({ rowData, isHeader = false }) => (
+  //   <tr>
+  //     {rowData.map((cellData, index) => (
+  //       <TableCell key={index} isHeader={isHeader} {...cellData}>
+  //         {cellData.content}
+  //       </TableCell>
+  //     ))}
+  //   </tr>
+  // );
 
   // TableHeader.js
-  const TableHeader = ({ labels }) => (
-    <thead>
-      <TableRow
-        isHeader
-        rowData={[
-          { content: "Metric", colSpan: 1 },
-          ...labels.map((label) => ({ content: label, colSpan: 1 })),
-        ]}
-      />
-    </thead>
-  );
+  // const TableHeader = ({ labels }) => (
+  //   <thead>
+  //     <TableRow
+  //       isHeader
+  //       rowData={[
+  //         { content: "Metric", colSpan: 1 },
+  //         ...labels.map((label) => ({ content: label, colSpan: 1 })),
+  //       ]}
+  //     />
+  //   </thead>
+  // );
 
-  const { labels, datasets } = chartData;
-  console.log("datasets", datasets);
+  const { headers, labels, datasets } = chartData;
+  console.log("datasets, labels, headers", datasets, labels, headers);
+
+  // Prepare header spans
+  const headerSpans = headers.reduce((spans, header) => {
+    spans[header] = (spans[header] || 0) + 1;
+    return spans;
+  }, {});
+
+  console.log("headerSpans", headerSpans);
+
   return (
-    <div className="overflow-x-auto w-full min-w-0">
-      {/* <table className="">
-        <TableHeader labels={labels} />
-        <tbody>
-          {datasets.map((dataset, index) => (
-            <TableRow
-              key={dataset.label}
-              rowData={[
-                { content: dataset.label },
-                ...dataset.data.map((value) => ({ content: value })),
-              ]}
-            />
+    <div className="overflow-x-auto mt-4">
+      <table className="divide-y divide-gray-200">
+        <thead>
+          <tr>
+            <th className="px-6 py-3 text-sm font-medium text-gray-500 tracking-wider text-center"></th>{" "}
+            {/* Empty header for shifting the row */}
+            {[...new Set(headers)].map((header, index) => (
+              <th
+                key={index}
+                colSpan={headerSpans[header]}
+                className={`text-xs font-normal text-gray-500 tracking-wider text-center`}
+              >
+                <div className="inline-block bg-customGray-50 rounded-md w-11/12 py-1">
+                  {header}
+                </div>
+              </th>
+            ))}
+          </tr>
+          <tr>
+            <td className="px-6 text-sm font-medium text-gray-500 tracking-wider text-left"></td>
+            {/* Empty cell for alignment */}
+            {labels.map((label, index) => (
+              <td
+                key={index}
+                className="px-4 py-1 text-sm font-semibold text-gray-500 tracking-wider text-center"
+              >
+                {label}
+              </td>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="bg-white">
+          {datasets.map((dataset, datasetIndex) => (
+            <tr key={dataset.label}>
+              <td className="pr-4 py-2 whitespace-nowrap text-sm font-normal text-gray-500">
+                {dataset.label}
+              </td>
+              {dataset.data.map((value, index) => (
+                <td
+                  key={index}
+                  className={`whitespace-nowrap text-sm text-gray-500 text-center`}
+                >
+                  {value}
+                </td>
+              ))}
+            </tr>
           ))}
         </tbody>
-      </table> */}
+      </table>
     </div>
   );
 }

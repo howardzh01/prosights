@@ -49,9 +49,11 @@ export const aggregateData = (
 ) => {
   // inputs: expected data in monthly format {Date(): {'visits': x, 'users': x}}
   // outputs: {time_key: output_key}
+  console.log("timescale", timescale, data);
   if (!data) {
     return;
   }
+
   const aggData = Object.entries(data).reduce((acc, [date, dic]) => {
     var timeInput;
     if (timescale === "month") {
@@ -145,3 +147,8 @@ export function fromUnderscoreCase(underscoreString) {
     .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize the first letter of each word
   return normalString;
 }
+
+const calculateGrowth = (current, previous) => {
+  if (previous === 0 || !previous) return "--";
+  return (((current - previous) / previous) * 100).toFixed(0) + "%";
+};
