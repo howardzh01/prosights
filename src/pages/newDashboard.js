@@ -119,7 +119,7 @@ function NewDashboard() {
         />
         <div className="flex flex-row">
           {/* Sidebar */}
-          <div className="w-60 h-screen">
+          <div className="flex-shrink-0 sticky top-0 w-60 h-screen">
             <NewSideBar />
           </div>
           {/* Main Content */}
