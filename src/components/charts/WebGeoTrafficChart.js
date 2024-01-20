@@ -155,8 +155,6 @@ function WebGeoTrafficChart({
       </div> */}
       <GenericDoughnut
         chartData={convertToGeoDoughnutData(geoTrafficData, "traffic")}
-        title={"Geography"}
-        showDataLabels={false}
       />
     </div>
   );

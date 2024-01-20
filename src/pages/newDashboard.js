@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import NewSideBar from "../components/dashboard/NewSideBar";
 import SearchBar from "../components/dashboard/SearchBar";
 import OverviewSection from "../components/dashboard/OverviewSection";
+import WebsiteTrafficSection from "../components/dashboard/WebsiteTrafficSection";
 import Image from "next/image";
 import useSWR from "swr";
 import { useUser } from "@clerk/clerk-react";
@@ -16,7 +17,7 @@ import { RELEVANT_CONTINENTS } from "../constants";
 import { createContext } from "react";
 import ChartModal from "../components/ChartModal";
 import HeadCountChart from "../components/charts/HeadCountChart";
-import WebGeoTrafficChart from "../components/charts/WebGeoTrafficChart";
+import { CHARTS } from "../constants";
 
 export const SelectedChartContext = createContext();
 export const ChartDataContext = createContext();
@@ -188,25 +189,10 @@ function NewDashboard() {
               </div>
             </div>
             {/* Website Traffic */}
-            <div className="flex flex-col w-full mt-12 pb-8">
-              <p className="text-2xl font-semibold text-gray-800 ml-2">
-                Website Traffic
-              </p>
-              <hr className="border-t border-customGray-50 mt-2 mb-4" />
-              <div className="mx-4 flex flex-col">
-                <p className="text-base font-semibold text-gray-800 mb-3">
-                  Visits Breakdown
-                </p>
-                <div>
-                  <div className="inline-block rounded-lg drop-shadow-sm bg-white border border-customGray-50 px-4 pt-3 pb-6">
-                    <WebGeoTrafficChart
-                      geoTrafficData={webTrafficGeoData}
-                      relevant_continents={RELEVANT_CONTINENTS}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <WebsiteTrafficSection
+              webTrafficData={webTrafficData}
+              webTrafficGeoData={webTrafficGeoData}
+            />
           </div>
         </div>
       </ChartDataContext.Provider>
