@@ -18,7 +18,12 @@ function HeadCountChart({ headCountData }) {
 
     // Calculate the growth percentages
     for (let i = 0; i < headcounts.length; i++) {
-      if (i === 0) {
+      if (
+        i === 0 ||
+        headcounts[i - 1] === 0 ||
+        headcounts[i - 1] == null ||
+        headcounts[i] == null
+      ) {
         // There's no previous data to compare to for the first entry
         growthPercentages.push("—");
       } else {
