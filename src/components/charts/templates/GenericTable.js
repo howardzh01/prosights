@@ -104,7 +104,7 @@ function GenericTable({
   // );
 
   const { headers, labels, datasets } = chartData;
-  console.log("datasets, labels, headers", datasets, labels, headers);
+  // console.log("datasets, labels, headers", datasets, labels, headers);
 
   // Prepare header spans
   let headerSpans = {};
@@ -115,7 +115,7 @@ function GenericTable({
     }, {});
   }
 
-  console.log("headerSpans", headerSpans);
+  // console.log("headerSpans", headerSpans);
 
   return (
     <div className="overflow-x-auto mt-4">

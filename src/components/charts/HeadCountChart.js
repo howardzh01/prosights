@@ -10,8 +10,6 @@ function HeadCountChart({ headCountData }) {
   if (!headCountData) return null;
 
   function convertToChartData(data) {
-    console.log("parsed data, ", data);
-
     const labels = Object.keys(data);
     let headers = [];
     let formattedLabels = [];

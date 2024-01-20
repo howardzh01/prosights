@@ -30,7 +30,6 @@ function GenericDoughnut({ chartData, title = undefined }) {
             context.dataset.backgroundColor[context.dataIndex];
           // Convert the color to its RGB components
           const [r, g, b] = rgbToComponents(backgroundColor);
-          console.log("WHAT", backgroundColor, isColorLight(r, g, b));
           // Set the color based on the luminance
           return isColorLight(r, g, b) ? "#1F272E" : "white";
         },
