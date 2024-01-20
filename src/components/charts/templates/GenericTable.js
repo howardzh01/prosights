@@ -107,10 +107,13 @@ function GenericTable({
   console.log("datasets, labels, headers", datasets, labels, headers);
 
   // Prepare header spans
-  const headerSpans = headers.reduce((spans, header) => {
-    spans[header] = (spans[header] || 0) + 1;
-    return spans;
-  }, {});
+  let headerSpans = {};
+  if (headers) {
+    headerSpans = headers.reduce((spans, header) => {
+      spans[header] = (spans[header] || 0) + 1;
+      return spans;
+    }, {});
+  }
 
   console.log("headerSpans", headerSpans);
 

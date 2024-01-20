@@ -152,3 +152,15 @@ const calculateGrowth = (current, previous) => {
   if (previous === 0 || !previous) return "--";
   return (((current - previous) / previous) * 100).toFixed(0) + "%";
 };
+
+export function isColorLight(r, g, b) {
+  // Calculate the perceptive luminance of the color
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  console.log("luminance", luminance);
+  return luminance > 0.6; // return true if light, false if dark
+}
+
+export function rgbToComponents(rgbString) {
+  // This will turn "rgb(255, 255, 255)" into [255, 255, 255]
+  return rgbString.match(/\d+/g).map(Number);
+}
