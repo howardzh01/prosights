@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import {
   aggregateData,
   convertMonthFormat,
-  generateMonths,
+  generateMonthsFromStartYear,
   generateYears,
 } from "../../utils/Utils";
 import GenericStackedBar from "./templates/GenericStackedBar";
@@ -20,7 +20,7 @@ function WebGeoTrafficChart({
   const [timescale, setTimescale] = useState("year");
 
   const monthLabels = useMemo(
-    () => generateMonths(startDateState),
+    () => generateMonthsFromStartYear(startDateState),
     [startDateState]
   ).map((date) => convertMonthFormat(date));
 

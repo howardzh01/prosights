@@ -54,42 +54,91 @@ export const aggregateData = (
     return;
   }
 
-  const aggData = Object.entries(data).reduce((acc, [date, dic]) => {
-    var timeInput;
-    if (timescale === "month") {
-      timeInput = dateToMonths(date);
-    } else if (timescale === "quarterYear") {
-      timeInput = dateToQuarters(date);
-    } else if (timescale === "year") {
-      timeInput = new Date(date).getUTCFullYear();
-    }
-    acc[timeInput] = acc[timeInput] || { sum: 0, count: 0, last: 0 };
-    acc[timeInput].sum += dic[output_key];
-    acc[timeInput].count += 1;
-    acc[timeInput].last = dic[output_key];
+  let aggData = {};
 
+  if (timescale === "month") {
+    // Sort the dates properly
+    const sortedDates = Object.keys(data)
+      .map((date) => new Date(date))
+      .sort((a, b) => a - b);
+    const allMonths =
+      sortedDates.length > 0
+        ? generateMonthsBetweenDates(
+            sortedDates[0],
+            sortedDates[sortedDates.length - 1]
+          )
+        : [];
+
+    // Aggregation logic with all months
+    aggData = allMonths.reduce((acc, month) => {
+      acc[month] = { sum: 0, count: 0, last: 0 };
+
+      Object.entries(data).forEach(([date, dic]) => {
+        var timeInput = convertMonthFormat(date);
+        if (timeInput === month) {
+          acc[month].sum += dic[output_key];
+          acc[month].count += 1;
+          acc[month].last = dic[output_key];
+        }
+      });
+
+      // Setting null for missing months
+      if (acc[month].count === 0) {
+        acc[month] = null;
+      }
+
+      return acc;
+    }, {});
+  } else {
+    // Your existing aggregation logic for other timescales
+    aggData = Object.entries(data).reduce((acc, [date, dic]) => {
+      var timeInput;
+      if (timescale === "quarterYear") {
+        timeInput = dateToQuarters(date);
+      } else if (timescale === "year") {
+        timeInput = new Date(date).getUTCFullYear();
+      }
+      acc[timeInput] = acc[timeInput] || { sum: 0, count: 0, last: 0 };
+      acc[timeInput].sum += dic[output_key];
+      acc[timeInput].count += 1;
+      acc[timeInput].last = dic[output_key];
+
+      return acc;
+    }, {});
+  }
+
+  // Final output based on aggregation method
+  return Object.entries(aggData).reduce((acc, [timeInput, data]) => {
+    if (!data) {
+      acc[timeInput] = null;
+    } else {
+      if (agg === "sum") {
+        acc[timeInput] = data.sum;
+      } else if (agg === "mean") {
+        acc[timeInput] = data.sum / data.count;
+      } else if (agg === "last") {
+        acc[timeInput] = data.last;
+      }
+    }
     return acc;
   }, {});
-
-  return Object.entries(aggData).reduce(
-    (acc, [timeInput, { sum, count, last }]) => {
-      if (agg === "sum") {
-        acc[timeInput] = sum;
-      }
-
-      if (agg === "mean") {
-        acc[timeInput] = sum / count;
-      }
-      if (agg === "last") {
-        acc[timeInput] = last;
-      }
-      return acc;
-    },
-    {}
-  );
 };
 
-export const generateMonths = (startYear) => {
+// Generate all months between two dates
+const generateMonthsBetweenDates = (startDate, endDate) => {
+  let start = new Date(startDate);
+  let end = new Date(endDate);
+  let allMonths = [];
+
+  while (start <= end) {
+    allMonths.push(convertMonthFormat(start));
+    start.setMonth(start.getMonth() + 1);
+  }
+
+  return allMonths;
+};
+
+export const generateMonthsFromStartYear = (startYear) => {
   const dates = [];
   const today = CONSTANTS.cutoffDate;
   const currentYear = today.getUTCFullYear();

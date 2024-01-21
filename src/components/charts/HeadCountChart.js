@@ -14,6 +14,7 @@ function HeadCountChart({ headCountData }) {
     let headers = [];
     let formattedLabels = [];
     let headcounts = Object.values(data);
+    console.log("looking", data);
     let growthPercentages = [];
 
     // Regular expressions to identify label formats
@@ -79,7 +80,7 @@ function HeadCountChart({ headCountData }) {
       datasets: [
         {
           label: "Headcount",
-          data: headcounts,
+          data: headcounts.map((item) => (item == null ? "—" : item)),
           backgroundColor: "rgba(0, 154, 255, 1)",
           borderWidth: 1,
         },
