@@ -74,6 +74,7 @@ function HeadCountChart({ headCountData }) {
 
     return {
       headers: headers,
+      originalLabels: labels,
       labels: formattedLabels,
       datasets: [
         {
@@ -109,11 +110,24 @@ function HeadCountChart({ headCountData }) {
   //   };
   // }
 
+  const customChartData = convertToChartData(
+    aggregateData(headCountData, "headcount", "last", timescale)
+  );
+
+  const yearChartData = convertToChartData(
+    aggregateData(headCountData, "headcount", "last", "year")
+  );
+
   const quarterHeadCountGraph = (
     <GenericBar
-      chartData={convertToChartData(
-        aggregateData(headCountData, "headcount", "last", timescale)
-      )}
+      barChartData={{
+        ...customChartData,
+        labels: customChartData.originalLabels,
+        datasets: customChartData.datasets.filter(
+          (dataset) => dataset.label !== "% YoY Growth"
+        ),
+      }}
+      tableChartData={customChartData}
       title={"Total Headcount"}
       showDataLabels={timescale !== "month"}
       timescale={timescale}
@@ -126,9 +140,14 @@ function HeadCountChart({ headCountData }) {
 
   const yearHeadCountGraph = (
     <GenericBar
-      chartData={convertToChartData(
-        aggregateData(headCountData, "headcount", "last", "year")
-      )}
+      barChartData={{
+        ...yearChartData,
+        labels: yearChartData.originalLabels,
+        datasets: yearChartData.datasets.filter(
+          (dataset) => dataset.label !== "% YoY Growth"
+        ),
+      }}
+      tableChartData={yearChartData}
       showTimescaleButtons={false}
       showModalButtons={false}
     />

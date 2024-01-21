@@ -28,7 +28,7 @@ function HeadCountSignal({ headCountData }) {
 
   const yearHeadCountGraph = (
     <GenericBar
-      chartData={convertToChartData(
+      barChartData={convertToChartData(
         aggregateData(headCountData, "headcount", "last", timescale)
       )}
       title={"Headcount"}
