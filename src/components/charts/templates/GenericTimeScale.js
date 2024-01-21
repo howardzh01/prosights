@@ -33,7 +33,7 @@ function GenericTimeScale({
           <div className="mr-2 flex items-center">
             <button
               type="button"
-              disabled={timescale === "year"}
+              disabled={timescale === "quarterYear"}
               onClick={() =>
                 setTimescale(TIMESCALE_TRANSITION_DIC[timescale][1])
               }
@@ -41,7 +41,7 @@ function GenericTimeScale({
             >
               <MinusCircleIcon
                 className={`w-6 h-6 ${
-                  timescale === "year"
+                  timescale === "quarterYear"
                     ? "text-customGray-100"
                     : "text-customGray-400"
                 }`}
