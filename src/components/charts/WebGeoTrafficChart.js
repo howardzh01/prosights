@@ -82,13 +82,13 @@ function WebGeoTrafficChart({
     );
 
     // Format the date to match the keys in the geoTrafficData object
-    const mostRecentYear = mostRecentDate.getFullYear();
+    const mostRecentYear = mostRecentDate.getUTCFullYear();
 
     // Aggregate data for the most recent year
     const aggregatedData = Object.entries(geoTrafficData).reduce(
       (acc, [continent, data]) => {
         const yearlyData = Object.entries(data).reduce((sum, [date, value]) => {
-          const year = new Date(date).getFullYear();
+          const year = new Date(date).getUTCFullYear();
           if (year === mostRecentYear) {
             sum += value[outputKey] || 0;
           }

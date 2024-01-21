@@ -11,7 +11,7 @@ function WebTrafficDoughnut({ trafficData, selectedChart = null }) {
 
     // Get the date 12 months ago from today
     const date12MonthsAgo = new Date();
-    date12MonthsAgo.setMonth(date12MonthsAgo.getMonth() - 12);
+    date12MonthsAgo.setMonth(date12MonthsAgo.getUTCMonth() - 12);
 
     // Initialize an object to accumulate the sums
     const sums = relevant_keys.reduce((acc, key) => {
