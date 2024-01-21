@@ -191,7 +191,7 @@ function OverviewSection({
       {/* Signals */}
       <div className="flex flex-col mt-6 mx-4">
         <div className="text-lg font-semibold text-gray-800">Signals</div>
-        <div className="space-x-8 items-align flex mt-4">
+        <div className="space-x-6 items-align flex mt-4">
           <div className="w-64 px-6 py-4 rounded-lg drop-shadow-sm bg-white border border-customGray-50">
             <HeadCountSignal headCountData={headCountData} />
           </div>

@@ -14,7 +14,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
         <p className="text-base font-semibold text-gray-800 mb-3">
           Visits Breakdown
         </p>
-        <div className="space-x-8">
+        <div className="space-x-6">
           <div className="inline-block rounded-lg drop-shadow-sm bg-white border border-customGray-50 px-4 pt-3 pb-6">
             <WebGeoTrafficChart
               geoTrafficData={webTrafficGeoData}

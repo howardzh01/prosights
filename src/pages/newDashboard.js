@@ -117,7 +117,7 @@ function NewDashboard() {
           selectedChart={selectedChart}
           chartData={chartData}
         />
-        <div className="flex flex-row w-screen ">
+        <div className="flex flex-row">
           {/* Sidebar */}
           <div className="flex-shrink-0 sticky top-0 w-60 h-screen">
             <NewSideBar />
