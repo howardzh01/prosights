@@ -16,19 +16,32 @@ function HeadCountChart({ headCountData }) {
     let headcounts = Object.values(data);
     let growthPercentages = [];
 
+    // Regular expressions to identify label formats
+    const monthlyRegex = /^[A-Za-z]+/;
+    const quarterlyRegex = /^[1-4]Q/;
+    const yearlyRegex = /^\d{4}$/;
+
+    // Determine timescale based on the format of labels
+    const isMonthly = labels.some((label) => monthlyRegex.test(label));
+    const isQuarterly = labels.some((label) => quarterlyRegex.test(label));
+    const isYearly = labels.some((label) => yearlyRegex.test(label));
+
+    // Determine offset for growth calculation
+    const offset = isYearly ? 1 : isMonthly ? 12 : isQuarterly ? 4 : 1; // Default to 1 if none match
+
     // Calculate the growth percentages
     for (let i = 0; i < headcounts.length; i++) {
       if (
-        i === 0 ||
-        headcounts[i - 1] === 0 ||
-        headcounts[i - 1] == null ||
+        i < offset ||
+        headcounts[i - offset] === 0 ||
+        headcounts[i - offset] == null ||
         headcounts[i] == null
       ) {
-        // There's no previous data to compare to for the first entry
         growthPercentages.push("—");
       } else {
         const growth =
-          ((headcounts[i] - headcounts[i - 1]) / headcounts[i - 1]) * 100;
+          ((headcounts[i] - headcounts[i - offset]) / headcounts[i - offset]) *
+          100;
         growthPercentages.push(`${Math.round(growth)}%`);
       }
     }
@@ -70,7 +83,7 @@ function HeadCountChart({ headCountData }) {
           borderWidth: 1,
         },
         {
-          label: "% Growth",
+          label: "% YoY Growth",
           data: growthPercentages,
           // Add more styling as necessary
         },
@@ -121,12 +134,12 @@ function HeadCountChart({ headCountData }) {
 
   return (
     <div className="flex flex-col">
-      <p
+      {/* <p
         id="employeeCount"
         className="text-base font-semibold text-gray-800 mb-3"
       >
         Employees
-      </p>
+      </p> */}
       <TwoColumnView
         quarterGraph={quarterHeadCountGraph}
         yearGraph={yearHeadCountGraph}
