@@ -54,18 +54,19 @@ export const aggregateData = (
     return;
   }
 
+  // Sort the keys (dates) of the data object
+  const sortedKeys = Object.keys(data).sort(
+    (dateA, dateB) => new Date(dateA) - new Date(dateB)
+  );
+
   let aggData = {};
 
   if (timescale === "month") {
-    // Sort the dates properly
-    const sortedDates = Object.keys(data)
-      .map((date) => new Date(date))
-      .sort((a, b) => a - b);
     const allMonths =
-      sortedDates.length > 0
+      sortedKeys.length > 0
         ? generateMonthsBetweenDates(
-            sortedDates[0],
-            sortedDates[sortedDates.length - 1]
+            sortedKeys[0],
+            sortedKeys[sortedKeys.length - 1]
           )
         : [];
 
@@ -90,8 +91,7 @@ export const aggregateData = (
       return acc;
     }, {});
   } else {
-    // Your existing aggregation logic for other timescales
-    aggData = Object.entries(data).reduce((acc, [date, dic]) => {
+    aggData = sortedKeys.reduce((acc, date) => {
       var timeInput;
       if (timescale === "quarterYear") {
         timeInput = dateToQuarters(date);
@@ -99,9 +99,9 @@ export const aggregateData = (
         timeInput = new Date(date).getUTCFullYear();
       }
       acc[timeInput] = acc[timeInput] || { sum: 0, count: 0, last: 0 };
-      acc[timeInput].sum += dic[output_key];
+      acc[timeInput].sum += data[date][output_key];
       acc[timeInput].count += 1;
-      acc[timeInput].last = dic[output_key];
+      acc[timeInput].last = data[date][output_key]; // Correctly reflects the last entry for each quarter
 
       return acc;
     }, {});
