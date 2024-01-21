@@ -73,7 +73,6 @@ function GenericTimeScale({
               setChartData(rawChartData);
             }}
           >
-            {/* <ArrowsPointingOutIcon className="w-6 h-6 text-customGray-800" /> */}
             <Image
               src="/assets/expand.svg"
               alt="Company Logo"

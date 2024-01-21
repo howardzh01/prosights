@@ -122,27 +122,27 @@ function GenericTable({
       <table className="divide-y divide-gray-200">
         <thead>
           <tr>
-            <th className="px-6 py-3 text-sm font-medium text-gray-500 tracking-wider text-center"></th>{" "}
+            <th className="px-6 py-3 text-sm font-medium text-customGray-500 tracking-wider text-center"></th>{" "}
             {/* Empty header for shifting the row */}
             {[...new Set(headers)].map((header, index) => (
               <th
                 key={index}
                 colSpan={headerSpans[header]}
-                className={`text-xs font-normal text-gray-500 tracking-wider text-center`}
+                className={`text-xs font-medium tracking-wider text-center`}
               >
-                <div className="inline-block bg-customGray-50 rounded-md w-11/12 py-1">
+                <div className="inline-block bg-customGray-50 text-customGray-500 rounded-md w-11/12 py-1">
                   {header}
                 </div>
               </th>
             ))}
           </tr>
           <tr>
-            <td className="px-6 text-sm font-medium text-gray-500 tracking-wider text-left"></td>
+            <td className="px-6 text-sm font-medium text-customGray-500 tracking-wider text-left"></td>
             {/* Empty cell for alignment */}
             {labels.map((label, index) => (
               <td
                 key={index}
-                className="px-4 py-1 text-sm font-semibold text-gray-500 tracking-wider text-center"
+                className="px-4 py-1 text-sm font-semibold text-customGray-500 tracking-wider text-center"
               >
                 {label}
               </td>
@@ -152,13 +152,13 @@ function GenericTable({
         <tbody className="bg-white">
           {datasets.map((dataset, datasetIndex) => (
             <tr key={dataset.label}>
-              <td className="pr-4 py-2 whitespace-nowrap text-sm font-normal text-gray-500">
+              <td className="pr-4 py-2 whitespace-nowrap text-sm font-normal text-customGray-500">
                 {dataset.label}
               </td>
               {dataset.data.map((value, index) => (
                 <td
                   key={index}
-                  className={`whitespace-nowrap text-sm text-gray-500 text-center`}
+                  className={`whitespace-nowrap text-sm text-customGray-500 text-center`}
                 >
                   {value}
                 </td>
