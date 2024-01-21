@@ -150,6 +150,7 @@ function HeadCountChart({ headCountData }) {
       tableChartData={yearChartData}
       showTimescaleButtons={false}
       showModalButtons={false}
+      scrollStart={"right"}
     />
   );
 

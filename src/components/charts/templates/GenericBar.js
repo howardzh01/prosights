@@ -18,6 +18,7 @@ function GenericBar({
   setTimescale,
   selectedChart,
   rawChartData,
+  scrollStart = "left",
 }) {
   const options = {
     plugins: {
@@ -87,6 +88,7 @@ function GenericBar({
           {/* Default to use barChartData if tableChartData is undefined */}
           <GenericTable
             chartData={tableChartData ? tableChartData : barChartData}
+            scrollStart={scrollStart}
           />
         </div>
       )}
