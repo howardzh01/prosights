@@ -8,15 +8,19 @@ export const config = {
 const VERSION = "v1";
 const table_name = "companies";
 const FORCE_REFETCH = false; // FOR TESTING
-const getGPTDescriptions = async (companyName, crunchbaseDescription) => {
+const getGPTDescriptions = async (
+  companyName,
+  companyUrl,
+  crunchbaseDescription
+) => {
   // retrieve cards for a specific company
   // cardName is an array
   // Providing crunchbaseDescription is optional.
   let systemPrompt;
   if (crunchbaseDescription) {
-    systemPrompt = `You are a private equity analyst and have two tasks. Give a company called "${companyName}" with a description from Crunchbase: "${crunchbaseDescription}".`;
+    systemPrompt = `You are a private equity analyst and have two tasks. Give a company called "${companyName}" with website url "${companyUrl}" and a description from Crunchbase: "${crunchbaseDescription}".`;
   } else {
-    systemPrompt = `You are a private equity analyst and have two tasks. Given a company called "${companyName}",`;
+    systemPrompt = `You are a private equity analyst and have two tasks. Given a company called "${companyName}" with website url "${companyUrl}",`;
   }
   systemPrompt += `\n\n1. What's the company description in 1 sentence. Keep it as concise as possible. Never include date or where it was founded\n
   2. What is the business model in 2 or 3 concise bullet points? Each point should describe distinct core revenue streams of the company. Only the top 10% most complex companies should have 3 bullet points.\n
@@ -56,9 +60,18 @@ const getGPTDescriptions = async (companyName, crunchbaseDescription) => {
   return [content, payload];
 };
 // TODO: UNSECURE, add errors
-const retrieveAndUpload = async (companyName, crunchbaseDescription, rows) => {
+const retrieveAndUpload = async (
+  companyName,
+  companyUrl,
+  crunchbaseDescription,
+  rows
+) => {
   const [content, payload] =
-    (await getGPTDescriptions(companyName, crunchbaseDescription)) || [];
+    (await getGPTDescriptions(
+      companyName,
+      companyUrl,
+      crunchbaseDescription
+    )) || [];
 
   if (content) {
     const { data: bucketData, error: bucketError } = await serviceSup.storage
@@ -80,7 +93,7 @@ const retrieveAndUpload = async (companyName, crunchbaseDescription, rows) => {
 };
 const handler = async (req) => {
   const reqJSON = await req.json();
-  const { companyName, crunchbaseDescription } = reqJSON;
+  const { companyName, crunchbaseDescription, companyUrl } = reqJSON;
   let { data: rows, error: error } = await serviceSup
     .from(table_name)
     .select()
@@ -90,7 +103,7 @@ const handler = async (req) => {
       .from(table_name)
       .insert({
         name: companyName,
-        // url: company_url, // for debugging only
+        url: companyUrl,
       })
       .select();
 
@@ -100,6 +113,7 @@ const handler = async (req) => {
     }
     const content = await retrieveAndUpload(
       companyName,
+      companyUrl,
       crunchbaseDescription,
       insertedRows
     );
@@ -118,6 +132,7 @@ const handler = async (req) => {
     );
     const content = await retrieveAndUpload(
       companyName,
+      companyUrl,
       crunchbaseDescription,
       rows
     );

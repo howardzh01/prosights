@@ -117,28 +117,27 @@ function NewDashboard() {
           selectedChart={selectedChart}
           chartData={chartData}
         />
-        <div className="flex flex-row">
+        <div className="flex flex-row w-screen ">
           {/* Sidebar */}
           <div className="flex-shrink-0 sticky top-0 w-60 h-screen">
             <NewSideBar />
           </div>
           {/* Main Content */}
           <div
-            className="flex-grow flex flex-col items-center px-10 bg-white bg-repeat bg-center"
+            className="flex flex-col w-screen overflow-x-hidden items-center px-10 bg-white bg-repeat bg-center"
             style={{
               backgroundImage: "url('/assets/backgroundPatternUltraLight.svg')",
             }}
           >
             {/* Search Bar */}
             <div className="w-[36rem] mt-2">
-              <SearchBar />
+              <SearchBar setCompany={setCompany} />
             </div>
             {/* Company name, country, and comparing section */}
             <div className="mt-6 flex flex-row justify-between w-full items-center">
               <div className="flex flex-row items-center">
                 <Image
                   src={companyLogo}
-                  alt="Company Logo"
                   className="w-10 h-10 mr-2 object-contain"
                   width={256}
                   height={256}
