@@ -49,24 +49,6 @@ function WebTrafficDoughnut({ trafficData, selectedChart = null }) {
     };
   }
 
-  function sumLast12Months(trafficData, relevantKeys, startDate) {
-    let totals = relevantKeys.reduce((acc, key) => {
-      acc[key] = 0;
-      return acc;
-    }, {});
-
-    Object.values(trafficData).forEach((dataByDate) => {
-      let date = new Date(dataByDate["display_date"]);
-      if (date >= startDate) {
-        relevantKeys.forEach((key) => {
-          totals[key] += dataByDate[key] || 0;
-        });
-      }
-    });
-
-    return totals;
-  }
-
   function getRelevantKeys(type) {
     switch (type) {
       case "traffic_by_channel":
