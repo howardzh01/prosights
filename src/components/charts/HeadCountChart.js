@@ -120,6 +120,7 @@ function HeadCountChart({ headCountData }) {
       setTimescale={setTimescale}
       selectedChart={CHARTS.employeeCount}
       rawChartData={headCountData}
+      showModalButtons={false}
     />
   );
 
@@ -129,6 +130,7 @@ function HeadCountChart({ headCountData }) {
         aggregateData(headCountData, "headcount", "last", "year")
       )}
       showTimescaleButtons={false}
+      showModalButtons={false}
     />
   );
 
