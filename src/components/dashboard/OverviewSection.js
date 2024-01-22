@@ -25,7 +25,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
   }
 
   const cbfields = crunchbaseData?.["fields"] || {};
-  console.log("CB FIELDS", headCountData);
+  console.log("CB FIELDS", cbfields);
   let companyFoundedYear = cbfields["founded_on"]
     ? new Date(cbfields["founded_on"]?.["value"]).getUTCFullYear()
     : "";

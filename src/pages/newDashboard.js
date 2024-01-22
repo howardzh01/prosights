@@ -26,9 +26,6 @@ function NewDashboard() {
   const { isSignedIn, user, isLoaded } = useUser();
 
   const [company, setCompany] = useState("zillow");
-  const [companyLogo, setCompanyLogo] = useState(
-    "https://imgtr.ee/images/2024/01/16/78d792f651a4f43e5f728d3026af4cb3.png"
-  );
   const [country, setCountry] = useState("US");
   // const [companyAbout, setCompanyAbout] = useState(
   //   "StockX is an e-commerce platform specializing in authenticated resale of limited edition sneakers and streetwear."
@@ -236,12 +233,17 @@ function NewDashboard() {
             {/* Company name, country, and comparing section */}
             <div className="mt-6 flex flex-row justify-between w-full items-center">
               <div className="flex flex-row items-center">
-                <Image
-                  src={companyLogo}
-                  className="w-10 h-10 mr-2 object-contain"
-                  width={256}
-                  height={256}
-                />
+                {
+                  <Image
+                    src={
+                      crunchbaseData?.["fields"]?.["image_url"] ||
+                      "/assets/whiteRectangle.png"
+                    }
+                    className="w-10 h-10 mr-2 object-contain"
+                    width={256}
+                    height={256}
+                  />
+                }
                 <p className="text-4xl font-bold text-gray-800">{company}</p>
                 <select
                   className="h-10 drop-shadow-sm border-customGray-50 text-customGray-500 rounded-md font-nunitoSans text-sm font-normal text-left focus:outline-none focus:ring-0 ml-6"

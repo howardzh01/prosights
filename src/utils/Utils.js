@@ -221,7 +221,7 @@ export function formatMoney(amount) {
   } else if (Math.abs(amount) >= 1.0e9) {
     divisor = 1.0e9;
     unit = "B";
-  } else if (Math.abs(amount) >= 1.0e6) {
+  } else if (Math.abs(amount) >= 1.0e5) {
     divisor = 1.0e6;
     unit = "M";
   } else if (Math.abs(amount) >= 1.0e3) {

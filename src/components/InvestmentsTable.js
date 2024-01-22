@@ -3,7 +3,6 @@ import Image from "next/image";
 import { formatMoney, formatDealRound, dateToMonths } from "../utils/Utils";
 
 function InvestmentsTable({ investmentsData }) {
-  console.log(investmentsData);
   if (!investmentsData) {
     return <div>Loading</div>;
   }
@@ -26,7 +25,7 @@ function InvestmentsTable({ investmentsData }) {
       date: investment.announced_on,
       announced: dateToMonths(investment.announced_on),
       type: formatDealRound(investment.funding_round_investment_type),
-      amount: wholeAmount ? formatMoney(wholeAmount) : "-",
+      amount: wholeAmount ? "$" + formatMoney(wholeAmount) : "-",
       company: investment.organization_identifier?.value,
     });
   });
@@ -38,13 +37,11 @@ function InvestmentsTable({ investmentsData }) {
       date: acquisition.announced_on.value,
       announced: dateToMonths(acquisition.announced_on.value),
       type: "Acquistion",
-      amount: wholeAmount ? formatMoney(wholeAmount) : "-",
+      amount: wholeAmount ? "$" + formatMoney(wholeAmount) : "-",
       company: acquisition.acquiree_identifier?.value,
     });
   });
-  console.log("before", combinedData);
   combinedData.sort((a, b) => new Date(b["date"]) - new Date(a["date"]));
-  console.log("aftrer", combinedData);
   return (
     <div className="w-full max-h-36 overflow-auto bg-white rounded-md drop-shadow-sm">
       <table className="bg-white text-center text-sm w-full">
