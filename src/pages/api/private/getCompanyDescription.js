@@ -1,7 +1,7 @@
 import { CONSTANTS } from "../../../constants.js";
 import { assert } from "../../../utils/Utils.js";
 import { serviceSup } from "../../../utils/Supabase.js";
-import { text } from "micro";
+
 export const config = {
   runtime: "edge",
 };
