@@ -43,7 +43,7 @@ function GenericDoughnut({ chartData, title = undefined }) {
           );
           const percentage = (value / total) * 100;
           // If the percentage is too small, don't display it
-          if (percentage < 1) {
+          if (percentage < 5) {
             return null; // This will hide the label
           } else {
             return `${percentage.toFixed(0)}%`; // Round to nearest whole number
@@ -52,7 +52,7 @@ function GenericDoughnut({ chartData, title = undefined }) {
         labels: {
           title: {
             font: {
-              size: "12", // Adjust the font size to make sure it fits
+              size: "11", // Adjust the font size to make sure it fits
             },
           },
         },

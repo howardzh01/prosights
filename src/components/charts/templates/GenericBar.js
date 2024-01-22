@@ -7,7 +7,8 @@ Chart.register(ChartDataLabels);
 import GenericTable from "./GenericTable";
 
 function GenericBar({
-  chartData,
+  barChartData,
+  tableChartData = undefined,
   title = undefined,
   showDataLabels = true,
   showTimescaleButtons = true,
@@ -17,6 +18,7 @@ function GenericBar({
   setTimescale,
   selectedChart,
   rawChartData,
+  scrollStart = "left",
 }) {
   const options = {
     plugins: {
@@ -78,11 +80,17 @@ function GenericBar({
       )}
 
       <div className="h-full w-full">
-        {chartData && <Bar data={chartData} options={options} />}
+        {barChartData && <Bar data={barChartData} options={options} />}
       </div>
 
       {showTable && (
-        <div>{chartData && <GenericTable chartData={chartData} />}</div>
+        <div>
+          {/* Default to use barChartData if tableChartData is undefined */}
+          <GenericTable
+            chartData={tableChartData ? tableChartData : barChartData}
+            scrollStart={scrollStart}
+          />
+        </div>
       )}
     </div>
   );

@@ -10,13 +10,9 @@ function InvestmentsTable({ investmentsData }) {
 
   function TableHeader({ text, is_header = true }) {
     if (is_header) {
-      return <th className=" px-2 py-1 text-center">{text}</th>;
+      return <th className=" px-4 py-2 text-center">{text}</th>;
     } else {
-      return (
-        <td className="px-2 max-w-xs overflow-wrap break-word whitespace-normal py-1 text-center">
-          {text}
-        </td>
-      );
+      return <td className="px-4 py-2 text-center">{text}</td>;
     }
   }
 
@@ -27,7 +23,8 @@ function InvestmentsTable({ investmentsData }) {
     const wholeAmount = investment.funding_round_money_raised?.value_usd;
 
     combinedData.push({
-      date: dateToMonths(investment.announced_on),
+      date: investment.announced_on,
+      announced: dateToMonths(investment.announced_on),
       type: formatDealRound(investment.funding_round_investment_type),
       amount: wholeAmount ? formatMoney(wholeAmount) : "-",
       company: investment.organization_identifier?.value,
@@ -38,13 +35,16 @@ function InvestmentsTable({ investmentsData }) {
     const wholeAmount = acquisition.price?.value_usd;
 
     combinedData.push({
+      date: acquisition.announced_on.value,
       announced: dateToMonths(acquisition.announced_on.value),
       type: "Acquistion",
       amount: wholeAmount ? formatMoney(wholeAmount) : "-",
       company: acquisition.acquiree_identifier?.value,
     });
   });
-
+  console.log("before", combinedData);
+  combinedData.sort((a, b) => new Date(b["date"]) - new Date(a["date"]));
+  console.log("aftrer", combinedData);
   return (
     <div className="w-full max-h-36 overflow-auto bg-white rounded-md drop-shadow-sm">
       <table className="bg-white text-center text-sm w-full">
@@ -60,7 +60,7 @@ function InvestmentsTable({ investmentsData }) {
           {combinedData.map((row, index) => (
             <tr key={index}>
               <TableHeader text={row.company} is_header={false} />
-              <TableHeader text={row.date} is_header={false} />
+              <TableHeader text={row.announced} is_header={false} />
               <TableHeader text={row.type} is_header={false} />
               <TableHeader text={row.amount} is_header={false} />
             </tr>

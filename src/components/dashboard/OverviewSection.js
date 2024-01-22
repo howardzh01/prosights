@@ -197,96 +197,20 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
         </div>
       </div>
 
-      <div className="flex space-x-4 mx-4 mt-6">
-        <div className="w-3/5 mr-8">
-          <p className="text-base font-semibold text-gray-800 mb-3">Funding</p>
-          <div className="bg-white drop-shadow-sm rounded-md">
-            <table className="min-w-full">
-              <thead>
-                <tr className="bg-primaryLight text-center text-sm font-medium">
-                  <th className="px-4 py-2 rounded-tl-md">Round</th>
-                  <th className="px-4 py-2">Date</th>
-                  <th className="px-4 py-2">Valuation</th>
-                  <th className="px-4 py-2">Raised</th>
-                  <th className="px-4 py-2 rounded-tr-md">Lead Investors</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="text-center text-sm">
-                  <td className="px-4 py-2">Secondary</td>
-                  <td className="px-4 py-2 whitespace-nowrap">Apr 23</td>
-                  <td className="px-4 py-2">$3.1B</td>
-                  <td className="px-4 py-2">$195M</td>
-                  <td className="px-4 py-2">
-                    Altimeter Capital, Dragon Investment Group
-                  </td>
-                </tr>
-                <tr className="text-center text-sm">
-                  <td className="px-4 py-2">Secondary</td>
-                  <td className="px-4 py-2">Apr 23</td>
-                  <td className="px-4 py-2">$3.1B</td>
-                  <td className="px-4 py-2">$195M</td>
-                  <td className="px-4 py-2">
-                    Altimeter Capital, Dragon Investment Group
-                  </td>
-                </tr>
-                <tr className="text-center text-sm">
-                  <td className="px-4 py-2">Secondary</td>
-                  <td className="px-4 py-2">Apr 23</td>
-                  <td className="px-4 py-2">$3.1B</td>
-                  <td className="px-4 py-2">$195M</td>
-                  <td className="px-4 py-2">
-                    Altimeter Capital, Dragon Investment Group
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div className="">
-          <p className="text-base font-semibold text-gray-800 mb-3">M&A</p>
-          <div className="bg-white drop-shadow-sm rounded-md">
-            <table className="min-w-full">
-              <thead>
-                <tr className="bg-primaryLight text-center text-sm font-medium">
-                  <th className="px-4 py-2 rounded-tl-md">Company</th>
-                  <th className="px-4 py-2">Date</th>
-                  <th className="px-4 py-2">Valuation</th>
-                  <th className="px-4 py-2 rounded-tr-md">Seller</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="text-center text-sm">
-                  <td className="px-4 py-2">Scout</td>
-                  <td className="px-4 py-2">Apr 23</td>
-                  <td className="px-4 py-2">$3.1B</td>
-                  <td className="px-4 py-2">Goodwater Capital</td>
-                </tr>
-                <tr className="text-center text-sm">
-                  <td className="px-4 py-2">Scout</td>
-                  <td className="px-4 py-2">Apr 23</td>
-                  <td className="px-4 py-2">$3.1B</td>
-                  <td className="px-4 py-2">Goodwater Capital</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
       {/* Signals */}
       <div className="flex flex-col mt-6 mx-4">
         <div className="text-lg font-semibold text-gray-800">Signals</div>
-        <div className="space-x-8 items-align flex mt-4">
-          <div className="w-64 px-6 py-4 rounded-lg drop-shadow-sm bg-white border border-customGray-50">
+        <div className="space-x-6 items-align flex mt-4">
+          <div className="w-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-white border border-customGray-50">
             <HeadCountSignal headCountData={headCountData} />
           </div>
-          <div className="w-64 px-6 py-4 rounded-lg drop-shadow-sm bg-white border border-customGray-50">
+          <div className="w-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-white border border-customGray-50">
             <HeadCountSignal headCountData={headCountData} />
           </div>
-          <div className="w-64 px-6 py-4 rounded-lg drop-shadow-sm bg-white border border-customGray-50">
+          <div className="w-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-white border border-customGray-50">
             <HeadCountSignal headCountData={headCountData} />
           </div>
-          <div className="w-64 px-6 py-4 rounded-lg drop-shadow-sm bg-white border border-customGray-50">
+          <div className="w-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-white border border-customGray-50">
             <HeadCountSignal headCountData={headCountData} />
           </div>
         </div>

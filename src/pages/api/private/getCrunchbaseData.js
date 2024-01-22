@@ -4,7 +4,6 @@
 
 import { serviceSup, cachedBucketFetch } from "../../../utils/Supabase.js";
 import { parseSemrushOutput } from "../../../utils/BackendUtils.js";
-import { generateMonths } from "../../../utils/Utils.js";
 
 export const config = {
   runtime: "edge",

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 Chart.register(ChartDataLabels);
@@ -54,6 +54,7 @@ Chart.register(ChartDataLabels);
 // export default GenericTable;
 function GenericTable({
   chartData,
+  scrollStart = "left",
   title = undefined,
   showDataLabels = true,
   showTimescaleButtons = true,
@@ -102,6 +103,13 @@ function GenericTable({
   //     />
   //   </thead>
   // );
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    if (scrollRef.current && scrollStart === "right") {
+      scrollRef.current.scrollLeft = scrollRef.current.scrollWidth;
+    }
+  }, []);
 
   const { headers, labels, datasets } = chartData;
   // console.log("datasets, labels, headers", datasets, labels, headers);
@@ -118,7 +126,7 @@ function GenericTable({
   // console.log("headerSpans", headerSpans);
 
   return (
-    <div className="overflow-x-auto mt-4">
+    <div className="overflow-x-scroll mt-4 pb-2" ref={scrollRef}>
       <table className="divide-y divide-gray-200">
         <thead>
           <tr>
@@ -142,7 +150,7 @@ function GenericTable({
             {labels.map((label, index) => (
               <td
                 key={index}
-                className="px-4 py-1 text-sm font-semibold text-customGray-500 tracking-wider text-center"
+                className="px-4 pt-1 pb-2 text-sm font-semibold text-customGray-500 tracking-wider text-center"
               >
                 {label}
               </td>
@@ -152,7 +160,7 @@ function GenericTable({
         <tbody className="bg-white">
           {datasets.map((dataset, datasetIndex) => (
             <tr key={dataset.label}>
-              <td className="pr-4 py-2 whitespace-nowrap text-sm font-normal text-customGray-500">
+              <td className="pr-2 py-2 whitespace-nowrap text-sm font-normal text-customGray-500 text-center">
                 {dataset.label}
               </td>
               {dataset.data.map((value, index) => (

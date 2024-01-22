@@ -95,7 +95,7 @@ function WebTrafficChart({ trafficData, selectedChart = null }) {
 
   const yearTrafficGraph = (
     <GenericBar
-      chartData={convertToChartData(
+      barChartData={convertToChartData(
         aggregateData(trafficData, "visits", "sum", trafficTimescale)
       )}
       title={"Total Visits (millions)"}
@@ -104,12 +104,12 @@ function WebTrafficChart({ trafficData, selectedChart = null }) {
       setTimescale={setTrafficTimescale}
       selectedChart={CHARTS.traffic}
       rawChartData={trafficData}
-    ></GenericBar>
+    />
   );
 
   const yearUserGraph = (
     <GenericBar
-      chartData={convertToChartData(
+      barChartData={convertToChartData(
         aggregateData(trafficData, "users", "mean", mauTimescale)
       )}
       title={"Web Users (millions)"}
@@ -119,7 +119,7 @@ function WebTrafficChart({ trafficData, selectedChart = null }) {
       selectedChart={CHARTS.mau}
       // showTimescaleButtons={false}
       rawChartData={trafficData}
-    ></GenericBar>
+    />
   );
 
   const trafficByChannel = (

@@ -5,7 +5,7 @@ const assert = require("assert");
 
 import { serviceSup, cachedFetch } from "../../../utils/Supabase.js";
 import { parseSemrushOutput } from "../../../utils/BackendUtils.js";
-import { generateMonths } from "../../../utils/Utils.js";
+import { generateMonthsFromStartYear } from "../../../utils/Utils.js";
 
 export const config = {
   runtime: "edge",
@@ -45,7 +45,7 @@ const handler = async (req) => {
   // reqJSON.userId, reqJSON.messages
   const reqJSON = await req.json();
   const { userId, companiesUrl, exportColumns, country, don } = reqJSON;
-  const displayDates = generateMonths(2019);
+  const displayDates = generateMonthsFromStartYear(2019);
   //   const displayDates = ["2023-10-01"];
   // "categories" cannot be in  exportColumns due to parseSemrushOutput handling ;
   const promises = displayDates.map(async (date) => {
