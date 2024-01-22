@@ -91,7 +91,7 @@ function WebTrafficDoughnut({ trafficData, selectedChart = null }) {
 
   return (
     <div>
-      <h2 id="trafficByGeo" className="text-base font-semibold mb-4">
+      <h2 id="trafficByGeo" className="text-sm font-semibold mb-3">
         {title}
       </h2>
       <div className="flex flex-row items-center mb-8">
