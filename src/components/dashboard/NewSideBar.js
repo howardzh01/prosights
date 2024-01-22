@@ -2,45 +2,9 @@ import React, { useEffect } from "react";
 import Image from "next/image";
 import UserProfileButton from "../UserProfileButton";
 
-function NewSideBar() {
-  const sections = [
-    {
-      title: "Overview",
-      level: 1,
-    },
-    {
-      title: "Headcount",
-      level: 1,
-    },
-    {
-      title: "Website Traffic",
-      level: 1,
-    },
-    {
-      title: "Visits Breakdown",
-      level: 2,
-    },
-    {
-      title: "Traffic Momentum",
-      level: 2,
-    },
-    {
-      title: "Traffic Quality",
-      level: 2,
-    },
-    {
-      title: "Consumer Spend",
-      level: 2,
-    },
-    {
-      title: "Ad Spend",
-      level: 2,
-    },
-    {
-      title: "Market Share",
-      level: 2,
-    },
-  ];
+function NewSideBar({ sections, activeSections }) {
+  // Determine if we should extend the bar to cover multiple consecutive active sections
+  const isSectionActive = (section) => activeSections[section.title];
 
   return (
     <div className="bg-customGray-800 h-full w-full px-6 py-4 flex flex-col">
@@ -51,13 +15,17 @@ function NewSideBar() {
         height={1024}
         className="w-28"
       />
-      <div className="mt-8 flex-grow">
+      <div className="mt-8 flex-grow relative">
         {sections.map((section, index) => (
           <div
             key={index}
-            className={`mt-4 text-base ${
+            className={`py-2 text-sm flex items-center ${
               section.level === 1 ? "" : "ml-4"
-            } text-customGray-25`}
+            } text-customGray-25 border-l-2 border-primaryMedium ${
+              isSectionActive(section)
+                ? "text-primaryMedium border-opacity-100"
+                : "border-opacity-0"
+            } pl-2`}
           >
             {section.title}
           </div>

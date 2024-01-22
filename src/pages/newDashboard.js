@@ -47,6 +47,90 @@ function NewDashboard() {
   const [selectedChart, setSelectedChart] = useState("");
   const [chartData, setChartData] = useState();
 
+  // State to track active sections
+  const [activeSections, setActiveSections] = useState({});
+  // Sections for sidebar; MUST have same title as section id, which might be passed in as a prop
+  const sections = [
+    {
+      title: "Overview",
+      level: 1,
+    },
+    {
+      title: "Headcount",
+      level: 1,
+    },
+    {
+      title: "Website Traffic",
+      level: 1,
+    },
+    {
+      title: "Visits Breakdown",
+      level: 2,
+    },
+    {
+      title: "Traffic Momentum",
+      level: 2,
+    },
+    {
+      title: "Traffic Quality",
+      level: 2,
+    },
+    {
+      title: "Consumer Spend",
+      level: 2,
+    },
+    {
+      title: "Ad Spend",
+      level: 2,
+    },
+    {
+      title: "Market Share",
+      level: 2,
+    },
+  ];
+
+  useEffect(() => {
+    let observer;
+    // let initialCheckDone = false;
+
+    const observerCallback = (entries, observer) => {
+      //   if (!initialCheckDone) {
+      //     // Delay setting the active section until after the initial call
+      //     setTimeout(() => (initialCheckDone = true), 100);
+      //     return;
+      //   }
+
+      entries.forEach((entry) => {
+        setActiveSections((prevActiveSections) => {
+          const newActiveSections = { ...prevActiveSections };
+          const targetId = entry.target.id;
+
+          if (entry.isIntersecting) {
+            newActiveSections[targetId] = true;
+          } else {
+            delete newActiveSections[targetId];
+          }
+          return newActiveSections;
+        });
+      });
+    };
+
+    const options = {
+      root: null,
+      threshold: 0.5,
+    };
+
+    observer = new IntersectionObserver(observerCallback, options);
+
+    const sections = document.querySelectorAll(".content-section");
+    sections.forEach((section) => observer.observe(section));
+
+    // Disconnect the observer on unmount
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   // API Data
   const { data: headCountData, error: headCountError } = useSWR(
     user && company ? [`/api/private/getHeadCount`, user.id, company] : null,
@@ -120,7 +204,7 @@ function NewDashboard() {
         <div className="flex flex-row">
           {/* Sidebar */}
           <div className="flex-shrink-0 sticky top-0 w-60 h-screen">
-            <NewSideBar />
+            <NewSideBar sections={sections} activeSections={activeSections} />
           </div>
           {/* Main Content */}
           <div
@@ -166,19 +250,24 @@ function NewDashboard() {
               </div>
             </div>
             {/* Overview Section */}
-            <OverviewSection
-              companyAbout={companyAbout}
-              companyBusinessModel={companyBusinessModel}
-              companyFoundedYear={companyFoundedYear}
-              companyHeadcount={companyHeadcount}
-              companyHeadquarters={companyHeadquarters}
-              companyValuation={companyValuation}
-              companyLastRoundSize={companyLastRoundSize}
-              companyLastDealType={companyLastDealType}
-              headCountData={headCountData}
-            />
+            <div id="Overview" className="content-section w-full">
+              <OverviewSection
+                companyAbout={companyAbout}
+                companyBusinessModel={companyBusinessModel}
+                companyFoundedYear={companyFoundedYear}
+                companyHeadcount={companyHeadcount}
+                companyHeadquarters={companyHeadquarters}
+                companyValuation={companyValuation}
+                companyLastRoundSize={companyLastRoundSize}
+                companyLastDealType={companyLastDealType}
+                headCountData={headCountData}
+              />
+            </div>
             {/* Headcount; TODO: MAKE THIS A SEPARATE COMPONENT */}
-            <div className="flex flex-col w-full mt-12">
+            <div
+              id="Headcount"
+              className="flex flex-col w-full mt-12 content-section"
+            >
               <p className="text-2xl font-semibold text-gray-800 ml-2">
                 Headcount
               </p>
@@ -188,10 +277,12 @@ function NewDashboard() {
               </div>
             </div>
             {/* Website Traffic */}
-            <WebsiteTrafficSection
-              webTrafficData={webTrafficData}
-              webTrafficGeoData={webTrafficGeoData}
-            />
+            <div className="w-full">
+              <WebsiteTrafficSection
+                webTrafficData={webTrafficData}
+                webTrafficGeoData={webTrafficGeoData}
+              />
+            </div>
           </div>
         </div>
       </ChartDataContext.Provider>
