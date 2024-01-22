@@ -43,8 +43,7 @@ module.exports = {
         "customTeal-100": "#003B66",
       },
       fontFamily: {
-        // nunito: ["Nunito", "sans-serif"],
-        // nunitoSans: ["Nunito Sans", "sans-serif"],
+        inter: ["Inter", "sans-serif"],
       },
       borderWidth: {
         0.5: "0.5px",
