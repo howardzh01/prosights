@@ -30,7 +30,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
     ? new Date(cbfields["founded_on"]?.["value"]).getUTCFullYear()
     : "";
   let companyHeadcount = headCountData
-    ? Object.values(headCountData).slice(-1)[0]["headcount"]
+    ? Object.values(headCountData).slice(-1)[0]["headcount"].toLocaleString()
     : undefined;
   if (!headCountData) {
     companyHeadcount = cbfields["num_employees_enum"]

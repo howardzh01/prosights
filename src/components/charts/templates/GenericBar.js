@@ -5,6 +5,7 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 import GenericTimeScale from "./GenericTimeScale";
 Chart.register(ChartDataLabels);
 import GenericTable from "./GenericTable";
+import { formatMoney } from "../../../utils/Utils";
 
 function GenericBar({
   barChartData,
@@ -38,7 +39,10 @@ function GenericBar({
         display: showDataLabels,
         anchor: "end",
         align: "top",
-        formatter: Math.round,
+        // formatter: Math.round,
+        formatter: function (value, context) {
+          return formatMoney(Math.round(value));
+        },
         font: {
           weight: "light",
         },

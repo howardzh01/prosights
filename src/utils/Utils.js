@@ -246,3 +246,50 @@ export function formatDealRound(dealRound) {
     .replace("Post Ipo", "Post-IPO")
     .trim();
 }
+
+export function findInsertIndex(arr, x, type = "left") {
+  // left -> returns the index of the first element that is greater than or equal to x
+  // right -> returns the index of the first element that is greater than x
+  let low = 0,
+    high = arr.length;
+
+  while (low < high) {
+    const mid = Math.floor((low + high) / 2);
+    if (arr[mid] < x || (type === "right" && arr[mid] === x)) {
+      low = mid + 1;
+    } else {
+      high = mid;
+    }
+  }
+  return low;
+}
+
+export function convertLabelToDate(label) {
+  // Example usage:
+  // console.log(convertLabelToDate("3Q19")); // July 1st 2019
+  // console.log(convertLabelToDate("Mar 19")); // March 1st 2019
+  // console.log(convertLabelToDate("2019")); // January 1st 2019
+  const quarterlyRegex = /^[1-4]Q\d{2}$/;
+  const monthlyRegex = /^[A-Za-z]+ \d{2}$/;
+  const yearlyRegex = /^\d{4}$/;
+
+  if (quarterlyRegex.test(label)) {
+    // Extract the quarter and year, then map to the first month of that quarter
+    const quarter = parseInt(label[0]);
+    const year = parseInt(label.slice(2)) + 2000; // Assuming '19' should be '2019'
+    const month = (quarter - 1) * 3 + 1; // Get the first month of the quarter
+    return new Date(year, month - 1, 1); // Months are 0-indexed in JavaScript Dates
+  } else if (monthlyRegex.test(label)) {
+    // Extract the month and year
+    const monthName = label.split(" ")[0];
+    const year = parseInt(label.split(" ")[1]) + 2000;
+    const month = new Date(`${monthName} 1, 2000`).getMonth(); // Use a dummy year to get the month index
+    return new Date(year, month, 1);
+  } else if (yearlyRegex.test(label)) {
+    // Just the year is provided
+    const year = parseInt(label);
+    return new Date(year, 0, 1); // January 1st of the given year
+  } else {
+    throw new Error("Unknown date format");
+  }
+}

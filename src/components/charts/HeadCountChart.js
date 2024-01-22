@@ -1,10 +1,14 @@
 import { useState } from "react";
-import { aggregateData } from "../../utils/Utils";
+import {
+  aggregateData,
+  findInsertIndex,
+  convertLabelToDate,
+} from "../../utils/Utils";
 import GenericBar from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
 import { CHARTS } from "../../constants";
 
-function HeadCountChart({ headCountData }) {
+function HeadCountChart({ headCountData, cutOffDate = new Date("2019") }) {
   const [timescale, setTimescale] = useState("quarterYear");
 
   if (!headCountData) return null;
@@ -14,7 +18,6 @@ function HeadCountChart({ headCountData }) {
     let headers = [];
     let formattedLabels = [];
     let headcounts = Object.values(data);
-    console.log("looking", data);
     let growthPercentages = [];
 
     // Regular expressions to identify label formats
@@ -38,7 +41,7 @@ function HeadCountChart({ headCountData }) {
         headcounts[i - offset] == null ||
         headcounts[i] == null
       ) {
-        growthPercentages.push("—");
+        growthPercentages.push("--");
       } else {
         const growth =
           ((headcounts[i] - headcounts[i - offset]) / headcounts[i - offset]) *
@@ -72,44 +75,33 @@ function HeadCountChart({ headCountData }) {
         }
       }
     });
+    const cutoffIndex = findInsertIndex(
+      labels.map((x) => convertLabelToDate(x)),
+      cutOffDate,
+      "left"
+    );
 
     return {
-      headers: headers,
-      originalLabels: labels,
-      labels: formattedLabels,
+      headers: headers.slice(cutoffIndex),
+      labels: labels.slice(cutoffIndex),
+      tableLabels: formattedLabels.slice(cutoffIndex),
       datasets: [
         {
           label: "Headcount",
-          data: headcounts.map((item) => (item == null ? "—" : item)),
+          data: headcounts
+            .map((item) => (item == null ? "—" : item))
+            .slice(cutoffIndex),
           backgroundColor: "rgba(0, 154, 255, 1)",
           borderWidth: 1,
         },
         {
           label: "% YoY Growth",
-          data: growthPercentages,
+          data: growthPercentages.slice(cutoffIndex),
           // Add more styling as necessary
         },
       ],
     };
   }
-
-  // function convertToChartData(data) {
-  //   console.log("parsed data, ", data);
-  //   // input: {time_key: output_key}
-  //   return {
-  //     labels: Object.keys(data),
-  //     datasets: [
-  //       {
-  //         // label: "Total Employee (#)",
-  //         data: Object.values(data),
-  //         backgroundColor: "rgba(0, 154, 255, 1)",
-  //         // backgroundColor: "rgba(75, 192, 192, 0.2)",
-  //         // borderColor: "rgba(75, 192, 192, 1)",
-  //         borderWidth: 1,
-  //       },
-  //     ],
-  //   };
-  // }
 
   const customChartData = convertToChartData(
     aggregateData(headCountData, "headcount", "last", timescale)
@@ -118,12 +110,12 @@ function HeadCountChart({ headCountData }) {
   const yearChartData = convertToChartData(
     aggregateData(headCountData, "headcount", "last", "year")
   );
-
+  customChartData.tableLabels;
   const quarterHeadCountGraph = (
     <GenericBar
       barChartData={{
         ...customChartData,
-        labels: customChartData.originalLabels,
+        labels: customChartData.labels,
         datasets: customChartData.datasets.filter(
           (dataset) => dataset.label !== "% YoY Growth"
         ),
@@ -143,7 +135,7 @@ function HeadCountChart({ headCountData }) {
     <GenericBar
       barChartData={{
         ...yearChartData,
-        labels: yearChartData.originalLabels,
+        labels: yearChartData.labels,
         datasets: yearChartData.datasets.filter(
           (dataset) => dataset.label !== "% YoY Growth"
         ),

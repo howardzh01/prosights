@@ -27,19 +27,8 @@ function NewDashboard() {
 
   const [company, setCompany] = useState("zillow");
   const [country, setCountry] = useState("US");
-  // const [companyAbout, setCompanyAbout] = useState(
-  //   "StockX is an e-commerce platform specializing in authenticated resale of limited edition sneakers and streetwear."
-  // );
-  // const [companyBusinessModel, setCompanyBusinessModel] =
-  //   useState(`Transaction Fees: Charges sellers a percentage fee on each sale.
-  // Processing Fees: Collects a fee from buyers for each transaction.
-  // Transaction Fees: Charges sellers a percentage fee on each sale.`);
-  // const [companyFoundedYear, setCompanyFoundedYear] = useState(2015);
-  // const [companyHeadcount, setCompanyHeadcount] = useState(500);
-  // const [companyHeadquarters, setCompanyHeadquarters] = useState("Detroit, MI");
-  // const [companyValuation, setCompanyValuation] = useState("3.1B"); // Some of these might need to convert formatting depending on API output
-  // const [companyLastRoundSize, setCompanyLastRoundSize] = useState("60M");
-  // const [companyLastDealType, setCompanyLastDealType] = useState("Series E1");
+  const [companyCompetitors, setCompanyCompetitors] = useState([]);
+
   const [dataLoading, setDataLoading] = useState(true);
 
   const [selectedChart, setSelectedChart] = useState("");

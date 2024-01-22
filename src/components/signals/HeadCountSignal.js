@@ -4,19 +4,24 @@ import GenericBar from "../charts/templates/GenericBar";
 // import TwoColumnView from "../charts/templates/TwoColumnView";
 import { CHARTS } from "../../constants";
 
-function HeadCountSignal({ headCountData }) {
+function HeadCountSignal({ headCountData, startCutoff = new Date("2019") }) {
   const [timescale, setTimescale] = useState("year");
 
   if (!headCountData) return null;
 
   function convertToChartData(data) {
     // input: {time_key: output_key}
+    let filteredData = Object.fromEntries(
+      Object.entries(data).filter(
+        (data) => new Date(data[0]) >= new Date(startCutoff)
+      )
+    );
     return {
-      labels: Object.keys(data),
+      labels: Object.keys(filteredData),
       datasets: [
         {
           // label: "Total Employee (#)",
-          data: Object.values(data),
+          data: Object.values(filteredData),
           backgroundColor: "rgba(0, 154, 255, 1)",
           // borderColor: "rgba(75, 192, 192, 1)",
           borderWidth: 0,
@@ -42,14 +47,7 @@ function HeadCountSignal({ headCountData }) {
     />
   );
 
-  return (
-    <div>
-      {/* <h2 id="employeeCount" className="text-md font-semibold">
-        Headcount
-      </h2> */}
-      {yearHeadCountGraph}
-    </div>
-  );
+  return <div>{yearHeadCountGraph}</div>;
 }
 
 export default HeadCountSignal;

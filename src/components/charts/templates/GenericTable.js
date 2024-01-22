@@ -111,7 +111,7 @@ function GenericTable({
     }
   }, []);
 
-  const { headers, labels, datasets } = chartData;
+  const { headers, tableLabels, datasets } = chartData;
   // console.log("datasets, labels, headers", datasets, labels, headers);
 
   // Prepare header spans
@@ -147,7 +147,7 @@ function GenericTable({
           <tr>
             <td className="px-6 text-sm font-medium text-customGray-500 tracking-wider text-left"></td>
             {/* Empty cell for alignment */}
-            {labels.map((label, index) => (
+            {tableLabels.map((label, index) => (
               <td
                 key={index}
                 className="px-4 pt-1 pb-2 text-sm font-semibold text-customGray-500 tracking-wider text-center"
