@@ -43,6 +43,7 @@ export async function cachedFetch(
       console.log(
         "cachedFetch Error",
         url.toString(),
+        cacheKey,
         new_response.status,
         new_response.statusText
       );
