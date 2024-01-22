@@ -86,7 +86,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
     <div className="mt-8 w-full">
       <p className="text-2xl font-semibold text-gray-800 ml-2">Overview</p>
       <hr className="border-t border-customGray-50 mt-2" />
-      <div className="flex flex-row mt-4 mx-4 space-x-4">
+      <div className="flex flex-row mt-4 mx-4 space-x-16">
         {/* About & Business Model */}
         <div className="flex flex-col w-1/2">
           <div className="text-base font-semibold text-gray-800">About</div>
@@ -179,7 +179,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
         </div>
       </div>
       {/* Funding and M&A Tables */}
-      <div className="flex space-x-4 mx-4 mt-6">
+      <div className="flex space-x-8 mx-4 mt-6">
         <div className="w-3/5 mr-8">
           <p className="text-base font-semibold text-gray-800 mb-3">Funding</p>{" "}
           <InvestorTable

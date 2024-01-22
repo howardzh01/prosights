@@ -130,7 +130,7 @@ function GenericTable({
       <table className="divide-y divide-gray-200">
         <thead>
           <tr>
-            <th className="px-6 py-3 text-sm font-medium text-customGray-500 tracking-wider text-center"></th>{" "}
+            <th className="px-6 py-3 text-sm font-medium text-customGray-500 tracking-wider text-center sticky left-0 z-10 bg-white bg-opacity-100"></th>{" "}
             {/* Empty header for shifting the row */}
             {[...new Set(headers)].map((header, index) => (
               <th
@@ -145,7 +145,7 @@ function GenericTable({
             ))}
           </tr>
           <tr>
-            <td className="px-6 text-sm font-medium text-customGray-500 tracking-wider text-left"></td>
+            <td className="px-6 text-sm font-medium text-customGray-500 tracking-wider text-left sticky left-0 z-10 bg-white bg-opacity-100"></td>
             {/* Empty cell for alignment */}
             {tableLabels.map((label, index) => (
               <td
@@ -160,7 +160,7 @@ function GenericTable({
         <tbody className="bg-white">
           {datasets.map((dataset, datasetIndex) => (
             <tr key={dataset.label}>
-              <td className="pr-2 py-2 whitespace-nowrap text-sm font-normal text-customGray-500 text-center">
+              <td className="pr-2 py-2 whitespace-nowrap text-sm font-normal text-customGray-500 text-center sticky left-0 z-10 bg-white bg-opacity-100">
                 {dataset.label}
               </td>
               {dataset.data.map((value, index) => (

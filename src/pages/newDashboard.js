@@ -18,6 +18,7 @@ import { createContext } from "react";
 import ChartModal from "../components/ChartModal";
 import HeadCountChart from "../components/charts/HeadCountChart";
 import { CHARTS } from "../constants";
+import CompetitorContainer from "../components/dashboard/CompetitorContainer";
 
 export const SelectedChartContext = createContext();
 export const ChartDataContext = createContext();
@@ -138,15 +139,7 @@ function NewDashboard() {
     getHeadCount,
     { revalidateOnFocus: false }
   );
-  // const { data: webTrafficData, error: webTrafficError } = useSWR(
-  //   user && company && country
-  //     ? [`/api/private/getWebTrafficData`, company + ".com", country]
-  //     : null,
-  //   (url, companyUrl, country) => {
-  //     console.log(companyUrl);
-  //     return getTrafficData(url, user, companyUrl, country);
-  //   }
-  // );
+
   const { data: webTrafficData, error: webTrafficError } = useSWR(
     user && company && country
       ? [`/api/private/getWebTrafficData`, user.id, company + ".com", country]
@@ -245,7 +238,7 @@ function NewDashboard() {
                   <option value="asia">Asia</option>
                 </select>
               </div>
-              <div className="flex flex-row items-center">
+              {/* <div className="flex flex-row items-center">
                 <Image
                   src="/assets/compare.svg"
                   alt="Compare"
@@ -254,7 +247,8 @@ function NewDashboard() {
                   height={128}
                 />
                 <p className="text-base text-customGray-500">Compare</p>
-              </div>
+              </div> */}
+              <CompetitorContainer></CompetitorContainer>
             </div>
             {/* Overview Section */}
             <div id="Overview" className="content-section w-full">
