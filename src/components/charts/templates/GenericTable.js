@@ -126,7 +126,7 @@ function GenericTable({
   // console.log("headerSpans", headerSpans);
 
   return (
-    <div className="overflow-x-scroll mt-4" ref={scrollRef}>
+    <div className="overflow-x-scroll mt-4 pb-2" ref={scrollRef}>
       <table className="divide-y divide-gray-200">
         <thead>
           <tr>

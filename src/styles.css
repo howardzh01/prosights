@@ -17,6 +17,7 @@
 /* Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
 *::-webkit-scrollbar-track {
@@ -36,7 +37,7 @@
   --background: #FAFBFD;
   --primary: #009AFF;
   --secondary: #B84CEB;
-  --gray_200: #DAE1E7;
+  --gray_200: #E2E5ED;
 }
 
 .cl-formButtonPrimary {

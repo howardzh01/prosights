@@ -7,7 +7,7 @@ function NewSideBar({ sections, activeSections }) {
   const isSectionActive = (section) => activeSections[section.title];
 
   return (
-    <div className="bg-customGray-800 h-full w-full px-6 py-4 flex flex-col">
+    <div className="bg-customGray-900 h-full w-full px-6 py-4 flex flex-col">
       <Image
         src="/assets/fullLogoWhite.png"
         alt="ProSights logo"

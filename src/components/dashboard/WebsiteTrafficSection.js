@@ -19,25 +19,25 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
             Visits Breakdown
           </p>
           <div className="space-x-6">
-            <div className="inline-block rounded-lg drop-shadow-sm bg-white border border-customGray-50 px-4 pt-3 pb-6">
+            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-4 pt-3 pb-6">
               <WebGeoTrafficChart
                 geoTrafficData={webTrafficGeoData}
                 relevant_continents={RELEVANT_CONTINENTS}
               />
             </div>
-            <div className="inline-block rounded-lg drop-shadow-sm bg-white border border-customGray-50 px-4 pt-3 pb-6">
+            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-4 pt-3 pb-6">
               <WebTrafficDoughnut
                 trafficData={webTrafficData}
                 selectedChart={CHARTS.trafficByDevice}
               />
             </div>
-            <div className="inline-block rounded-lg drop-shadow-sm bg-white border border-customGray-50 px-4 pt-3 pb-6">
+            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-4 pt-3 pb-6">
               <WebTrafficDoughnut
                 trafficData={webTrafficData}
                 selectedChart={CHARTS.trafficByChannel}
               />
             </div>
-            <div className="inline-block rounded-lg drop-shadow-sm bg-white border border-customGray-50 px-4 pt-3 pb-6">
+            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-4 pt-3 pb-6">
               <WebTrafficDoughnut
                 trafficData={webTrafficData}
                 selectedChart={CHARTS.trafficByOrganicVsPaid}
@@ -50,25 +50,25 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
             Traffic Momentum
           </p>
           <div className="space-x-6">
-            <div className="inline-block rounded-lg drop-shadow-sm bg-white border border-customGray-50 px-4 pt-3 pb-6">
+            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-4 pt-3 pb-6">
               <WebGeoTrafficChart
                 geoTrafficData={webTrafficGeoData}
                 relevant_continents={RELEVANT_CONTINENTS}
               />
             </div>
-            <div className="inline-block rounded-lg drop-shadow-sm bg-white border border-customGray-50 px-4 pt-3 pb-6">
+            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-4 pt-3 pb-6">
               <WebTrafficDoughnut
                 trafficData={webTrafficData}
                 selectedChart={CHARTS.trafficByDevice}
               />
             </div>
-            <div className="inline-block rounded-lg drop-shadow-sm bg-white border border-customGray-50 px-4 pt-3 pb-6">
+            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-4 pt-3 pb-6">
               <WebTrafficDoughnut
                 trafficData={webTrafficData}
                 selectedChart={CHARTS.trafficByChannel}
               />
             </div>
-            <div className="inline-block rounded-lg drop-shadow-sm bg-white border border-customGray-50 px-4 pt-3 pb-6">
+            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-4 pt-3 pb-6">
               <WebTrafficDoughnut
                 trafficData={webTrafficData}
                 selectedChart={CHARTS.trafficByOrganicVsPaid}
@@ -81,25 +81,25 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
             Traffic Quality
           </p>
           <div className="space-x-6">
-            <div className="inline-block rounded-lg drop-shadow-sm bg-white border border-customGray-50 px-4 pt-3 pb-6">
+            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-4 pt-3 pb-6">
               <WebGeoTrafficChart
                 geoTrafficData={webTrafficGeoData}
                 relevant_continents={RELEVANT_CONTINENTS}
               />
             </div>
-            <div className="inline-block rounded-lg drop-shadow-sm bg-white border border-customGray-50 px-4 pt-3 pb-6">
+            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-4 pt-3 pb-6">
               <WebTrafficDoughnut
                 trafficData={webTrafficData}
                 selectedChart={CHARTS.trafficByDevice}
               />
             </div>
-            <div className="inline-block rounded-lg drop-shadow-sm bg-white border border-customGray-50 px-4 pt-3 pb-6">
+            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-4 pt-3 pb-6">
               <WebTrafficDoughnut
                 trafficData={webTrafficData}
                 selectedChart={CHARTS.trafficByChannel}
               />
             </div>
-            <div className="inline-block rounded-lg drop-shadow-sm bg-white border border-customGray-50 px-4 pt-3 pb-6">
+            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-4 pt-3 pb-6">
               <WebTrafficDoughnut
                 trafficData={webTrafficData}
                 selectedChart={CHARTS.trafficByOrganicVsPaid}
