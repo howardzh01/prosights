@@ -43,13 +43,14 @@ function NewDashboard() {
   const [companyValuation, setCompanyValuation] = useState("3.1B"); // Some of these might need to convert formatting depending on API output
   const [companyLastRoundSize, setCompanyLastRoundSize] = useState("60M");
   const [companyLastDealType, setCompanyLastDealType] = useState("Series E1");
+  const [dataLoading, setDataLoading] = useState(true);
 
   const [selectedChart, setSelectedChart] = useState("");
   const [chartData, setChartData] = useState();
 
   // State to track active sections
-  const [activeSections, setActiveSections] = useState({});
-  // Sections for sidebar; MUST have same title as section id, which might be passed in as a prop
+  const [activeSections, setActiveSections] = useState({ Overview: true });
+  // Sections for sidebar; MUST have same title as section id, which might be used in child components
   const sections = [
     {
       title: "Overview",
@@ -90,45 +91,59 @@ function NewDashboard() {
   ];
 
   useEffect(() => {
-    let observer;
-    // let initialCheckDone = false;
+    console.log("active", activeSections);
+  }, [activeSections]);
 
-    const observerCallback = (entries, observer) => {
-      //   if (!initialCheckDone) {
-      //     // Delay setting the active section until after the initial call
-      //     setTimeout(() => (initialCheckDone = true), 100);
-      //     return;
-      //   }
+  useEffect(() => {
+    if (!dataLoading) {
+      let observer;
 
-      entries.forEach((entry) => {
-        setActiveSections((prevActiveSections) => {
-          const newActiveSections = { ...prevActiveSections };
+      const observerCallback = (entries) => {
+        entries.forEach((entry) => {
           const targetId = entry.target.id;
 
-          if (entry.isIntersecting) {
-            newActiveSections[targetId] = true;
-          } else {
-            delete newActiveSections[targetId];
-          }
-          return newActiveSections;
+          setActiveSections((prevActiveSections) => {
+            const newActiveSections = { ...prevActiveSections };
+
+            if (entry.isIntersecting) {
+              newActiveSections[targetId] = true;
+            } else {
+              delete newActiveSections[targetId];
+            }
+            return newActiveSections;
+          });
         });
+      };
+
+      const options = {
+        root: null,
+        threshold: 0.5,
+      };
+
+      observer = new IntersectionObserver(observerCallback, options);
+
+      const sections = document.querySelectorAll(".content-section");
+      sections.forEach((section) => {
+        observer.observe(section);
       });
-    };
 
-    const options = {
-      root: null,
-      threshold: 0.5,
-    };
+      // Disconnect the observer on unmount
+      return () => {
+        if (observer) {
+          observer.disconnect();
+        }
+      };
+    }
+  }, [dataLoading]);
 
-    observer = new IntersectionObserver(observerCallback, options);
-
-    const sections = document.querySelectorAll(".content-section");
-    sections.forEach((section) => observer.observe(section));
-
-    // Disconnect the observer on unmount
-    return () => {
-      observer.disconnect();
-    };
+  useEffect(() => {
+    if (dataLoading) {
+      // This is an inelegant way to fix the issue of sidebar sections all being highlighted on page load
+      // Approximately the time it takes for the page to load; cleaner fix would be to update when the data is loaded
+      setTimeout(() => {
+        setDataLoading(false);
+      }, 1000);
+    }
   }, []);
 
   // API Data
