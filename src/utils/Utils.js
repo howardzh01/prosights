@@ -49,7 +49,7 @@ export const aggregateData = (
 ) => {
   // inputs: expected data in monthly format {Date(): {'visits': x, 'users': x}}
   // outputs: {time_key: output_key}
-  console.log("timescale", timescale, data);
+
   if (!data) {
     return;
   }
@@ -162,4 +162,38 @@ export function isColorLight(r, g, b) {
 export function rgbToComponents(rgbString) {
   // This will turn "rgb(255, 255, 255)" into [255, 255, 255]
   return rgbString.match(/\d+/g).map(Number);
+}
+
+export function formatMoney(amount) {
+  let divisor, unit;
+  if (Math.abs(amount) >= 1.0e12) {
+    divisor = 1.0e12;
+    unit = "T";
+  } else if (Math.abs(amount) >= 1.0e9) {
+    divisor = 1.0e9;
+    unit = "B";
+  } else if (Math.abs(amount) >= 1.0e6) {
+    divisor = 1.0e6;
+    unit = "M";
+  } else if (Math.abs(amount) >= 1.0e3) {
+    divisor = 1.0e3;
+    unit = "K";
+  } else {
+    divisor = 1;
+    unit = "";
+  }
+
+  let result = Math.abs(amount) / divisor;
+  return result % 1 === 0 ? result.toFixed(0) + unit : result.toFixed(1) + unit;
+}
+
+// CRUNCHBASE API UTILS
+export function formatDealRound(dealRound) {
+  // secondary_market -> Secondary
+  // series_a -> Series A
+  return fromUnderscoreCase(dealRound)
+    .replace("Market", "")
+    .replace("Equity", "")
+    .replace("Post Ipo", "Post-IPO")
+    .trim();
 }

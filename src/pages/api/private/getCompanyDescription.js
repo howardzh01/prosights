@@ -22,8 +22,8 @@ const getGPTDescriptions = async (
   } else {
     systemPrompt = `You are a private equity analyst and have two tasks. Given a company called "${companyName}" with website url "${companyUrl}",`;
   }
-  systemPrompt += `\n\n1. What's the company description in 1 sentence. Keep it as concise as possible. Never include date or where it was founded\n
-  2. What is the business model in 2 or 3 concise bullet points? Each point should describe distinct core revenue streams of the company. Only the top 10% most complex companies should have 3 bullet points.\n
+  systemPrompt += `\n\n1. What's the company description in 1 sentence. Keep it as concise as possible. Never include date or where it was founded. Crunchbase descriptions can be lacking in information or too verbose so please incorporate your knowledge to create a simple and focused description.\n
+  2. Each point should describe distinct core revenue segments of the company, specifically how it makes money. Only the top 10% most complex companies should have 3 bullet points. List the largest revenue stream first and never list minor revenue streams.\n
 
   Return this as a JSON of with keys company_description and business_model. Bullet points for business_model should be representents as key value pairs.
 `;
@@ -130,6 +130,7 @@ const handler = async (req) => {
       `${VERSION}/${rows[0].id}.json not in company_descriptions bucket`,
       gptContentError
     );
+    console.log(crunchbaseDescription, "CB");
     const content = await retrieveAndUpload(
       companyName,
       companyUrl,
@@ -138,6 +139,7 @@ const handler = async (req) => {
     );
     return new Response(content);
   }
+  console.log("HI");
   return new Response(parsedGPTContent["content"]);
 };
 

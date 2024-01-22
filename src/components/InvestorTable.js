@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { formatMoney, formatDealRound, dateToMonths } from "../utils/Utils";
 
 function InvestorTable({ fundingData }) {
   console.log(fundingData);
@@ -8,66 +9,57 @@ function InvestorTable({ fundingData }) {
   }
   function TableHeader({ text, is_header = true }) {
     if (is_header) {
-      return <th className="border px-2 py-1 text-center">{text}</th>;
+      return <th className=" px-2 py-1 text-center">{text}</th>;
     } else {
-      return <td className="border px-2 py-1 text-center">{text}</td>;
+      return <td className="px-2 py-1 text-center">{text}</td>;
     }
   }
 
   return (
-    <div className="w-full overflow-auto">
-      <table className="bg-white text-sm w-full">
+    <div className="w-full max-h-64 overflow-auto bg-white drop-shadow-sm rounded-md">
+      <table className="bg-white text-center text-sm w-full">
         <thead>
-          <tr>
-            <TableHeader text="Announced Date" />
-            <TableHeader text="Rounds" />
-            <TableHeader text="Number of Investors" />
-            <TableHeader text="Money Raised" />
-            <TableHeader text="Post-Money Valuation" />
+          <tr className="bg-primaryLight font-medium sticky top-0">
+            <TableHeader text="Round" />
+            <TableHeader text="Date" />
+            <TableHeader text="Valuation" />
+            <TableHeader text="Raised" />
             <TableHeader text="Lead Investors" />
           </tr>
         </thead>
         <tbody>
           {fundingData.map((row, index) => (
             <tr key={index}>
-              <TableHeader text={row["announced_on"]} is_header={false} />
-              <TableHeader text={row["investment_type"]} is_header={false} />
-              <TableHeader text={row["num_investors"]} is_header={false} />
+              <TableHeader
+                text={formatDealRound(row["investment_type"])}
+                is_header={false}
+              />
               <TableHeader
                 text={
-                  row["money_raised"]
-                    ? // check if money raised > 1 billion and if not then just use millions
-                      `$${
-                        row["money_raised"]["value_usd"] > 1000000000
-                          ? row["money_raised"]["value_usd"] / 1000000000
-                          : row["money_raised"]["value_usd"] / 1000000
-                      }${
-                        row["money_raised"]["value_usd"] > 1000000000
-                          ? "B"
-                          : "M"
-                      }`
+                  row["announced_on"]
+                    ? dateToMonths(row["announced_on"])
+                    : undefined
+                }
+                is_header={false}
+              />
+              <TableHeader
+                text={
+                  row["post_money_valuation"]?.["value_usd"]
+                    ? "$" +
+                      formatMoney(row["post_money_valuation"]["value_usd"])
                     : "-"
                 }
                 is_header={false}
               />
               <TableHeader
                 text={
-                  row["post_money_valuation"]
-                    ? // check if valuation > 1 billion and if not then just use millions
-                      `$${
-                        row["post_money_valuation"]["value_usd"] > 1000000000
-                          ? row["post_money_valuation"]["value_usd"] /
-                            1000000000
-                          : row["post_money_valuation"]["value_usd"] / 1000000
-                      }${
-                        row["post_money_valuation"]["value_usd"] > 1000000000
-                          ? "B"
-                          : "M"
-                      }`
+                  row["money_raised"]?.["value_usd"]
+                    ? "$" + formatMoney(row["money_raised"]["value_usd"])
                     : "-"
                 }
                 is_header={false}
               />
+
               <TableHeader
                 text={
                   row["lead_investor_identifiers"]

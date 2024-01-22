@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { formatMoney, formatDealRound, dateToMonths } from "../utils/Utils";
 
 function InvestmentsTable({ investmentsData }) {
   console.log(investmentsData);
@@ -9,9 +10,13 @@ function InvestmentsTable({ investmentsData }) {
 
   function TableHeader({ text, is_header = true }) {
     if (is_header) {
-      return <th className="border px-2 py-1 text-center">{text}</th>;
+      return <th className=" px-2 py-1 text-center">{text}</th>;
     } else {
-      return <td className="border px-2 py-1 text-center">{text}</td>;
+      return (
+        <td className="px-2 max-w-xs overflow-wrap break-word whitespace-normal py-1 text-center">
+          {text}
+        </td>
+      );
     }
   }
 
@@ -19,51 +24,45 @@ function InvestmentsTable({ investmentsData }) {
 
   // TODO: need some investment data from crunchbase to see the structure
   investmentsData.investments.forEach((investment) => {
+    const wholeAmount = investment.funding_round_money_raised?.value_usd;
+
     combinedData.push({
-      // date: investment.,
-      // type: investment.,
-      // amount: investment.,
-      // valuation: investment.
+      date: dateToMonths(investment.announced_on),
+      type: formatDealRound(investment.funding_round_investment_type),
+      amount: wholeAmount ? formatMoney(wholeAmount) : "-",
+      company: investment.organization_identifier?.value,
     });
   });
 
   investmentsData.acquisitions.forEach((acquisition) => {
-    const wholeAmount = acquisition.acquirer_funding_total.value_usd;
+    const wholeAmount = acquisition.price?.value_usd;
 
     combinedData.push({
-      date: acquisition.announced_on.value,
-      type: acquisition.acquisition_type,
-      amount:
-        wholeAmount !== 0
-          ? // check if money raised > 1 billion and if not then just use millions
-            `$${
-              wholeAmount > 1000000000
-                ? wholeAmount / 1000000000
-                : wholeAmount / 1000000
-            }${wholeAmount > 1000000000 ? "B" : "M"}`
-          : "-",
-      valuation: "_", // TODO: not sure if this data is returned for acquisitions
+      announced: dateToMonths(acquisition.announced_on.value),
+      type: "Acquistion",
+      amount: wholeAmount ? formatMoney(wholeAmount) : "-",
+      company: acquisition.acquiree_identifier?.value,
     });
   });
 
   return (
-    <div className="w-full overflow-auto">
-      <table className="bg-white text-sm w-full">
+    <div className="w-full max-h-36 overflow-auto bg-white rounded-md drop-shadow-sm">
+      <table className="bg-white text-center text-sm w-full">
         <thead>
-          <tr>
-            <TableHeader text="Date" />
+          <tr className="bg-primaryLight font-medium sticky top-0">
+            <TableHeader text="Company" />
+            <TableHeader text="Announced" />
             <TableHeader text="Type" />
             <TableHeader text="Amount" />
-            <TableHeader text="Valuation" />
           </tr>
         </thead>
         <tbody>
           {combinedData.map((row, index) => (
             <tr key={index}>
+              <TableHeader text={row.company} is_header={false} />
               <TableHeader text={row.date} is_header={false} />
               <TableHeader text={row.type} is_header={false} />
               <TableHeader text={row.amount} is_header={false} />
-              <TableHeader text={row.valuation} is_header={false} />
             </tr>
           ))}
         </tbody>

@@ -25,24 +25,24 @@ export const ChartDataContext = createContext();
 function NewDashboard() {
   const { isSignedIn, user, isLoaded } = useUser();
 
-  const [company, setCompany] = useState("stockx");
+  const [company, setCompany] = useState("zillow");
   const [companyLogo, setCompanyLogo] = useState(
     "https://imgtr.ee/images/2024/01/16/78d792f651a4f43e5f728d3026af4cb3.png"
   );
   const [country, setCountry] = useState("US");
-  const [companyAbout, setCompanyAbout] = useState(
-    "StockX is an e-commerce platform specializing in authenticated resale of limited edition sneakers and streetwear."
-  );
-  const [companyBusinessModel, setCompanyBusinessModel] =
-    useState(`Transaction Fees: Charges sellers a percentage fee on each sale.
-  Processing Fees: Collects a fee from buyers for each transaction.
-  Transaction Fees: Charges sellers a percentage fee on each sale.`);
-  const [companyFoundedYear, setCompanyFoundedYear] = useState(2015);
-  const [companyHeadcount, setCompanyHeadcount] = useState(500);
-  const [companyHeadquarters, setCompanyHeadquarters] = useState("Detroit, MI");
-  const [companyValuation, setCompanyValuation] = useState("3.1B"); // Some of these might need to convert formatting depending on API output
-  const [companyLastRoundSize, setCompanyLastRoundSize] = useState("60M");
-  const [companyLastDealType, setCompanyLastDealType] = useState("Series E1");
+  // const [companyAbout, setCompanyAbout] = useState(
+  //   "StockX is an e-commerce platform specializing in authenticated resale of limited edition sneakers and streetwear."
+  // );
+  // const [companyBusinessModel, setCompanyBusinessModel] =
+  //   useState(`Transaction Fees: Charges sellers a percentage fee on each sale.
+  // Processing Fees: Collects a fee from buyers for each transaction.
+  // Transaction Fees: Charges sellers a percentage fee on each sale.`);
+  // const [companyFoundedYear, setCompanyFoundedYear] = useState(2015);
+  // const [companyHeadcount, setCompanyHeadcount] = useState(500);
+  // const [companyHeadquarters, setCompanyHeadquarters] = useState("Detroit, MI");
+  // const [companyValuation, setCompanyValuation] = useState("3.1B"); // Some of these might need to convert formatting depending on API output
+  // const [companyLastRoundSize, setCompanyLastRoundSize] = useState("60M");
+  // const [companyLastDealType, setCompanyLastDealType] = useState("Series E1");
 
   const [selectedChart, setSelectedChart] = useState("");
   const [chartData, setChartData] = useState();
@@ -93,18 +93,19 @@ function NewDashboard() {
   );
 
   const { data: companyDescription, error: companyDescriptionError } = useSWR(
-    user && company ? [`/api/private/getCompanyDescription`, company] : null,
-    ([url, company]) => {
+    user && company && crunchbaseData
+      ? [`/api/private/getCompanyDescription`, company, crunchbaseData]
+      : null,
+    ([url, company, crunchbaseData]) => {
       return getCompanyDescription([
         url,
         user.id,
         company,
-        // crunchbaseCompanyDescription,
+        crunchbaseData["fields"]["description"],
       ]);
     },
     { revalidateOnFocus: false }
   );
-
   return (
     <SelectedChartContext.Provider value={{ selectedChart, setSelectedChart }}>
       <ChartDataContext.Provider value={{ chartData, setChartData }}>
@@ -167,14 +168,8 @@ function NewDashboard() {
             </div>
             {/* Overview Section */}
             <OverviewSection
-              companyAbout={companyAbout}
-              companyBusinessModel={companyBusinessModel}
-              companyFoundedYear={companyFoundedYear}
-              companyHeadcount={companyHeadcount}
-              companyHeadquarters={companyHeadquarters}
-              companyValuation={companyValuation}
-              companyLastRoundSize={companyLastRoundSize}
-              companyLastDealType={companyLastDealType}
+              companyAbout={companyDescription}
+              crunchbaseData={crunchbaseData}
               headCountData={headCountData}
             />
             {/* Headcount; TODO: MAKE THIS A SEPARATE COMPONENT */}

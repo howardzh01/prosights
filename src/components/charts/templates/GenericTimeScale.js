@@ -20,7 +20,6 @@ function GenericTimeScale({
   showModalButtons = false,
   showTimescaleButtons = false,
 }) {
-  // console.log(useContext(SelectedChartContext));
   const { selectedChart: chart, setSelectedChart } =
     useContext(SelectedChartContext);
   const { setChartData } = useContext(ChartDataContext);

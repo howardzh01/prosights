@@ -185,7 +185,7 @@ export const getCompanyDescription = async ([
   api_url,
   userId,
   companyName,
-  crunchbaseDescription = "",
+  crunchbaseDescription,
 ]) => {
   //`/api/private/getCompanyDescription`
   // data["fields"]["description"]
