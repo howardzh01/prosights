@@ -112,8 +112,7 @@ export default function ChartModal({
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
                 </div>
-
-                {chart}
+                <div className="z-20">{chart}</div>
               </Dialog.Panel>
             </Transition.Child>
           </div>
