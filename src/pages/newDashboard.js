@@ -76,15 +76,47 @@ function NewDashboard() {
       level: 2,
     },
     {
+      title: "Traffic Growth vs. Peers",
+      level: 2,
+    },
+    {
+      title: "Traffic Market Share vs. Peers",
+      level: 2,
+    },
+    {
+      title: "Visits Breakdown vs. Peers",
+      level: 2,
+    },
+    {
+      title: "App Usage",
+      level: 1,
+    },
+    {
+      title: "App Loyalty vs. Peers",
+      level: 2,
+    },
+    {
+      title: "App Market Share vs. Peers",
+      level: 2,
+    },
+    {
+      title: "App Usage Growth vs. Peers",
+      level: 2,
+    },
+    {
       title: "Consumer Spend",
+      level: 1,
+    },
+    {
+      title: "Customer Loyalty",
       level: 2,
     },
     {
       title: "Ad Spend",
-      level: 2,
+      level: 1,
     },
     {
-      title: "Market Share",
+      title: "Ad Spend Channel Breakdown",
       level: 2,
     },
   ];

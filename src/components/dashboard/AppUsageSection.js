@@ -17,7 +17,7 @@ function AppUsageSection({}) {
       </p>
       <hr className="border-t border-customGray-50 mt-2 mb-4" />
       <div className="mx-4 flex flex-col">
-        <div id="Traffic Quality" className="content-section">
+        <div id="App Loyalty vs. Peers" className="content-section">
           <p className="text-base font-semibold text-gray-800 mb-3">
             App Loyalty vs. Peers
           </p>
@@ -172,7 +172,7 @@ function AppUsageSection({}) {
             </div>
           </div>
         </div>
-        <div id="Traffic Quality" className="content-section mt-8">
+        <div id="App Market Share vs. Peers" className="content-section mt-8">
           <p className="text-base font-semibold text-gray-800 mb-3">
             App Market Share vs. Peers
           </p>
@@ -297,7 +297,7 @@ function AppUsageSection({}) {
             </div>
           </div>
         </div>
-        <div id="Traffic Quality" className="content-section mt-8">
+        <div id="App Usage Growth vs. Peers" className="content-section mt-8">
           <p className="text-base font-semibold text-gray-800 mb-3">
             App Usage Growth vs. Peers
           </p>
