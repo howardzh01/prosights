@@ -54,7 +54,7 @@ function WebTrafficChart({
         {
           label: displayedLabel + " (M)",
           data: values
-            .map((item) => (item == null ? "—" : (item / 1e6).toFixed(1)))
+            .map((item) => (item == null ? "--" : (item / 1e6).toFixed(1)))
             .slice(cutoffIndex),
           backgroundColor: "rgba(0, 154, 255, 1)",
           borderWidth: 1,

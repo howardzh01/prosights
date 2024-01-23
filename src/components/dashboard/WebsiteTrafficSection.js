@@ -18,7 +18,15 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
       </p>
       <hr className="border-t border-customGray-50 mt-2 mb-4" />
       <div className="mx-4 flex flex-col">
-        <WebTrafficChart trafficData={webTrafficData}></WebTrafficChart>
+        {webTrafficData !== undefined &&
+        webTrafficGeoData !== null &&
+        Object.keys(webTrafficData).length !== 0 ? (
+          <div id="Traffic Growth" className="content-section">
+            <WebTrafficChart trafficData={webTrafficData}></WebTrafficChart>
+          </div>
+        ) : (
+          <Skeleton className="w-full h-80 rounded-lg bg-customGray-50" />
+        )}
         <div id="Visits Breakdown" className="content-section">
           <p className="text-base font-semibold text-gray-800 mb-3">
             Visits Breakdown

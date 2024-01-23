@@ -60,6 +60,10 @@ function NewDashboard() {
       level: 1,
     },
     {
+      title: "Traffic Growth",
+      level: 2,
+    },
+    {
       title: "Visits Breakdown",
       level: 2,
     },

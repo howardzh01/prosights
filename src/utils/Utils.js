@@ -285,6 +285,7 @@ export function rgbToComponents(rgbString) {
 
 export function formatMoney(amount) {
   if (!amount) return amount;
+  if (isNaN(amount)) return amount;
   let divisor, unit;
   if (Math.abs(amount) >= 1.0e12) {
     divisor = 1.0e12;
@@ -309,7 +310,11 @@ export function formatMoney(amount) {
 
 export function roundPeNumbers(amount) {
   // make numbers 1 sig fig if <10 else integers
-  if (!amount) return amount;
+  if (!amount) {
+    return amount;
+  }
+  if (isNaN(amount)) return amount;
+
   let result;
   if (amount < 1e1) {
     result = Number(amount).toFixed(1);
@@ -320,6 +325,9 @@ export function roundPeNumbers(amount) {
   if (Number(result) >= 1000) {
     result = Number(result).toLocaleString();
   }
+  // if (result === NaN) {
+  //   return "--";
+  // }
   return result;
 }
 
