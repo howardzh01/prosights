@@ -3,6 +3,8 @@ import {
   aggregateData,
   findInsertIndex,
   convertLabelToDate,
+  getTableInfo,
+  formatMoney,
 } from "../../utils/Utils";
 import GenericBar from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
@@ -14,67 +16,8 @@ function HeadCountChart({ headCountData, cutOffDate = new Date("2019") }) {
   if (!headCountData) return null;
 
   function convertToChartData(data) {
-    const labels = Object.keys(data);
-    let headers = [];
-    let formattedLabels = [];
-    let headcounts = Object.values(data);
-    let growthPercentages = [];
-
-    // Regular expressions to identify label formats
-    const monthlyRegex = /^[A-Za-z]+/;
-    const quarterlyRegex = /^[1-4]Q/;
-    const yearlyRegex = /^\d{4}$/;
-
-    // Determine timescale based on the format of labels
-    const isMonthly = labels.some((label) => monthlyRegex.test(label));
-    const isQuarterly = labels.some((label) => quarterlyRegex.test(label));
-    const isYearly = labels.some((label) => yearlyRegex.test(label));
-
-    // Determine offset for growth calculation
-    const offset = isYearly ? 1 : isMonthly ? 12 : isQuarterly ? 4 : 1; // Default to 1 if none match
-
-    // Calculate the growth percentages
-    for (let i = 0; i < headcounts.length; i++) {
-      if (
-        i < offset ||
-        headcounts[i - offset] === 0 ||
-        headcounts[i - offset] == null ||
-        headcounts[i] == null
-      ) {
-        growthPercentages.push("--");
-      } else {
-        const growth =
-          ((headcounts[i] - headcounts[i - offset]) / headcounts[i - offset]) *
-          100;
-        growthPercentages.push(`${Math.round(growth)}%`);
-      }
-    }
-
-    // Process labels and headers
-    const isAllAnnual = labels.every((label) => /^\d{4}$/.test(label));
-
-    labels.forEach((label) => {
-      const yearMatch = label.match(/\d{2,4}$/);
-      const year = yearMatch
-        ? yearMatch[0].length === 2
-          ? "20" + yearMatch[0]
-          : yearMatch[0]
-        : undefined;
-
-      if (isAllAnnual) {
-        headers.push("Annual");
-        formattedLabels.push(label);
-      } else {
-        headers.push(year || label);
-
-        const quarterOrMonthMatch = label.match(/^[1-4]Q|^[A-Za-z]+/);
-        if (quarterOrMonthMatch) {
-          formattedLabels.push(quarterOrMonthMatch[0]);
-        } else {
-          formattedLabels.push(label);
-        }
-      }
-    });
+    let { labels, values, tableHeaders, tableLabels, growthPercentages } =
+      getTableInfo(data);
     const cutoffIndex = findInsertIndex(
       labels.map((x) => convertLabelToDate(x)),
       cutOffDate,
@@ -82,22 +25,23 @@ function HeadCountChart({ headCountData, cutOffDate = new Date("2019") }) {
     );
 
     return {
-      headers: headers.slice(cutoffIndex),
+      tableHeaders: tableHeaders.slice(cutoffIndex),
       labels: labels.slice(cutoffIndex),
-      tableLabels: formattedLabels.slice(cutoffIndex),
+      tableLabels: tableLabels.slice(cutoffIndex),
       datasets: [
         {
-          label: "Headcount",
-          data: headcounts
+          label: "HeadCount",
+          data: values
             .map((item) => (item == null ? "—" : item))
             .slice(cutoffIndex),
           backgroundColor: "rgba(0, 154, 255, 1)",
           borderWidth: 1,
         },
+      ],
+      tableDatasets: [
         {
           label: "% YoY Growth",
           data: growthPercentages.slice(cutoffIndex),
-          // Add more styling as necessary
         },
       ],
     };
@@ -110,17 +54,10 @@ function HeadCountChart({ headCountData, cutOffDate = new Date("2019") }) {
   const yearChartData = convertToChartData(
     aggregateData(headCountData, "headcount", "last", "year")
   );
-  customChartData.tableLabels;
+
   const quarterHeadCountGraph = (
     <GenericBar
-      barChartData={{
-        ...customChartData,
-        labels: customChartData.labels,
-        datasets: customChartData.datasets.filter(
-          (dataset) => dataset.label !== "% YoY Growth"
-        ),
-      }}
-      tableChartData={customChartData}
+      barChartData={customChartData}
       title={"Total Headcount"}
       showDataLabels={timescale !== "month"}
       timescale={timescale}
@@ -128,22 +65,17 @@ function HeadCountChart({ headCountData, cutOffDate = new Date("2019") }) {
       selectedChart={CHARTS.employeeCount}
       rawChartData={headCountData}
       showModalButtons={false}
+      formatLabelFunction={formatMoney}
     />
   );
 
   const yearHeadCountGraph = (
     <GenericBar
-      barChartData={{
-        ...yearChartData,
-        labels: yearChartData.labels,
-        datasets: yearChartData.datasets.filter(
-          (dataset) => dataset.label !== "% YoY Growth"
-        ),
-      }}
-      tableChartData={yearChartData}
+      barChartData={yearChartData}
       showTimescaleButtons={false}
       showModalButtons={false}
       scrollStart={"right"}
+      formatLabelFunction={formatMoney}
     />
   );
 

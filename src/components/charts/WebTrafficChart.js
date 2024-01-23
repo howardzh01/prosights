@@ -2,14 +2,23 @@ import { useState, useEffect } from "react";
 import GenericBar from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
 import ThreeColumnView from "./templates/ThreeColumnView";
-import { aggregateData } from "../../utils/Utils";
+import {
+  aggregateData,
+  findInsertIndex,
+  getTableInfo,
+  convertLabelToDate,
+} from "../../utils/Utils";
 import GenericStackedBar from "./templates/GenericStackedBar";
 import { CHARTS } from "../../constants";
 
-function WebTrafficChart({ trafficData, selectedChart = null }) {
+function WebTrafficChart({
+  trafficData,
+  selectedChart = null,
+  cutOffDate = new Date("2019"),
+}) {
   // TODO: make this more compact later - probably 1 useState with an object containing all timescale states, or useReducer
-  const [trafficTimescale, setTrafficTimescale] = useState("year");
-  const [mauTimescale, setMauTimescale] = useState("year");
+  const [trafficTimescale, setTrafficTimescale] = useState("quarterYear");
+  const [mauTimescale, setMauTimescale] = useState("quarterYear");
   const [trafficByChannelTimescale, setTrafficByChannelTimescale] =
     useState("year");
   const [trafficByDeviceTimescale, setTrafficByDeviceTimescale] =
@@ -27,163 +36,91 @@ function WebTrafficChart({ trafficData, selectedChart = null }) {
       return [`${month}-${year}`, trafficData[key]];
     })
   );
-  function convertToChartData(data) {
+  function convertToChartData(data, displayedLabel) {
     // input: {time_key: output_key}
-    if (!data) {
-      return;
-    }
+    let { labels, values, tableHeaders, tableLabels, growthPercentages } =
+      getTableInfo(data);
+    const cutoffIndex = findInsertIndex(
+      labels.map((x) => convertLabelToDate(x)),
+      cutOffDate,
+      "left"
+    );
     return {
-      labels: Object.keys(data),
+      tableHeaders: tableHeaders.slice(cutoffIndex),
+      labels: labels.slice(cutoffIndex),
+      tableLabels: tableLabels.slice(cutoffIndex),
       datasets: [
         {
-          data: Object.values(data).map((number) => (number / 1e6).toFixed(1)),
+          label: displayedLabel + " (M)",
+          data: values
+            .map((item) => (item == null ? "—" : (item / 1e6).toFixed(1)))
+            .slice(cutoffIndex),
+          backgroundColor: "rgba(0, 154, 255, 1)",
           borderWidth: 1,
+        },
+      ],
+      tableDatasets: [
+        {
+          label: "% YoY Growth",
+          data: growthPercentages.slice(cutoffIndex),
         },
       ],
     };
   }
 
-  function convertToChannelChartData(
-    trafficData,
-    type = "traffic_by_channel",
-    timescale
-  ) {
-    let relevant_keys;
-    if (type === "traffic_by_channel") {
-      relevant_keys = [
-        "direct",
-        "mail",
-        "social",
-        "search",
-        "referral",
-        "display_ad",
-      ];
-    } else if (type === "traffic_by_device") {
-      relevant_keys = ["mobile_visits", "desktop_visits"];
-    } else if (type === "users_by_device") {
-      relevant_keys = ["mobile_users", "desktop_users"];
-    } else if (type === "traffic_by_organic_paid") {
-      relevant_keys = [
-        "search_organic",
-        "social_organic",
-        "search_paid",
-        "social_paid",
-      ];
-    } else {
-      relevant_keys = [
-        "search_organic",
-        "social_organic",
-        "search_paid",
-        "social_paid",
-      ];
-    }
-
-    const aggData = relevant_keys.reduce((acc, key) => {
-      acc[key] = aggregateData(trafficData, key, "sum", timescale);
-      return acc;
-    }, {});
-
-    return {
-      labels: Object.keys(aggData[relevant_keys[0]]),
-      datasets: relevant_keys.map((key) => ({
-        data: Object.values(aggData[key]).map((number) => number / 1e6),
-        borderWidth: 1,
-        label: key,
-      })),
-    };
-  }
-
-  const yearTrafficGraph = (
+  const customTrafficGraph = (
     <GenericBar
       barChartData={convertToChartData(
-        aggregateData(trafficData, "visits", "sum", trafficTimescale)
+        aggregateData(trafficData, "visits", "sum", trafficTimescale),
+        "Visits"
       )}
-      title={"Total Visits (millions)"}
+      title={"Total Visits (M)"}
       showDataLabels={trafficTimescale !== "month"}
       timescale={trafficTimescale}
       setTimescale={setTrafficTimescale}
       selectedChart={CHARTS.traffic}
       rawChartData={trafficData}
+      showModalButtons={false}
+    />
+  );
+  const yearTrafficGraph = (
+    <GenericBar
+      barChartData={convertToChartData(
+        aggregateData(trafficData, "visits", "sum", "year"),
+        "Visits"
+      )}
+      showTimescaleButtons={false}
+      showModalButtons={false}
+      scrollStart={"right"}
     />
   );
 
-  const yearUserGraph = (
+  const customUserGraph = (
     <GenericBar
       barChartData={convertToChartData(
-        aggregateData(trafficData, "users", "mean", mauTimescale)
+        aggregateData(trafficData, "users", "mean", mauTimescale),
+        "Users"
       )}
-      title={"Web Users (millions)"}
+      title={"Web Users (M)"}
       showDataLabels={mauTimescale !== "month"}
       timescale={mauTimescale}
       setTimescale={setMauTimescale}
       selectedChart={CHARTS.mau}
       // showTimescaleButtons={false}
       rawChartData={trafficData}
+      showModalButtons={false}
     />
   );
-
-  const trafficByChannel = (
-    <GenericStackedBar
-      data={convertToChannelChartData(
-        trafficData,
-        "traffic_by_channel",
-        trafficByChannelTimescale
+  const yearUserGraph = (
+    <GenericBar
+      barChartData={convertToChartData(
+        aggregateData(trafficData, "users", "mean", mauTimescale),
+        "Users"
       )}
-      title={"% Share"}
-      showDataLabels={false}
-      timescale={trafficByChannelTimescale}
-      setTimescale={setTrafficByChannelTimescale}
-      selectedChart={CHARTS.trafficByChannel}
-      rawChartData={trafficData}
-    ></GenericStackedBar>
-  );
-
-  const trafficByDevice = (
-    <GenericStackedBar
-      data={convertToChannelChartData(
-        trafficData,
-        "traffic_by_device",
-        trafficByDeviceTimescale
-      )}
-      title={"% Share of Traffic by Device"}
-      showDataLabels={trafficByDeviceTimescale === "year"}
-      timescale={trafficByDeviceTimescale}
-      setTimescale={setTrafficByDeviceTimescale}
-      selectedChart={CHARTS.trafficByDevice}
-      rawChartData={trafficData}
-    ></GenericStackedBar>
-  );
-
-  const usersByDevice = (
-    <GenericStackedBar
-      data={convertToChannelChartData(
-        trafficData,
-        "users_by_device",
-        usersByDeviceTimescale
-      )}
-      showDataLabels={usersByDeviceTimescale === "year"}
-      title={"% Share of Users by Device"}
-      timescale={usersByDeviceTimescale}
-      setTimescale={setUsersByDeviceTimescale}
-      selectedChart={CHARTS.usersByDevice}
-      rawChartData={trafficData}
-    ></GenericStackedBar>
-  );
-
-  const trafficByOrganicVsPaid = (
-    <GenericStackedBar
-      data={convertToChannelChartData(
-        trafficData,
-        "traffic_by_organic_paid",
-        trafficByOrganicVsPaidTimescale
-      )}
-      title={"% Share of Organic Traffic"}
-      showDataLabels={false}
-      timescale={trafficByOrganicVsPaidTimescale}
-      setTimescale={setTrafficByOrganicVsPaidTimescale}
-      selectedChart={CHARTS.trafficByOrganicVsPaid}
-      rawChartData={trafficData}
-    ></GenericStackedBar>
+      showTimescaleButtons={false}
+      showModalButtons={false}
+      scrollStart={"right"}
+    />
   );
 
   switch (selectedChart) {
@@ -191,38 +128,24 @@ function WebTrafficChart({ trafficData, selectedChart = null }) {
       return yearTrafficGraph;
     case CHARTS.mau:
       return yearUserGraph;
-    case CHARTS.trafficByChannel:
-      return trafficByChannel;
-    case CHARTS.trafficByDevice:
-      return trafficByDevice;
-    case CHARTS.usersByDevice:
-      return usersByDevice;
-    case CHARTS.trafficByOrganicVsPaid:
-      return trafficByOrganicVsPaid;
     // if no selected chart, return all charts
     default:
       return (
         <div>
-          <h2 id="WebsiteTraffic" className="text-2xl font-bold">
-            Website Traffic
-          </h2>
-          <div className="h-fit">
-            <ThreeColumnView
-              titleId="traffic"
-              title={""}
-              graph1={yearTrafficGraph}
-              graph2={yearUserGraph}
-              graph3={trafficByChannel}
-            ></ThreeColumnView>
+          <p className="text-base font-semibold text-gray-800 mb-3">
+            Traffic Growth
+          </p>
+          <div className="h-fit mb-4">
+            <TwoColumnView
+              quarterGraph={customTrafficGraph}
+              yearGraph={yearTrafficGraph}
+            />
           </div>
-          <div className="h-64">
-            <ThreeColumnView
-              titleId="traffic"
-              title={""}
-              graph1={trafficByDevice}
-              graph2={usersByDevice}
-              graph3={trafficByOrganicVsPaid}
-            ></ThreeColumnView>
+          <div className="h-fit my-8">
+            <TwoColumnView
+              quarterGraph={customUserGraph}
+              yearGraph={yearUserGraph}
+            />
           </div>
         </div>
       );

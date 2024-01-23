@@ -124,6 +124,76 @@ export const aggregateData = (
   }, {});
 };
 
+export function getTableInfo(data) {
+  let tableHeaders = [];
+  let tableLabels = [];
+  let growthPercentages = [];
+  const labels = Object.keys(data);
+  let values = Object.values(data);
+  // Regular expressions to identify label formats
+  const monthlyRegex = /^[A-Za-z]+/;
+  const quarterlyRegex = /^[1-4]Q/;
+  const yearlyRegex = /^\d{4}$/;
+
+  // Determine timescale based on the format of labels
+  const isMonthly = labels.some((label) => monthlyRegex.test(label));
+  const isQuarterly = labels.some((label) => quarterlyRegex.test(label));
+  const isYearly = labels.some((label) => yearlyRegex.test(label));
+
+  // Determine offset for growth calculation
+  const offset = isYearly ? 1 : isMonthly ? 12 : isQuarterly ? 4 : 1; // Default to 1 if none match
+
+  // Calculate the growth percentages
+  for (let i = 0; i < values.length; i++) {
+    if (
+      i < offset ||
+      values[i - offset] === 0 ||
+      values[i - offset] == null ||
+      values[i] == null
+    ) {
+      growthPercentages.push("--");
+    } else {
+      const growth =
+        ((values[i] - values[i - offset]) / values[i - offset]) * 100;
+      growthPercentages.push(`${Math.round(growth)}%`);
+    }
+  }
+
+  // Process labels and headers
+  const isAllAnnual = labels.every((label) => /^\d{4}$/.test(label));
+
+  labels.forEach((label) => {
+    const yearMatch = label.match(/\d{2,4}$/);
+    const year = yearMatch
+      ? yearMatch[0].length === 2
+        ? "20" + yearMatch[0]
+        : yearMatch[0]
+      : undefined;
+
+    if (isAllAnnual) {
+      tableHeaders.push("Annual");
+      tableLabels.push(label);
+    } else {
+      tableHeaders.push(year || label);
+
+      const quarterOrMonthMatch = label.match(/^[1-4]Q|^[A-Za-z]+/);
+      if (quarterOrMonthMatch) {
+        tableLabels.push(quarterOrMonthMatch[0]);
+      } else {
+        tableLabels.push(label);
+      }
+    }
+  });
+
+  return {
+    labels: labels,
+    values: values,
+    tableHeaders: tableHeaders,
+    tableLabels: tableLabels,
+    growthPercentages: growthPercentages,
+  };
+}
+
 // Generate all months between two dates
 const generateMonthsBetweenDates = (startDate, endDate) => {
   let start = new Date(startDate);

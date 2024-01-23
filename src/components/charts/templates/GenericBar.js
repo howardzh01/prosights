@@ -9,7 +9,6 @@ import { formatMoney } from "../../../utils/Utils";
 
 function GenericBar({
   barChartData,
-  tableChartData = undefined,
   title = undefined,
   showDataLabels = true,
   showTimescaleButtons = true,
@@ -19,6 +18,7 @@ function GenericBar({
   setTimescale,
   selectedChart,
   rawChartData,
+  formatLabelFunction = (x) => x,
   scrollStart = "left",
 }) {
   const options = {
@@ -41,7 +41,7 @@ function GenericBar({
         align: "top",
         // formatter: Math.round,
         formatter: function (value, context) {
-          return formatMoney(Math.round(value));
+          return formatLabelFunction(Math.round(value));
         },
         font: {
           weight: "light",
@@ -90,10 +90,7 @@ function GenericBar({
       {showTable && (
         <div>
           {/* Default to use barChartData if tableChartData is undefined */}
-          <GenericTable
-            chartData={tableChartData ? tableChartData : barChartData}
-            scrollStart={scrollStart}
-          />
+          <GenericTable chartData={barChartData} scrollStart={scrollStart} />
         </div>
       )}
     </div>

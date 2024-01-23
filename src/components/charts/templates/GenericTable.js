@@ -3,106 +3,7 @@ import Chart from "chart.js/auto";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 Chart.register(ChartDataLabels);
 
-// function GenericTable({
-//   chartData,
-//   title = undefined,
-//   showDataLabels = true,
-//   showTimescaleButtons = true,
-//   timescale,
-//   setTimescale,
-// }) {
-//   // Expect chartData of same format as GenericBar
-//   const tables = chartData["labels"].map((label, index) => {
-//     const employeeCount = chartData.datasets[0].data[index];
-//     return (
-//       <table key={label} className="inline-block mr-4">
-//         <thead>
-//           <tr>
-//             <th>{label}</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           <tr>
-//             <td>{employeeCount}</td>
-//           </tr>
-//         </tbody>
-//       </table>
-//     );
-//   });
-
-//   return (
-//     <div className="flex flex-col">
-//       <div className="flex">
-//         <table className="inline-block mr-4">
-//           <thead>
-//             {/* <tr>
-//               <th> fill in space</th>
-//             </tr> */}
-//           </thead>
-//           <tbody>
-//             <tr>
-//               <td>Employees</td>
-//             </tr>
-//           </tbody>
-//         </table>
-//         {tables}
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default GenericTable;
-function GenericTable({
-  chartData,
-  scrollStart = "left",
-  title = undefined,
-  showDataLabels = true,
-  showTimescaleButtons = true,
-  timescale,
-  setTimescale,
-}) {
-  // Expect chartData of same format as GenericBar
-  // TableCell.js
-  // const TableCell = ({
-  //   children,
-  //   isHeader = false,
-  //   colSpan = 1,
-  //   customClasses = "",
-  // }) => {
-  //   const baseClasses = "border px-4 py-2 text-center whitespace-nowrap";
-  //   const classes = `${baseClasses} ${customClasses}`;
-  //   return isHeader ? (
-  //     <th colSpan={colSpan} className={classes}>
-  //       {children}
-  //     </th>
-  //   ) : (
-  //     <td className={classes}>{children}</td>
-  //   );
-  // };
-
-  // TableRow.js
-  // const TableRow = ({ rowData, isHeader = false }) => (
-  //   <tr>
-  //     {rowData.map((cellData, index) => (
-  //       <TableCell key={index} isHeader={isHeader} {...cellData}>
-  //         {cellData.content}
-  //       </TableCell>
-  //     ))}
-  //   </tr>
-  // );
-
-  // TableHeader.js
-  // const TableHeader = ({ labels }) => (
-  //   <thead>
-  //     <TableRow
-  //       isHeader
-  //       rowData={[
-  //         { content: "Metric", colSpan: 1 },
-  //         ...labels.map((label) => ({ content: label, colSpan: 1 })),
-  //       ]}
-  //     />
-  //   </thead>
-  // );
+function GenericTable({ chartData, scrollStart = "left" }) {
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -111,13 +12,13 @@ function GenericTable({
     }
   }, []);
 
-  const { headers, tableLabels, datasets } = chartData;
+  const { tableHeaders, tableLabels, datasets, tableDatasets } = chartData;
   // console.log("datasets, labels, headers", datasets, labels, headers);
 
   // Prepare header spans
   let headerSpans = {};
-  if (headers) {
-    headerSpans = headers.reduce((spans, header) => {
+  if (tableHeaders) {
+    headerSpans = tableHeaders.reduce((spans, header) => {
       spans[header] = (spans[header] || 0) + 1;
       return spans;
     }, {});
@@ -132,7 +33,7 @@ function GenericTable({
           <tr>
             <th className="px-6 py-3 text-sm font-medium text-customGray-500 tracking-wider text-center sticky left-0 z-10 bg-white bg-opacity-100"></th>{" "}
             {/* Empty header for shifting the row */}
-            {[...new Set(headers)].map((header, index) => (
+            {[...new Set(tableHeaders)].map((header, index) => (
               <th
                 key={index}
                 colSpan={headerSpans[header]}
@@ -158,7 +59,7 @@ function GenericTable({
           </tr>
         </thead>
         <tbody className="bg-white">
-          {datasets.map((dataset, datasetIndex) => (
+          {[...datasets, ...tableDatasets].map((dataset, datasetIndex) => (
             <tr key={dataset.label}>
               <td className="pr-2 py-2 whitespace-nowrap text-sm font-normal text-customGray-500 text-left sticky left-0 z-10 bg-white bg-opacity-100">
                 {dataset.label}

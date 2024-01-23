@@ -18,6 +18,9 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
   // headccountData comes sorted by date
   function formatCrunchbaseHeadcount(headcountRange) {
     // c_01001_05000 => 1001-5000
+    if (headcountRange === "c_10001_max") {
+      return "10,000+";
+    }
     return headcountRange
       .split("_")
       .slice(1)

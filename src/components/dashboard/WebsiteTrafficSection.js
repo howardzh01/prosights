@@ -5,6 +5,7 @@ import WebTrafficDoughnut from "../charts/WebTrafficDoughnut";
 import Image from "next/image";
 import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 import { Skeleton } from "@nextui-org/react";
+import WebTrafficChart from "../charts/WebTrafficChart";
 
 function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
   useEffect(() => {
@@ -20,6 +21,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
       </p>
       <hr className="border-t border-customGray-50 mt-2 mb-4" />
       <div className="mx-4 flex flex-col">
+        <WebTrafficChart trafficData={webTrafficData}></WebTrafficChart>
         <div id="Visits Breakdown" className="content-section">
           <p className="text-base font-semibold text-gray-800 mb-3">
             Visits Breakdown

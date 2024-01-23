@@ -3,6 +3,7 @@ import { aggregateData } from "../../utils/Utils";
 import GenericBar from "../charts/templates/GenericBar";
 // import TwoColumnView from "../charts/templates/TwoColumnView";
 import { CHARTS } from "../../constants";
+import { formatMoney } from "../../utils/Utils";
 
 function HeadCountSignal({ headCountData, startCutoff = new Date("2019") }) {
   const [timescale, setTimescale] = useState("year");
@@ -44,6 +45,7 @@ function HeadCountSignal({ headCountData, startCutoff = new Date("2019") }) {
       showTable={false}
       rawChartData={headCountData}
       showTimescaleButtons={false}
+      formatLabelFunction={formatMoney}
     />
   );
 
