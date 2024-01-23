@@ -131,10 +131,10 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
                   height={5120}
                 />
                 <div className="overflow-x-auto">
-                  <div className="inline-block w-[72rem] pb-2">
+                  <div className="inline-block w-[80rem] pb-2">
                     <Image
-                      src="/assets/graphPictures/totalVisitsByChannelTable.png"
-                      className="w-[72rem]"
+                      src="/assets/graphPictures/totalVisitsByChannelTable.svg"
+                      className="h-96"
                       width={5120}
                       height={5120}
                     />
@@ -190,10 +190,10 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
                   height={5120}
                 />
                 <div className="overflow-x-auto">
-                  <div className="inline-block w-[24rem] pb-2">
+                  <div className="inline-block w-[26rem] pt-2 pb-2">
                     <Image
-                      src="/assets/graphPictures/totalVisitsByChannelTableAnnual.png"
-                      className="w-[24rem] object-contain"
+                      src="/assets/graphPictures/totalVisitsByChannelTableAnnual.svg"
+                      className="h-96 object-contain"
                       width={5120}
                       height={5120}
                     />
@@ -256,10 +256,10 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
                   height={5120}
                 />
                 <div className="overflow-x-auto">
-                  <div className="inline-block w-[72rem] pb-2">
+                  <div className="inline-block w-[90rem] h-auto pb-2">
                     <Image
-                      src="/assets/graphPictures/visitsGrowthTable.png"
-                      className="w-[72rem]"
+                      src="/assets/graphPictures/visitsGrowthTable.svg"
+                      className="h-46 object-contain"
                       width={5120}
                       height={5120}
                     />
@@ -314,11 +314,11 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
                   width={5120}
                   height={5120}
                 />
-                <div className="overflow-x-auto">
-                  <div className="inline-block w-[24rem] pb-2">
+                <div className="overflow-x-auto pt-2">
+                  <div className="inline-block w-[30rem] pb-2">
                     <Image
-                      src="/assets/graphPictures/visitsGrowthTableAnnual.png"
-                      className="w-[24rem] object-contain"
+                      src="/assets/graphPictures/visitsGrowthTableAnnual.svg"
+                      className="h-46 object-contain"
                       width={5120}
                       height={5120}
                     />
@@ -381,10 +381,10 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
                   height={5120}
                 />
                 <div className="overflow-x-auto">
-                  <div className="inline-block w-[72rem] pb-2">
+                  <div className="inline-block w-[88rem] pb-2">
                     <Image
-                      src="/assets/graphPictures/totalVisitsMarketShareTable.png"
-                      className="w-[72rem]"
+                      src="/assets/graphPictures/totalVisitsMarketShareTable.svg"
+                      className="h-48"
                       width={5120}
                       height={5120}
                     />
@@ -439,13 +439,13 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
                   width={5120}
                   height={5120}
                 />
-                <div className="overflow-x-auto">
-                  <div className="inline-block w-[24rem] pb-2">
+                <div className="overflow-x-auto pt-2">
+                  <div className="inline-block w-[30rem] pb-2">
                     <Image
-                      src="/assets/graphPictures/totalVisitsMarketShareTableAnnual.png"
-                      className="w-[24rem] object-contain"
-                      width={5120}
-                      height={5120}
+                      src="/assets/graphPictures/totalVisitsMarketShareTableAnnual.svg"
+                      className="h-42 object-contain"
+                      width={1024}
+                      height={1024}
                     />
                   </div>
                 </div>

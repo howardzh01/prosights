@@ -160,7 +160,7 @@ function GenericTable({
         <tbody className="bg-white">
           {datasets.map((dataset, datasetIndex) => (
             <tr key={dataset.label}>
-              <td className="pr-2 py-2 whitespace-nowrap text-sm font-normal text-customGray-500 text-center sticky left-0 z-10 bg-white bg-opacity-100">
+              <td className="pr-2 py-2 whitespace-nowrap text-sm font-normal text-customGray-500 text-left sticky left-0 z-10 bg-white bg-opacity-100">
                 {dataset.label}
               </td>
               {dataset.data.map((value, index) => (
