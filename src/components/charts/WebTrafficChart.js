@@ -7,6 +7,7 @@ import {
   findInsertIndex,
   getTableInfo,
   convertLabelToDate,
+  roundPeNumbers,
 } from "../../utils/Utils";
 import GenericStackedBar from "./templates/GenericStackedBar";
 import { CHARTS } from "../../constants";
@@ -81,6 +82,7 @@ function WebTrafficChart({
       selectedChart={CHARTS.traffic}
       rawChartData={trafficData}
       showModalButtons={false}
+      formatLabelFunction={roundPeNumbers}
     />
   );
   const yearTrafficGraph = (
@@ -92,6 +94,7 @@ function WebTrafficChart({
       showTimescaleButtons={false}
       showModalButtons={false}
       scrollStart={"right"}
+      formatLabelFunction={roundPeNumbers}
     />
   );
 
@@ -109,17 +112,19 @@ function WebTrafficChart({
       // showTimescaleButtons={false}
       rawChartData={trafficData}
       showModalButtons={false}
+      formatLabelFunction={roundPeNumbers}
     />
   );
   const yearUserGraph = (
     <GenericBar
       barChartData={convertToChartData(
-        aggregateData(trafficData, "users", "mean", mauTimescale),
+        aggregateData(trafficData, "users", "mean", "year"),
         "Users"
       )}
       showTimescaleButtons={false}
       showModalButtons={false}
       scrollStart={"right"}
+      formatLabelFunction={roundPeNumbers}
     />
   );
 

@@ -3,7 +3,7 @@ import Chart from "chart.js/auto";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 Chart.register(ChartDataLabels);
 
-function GenericTable({ chartData, scrollStart = "left" }) {
+function GenericTable({ chartData, scrollStart = "left", formatDataFunction }) {
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -59,21 +59,23 @@ function GenericTable({ chartData, scrollStart = "left" }) {
           </tr>
         </thead>
         <tbody className="bg-white">
-          {[...datasets, ...tableDatasets].map((dataset, datasetIndex) => (
-            <tr key={dataset.label}>
-              <td className="pr-2 py-2 whitespace-nowrap text-sm font-normal text-customGray-500 text-left sticky left-0 z-10 bg-white bg-opacity-100">
-                {dataset.label}
-              </td>
-              {dataset.data.map((value, index) => (
-                <td
-                  key={index}
-                  className={`whitespace-nowrap text-sm text-customGray-500 text-center`}
-                >
-                  {value}
+          {[datasets, tableDatasets].map((dsetCategory, categoryIndex) =>
+            dsetCategory.map((dataset) => (
+              <tr key={dataset.label}>
+                <td className="pr-2 py-2 whitespace-nowrap text-sm font-normal text-customGray-500 text-left sticky left-0 z-10 bg-white bg-opacity-100">
+                  {dataset.label}
                 </td>
-              ))}
-            </tr>
-          ))}
+                {dataset.data.map((value, index) => (
+                  <td
+                    key={index}
+                    className={`whitespace-nowrap text-sm text-customGray-500 text-center`}
+                  >
+                    {categoryIndex ? value : formatDataFunction(value)}
+                  </td>
+                ))}
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>
