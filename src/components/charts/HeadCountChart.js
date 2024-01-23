@@ -5,6 +5,7 @@ import {
   convertLabelToDate,
   getTableInfo,
   formatMoney,
+  roundPeNumbers,
 } from "../../utils/Utils";
 import GenericBar from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
@@ -66,6 +67,7 @@ function HeadCountChart({ headCountData, cutOffDate = new Date("2019") }) {
       rawChartData={headCountData}
       showModalButtons={false}
       formatLabelFunction={formatMoney}
+      formatTableDataFunction={roundPeNumbers}
     />
   );
 
@@ -76,6 +78,7 @@ function HeadCountChart({ headCountData, cutOffDate = new Date("2019") }) {
       showModalButtons={false}
       scrollStart={"right"}
       formatLabelFunction={formatMoney}
+      formatTableDataFunction={roundPeNumbers}
     />
   );
 

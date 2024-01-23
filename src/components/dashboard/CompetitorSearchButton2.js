@@ -33,7 +33,7 @@ export default function SearchBar({
       options={companyList}
       getOptionLabel={(option) => option.displayedName}
       onChange={(event, value) => setCompanyCompetitors(value)}
-      defaultValue={[]}
+      value={companyCompetitors}
       renderTags={(value, getTagProps) => {
         return value.map((option, index) => (
           <Chip

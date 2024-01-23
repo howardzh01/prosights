@@ -83,6 +83,7 @@ function WebTrafficChart({
       rawChartData={trafficData}
       showModalButtons={false}
       formatLabelFunction={roundPeNumbers}
+      formatTableDataFunction={roundPeNumbers}
     />
   );
   const yearTrafficGraph = (
@@ -95,6 +96,7 @@ function WebTrafficChart({
       showModalButtons={false}
       scrollStart={"right"}
       formatLabelFunction={roundPeNumbers}
+      formatTableDataFunction={roundPeNumbers}
     />
   );
 
@@ -113,6 +115,7 @@ function WebTrafficChart({
       rawChartData={trafficData}
       showModalButtons={false}
       formatLabelFunction={roundPeNumbers}
+      formatTableDataFunction={roundPeNumbers}
     />
   );
   const yearUserGraph = (
@@ -125,6 +128,7 @@ function WebTrafficChart({
       showModalButtons={false}
       scrollStart={"right"}
       formatLabelFunction={roundPeNumbers}
+      formatTableDataFunction={roundPeNumbers}
     />
   );
 

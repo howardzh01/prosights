@@ -169,6 +169,9 @@ function NewDashboard() {
     }
   }, []);
 
+  useEffect(() => {
+    setCompanyCompetitors([]);
+  }, [company]);
   // API Data
   const { data: headCountData, error: headCountError } = useSWR(
     user && company ? [`/api/private/getHeadCount`, user.id, company] : null,

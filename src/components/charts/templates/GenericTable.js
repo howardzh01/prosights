@@ -70,7 +70,7 @@ function GenericTable({ chartData, scrollStart = "left", formatDataFunction }) {
                     key={index}
                     className={`whitespace-nowrap text-sm text-customGray-500 text-center`}
                   >
-                    {categoryIndex ? value : value}
+                    {categoryIndex ? value : formatDataFunction(value)}
                   </td>
                 ))}
               </tr>

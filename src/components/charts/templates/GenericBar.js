@@ -18,6 +18,7 @@ function GenericBar({
   selectedChart,
   rawChartData,
   formatLabelFunction = (x) => x,
+  formatTableDataFunction = (x) => x,
   scrollStart = "left",
 }) {
   const options = {
@@ -92,7 +93,7 @@ function GenericBar({
           <GenericTable
             chartData={barChartData}
             scrollStart={scrollStart}
-            formatDataFunction={formatLabelFunction}
+            formatDataFunction={formatTableDataFunction}
           />
         </div>
       )}
