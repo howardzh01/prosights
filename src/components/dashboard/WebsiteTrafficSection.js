@@ -8,11 +8,8 @@ import { Skeleton } from "@nextui-org/react";
 import WebTrafficChart from "../charts/WebTrafficChart";
 
 function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
-  useEffect(() => {
-    console.log("dataaaa", webTrafficData, webTrafficGeoData);
-  }, [webTrafficData, webTrafficGeoData]);
   return (
-    <div className="flex flex-col w-full mt-12 pb-8">
+    <div className="flex flex-col w-full mt-12">
       <p
         id="Website Traffic"
         className="content-section text-2xl font-semibold text-gray-800 ml-2"
@@ -179,7 +176,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
               </div>
               <div className="flex flex-col">
                 <Image
-                  src="/assets/graphPictures/totalVisitsByChannel.png"
+                  src="/assets/graphPictures/totalVisitsByChannel.svg"
                   className="h-72 object-contain"
                   width={5120}
                   height={5120}
@@ -238,7 +235,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
               </div>
               <div className="flex flex-col">
                 <Image
-                  src="/assets/graphPictures/totalVisitsByChannelAnnual.png"
+                  src="/assets/graphPictures/totalVisitsByChannelAnnual.svg"
                   className="h-72 object-contain"
                   width={5120}
                   height={5120}
@@ -304,7 +301,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
               </div>
               <div className="flex flex-col">
                 <Image
-                  src="/assets/graphPictures/visitsGrowth.png"
+                  src="/assets/graphPictures/visitsGrowth.svg"
                   className="h-72 object-contain"
                   width={5120}
                   height={5120}
@@ -363,7 +360,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
               </div>
               <div className="flex flex-col">
                 <Image
-                  src="/assets/graphPictures/visitsGrowthAnnual.png"
+                  src="/assets/graphPictures/visitsGrowthAnnual.svg"
                   className="h-72 object-contain"
                   width={5120}
                   height={5120}
@@ -429,7 +426,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
               </div>
               <div className="flex flex-col">
                 <Image
-                  src="/assets/graphPictures/totalVisitsMarketShare.png"
+                  src="/assets/graphPictures/totalVisitsMarketShare.svg"
                   className="h-72 object-contain"
                   width={5120}
                   height={5120}
@@ -488,7 +485,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
               </div>
               <div className="flex flex-col">
                 <Image
-                  src="/assets/graphPictures/totalVisitsMarketShareAnnual.png"
+                  src="/assets/graphPictures/totalVisitsMarketShareAnnual.svg"
                   className="h-72 object-contain"
                   width={5120}
                   height={5120}
@@ -569,7 +566,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
               </div>
               <div className="flex flex-row space-x-4">
                 <Image
-                  src="/assets/graphPictures/visitsBreakdownPeersDevice.png"
+                  src="/assets/graphPictures/visitsBreakdownPeersDevice.svg"
                   className="w-2/3 object-contain"
                   width={5120}
                   height={5120}
@@ -647,7 +644,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
               </div>
               <div className="flex flex-row space-x-4 pt-6">
                 <Image
-                  src="/assets/graphPictures/visitsBreakdownPeersSearch.png"
+                  src="/assets/graphPictures/visitsBreakdownPeersSearch.svg"
                   className="w-3/5 object-contain"
                   width={5120}
                   height={5120}
