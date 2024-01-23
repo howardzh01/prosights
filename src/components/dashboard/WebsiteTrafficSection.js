@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { RELEVANT_CONTINENTS, CHARTS } from "../../constants";
 import WebGeoTrafficChart from "../charts/WebGeoTrafficChart";
 import WebTrafficDoughnut from "../charts/WebTrafficDoughnut";
 import Image from "next/image";
 import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
+import { Skeleton } from "@nextui-org/react";
 
 function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
+  useEffect(() => {
+    console.log("dataaaa", webTrafficData, webTrafficGeoData);
+  }, [webTrafficData, webTrafficGeoData]);
   return (
     <div className="flex flex-col w-full mt-12 pb-8">
       <p
@@ -21,30 +25,54 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
             Visits Breakdown
           </p>
           <div className="space-x-6">
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6">
-              <WebGeoTrafficChart
-                geoTrafficData={webTrafficGeoData}
-                relevant_continents={RELEVANT_CONTINENTS}
-              />
-            </div>
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6">
-              <WebTrafficDoughnut
-                trafficData={webTrafficData}
-                selectedChart={CHARTS.trafficByDevice}
-              />
-            </div>
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6">
-              <WebTrafficDoughnut
-                trafficData={webTrafficData}
-                selectedChart={CHARTS.trafficByChannel}
-              />
-            </div>
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6">
-              <WebTrafficDoughnut
-                trafficData={webTrafficData}
-                selectedChart={CHARTS.trafficByOrganicVsPaid}
-              />
-            </div>
+            {webTrafficGeoData !== undefined &&
+            webTrafficGeoData !== null &&
+            Object.keys(webTrafficGeoData).length !== 0 ? (
+              <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6">
+                <WebGeoTrafficChart
+                  geoTrafficData={webTrafficGeoData}
+                  relevant_continents={RELEVANT_CONTINENTS}
+                />
+              </div>
+            ) : (
+              <Skeleton className="inline-block w-80 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
+            )}
+            {webTrafficData !== undefined &&
+            webTrafficData !== null &&
+            Object.keys(webTrafficData).length !== 0 ? (
+              <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6">
+                <WebTrafficDoughnut
+                  trafficData={webTrafficData}
+                  selectedChart={CHARTS.trafficByDevice}
+                />
+              </div>
+            ) : (
+              <Skeleton className="inline-block w-80 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
+            )}
+            {webTrafficData !== undefined &&
+            webTrafficData !== null &&
+            Object.keys(webTrafficData).length !== 0 ? (
+              <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6">
+                <WebTrafficDoughnut
+                  trafficData={webTrafficData}
+                  selectedChart={CHARTS.trafficByChannel}
+                />
+              </div>
+            ) : (
+              <Skeleton className="inline-block w-80 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
+            )}
+            {webTrafficData !== undefined &&
+            webTrafficData !== null &&
+            Object.keys(webTrafficData).length !== 0 ? (
+              <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6">
+                <WebTrafficDoughnut
+                  trafficData={webTrafficData}
+                  selectedChart={CHARTS.trafficByOrganicVsPaid}
+                />
+              </div>
+            ) : (
+              <Skeleton className="inline-block w-80 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
+            )}
           </div>
         </div>
         <div id="Traffic Momentum" className="content-section mt-8">
@@ -52,30 +80,54 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
             Traffic Momentum
           </p>
           <div className="space-x-6">
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6">
-              <WebGeoTrafficChart
-                geoTrafficData={webTrafficGeoData}
-                relevant_continents={RELEVANT_CONTINENTS}
-              />
-            </div>
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6">
-              <WebTrafficDoughnut
-                trafficData={webTrafficData}
-                selectedChart={CHARTS.trafficByDevice}
-              />
-            </div>
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6">
-              <WebTrafficDoughnut
-                trafficData={webTrafficData}
-                selectedChart={CHARTS.trafficByChannel}
-              />
-            </div>
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6">
-              <WebTrafficDoughnut
-                trafficData={webTrafficData}
-                selectedChart={CHARTS.trafficByOrganicVsPaid}
-              />
-            </div>
+            {webTrafficGeoData !== undefined &&
+            webTrafficGeoData !== null &&
+            Object.keys(webTrafficGeoData).length !== 0 ? (
+              <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6">
+                <WebGeoTrafficChart
+                  geoTrafficData={webTrafficGeoData}
+                  relevant_continents={RELEVANT_CONTINENTS}
+                />
+              </div>
+            ) : (
+              <Skeleton className="inline-block w-80 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
+            )}
+            {webTrafficData !== undefined &&
+            webTrafficData !== null &&
+            Object.keys(webTrafficData).length !== 0 ? (
+              <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6">
+                <WebTrafficDoughnut
+                  trafficData={webTrafficData}
+                  selectedChart={CHARTS.trafficByDevice}
+                />
+              </div>
+            ) : (
+              <Skeleton className="inline-block w-80 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
+            )}
+            {webTrafficData !== undefined &&
+            webTrafficData !== null &&
+            Object.keys(webTrafficData).length !== 0 ? (
+              <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6">
+                <WebTrafficDoughnut
+                  trafficData={webTrafficData}
+                  selectedChart={CHARTS.trafficByChannel}
+                />
+              </div>
+            ) : (
+              <Skeleton className="inline-block w-80 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
+            )}
+            {webTrafficData !== undefined &&
+            webTrafficData !== null &&
+            Object.keys(webTrafficData).length !== 0 ? (
+              <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6">
+                <WebTrafficDoughnut
+                  trafficData={webTrafficData}
+                  selectedChart={CHARTS.trafficByOrganicVsPaid}
+                />
+              </div>
+            ) : (
+              <Skeleton className="inline-block w-80 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
+            )}
           </div>
         </div>
         <div id="Traffic Quality" className="content-section mt-8">
@@ -476,7 +528,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
               </div>
               <div className="flex flex-row space-x-4">
                 <Image
-                  src="/assets/graphPictures/visitsBreakdownPeersGeography.png"
+                  src="/assets/graphPictures/visitsBreakdownPeersGeography.svg"
                   className="w-2/3 object-contain"
                   width={5120}
                   height={5120}
@@ -554,7 +606,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
               </div>
               <div className="flex flex-row space-x-4">
                 <Image
-                  src="/assets/graphPictures/visitsBreakdownPeersChannel.png"
+                  src="/assets/graphPictures/visitsBreakdownPeersChannel.svg"
                   className="w-2/3 object-contain"
                   width={5120}
                   height={5120}

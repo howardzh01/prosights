@@ -19,6 +19,7 @@ import ChartModal from "../components/ChartModal";
 import HeadCountChart from "../components/charts/HeadCountChart";
 import { CHARTS } from "../constants";
 import CompetitorContainer from "../components/dashboard/CompetitorContainer";
+import { Skeleton } from "@nextui-org/react";
 
 export const SelectedChartContext = createContext();
 export const ChartDataContext = createContext();
@@ -215,17 +216,16 @@ function NewDashboard() {
             {/* Company name, country, and comparing section */}
             <div className="mt-6 flex flex-row justify-between w-full items-center">
               <div className="flex flex-row items-center">
-                {
+                {crunchbaseData?.["fields"]?.["image_url"] ? (
                   <Image
-                    src={
-                      crunchbaseData?.["fields"]?.["image_url"] ||
-                      "/assets/whiteRectangle.png"
-                    }
+                    src={crunchbaseData["fields"]["image_url"]}
                     className="w-10 h-10 mr-2 object-contain rounded-md"
                     width={256}
                     height={256}
                   />
-                }
+                ) : (
+                  <Skeleton className="w-10 h-10 mr-2 rounded-md bg-customGray-50" />
+                )}
                 <p className="text-4xl font-bold text-gray-800 pl-1">
                   {company}
                 </p>
@@ -270,7 +270,11 @@ function NewDashboard() {
               </p>
               <hr className="border-t border-customGray-50 mt-2 mb-4" />
               <div className="mx-4">
-                <HeadCountChart headCountData={headCountData} />
+                {headCountData ? (
+                  <HeadCountChart headCountData={headCountData} />
+                ) : (
+                  <Skeleton className="w-full h-80 rounded-lg bg-customGray-50" />
+                )}
               </div>
             </div>
             {/* Website Traffic */}

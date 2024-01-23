@@ -2,6 +2,7 @@ import "../styles.css";
 import Script from "next/script";
 import Head from "next/head";
 import { ClerkProvider } from "@clerk/nextjs";
+import { NextUIProvider } from "@nextui-org/react";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { useState, useEffect } from "react";
@@ -97,7 +98,9 @@ export default function MyApp({ Component, pageProps }) {
           initialSession={pageProps.initialSession}
         > */}
       <ClerkProvider {...pageProps}>
-        <Component {...pageProps} />
+        <NextUIProvider>
+          <Component {...pageProps} />
+        </NextUIProvider>
       </ClerkProvider>
       {/* </SessionContextProvider>
       </PostHogProvider> */}
