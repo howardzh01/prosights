@@ -196,6 +196,127 @@ function ConsumerSpendSection({}) {
             </div>
           </div>
         </div>
+        <div className="pt-8">
+          <div className="flex flex-row justify-between items-center">
+            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-[30%]">
+              <h2 id="trafficByGeo" className="text-sm font-semibold mb-3">
+                Transaction Frequency
+              </h2>
+              <div className="flex flex-row items-center mb-6">
+                <Image
+                  src="/assets/calendar.svg"
+                  alt="Company Logo"
+                  className="w-4 h-4 object-contain mr-1"
+                  width={128}
+                  height={128}
+                />
+                <p className="text-xs font-normal text-customGray-200">
+                  Last 12 Months
+                </p>
+                <Image
+                  src="/assets/globe.svg"
+                  alt="Company Logo"
+                  className="w-4 h-4 object-contain mr-1 ml-4"
+                  width={128}
+                  height={128}
+                />
+                <p className="text-xs font-normal text-customGray-200">US</p>
+              </div>
+              <div className="flex flex-row space-x-4">
+                <Image
+                  src="/assets/graphPictures/ConsumerSpendTransactionFrequencyPeersChart.svg"
+                  className="w-2/3 object-contain"
+                  width={5120}
+                  height={5120}
+                />
+                <Image
+                  src="/assets/graphPictures/AppLegend.svg"
+                  className="w-16 h-auto object-contain"
+                  width={512}
+                  height={512}
+                />
+              </div>
+            </div>
+            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-[30%]">
+              <h2 id="trafficByGeo" className="text-sm font-semibold mb-3">
+                Spend Per Transaction
+              </h2>
+              <div className="flex flex-row items-center mb-6">
+                <Image
+                  src="/assets/calendar.svg"
+                  alt="Company Logo"
+                  className="w-4 h-4 object-contain mr-1"
+                  width={128}
+                  height={128}
+                />
+                <p className="text-xs font-normal text-customGray-200">
+                  Last 12 Months
+                </p>
+                <Image
+                  src="/assets/globe.svg"
+                  alt="Company Logo"
+                  className="w-4 h-4 object-contain mr-1 ml-4"
+                  width={128}
+                  height={128}
+                />
+                <p className="text-xs font-normal text-customGray-200">US</p>
+              </div>
+              <div className="flex flex-row space-x-4">
+                <Image
+                  src="/assets/graphPictures/ConsumerSpendperTransactionPeersChart.svg"
+                  className="w-2/3 object-contain"
+                  width={5120}
+                  height={5120}
+                />
+                <Image
+                  src="/assets/graphPictures/AppLegend.svg"
+                  className="w-16 h-auto object-contain"
+                  width={512}
+                  height={512}
+                />
+              </div>
+            </div>
+            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-[30%]">
+              <h2 id="trafficByGeo" className="text-sm font-semibold mb-3">
+                Spend Per Customer
+              </h2>
+              <div className="flex flex-row items-center mb-6">
+                <Image
+                  src="/assets/calendar.svg"
+                  alt="Company Logo"
+                  className="w-4 h-4 object-contain mr-1"
+                  width={128}
+                  height={128}
+                />
+                <p className="text-xs font-normal text-customGray-200">
+                  Last 12 Months
+                </p>
+                <Image
+                  src="/assets/globe.svg"
+                  alt="Company Logo"
+                  className="w-4 h-4 object-contain mr-1 ml-4"
+                  width={128}
+                  height={128}
+                />
+                <p className="text-xs font-normal text-customGray-200">US</p>
+              </div>
+              <div className="flex flex-row space-x-4">
+                <Image
+                  src="/assets/graphPictures/ConsumerSpendperCustomerPeersChart.svg"
+                  className="w-2/3 object-contain"
+                  width={5120}
+                  height={5120}
+                />
+                <Image
+                  src="/assets/graphPictures/AppLegend.svg"
+                  className="w-16 h-auto object-contain"
+                  width={512}
+                  height={512}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
