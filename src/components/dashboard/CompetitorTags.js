@@ -1,10 +1,10 @@
 const CompetitorTags = ({ label, onDelete }) => {
   return (
-    <div className="flex items-center bg-gray-200 rounded-full pl-2 pr-1 py-1 m-1">
+    <div className="flex items-center border border-gray-200 rounded-lg pl-2 pr-1 py-1 m-1">
       <span className="text-sm font-medium mr-2">{label}</span>
       <button
         onClick={onDelete}
-        className="bg-transparent hover:bg-gray-300 rounded-full p-1"
+        className="bg-transparent hover:bg-gray-200 rounded-full p-1"
       >
         <svg
           className="h-4 w-4"

@@ -29,7 +29,11 @@ function NewDashboard() {
 
   const [company, setCompany] = useState("zillow");
   const [country, setCountry] = useState("US");
-  const [companyCompetitors, setCompanyCompetitors] = useState([]);
+  const [companyCompetitors, setCompanyCompetitors] = useState([
+    "zillow",
+    "redfin",
+    "stockx",
+  ]);
 
   const [dataLoading, setDataLoading] = useState(true);
 
@@ -250,7 +254,10 @@ function NewDashboard() {
                 />
                 <p className="text-base text-customGray-500">Compare</p>
               </div> */}
-              <CompetitorContainer></CompetitorContainer>
+              <CompetitorContainer
+                companyCompetitors={companyCompetitors}
+                setCompanyCompetitors={setCompanyCompetitors}
+              ></CompetitorContainer>
             </div>
             {/* Overview Section */}
             <div id="Overview" className="content-section w-full">

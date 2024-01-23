@@ -4,12 +4,10 @@ import React from "react";
 import { useState, useEffect, useRef } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 
-function SearchBar({ setCompany, isCompetitorSearch = false }) {
+function SearchBar({ setCompanyCompetitors }) {
   // always converts company to lowercase
   const [searchTerm, setSearchTerm] = useState("");
-  const placeholder = isCompetitorSearch
-    ? "Search for a company..."
-    : "Competitor";
+
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
@@ -25,16 +23,10 @@ function SearchBar({ setCompany, isCompetitorSearch = false }) {
   };
 
   const send = async () => {
-    // setMessages((oldMessages) => {
-    //   const newMessages = [
-    //     ...oldMessages,
-    //     { role: "user", content: searchTerm },
-    //   ];
-    //   getAIResponse(newMessages);
-
-    //   return newMessages;
-    // });
-    setCompany(searchTerm.toLowerCase());
+    setCompanyCompetitors((prevCompetitors) => [
+      ...prevCompetitors,
+      searchTerm.toLowerCase(),
+    ]);
     setSearchTerm("");
     // const container = messagesContainerRef.current;
     // shouldBeSnapping.current = true;
@@ -53,7 +45,7 @@ function SearchBar({ setCompany, isCompetitorSearch = false }) {
         />
         <TextareaAutosize
           type="text"
-          placeholder="Search for a company..."
+          placeholder="Add competitors"
           className={`w-full border-none font-nunito text-sm text-customGray-800 px-0 py-0 pr-2 mr-2 resize-none placeholder:text-customGray-150 focus:ring-0`}
           value={searchTerm}
           maxRows={1} // set to 1 so the textarea doesn't overflow
