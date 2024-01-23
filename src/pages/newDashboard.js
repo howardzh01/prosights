@@ -3,6 +3,7 @@ import NewSideBar from "../components/dashboard/NewSideBar";
 import SearchBar from "../components/dashboard/SearchBar";
 import OverviewSection from "../components/dashboard/OverviewSection";
 import WebsiteTrafficSection from "../components/dashboard/WebsiteTrafficSection";
+import AppUsageSection from "../components/dashboard/AppUsageSection";
 import Image from "next/image";
 import useSWR from "swr";
 import { useUser } from "@clerk/clerk-react";
@@ -290,6 +291,10 @@ function NewDashboard() {
                 webTrafficData={webTrafficData}
                 webTrafficGeoData={webTrafficGeoData}
               />
+            </div>
+            {/* App Usage */}
+            <div className="w-full">
+              <AppUsageSection />
             </div>
           </div>
         </div>
