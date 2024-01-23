@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import CompetitorTags from "./CompetitorTags";
-import CompetitorSearchButton from "./CompetitorSearchButton";
+import CompetitorSearchButton from "./CompetitorSearchButton2";
 import SearchBar from "./SearchBar";
 import Image from "next/image";
 
@@ -11,14 +11,14 @@ function CompetitorContainer({ companyCompetitors, setCompanyCompetitors }) {
 
   return (
     <div className="flex flex-wrap bg-white">
-      {companyCompetitors.map((tag, index) => (
+      {/* {companyCompetitors.map((tag, index) => (
         <CompetitorTags
           key={index}
           label={tag}
           onDelete={() => handleDelete(index)}
         />
-      ))}
-      <div>
+      ))} */}
+      <div className="">
         <CompetitorSearchButton
           setCompanyCompetitors={setCompanyCompetitors}
         ></CompetitorSearchButton>

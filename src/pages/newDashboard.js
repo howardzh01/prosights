@@ -32,12 +32,8 @@ function NewDashboard() {
 
   const [company, setCompany] = useState("zillow");
   const [country, setCountry] = useState("US");
-  const [companyCompetitors, setCompanyCompetitors] = useState([
-    "zillow",
-    "redfin",
-    "stockx",
-  ]);
-
+  const [companyCompetitors, setCompanyCompetitors] = useState([]);
+  console.log(companyCompetitors);
   const [dataLoading, setDataLoading] = useState(true);
 
   const [selectedChart, setSelectedChart] = useState("");

@@ -54,7 +54,7 @@ function SearchBar({ setCompany, isCompetitorSearch = false }) {
         <TextareaAutosize
           type="text"
           placeholder="Search for a company..."
-          className={`w-full border-none font-nunito text-sm text-customGray-800 px-0 py-0 pr-2 mr-2 resize-none placeholder:text-customGray-150 focus:ring-0`}
+          className={`w-full border-none font-nunito text-sm text-customGray-800 px-0 py-0 pr-2 mr-2 resize-none placeholder:text-customGray-150 focus:ring-0 focus:outline-none`}
           value={searchTerm}
           maxRows={1} // set to 1 so the textarea doesn't overflow
           minRows={1}

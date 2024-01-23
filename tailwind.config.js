@@ -52,5 +52,9 @@ module.exports = {
     },
   },
   darkMode: "class",
-  plugins: [require("@tailwindcss/forms"), nextui()],
+  plugins: [
+    // require("@tailwindcss/forms"),
+
+    nextui(),
+  ],
 };
