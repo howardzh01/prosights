@@ -262,7 +262,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
             </div>
           </div>
         </div>
-        <div id="Traffic Quality" className="content-section mt-8">
+        <div id="Traffic Growth vs. Peers" className="content-section mt-8">
           <p className="text-base font-semibold text-gray-800 mb-3">
             Traffic Growth vs. Peers
           </p>
@@ -387,7 +387,10 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
             </div>
           </div>
         </div>
-        <div id="Traffic Quality" className="content-section mt-8">
+        <div
+          id="Traffic Market Share vs. Peers"
+          className="content-section mt-8"
+        >
           <p className="text-base font-semibold text-gray-800 mb-3">
             Traffic Market Share vs. Peers
           </p>
@@ -512,7 +515,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
             </div>
           </div>
         </div>
-        <div id="Traffic Quality" className="content-section mt-8">
+        <div id="Visits Breakdown vs. Peers" className="content-section mt-8">
           <p className="text-base font-semibold text-gray-800 mb-3">
             Visits Breakdown vs. Peers
           </p>

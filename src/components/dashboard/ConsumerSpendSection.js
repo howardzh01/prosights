@@ -17,7 +17,7 @@ function ConsumerSpendSection({}) {
       </p>
       <hr className="border-t border-customGray-50 mt-2 mb-4" />
       <div className="mx-4 flex flex-col">
-        <div id="Traffic Quality" className="content-section">
+        <div id="Customer Loyalty" className="content-section">
           <p className="text-base font-semibold text-gray-800 mb-3">
             Customer Loyalty
           </p>

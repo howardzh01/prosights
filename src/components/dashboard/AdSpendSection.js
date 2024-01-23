@@ -10,14 +10,14 @@ function AdSpendSection({}) {
   return (
     <div className="flex flex-col w-full mt-12 pb-8">
       <p
-        id="Consumer Spend"
+        id="Ad Spend"
         className="content-section text-2xl font-semibold text-gray-800 ml-2"
       >
         Ad Spend
       </p>
       <hr className="border-t border-customGray-50 mt-2 mb-4" />
       <div className="mx-4 flex flex-col">
-        <div id="Traffic Quality" className="content-section">
+        <div id="Ad Spend Channel Breakdown" className="content-section">
           <p className="text-base font-semibold text-gray-800 mb-3">
             Ad Spend Channel Breakdown
           </p>
