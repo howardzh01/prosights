@@ -22,7 +22,7 @@ function NewSideBar({ sections, activeSections }) {
         height={1024}
         className="w-28"
       />
-      <div className="mt-8 flex-grow relative">
+      <div className="mt-8 flex-grow relative overflow-y-auto overflow-x-hidden">
         {sections.map((section, index) => (
           <div
             key={index}
@@ -39,7 +39,7 @@ function NewSideBar({ sections, activeSections }) {
           </div>
         ))}
       </div>
-      <div className={`flex flex-row items-center`}>
+      <div className={`flex flex-row items-center pt-4`}>
         <UserProfileButton />
       </div>
     </div>
