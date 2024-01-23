@@ -18,7 +18,7 @@ function CompetitorContainer({ companyCompetitors, setCompanyCompetitors }) {
           onDelete={() => handleDelete(index)}
         />
       ))} */}
-      <div className="">
+      <div className="flex flex-end w-300 mr-4">
         <CompetitorSearchButton
           companyCompetitors={companyCompetitors}
           setCompanyCompetitors={setCompanyCompetitors}

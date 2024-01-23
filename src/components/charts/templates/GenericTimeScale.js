@@ -9,7 +9,7 @@ import { TIMESCALE_TRANSITION_DIC } from "../../../constants";
 import {
   ChartDataContext,
   SelectedChartContext,
-} from "../../../pages/newDashboard";
+} from "../../../pages/dashboard";
 
 function GenericTimeScale({
   timescale,

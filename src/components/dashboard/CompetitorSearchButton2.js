@@ -103,8 +103,11 @@ export default function SearchBar({
         </Box>
       )}
       sx={{
-        width: "450px",
         height: "50px",
+        "& .MuiAutocomplete-inputRoot": {
+          width: `calc(100% + 50px)`, // Allow the input to automatically adjust its width
+          minWidth: "200px", // Minimum width to avoid too small input when there are no tags
+        },
       }}
       fullWidth={true}
       disabled={companyCompetitors.length >= 3}
