@@ -20,6 +20,7 @@ function CompetitorContainer({ companyCompetitors, setCompanyCompetitors }) {
       ))} */}
       <div className="">
         <CompetitorSearchButton
+          companyCompetitors={companyCompetitors}
           setCompanyCompetitors={setCompanyCompetitors}
         ></CompetitorSearchButton>
       </div>

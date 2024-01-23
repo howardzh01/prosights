@@ -6,7 +6,10 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Image from "next/image";
 import Chip from "@mui/material/Chip";
 
-export default function SearchBar({ setCompanyCompetitors }) {
+export default function SearchBar({
+  companyCompetitors,
+  setCompanyCompetitors,
+}) {
   // return (
   //   <Autocomplete
   //     multiple
@@ -45,6 +48,7 @@ export default function SearchBar({ setCompanyCompetitors }) {
             }
             label={option.displayedName} // Assuming 'option' has a 'displayedName' property
             {...getTagProps({ index })}
+            disabled={false}
             className="MuiAutocomplete-tag pl-1"
           />
         ));
@@ -54,7 +58,7 @@ export default function SearchBar({ setCompanyCompetitors }) {
           <TextField
             {...params}
             label="Add Competitors"
-            placeholder="Company"
+            placeholder={companyCompetitors.length >= 3 ? "" : "Company"}
             sx={{
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
@@ -64,6 +68,7 @@ export default function SearchBar({ setCompanyCompetitors }) {
               bgcolor: "white",
               borderRadius: "0.375rem", // Equivalent to Tailwind's rounded-lg
             }}
+            className="flex-1 min-w-0"
             InputProps={{
               ...params.InputProps,
               startAdornment: [
@@ -76,8 +81,7 @@ export default function SearchBar({ setCompanyCompetitors }) {
                 />,
                 params.InputProps.startAdornment,
               ],
-              // </InputAdornment>
-              // endAdornment: null,
+              endAdornment: null,
             }}
           />
         );
@@ -99,8 +103,11 @@ export default function SearchBar({ setCompanyCompetitors }) {
         </Box>
       )}
       sx={{
-        width: "400px",
+        width: "450px",
+        height: "50px",
       }}
+      fullWidth={true}
+      disabled={companyCompetitors.length >= 3}
     />
   );
 }
