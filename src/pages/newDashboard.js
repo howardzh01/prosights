@@ -5,6 +5,7 @@ import OverviewSection from "../components/dashboard/OverviewSection";
 import WebsiteTrafficSection from "../components/dashboard/WebsiteTrafficSection";
 import AppUsageSection from "../components/dashboard/AppUsageSection";
 import ConsumerSpendSection from "../components/dashboard/ConsumerSpendSection";
+import AdSpendSection from "../components/dashboard/AdSpendSection";
 import Image from "next/image";
 import useSWR from "swr";
 import { useUser } from "@clerk/clerk-react";
@@ -300,6 +301,10 @@ function NewDashboard() {
             {/* Consumer Spend */}
             <div className="w-full">
               <ConsumerSpendSection />
+            </div>
+            {/* Ad Spend */}
+            <div className="w-full">
+              <AdSpendSection />
             </div>
           </div>
         </div>
