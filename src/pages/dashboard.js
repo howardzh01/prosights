@@ -177,6 +177,43 @@ function NewDashboard() {
   useEffect(() => {
     setCompanyCompetitors([]);
   }, [company]);
+
+  const downloadPDF = async () => {
+    const { default: html2pdf } = await import("html2pdf.js");
+
+    const element = document.getElementById("main-content");
+    const contentWidth = element.scrollWidth; // Get the full scrollable width of the content
+
+    const opt = {
+      margin: [0.5, 0.5],
+      filename: "dashboard.pdf",
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: {
+        scale: 2, // You may adjust this as needed
+        logging: true,
+        dpi: 192,
+        letterRendering: true,
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: contentWidth, // Set the canvas width to the full content width
+      },
+      jsPDF: {
+        unit: "pt", // Points can allow for more fine-grained control over the size
+        format: [contentWidth, 792], // Custom format size [width, height] in points (72 points per inch)
+        orientation: "landscape",
+      },
+    };
+
+    html2pdf()
+      .set(opt)
+      .from(element)
+      .toPdf()
+      .get("pdf")
+      .then(function (pdf) {
+        window.open(pdf.output("bloburl")); // Open PDF in new window to preview
+      });
+  };
+
   // API Data
   const { data: headCountData, error: headCountError } = useSWR(
     user && company ? [`/api/private/getHeadCount`, user.id, company] : null,
@@ -248,6 +285,7 @@ function NewDashboard() {
           </div>
           {/* Main Content */}
           <div
+            id="main-content"
             className="flex flex-col w-screen overflow-x-hidden items-center px-10 bg-white bg-repeat bg-center"
             style={{
               backgroundImage: "url('/assets/backgroundPatternUltraLight.svg')",
@@ -283,6 +321,47 @@ function NewDashboard() {
                   <option value="us">US</option>
                   <option value="asia">Asia</option>
                 </select>
+                <div
+                  className="group flex flex-row items-center ml-8 hover:cursor-pointer hover:text-primary"
+                  onClick={downloadPDF}
+                >
+                  <div className="group">
+                    <Image
+                      src="/assets/downloadInactive.svg"
+                      className="w-4 h-4 object-contain mr-1 group-hover:hidden"
+                      width={256}
+                      height={256}
+                    />
+                    <Image
+                      src="/assets/downloadActive.svg"
+                      className="w-4 h-4 object-contain mr-1 hidden group-hover:block"
+                      width={256}
+                      height={256}
+                    />
+                  </div>
+                  <p className="text-sm text-customGray-500 group-hover:text-primary">
+                    Download PDF
+                  </p>
+                </div>
+                <div className="group flex flex-row items-center ml-4 hover:cursor-pointer hover:text-primary">
+                  <div className="group">
+                    <Image
+                      src="/assets/downloadInactive.svg"
+                      className="w-4 h-4 object-contain mr-1 group-hover:hidden"
+                      width={256}
+                      height={256}
+                    />
+                    <Image
+                      src="/assets/downloadActive.svg"
+                      className="w-4 h-4 object-contain mr-1 hidden group-hover:block"
+                      width={256}
+                      height={256}
+                    />
+                  </div>
+                  <p className="text-sm text-customGray-500 group-hover:text-primary">
+                    Download XLS
+                  </p>
+                </div>
               </div>
               {/* <div className="flex flex-row items-center">
                 <Image
