@@ -6,6 +6,7 @@ import WebsiteTrafficSection from "../components/dashboard/WebsiteTrafficSection
 import AppUsageSection from "../components/dashboard/AppUsageSection";
 import ConsumerSpendSection from "../components/dashboard/ConsumerSpendSection";
 import AdSpendSection from "../components/dashboard/AdSpendSection";
+import CompetitorOverviewSection from "../components/dashboard/CompetitorOverviewSection";
 import Image from "next/image";
 import useSWR from "swr";
 import { useUser } from "@clerk/clerk-react";
@@ -45,6 +46,10 @@ function NewDashboard() {
   const sections = [
     {
       title: "Overview",
+      level: 1,
+    },
+    {
+      title: "Competitor Overview",
       level: 1,
     },
     {
@@ -223,6 +228,7 @@ function NewDashboard() {
     },
     { revalidateOnFocus: false }
   );
+
   return (
     <SelectedChartContext.Provider value={{ selectedChart, setSelectedChart }}>
       <ChartDataContext.Provider value={{ chartData, setChartData }}>
@@ -300,6 +306,10 @@ function NewDashboard() {
                 crunchbaseData={crunchbaseData}
                 headCountData={headCountData}
               />
+            </div>
+            {/* Competitor Overview */}
+            <div id="Competitor Overview" className="content-section w-full">
+              <CompetitorOverviewSection />
             </div>
             {/* Headcount; TODO: MAKE THIS A SEPARATE COMPONENT */}
             <div
