@@ -189,7 +189,7 @@ function NewDashboard() {
       filename: "dashboard.pdf",
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: {
-        scale: 2, // You may adjust this as needed
+        scale: 2, // Adjust this as needed
         logging: true,
         dpi: 192,
         letterRendering: true,
@@ -202,15 +202,15 @@ function NewDashboard() {
         format: [contentWidth, 792], // Custom format size [width, height] in points (72 points per inch)
         orientation: "landscape",
       },
+      pagebreak: { mode: "avoid-all" },
     };
 
     html2pdf()
       .set(opt)
       .from(element)
-      .toPdf()
-      .get("pdf")
-      .then(function (pdf) {
-        window.open(pdf.output("bloburl")); // Open PDF in new window to preview
+      .save() // Save the PDF directly, without opening it in a new window
+      .catch((err) => {
+        console.error("Error exporting PDF:", err);
       });
   };
 
