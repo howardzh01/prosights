@@ -16,12 +16,12 @@ function ConsumerSpendSection({}) {
         Consumer Spend
       </p>
       <hr className="border-t border-customGray-50 mt-2 mb-4" />
-      <div className="mx-4 flex flex-col">
+      <div className="flex flex-col">
         <div id="Customer Loyalty" className="content-section">
           <p className="text-base font-semibold text-gray-800 mb-3">
             Customer Loyalty
           </p>
-          <div className="flex flex-row w-full">
+          <div className="flex flex-row w-full justify-between">
             <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/2">
               <div className="flex flex-row justify-between w-full items-center mb-4">
                 <h2 id="trafficByGeo" className="text-sm font-semibold">

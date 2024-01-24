@@ -16,7 +16,7 @@ function AdSpendSection({}) {
         Ad Spend
       </p>
       <hr className="border-t border-customGray-50 mt-2 mb-4" />
-      <div className="mx-4 flex flex-col">
+      <div className="flex flex-col">
         <div id="Ad Spend Channel Breakdown" className="content-section">
           <p className="text-base font-semibold text-gray-800 mb-3">
             Ad Spend Channel Breakdown

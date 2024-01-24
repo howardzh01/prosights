@@ -8,17 +8,17 @@ import { Skeleton } from "@nextui-org/react";
 
 function CompetitorOverviewSection({}) {
   return (
-    <div className="flex flex-col w-full mt-12 pb-8">
+    <div className="flex flex-col w-full mt-12">
       <p className="text-2xl font-semibold text-gray-800 ml-2">
         Competitor Overview
       </p>
       <hr className="border-t border-customGray-50 mt-2 mb-4" />
-      <div className="mx-4 flex flex-col items-center">
+      <div className="lex flex-col items-center w-full overflow-hidden">
         <Image
           src="/assets/graphPictures/competitorOverview.svg"
-          className="h-[32rem] object-contain mt-4"
-          width={1024}
-          height={1024}
+          className="h-[30rem] object-contain"
+          width={1500}
+          height={1500}
         />
       </div>
     </div>

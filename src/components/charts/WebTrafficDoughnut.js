@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import GenericDoughnut from "./templates/GenericDoughnut";
 import { CHARTS } from "../../constants";
 import Image from "next/image";
+import { fromUnderscoreCase } from "../../utils/Utils";
 
 function WebTrafficDoughnut({ trafficData, selectedChart = null }) {
   if (!trafficData) return null;
@@ -38,7 +39,7 @@ function WebTrafficDoughnut({ trafficData, selectedChart = null }) {
     const percentages = relevant_keys.map((key) => (sums[key] / total) * 100);
 
     return {
-      labels: relevant_keys,
+      labels: relevant_keys.map(fromUnderscoreCase),
       datasets: [
         {
           data: percentages,

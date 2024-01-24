@@ -16,7 +16,7 @@ function AppUsageSection({}) {
         App Usage
       </p>
       <hr className="border-t border-customGray-50 mt-2 mb-4" />
-      <div className="mx-4 flex flex-col">
+      <div className="flex flex-col">
         <div id="App Loyalty vs. Peers" className="content-section">
           <p className="text-base font-semibold text-gray-800 mb-3">
             App Loyalty vs. Peers
@@ -176,7 +176,7 @@ function AppUsageSection({}) {
           <p className="text-base font-semibold text-gray-800 mb-3">
             App Market Share vs. Peers
           </p>
-          <div className="flex flex-row w-full">
+          <div className="flex flex-row w-full space-x-8">
             <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-2/3">
               <div className="flex flex-row justify-between w-full items-center mb-4">
                 <h2 id="trafficByGeo" className="text-sm font-semibold">
@@ -225,10 +225,10 @@ function AppUsageSection({}) {
                   height={5120}
                 />
                 <div className="overflow-x-auto">
-                  <div className="inline-block w-[88rem] pb-2">
+                  <div className="inline-block w-[77rem] pb-2">
                     <Image
                       src="/assets/graphPictures/AppMAUMarketShareTable.svg"
-                      className="h-48"
+                      className="h-40"
                       width={5120}
                       height={5120}
                     />
@@ -236,7 +236,7 @@ function AppUsageSection({}) {
                 </div>
               </div>
             </div>
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/3 ml-6">
+            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 pt-3 pb-6 w-1/3">
               <div className="flex flex-row justify-between w-full items-center mb-4 opacity-0">
                 <h2 id="trafficByGeo" className="text-sm font-semibold">
                   Total Visits by Channel (%)
@@ -284,10 +284,10 @@ function AppUsageSection({}) {
                   height={5120}
                 />
                 <div className="overflow-x-auto pt-2">
-                  <div className="inline-block w-[30rem] pb-2">
+                  <div className="inline-block w-[28rem] pb-2 px-4">
                     <Image
                       src="/assets/graphPictures/AppMAUMarketShareTableAnnual.svg"
-                      className="h-42 object-contain"
+                      className="h-35 object-contain"
                       width={1024}
                       height={1024}
                     />
@@ -301,7 +301,7 @@ function AppUsageSection({}) {
           <p className="text-base font-semibold text-gray-800 mb-3">
             App Usage Growth vs. Peers
           </p>
-          <div className="flex flex-row w-full">
+          <div className="flex flex-row w-full space-x-8">
             <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-2/3">
               <div className="flex flex-row justify-between w-full items-center mb-4">
                 <h2 id="trafficByGeo" className="text-sm font-semibold">
@@ -350,10 +350,10 @@ function AppUsageSection({}) {
                   height={5120}
                 />
                 <div className="overflow-x-auto">
-                  <div className="inline-block w-[90rem] h-auto pb-2">
+                  <div className="inline-block w-[72rem] h-auto pb-2">
                     <Image
                       src="/assets/graphPictures/AppMAUGrowthPeersTable.svg"
-                      className="h-46 object-contain"
+                      className="h-36 object-contain"
                       width={5120}
                       height={5120}
                     />
@@ -361,7 +361,7 @@ function AppUsageSection({}) {
                 </div>
               </div>
             </div>
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/3 ml-6">
+            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 pt-3 pb-6 w-1/3">
               <div className="flex flex-row justify-between w-full items-center mb-4 opacity-0">
                 <h2 id="trafficByGeo" className="text-sm font-semibold">
                   Total Visits by Channel (%)
@@ -408,11 +408,11 @@ function AppUsageSection({}) {
                   width={5120}
                   height={5120}
                 />
-                <div className="overflow-x-auto pt-2">
-                  <div className="inline-block w-[30rem] pb-2">
+                <div className="overflow-x-auto pt-2 px-4">
+                  <div className="inline-block w-[24rem] pb-2">
                     <Image
                       src="/assets/graphPictures/AppMAUGrowthPeersTableAnnual.svg"
-                      className="h-46 object-contain"
+                      className="h-30 object-contain"
                       width={5120}
                       height={5120}
                     />

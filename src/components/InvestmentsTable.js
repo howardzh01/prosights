@@ -46,7 +46,7 @@ function InvestmentsTable({ investmentsData }) {
     <div className="w-full max-h-36 overflow-auto bg-white rounded-md drop-shadow-sm">
       <table className="bg-white text-center text-sm w-full">
         <thead>
-          <tr className="bg-primaryLight font-medium sticky top-0">
+          <tr className="bg-customGray-50 font-medium sticky top-0">
             <TableHeader text="Company" />
             <TableHeader text="Announced" />
             <TableHeader text="Type" />

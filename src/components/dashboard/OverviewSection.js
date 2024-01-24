@@ -10,6 +10,7 @@ import { US_STATE_TO_ABBREV } from "../../constants";
 import InvestorTable from "../InvestorTable";
 import InvestmentsTable from "../InvestmentsTable";
 import { Skeleton } from "@nextui-org/react";
+import Image from "next/image";
 
 export const SelectedChartContext = createContext();
 export const ChartDataContext = createContext();
@@ -238,8 +239,8 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
         </div>
       </div>
       {/* Funding and M&A Tables */}
-      <div className="flex space-x-8 mx-4 mt-6">
-        <div className="w-3/5 mr-8">
+      <div className="flex space-x-8 mt-6 justify-between ">
+        <div className="w-3/5">
           <p className="text-base font-semibold text-gray-800 mb-3">Funding</p>{" "}
           {crunchbaseData?.["raised_funding_rounds"] ? (
             <InvestorTable
@@ -249,7 +250,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
             <Skeleton className="bg-customGray-50 w-full h-36 rounded-lg" />
           )}
         </div>
-        <div className="">
+        <div className="w-2/5">
           <p className="text-base font-semibold text-gray-800 mb-3">M&A</p>
           {crunchbaseData?.["participated_investments"] &&
           crunchbaseData?.["acquiree_acquisitions"] ? (
@@ -266,9 +267,9 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
       </div>
 
       {/* Signals */}
-      <div className="flex flex-col mt-6 mx-4">
+      <div className="flex flex-col mt-6">
         <div className="text-lg font-semibold text-gray-800">Signals</div>
-        <div className="space-x-6 items-align flex mt-4 px-12">
+        <div className="space-x-6 items-align flex mt-4 justify-between">
           {headCountData ? (
             <div className="md:w-64 2xl:w-96 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-white border border-customGray-50">
               <HeadCountSignal headCountData={headCountData} />
@@ -277,8 +278,19 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
             <Skeleton className="md:w-64 2xl:w-96 h-52 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
           )}
           {headCountData ? (
-            <div className="md:w-64 2xl:w-96 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-white border border-customGray-50">
-              <HeadCountSignal headCountData={headCountData} />
+            <div className="flex flex-col space-x-4 md:w-64 2xl:w-96 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-white border border-customGray-50">
+              <Image
+                src="/assets/graphPictures/SignalsMAUChartAnnual.svg"
+                className="w-2/3 object-contain"
+                width={5120}
+                height={5120}
+              />
+              <Image
+                src="/assets/graphPictures/SignalsMAULegend.svg"
+                className="w-2/3 object-contain"
+                width={512}
+                height={512}
+              />
             </div>
           ) : (
             <Skeleton className="md:w-64 2xl:w-96 h-52 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />

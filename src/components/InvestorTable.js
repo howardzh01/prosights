@@ -19,7 +19,7 @@ function InvestorTable({ fundingData }) {
     <div className="w-full max-h-36 overflow-auto bg-white drop-shadow-sm rounded-md">
       <table className="bg-white text-center text-sm w-full">
         <thead>
-          <tr className="bg-primaryLight font-medium sticky top-0">
+          <tr className="bg-customGray-50 font-medium sticky top-0">
             <TableHeader text="Round" />
             <TableHeader text="Date" />
             <TableHeader text="Valuation" />

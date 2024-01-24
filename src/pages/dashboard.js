@@ -399,7 +399,7 @@ function NewDashboard() {
                 Headcount
               </p>
               <hr className="border-t border-customGray-50 mt-2 mb-4" />
-              <div className="mx-4">
+              <div className="">
                 {headCountData ? (
                   <HeadCountChart headCountData={headCountData} />
                 ) : (
