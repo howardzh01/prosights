@@ -31,7 +31,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
           <p className="text-base font-semibold text-gray-800 mb-3">
             Visits Breakdown
           </p>
-          <div className="flex space-x-2 justify-between">
+          <div className="flex space-x-8 justify-start">
             {webTrafficGeoData !== undefined &&
             webTrafficGeoData !== null &&
             Object.keys(webTrafficGeoData).length !== 0 ? (
@@ -464,7 +464,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
           <p className="text-base font-semibold text-gray-800 mb-3">
             Visits Breakdown vs. Peers
           </p>
-          <div className="space-x-6 flex flex-row items-center justify-between">
+          <div className="space-x-8 flex flex-row items-center justify-start">
             <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-96">
               <h2 id="trafficByGeo" className="text-sm font-semibold mb-3">
                 Geography
