@@ -295,18 +295,30 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
                   </button>
                 </div>
               </div>
-              <div className="flex flex-row space-x-0 w-full h-full">
+              <div className="flex flex-row items-center">
+                <div className="flex flex-row mr-8">
+                  <Image
+                    src="/assets/globe.svg"
+                    alt="Company Logo"
+                    className="w-4 h-4 object-contain mr-1"
+                    width={128}
+                    height={128}
+                  />
+                  <p className="text-xs font-normal text-customGray-200">US</p>
+                </div>
+                <Image
+                  src="/assets/graphPictures/SignalsMAULegend.svg"
+                  className="w-52 object-contain"
+                  width={512}
+                  height={512}
+                />
+              </div>
+              <div className="flex flex-row justify-center space-x-4">
                 <Image
                   src="/assets/graphPictures/SignalsMAUChartAnnual.svg"
                   className="w-5/6 object-contain"
                   width={5120}
                   height={5120}
-                />
-                <Image
-                  src="/assets/graphPictures/SignalsMAULegendVertical.svg"
-                  className="w-20 object-contain"
-                  width={512}
-                  height={512}
                 />
               </div>
             </div>
