@@ -73,3 +73,4 @@ export default function SearchBar({ company, setCompany }) {
       />
     </div>
   );
+}

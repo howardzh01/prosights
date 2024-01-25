@@ -115,9 +115,11 @@ function WebTrafficDoughnut({ trafficData, selectedChart = null }) {
         />
         <p className="text-xs font-normal text-customGray-200">US</p>
       </div>
-      <GenericDoughnut
-        chartData={convertToChannelChartData(trafficData, chartType)}
-      />
+      <div className="px-2">
+        <GenericDoughnut
+          chartData={convertToChannelChartData(trafficData, chartType)}
+        />
+      </div>
     </div>
   );
 }
