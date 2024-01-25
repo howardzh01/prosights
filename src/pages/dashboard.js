@@ -48,98 +48,116 @@ function NewDashboard() {
   // Sections for sidebar; MUST have same title as section id, which might be used in child components
   const sections = [
     {
-      title: "Overview",
+      title: "Company Overview",
+      id: "Company Overview",
       level: 1,
     },
     {
       title: "Competitor Overview",
+      id: "Competitor Overview",
       level: 1,
     },
     {
       title: "Headcount",
+      id: "Headcount",
       level: 1,
     },
     {
       title: "Website Traffic",
+      id: "Website Traffic",
       level: 1,
     },
     {
-      title: "Traffic Growth",
+      title: "Growth",
+      id: "Growth",
       level: 2,
     },
     {
-      title: "Visits Breakdown",
+      title: "Breakdown",
+      id: "Breakdown",
       level: 2,
     },
     {
-      title: "Traffic Quality",
+      title: "Quality Over Time",
+      id: "Quality Over Time",
       level: 2,
     },
     {
-      title: "Traffic Growth vs. Peers",
-      level: 2,
-    },
-    {
-      title: "Traffic Market Share vs. Peers",
-      level: 2,
-    },
-    {
-      title: "Visits Breakdown vs. Peers",
-      level: 2,
-    },
-    {
-      title: "App Usage",
-      level: 1,
-    },
-    {
-      title: "App Loyalty vs. Peers",
-      level: 2,
-    },
-    {
-      title: "App Market Share vs. Peers",
-      level: 2,
-    },
-    {
-      title: "App Usage Growth vs. Peers",
-      level: 2,
-    },
-    {
-      title: "Consumer Spend",
-      level: 1,
-    },
-    {
-      title: "Customer Loyalty",
+      title: "Growth vs. Peers",
+      id: "Traffic Growth vs. Peers",
       level: 2,
     },
     {
       title: "Market Share vs. Peers",
+      id: "Traffic Market Share vs. Peers",
       level: 2,
     },
     {
-      title: "Consumer Spend Growth vs. Peers",
+      title: "Breakdown vs. Peers",
+      id: "Traffic Breakdown vs. Peers",
+      level: 2,
+    },
+    {
+      title: "App Usage",
+      id: "App Usage",
+      level: 1,
+    },
+    {
+      title: "Growth vs. Peers",
+      id: "App Growth vs. Peers",
+      level: 2,
+    },
+    {
+      title: "Market Share vs. Peers",
+      id: "App Market Share vs. Peers",
+      level: 2,
+    },
+    {
+      title: "Loyalty vs. Peers",
+      id: "Loyalty vs. Peers",
+      level: 2,
+    },
+    {
+      title: "Consumer Spend",
+      id: "Consumer Spend",
+      level: 1,
+    },
+    {
+      title: "Customer Loyalty vs. Peers",
+      id: "Customer Loyalty vs. Peers",
+      level: 2,
+    },
+    {
+      title: "Growth vs. Peers",
+      id: "Consumer Growth vs. Peers",
+      level: 2,
+    },
+    {
+      title: "Market Share vs. Peers",
+      id: "Consumer Market Share vs. Peers",
       level: 2,
     },
     {
       title: "Ad Spend",
+      id: "Ad Spend",
       level: 1,
     },
     {
-      title: "$ Ad Spend",
+      title: "Market Spend",
+      id: "Market Spend",
       level: 2,
     },
     {
-      title: "Ad Spend Channel Breakdown",
+      title: "Channel Breakdown",
+      id: "Channel Breakdown",
       level: 2,
     },
     {
-      title: "Ad Spend Channel Breakdown vs. Peers",
+      title: "Breakdown vs. Peers",
+      id: "Ad Breakdown vs. Peers",
       level: 2,
     },
   ];
-
-  useEffect(() => {
-    console.log("active", activeSections);
-  }, [activeSections]);
 
   useEffect(() => {
     if (!dataLoading) {
@@ -398,7 +416,7 @@ function NewDashboard() {
               ></CompetitorContainer>
             </div>
             {/* Overview Section */}
-            <div id="Overview" className="content-section w-full">
+            <div id="Company Overview" className="content-section w-full">
               <OverviewSection
                 companyAbout={companyDescription}
                 crunchbaseData={crunchbaseData}

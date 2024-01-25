@@ -89,7 +89,9 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
 
   return (
     <div className="mt-8 w-full">
-      <p className="text-2xl font-semibold text-gray-800 ml-2">Overview</p>
+      <p className="text-2xl font-semibold text-gray-800 ml-2">
+        Company Overview
+      </p>
       <hr className="border-t border-customGray-50 mt-2" />
       <div className="flex flex-row mt-4 ml-4 space-x-16">
         {/* About & Business Model */}

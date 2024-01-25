@@ -18,7 +18,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
       </p>
       <hr className="border-t border-customGray-50 mt-2 mb-4" />
       <div className="flex flex-col">
-        <div id="Traffic Growth" className="content-section">
+        <div id="Growth" className="content-section">
           {webTrafficData !== undefined &&
           webTrafficGeoData !== null &&
           Object.keys(webTrafficData).length !== 0 ? (
@@ -27,9 +27,9 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
             <Skeleton className="w-full h-80 rounded-lg bg-customGray-50" />
           )}
         </div>
-        <div id="Visits Breakdown" className="content-section">
+        <div id="Breakdown" className="content-section">
           <p className="text-base font-semibold text-gray-800 mb-3">
-            Visits Breakdown
+            Breakdown
           </p>
           <div className="flex space-x-8 justify-start">
             {webTrafficGeoData !== undefined &&
@@ -82,9 +82,9 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
             )}
           </div>
         </div>
-        <div id="Traffic Quality" className="content-section mt-8">
+        <div id="Quality Over Time" className="content-section mt-8">
           <p className="text-base font-semibold text-gray-800 mb-3">
-            Traffic Quality
+            Quality Over Time
           </p>
           <div className="flex flex-row w-full justify-between space-x-8">
             <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-2/3">
@@ -209,7 +209,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
         </div>
         <div id="Traffic Growth vs. Peers" className="content-section mt-8">
           <p className="text-base font-semibold text-gray-800 mb-3">
-            Traffic Growth vs. Peers
+            Growth vs. Peers
           </p>
           <div className="flex flex-row w-full justify-between space-x-8">
             <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-2/3">
@@ -337,7 +337,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
           className="content-section mt-8"
         >
           <p className="text-base font-semibold text-gray-800 mb-3">
-            Traffic Market Share vs. Peers
+            Market Share vs. Peers
           </p>
           <div className="flex flex-row w-full justify-between space-x-8">
             <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-2/3">
@@ -460,9 +460,9 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
             </div>
           </div>
         </div>
-        <div id="Visits Breakdown vs. Peers" className="content-section mt-8">
+        <div id="Traffic Breakdown vs. Peers" className="content-section mt-8">
           <p className="text-base font-semibold text-gray-800 mb-3">
-            Visits Breakdown vs. Peers
+            Breakdown vs. Peers
           </p>
           <div className="space-x-8 flex flex-row items-center justify-start">
             <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-96">

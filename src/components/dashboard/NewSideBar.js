@@ -4,7 +4,7 @@ import UserProfileButton from "../UserProfileButton";
 
 function NewSideBar({ sections, activeSections }) {
   // Determine if we should extend the bar to cover multiple consecutive active sections
-  const isSectionActive = (section) => activeSections[section.title];
+  const isSectionActive = (section) => activeSections[section.id];
 
   const scrollToSection = (sectionTitle) => {
     const sectionElement = document.getElementById(sectionTitle);
@@ -33,7 +33,7 @@ function NewSideBar({ sections, activeSections }) {
                 ? "text-primaryMedium border-opacity-100"
                 : "border-opacity-0 hover:rounded-md"
             } pl-2 hover:translate-x-2`}
-            onClick={() => scrollToSection(section.title)}
+            onClick={() => scrollToSection(section.id)}
           >
             {section.title}
           </div>

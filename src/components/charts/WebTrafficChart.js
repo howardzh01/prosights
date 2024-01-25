@@ -141,9 +141,7 @@ function WebTrafficChart({
     default:
       return (
         <div>
-          <p className="text-base font-semibold text-gray-800 mb-3">
-            Traffic Growth
-          </p>
+          <p className="text-base font-semibold text-gray-800 mb-3">Growth</p>
           <div className="h-fit mb-4">
             <TwoColumnView
               quarterGraph={customTrafficGraph}

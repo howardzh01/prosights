@@ -17,9 +17,9 @@ function AdSpendSection({}) {
       </p>
       <hr className="border-t border-customGray-50 mt-2 mb-4" />
       <div className="flex flex-col">
-        <div id="$ Ad Spend" className="content-section">
+        <div id="Market Spend" className="content-section">
           <p className="text-base font-semibold text-gray-800 mb-3">
-            $ Ad Spend
+            Market Spend
           </p>
           <div className="flex flex-row w-full space-x-8">
             <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-2/3">
@@ -142,9 +142,9 @@ function AdSpendSection({}) {
             </div>
           </div>
         </div>
-        <div id="Ad Spend Channel Breakdown" className="content-section mt-8">
+        <div id="Channel Breakdown" className="content-section mt-8">
           <p className="text-base font-semibold text-gray-800 mb-3">
-            Ad Spend Channel Breakdown
+            Channel Breakdown
           </p>
           <div className="flex flex-row w-full">
             <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-2/3">
@@ -251,12 +251,9 @@ function AdSpendSection({}) {
             </div>
           </div>
         </div>
-        <div
-          id="Ad Spend Channel Breakdown vs. Peers"
-          className="content-section mt-8"
-        >
+        <div id="Ad Breakdown vs. Peers" className="content-section mt-8">
           <p className="text-base font-semibold text-gray-800 mb-3">
-            Ad Spend Channel Breakdown vs. Peers
+            Breakdown vs. Peers
           </p>
           <div className="flex flex-row w-full space-x-8">
             <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-full">
