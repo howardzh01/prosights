@@ -18,8 +18,8 @@ function NewSideBar({ sections, activeSections }) {
       <Image
         src="/assets/fullLogoWhite.png"
         alt="ProSights logo"
-        width={1024}
-        height={1024}
+        width={128}
+        height={128}
         className="w-28"
       />
       <div className="mt-8 flex-grow relative overflow-y-auto overflow-x-hidden">
@@ -50,8 +50,8 @@ function NewSideBar({ sections, activeSections }) {
                     isSectionActive(section) ? "Active" : ""
                   }${section.title.replace(/\s/g, "")}Icon.svg`}
                   alt="Section Icon"
-                  width={1024}
-                  height={1024}
+                  width={32}
+                  height={32}
                   className="w-4 mr-2"
                 />
               )}
