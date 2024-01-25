@@ -26,7 +26,8 @@ function HeadCountSignal({ headCountData, startCutoff = new Date("2019") }) {
           backgroundColor: "rgba(0, 154, 255, 1)",
           // borderColor: "rgba(75, 192, 192, 1)",
           borderWidth: 0,
-          barThickness: 24,
+          // barThickness: 24,
+          barPercentage: 0.7,
         },
       ],
     };

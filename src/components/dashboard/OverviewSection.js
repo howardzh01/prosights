@@ -280,45 +280,49 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
             <Skeleton className="md:w-64 2xl:w-96 h-52 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
           )}
           {headCountData ? (
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-96 h-60">
-              <div className="flex justify-between mb-2">
-                <div className="items-center gap-1 text-sm font-medium">
-                  Monthly Active Users
+            <div className="flex flex-col justify-between rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 py-3 w-96 h-60">
+              <div>
+                <div className="flex justify-between mb-2">
+                  <div className="items-center gap-1 text-sm font-medium">
+                    Monthly Active Users
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <button type="button" onClick={() => {}}>
+                      <Image
+                        src="/assets/expand.svg"
+                        alt="Company Logo"
+                        className="w-4 h-4 object-contain"
+                        width={128}
+                        height={128}
+                      />
+                    </button>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1">
-                  <button type="button" onClick={() => {}}>
+                <div className="flex flex-row items-center">
+                  <div className="flex flex-row mr-8">
                     <Image
-                      src="/assets/expand.svg"
+                      src="/assets/globe.svg"
                       alt="Company Logo"
-                      className="w-4 h-4 object-contain"
+                      className="w-4 h-4 object-contain mr-1"
                       width={128}
                       height={128}
                     />
-                  </button>
-                </div>
-              </div>
-              <div className="flex flex-row items-center">
-                <div className="flex flex-row mr-8">
+                    <p className="text-xs font-normal text-customGray-200">
+                      US
+                    </p>
+                  </div>
                   <Image
-                    src="/assets/globe.svg"
-                    alt="Company Logo"
-                    className="w-4 h-4 object-contain mr-1"
-                    width={128}
-                    height={128}
+                    src="/assets/graphPictures/SignalsMAULegend.svg"
+                    className="w-56 object-contain"
+                    width={512}
+                    height={512}
                   />
-                  <p className="text-xs font-normal text-customGray-200">US</p>
                 </div>
-                <Image
-                  src="/assets/graphPictures/SignalsMAULegend.svg"
-                  className="w-52 object-contain"
-                  width={512}
-                  height={512}
-                />
               </div>
               <div className="flex flex-row justify-center space-x-4">
                 <Image
                   src="/assets/graphPictures/SignalsMAUChartAnnual.svg"
-                  className="w-5/6 object-contain"
+                  className="w-full object-contain"
                   width={5120}
                   height={5120}
                 />
@@ -328,45 +332,49 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
             <Skeleton className="md:w-64 2xl:w-96 h-52 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
           )}
           {headCountData ? (
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-96">
-              <div className="flex justify-between mb-2">
-                <div className="items-center gap-1 text-sm font-medium">
-                  Revenue Momentum
+            <div className="flex flex-col justify-between rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 py-3 w-96 h-60">
+              <div>
+                <div className="flex justify-between mb-2">
+                  <div className="items-center gap-1 text-sm font-medium">
+                    Revenue Momentum
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <button type="button" onClick={() => {}}>
+                      <Image
+                        src="/assets/expand.svg"
+                        alt="Company Logo"
+                        className="w-4 h-4 object-contain"
+                        width={128}
+                        height={128}
+                      />
+                    </button>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1">
-                  <button type="button" onClick={() => {}}>
+                <div className="flex flex-row items-center">
+                  <div className="flex flex-row mr-8">
                     <Image
-                      src="/assets/expand.svg"
+                      src="/assets/globe.svg"
                       alt="Company Logo"
-                      className="w-4 h-4 object-contain"
+                      className="w-4 h-4 object-contain mr-1"
                       width={128}
                       height={128}
                     />
-                  </button>
-                </div>
-              </div>
-              <div className="flex flex-row items-center">
-                <div className="flex flex-row mr-8">
+                    <p className="text-xs font-normal text-customGray-200">
+                      US
+                    </p>
+                  </div>
                   <Image
-                    src="/assets/globe.svg"
-                    alt="Company Logo"
-                    className="w-4 h-4 object-contain mr-1"
-                    width={128}
-                    height={128}
+                    src="/assets/graphPictures/SignalsRevenueLegend.svg"
+                    className="w-52 object-contain"
+                    width={512}
+                    height={512}
                   />
-                  <p className="text-xs font-normal text-customGray-200">US</p>
                 </div>
-                <Image
-                  src="/assets/graphPictures/SignalsRevenueLegend.svg"
-                  className="w-52 object-contain"
-                  width={512}
-                  height={512}
-                />
               </div>
               <div className="flex flex-row justify-center space-x-4">
                 <Image
                   src="/assets/graphPictures/SignalsRevenueChartAnnual.svg"
-                  className="w-5/6 object-contain"
+                  className="w-full object-contain"
                   width={5120}
                   height={5120}
                 />
@@ -376,45 +384,49 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
             <Skeleton className="md:w-64 2xl:w-96 h-52 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
           )}
           {headCountData ? (
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-96">
-              <div className="flex justify-between mb-2">
-                <div className="items-center gap-1 text-sm font-medium">
-                  Ad Spend
+            <div className="flex flex-col justify-between rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 py-3 w-96 h-60">
+              <div>
+                <div className="flex justify-between mb-2">
+                  <div className="items-center gap-1 text-sm font-medium">
+                    Ad Spend
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <button type="button" onClick={() => {}}>
+                      <Image
+                        src="/assets/expand.svg"
+                        alt="Company Logo"
+                        className="w-4 h-4 object-contain"
+                        width={128}
+                        height={128}
+                      />
+                    </button>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1">
-                  <button type="button" onClick={() => {}}>
+                <div className="flex flex-row items-center">
+                  <div className="flex flex-row mr-8 pb-1">
                     <Image
-                      src="/assets/expand.svg"
+                      src="/assets/globe.svg"
                       alt="Company Logo"
-                      className="w-4 h-4 object-contain"
+                      className="w-4 h-4 object-contain mr-1"
                       width={128}
                       height={128}
                     />
-                  </button>
-                </div>
-              </div>
-              <div className="flex flex-row items-center">
-                <div className="flex flex-row mr-8 pb-1">
+                    <p className="text-xs font-normal text-customGray-200">
+                      US
+                    </p>
+                  </div>
                   <Image
-                    src="/assets/globe.svg"
-                    alt="Company Logo"
-                    className="w-4 h-4 object-contain mr-1"
-                    width={128}
-                    height={128}
+                    src="/assets/graphPictures/SignalsAdSpendLegend.svg"
+                    className="w-40 object-contain"
+                    width={512}
+                    height={512}
                   />
-                  <p className="text-xs font-normal text-customGray-200">US</p>
                 </div>
-                <Image
-                  src="/assets/graphPictures/SignalsAdSpendLegend.svg"
-                  className="w-40 object-contain"
-                  width={512}
-                  height={512}
-                />
               </div>
               <div className="flex justify-center flex-row space-x-4">
                 <Image
                   src="/assets/graphPictures/SignalsAdSpendChartAnnual.svg"
-                  className="w-5/6 object-contain"
+                  className="w-full object-contain"
                   width={5120}
                   height={5120}
                 />

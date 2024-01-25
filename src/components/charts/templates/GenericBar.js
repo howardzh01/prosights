@@ -68,6 +68,7 @@ function GenericBar({
     devicePixelRatio: 2,
     maintainAspectRatio: false,
     responsive: true,
+    barPercentage: 0.9,
     // other options...
   };
 
