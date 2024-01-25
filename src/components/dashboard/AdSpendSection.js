@@ -261,7 +261,7 @@ function AdSpendSection({}) {
             <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-full">
               <div className="flex flex-row justify-between w-full items-center mb-2">
                 <h2 id="trafficByGeo" className="text-sm font-semibold">
-                  Ad Spend by Channel
+                  Ad Spend by Channel (%)
                 </h2>
                 <div className="flex items-center gap-1">
                   <div className="mr-2 flex items-center">
@@ -279,7 +279,7 @@ function AdSpendSection({}) {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-row items-center mb-4">
+              <div className="flex flex-row items-center mb-8">
                 <div className="pb-1 flex flex-row">
                   <Image
                     src="/assets/globe.svg"
@@ -296,17 +296,80 @@ function AdSpendSection({}) {
                   src="/assets/graphPictures/AdSpendBreakdownLegend.svg"
                   alt="Company Logo"
                   className="w-2/3 object-contain"
-                  width={4096}
-                  height={4096}
+                  width={1024}
+                  height={1024}
                 />
               </div>
-              <div className="flex flex-col">
-                <Image
-                  src="/assets/graphPictures/AdSpendBreakdownPeersChart.svg"
-                  className="h-60 object-contain"
-                  width={5120}
-                  height={5120}
-                />
+              <div className="flex flex-row justify-between">
+                <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.01),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] border border-customGray-50 px-6 pt-3 pb-6 w-[30%]">
+                  <h2 id="trafficByGeo" className="text-sm font-semibold mb-3">
+                    StockX
+                  </h2>
+                  <div className="flex flex-row items-center mb-6">
+                    <Image
+                      src="/assets/globe.svg"
+                      alt="Company Logo"
+                      className="w-4 h-4 object-contain mr-1"
+                      width={128}
+                      height={128}
+                    />
+                    <p className="text-xs font-normal text-customGray-200">
+                      US
+                    </p>
+                  </div>
+                  <Image
+                    src="/assets/graphPictures/AdSpendBreakdownStockXChart.svg"
+                    className="h-52 object-contain"
+                    width={1024}
+                    height={1024}
+                  />
+                </div>
+                <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.01),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] border border-customGray-50 px-6 pt-3 pb-6 w-[30%]">
+                  <h2 id="trafficByGeo" className="text-sm font-semibold mb-3">
+                    GOAT
+                  </h2>
+                  <div className="flex flex-row items-center mb-6">
+                    <Image
+                      src="/assets/globe.svg"
+                      alt="Company Logo"
+                      className="w-4 h-4 object-contain mr-1"
+                      width={128}
+                      height={128}
+                    />
+                    <p className="text-xs font-normal text-customGray-200">
+                      US
+                    </p>
+                  </div>
+                  <Image
+                    src="/assets/graphPictures/AdSpendBreakdownGOATChart.svg"
+                    className="h-52 object-contain"
+                    width={1024}
+                    height={1024}
+                  />
+                </div>
+                <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.01),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] border border-customGray-50 px-6 pt-3 pb-6 w-[30%]">
+                  <h2 id="trafficByGeo" className="text-sm font-semibold mb-3">
+                    Flight Club
+                  </h2>
+                  <div className="flex flex-row items-center mb-6">
+                    <Image
+                      src="/assets/globe.svg"
+                      alt="Company Logo"
+                      className="w-4 h-4 object-contain mr-1"
+                      width={128}
+                      height={128}
+                    />
+                    <p className="text-xs font-normal text-customGray-200">
+                      US
+                    </p>
+                  </div>
+                  <Image
+                    src="/assets/graphPictures/AdSpendBreakdownFlightClubChart.svg"
+                    className="h-52 object-contain"
+                    width={1024}
+                    height={1024}
+                  />
+                </div>
               </div>
             </div>
           </div>
