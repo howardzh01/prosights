@@ -6,16 +6,24 @@ import Image from "next/image";
 import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 import { Skeleton } from "@nextui-org/react";
 import WebTrafficChart from "../charts/WebTrafficChart";
+import WebTrafficIcon from "/public/assets/WebsiteTrafficIcon.svg";
 
 function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
   return (
     <div className="flex flex-col w-full mt-12">
-      <p
+      <div
         id="Website Traffic"
-        className="content-section text-2xl font-semibold text-gray-800 ml-2"
+        className="content-section flex items-center py-1 bg-customGray-50 rounded-md"
+      >
+        <WebTrafficIcon className="mx-2 filter invert" />
+        <p className="text-2xl font-semibold text-gray-800">Website Traffic</p>
+      </div>
+      {/* <p
+        id="Website Traffic"
+        className="content-section text-2xl font-semibold text-gray-800 pl-2 py-1 bg-customGray-50 rounded-md"
       >
         Website Traffic
-      </p>
+      </p> */}
       <hr className="border-t border-customGray-50 mt-2 mb-4" />
       <div className="flex flex-col section-indent">
         <div id="Growth" className="content-section">

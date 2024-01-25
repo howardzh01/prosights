@@ -5,16 +5,18 @@ import WebTrafficDoughnut from "../charts/WebTrafficDoughnut";
 import Image from "next/image";
 import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 import { Skeleton } from "@nextui-org/react";
+import ConsumerSpendIcon from "/public/assets/ConsumerSpendIcon.svg";
 
 function ConsumerSpendSection({}) {
   return (
     <div className="flex flex-col w-full mt-12 pb-8">
-      <p
+      <div
         id="Consumer Spend"
-        className="content-section text-2xl font-semibold text-gray-800 ml-2"
+        className="content-section flex items-center py-1 bg-customGray-50 rounded-md"
       >
-        Consumer Spend
-      </p>
+        <ConsumerSpendIcon className="mx-2 filter invert mb-1" />
+        <p className="text-2xl font-semibold text-gray-800">Consumer Spend</p>
+      </div>
       <hr className="border-t border-customGray-50 mt-2 mb-4" />
       <div className="flex flex-col">
         <div id="Customer Loyalty vs. Peers" className="content-section">

@@ -26,6 +26,7 @@ import CompetitorContainer from "../components/dashboard/CompetitorContainer";
 import { Skeleton } from "@nextui-org/react";
 import { CompanyDirectory } from "../components/dashboard/CompanyListDirectory";
 import { companyList } from "../components/dashboard/CompanyList";
+import HeadcountIcon from "/public/assets/HeadcountIcon.svg";
 
 export const SelectedChartContext = createContext();
 export const ChartDataContext = createContext();
@@ -432,9 +433,12 @@ function NewDashboard() {
               id="Headcount"
               className="flex flex-col w-full mt-12 content-section"
             >
-              <p className="text-2xl font-semibold text-gray-800 ml-2">
-                Headcount
-              </p>
+              <div className="flex items-center py-1 bg-customGray-50 rounded-md">
+                <HeadcountIcon className="mx-2 filter invert mb-1" />
+                <p className="text-2xl font-semibold text-gray-800">
+                  Headcount
+                </p>
+              </div>
               <hr className="border-t border-customGray-50 mt-2 mb-4" />
               <div className="">
                 {headCountData ? (

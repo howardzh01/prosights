@@ -11,6 +11,7 @@ import InvestorTable from "../InvestorTable";
 import InvestmentsTable from "../InvestmentsTable";
 import { Skeleton } from "@nextui-org/react";
 import Image from "next/image";
+import CompanyOverviewIcon from "/public/assets/CompanyOverviewIcon.svg";
 
 export const SelectedChartContext = createContext();
 export const ChartDataContext = createContext();
@@ -89,9 +90,12 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
 
   return (
     <div className="mt-8 w-full">
-      <p className="text-2xl font-semibold text-gray-800 ml-2">
-        Company Overview
-      </p>
+      <div className="flex items-center py-1 bg-customGray-50 rounded-md">
+        <CompanyOverviewIcon className="mx-2 filter invert" />
+        <p className="text-2xl font-semibold text-gray-800  ">
+          Company Overview
+        </p>
+      </div>
       <hr className="border-t border-customGray-50 mt-2" />
       <div className="flex flex-row mt-4 section-indent space-x-16">
         {/* About & Business Model */}
@@ -267,7 +271,6 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
           )}
         </div>
       </div>
-
       {/* Signals */}
       <div className="flex flex-col mt-6 ml-4">
         <div className="text-lg font-semibold text-gray-800">Signals</div>
