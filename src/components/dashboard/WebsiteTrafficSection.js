@@ -17,7 +17,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
         Website Traffic
       </p>
       <hr className="border-t border-customGray-50 mt-2 mb-4" />
-      <div className="flex flex-col">
+      <div className="flex flex-col section-indent">
         <div id="Growth" className="content-section">
           {webTrafficData !== undefined &&
           webTrafficGeoData !== null &&

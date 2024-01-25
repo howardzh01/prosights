@@ -93,7 +93,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
         Company Overview
       </p>
       <hr className="border-t border-customGray-50 mt-2" />
-      <div className="flex flex-row mt-4 ml-4 space-x-16">
+      <div className="flex flex-row mt-4 section-indent space-x-16">
         {/* About & Business Model */}
         {companyAbout && companyBusinessModel ? (
           <div className="flex flex-col w-1/2">

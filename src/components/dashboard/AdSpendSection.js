@@ -15,8 +15,8 @@ function AdSpendSection({}) {
       >
         Ad Spend
       </p>
-      <hr className="border-t border-customGray-50 mt-2 mb-4" />
-      <div className="flex flex-col">
+      <hr className="border-t border-customGray-50 mt-2 mb-4 " />
+      <div className="flex flex-col section-indent">
         <div id="Market Spend" className="content-section">
           <p className="text-base font-semibold text-gray-800 mb-3">
             Market Spend

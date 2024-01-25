@@ -13,7 +13,7 @@ function CompetitorOverviewSection({}) {
         Competitor Overview
       </p>
       <hr className="border-t border-customGray-50 mt-2" />
-      <div className="lex flex-col items-center w-full overflow-hidden ml-4">
+      <div className="lex flex-col items-center w-full overflow-hidden section-indent">
         <Image
           src="/assets/graphPictures/competitorOverview.svg"
           className="h-[30rem] object-contain"
