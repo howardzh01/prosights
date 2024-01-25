@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import NewSideBar from "../components/dashboard/NewSideBar";
-import SearchBar from "../components/dashboard/SearchBar";
+import SearchBar from "../components/dashboard/SearchBar2";
 import OverviewSection from "../components/dashboard/OverviewSection";
 import WebsiteTrafficSection from "../components/dashboard/WebsiteTrafficSection";
 import AppUsageSection from "../components/dashboard/AppUsageSection";
@@ -24,13 +24,15 @@ import HeadCountChart from "../components/charts/HeadCountChart";
 import { CHARTS } from "../constants";
 import CompetitorContainer from "../components/dashboard/CompetitorContainer";
 import { Skeleton } from "@nextui-org/react";
+import { CompanyDirectory } from "../components/dashboard/CompanyListDirectory";
+import { companyList } from "../components/dashboard/CompanyList";
 
 export const SelectedChartContext = createContext();
 export const ChartDataContext = createContext();
 
 function NewDashboard() {
   const { isSignedIn, user, isLoaded } = useUser();
-
+  const companyDirectory = new CompanyDirectory(companyList);
   const [company, setCompany] = useState("zillow");
   const [country, setCountry] = useState("US");
   const [companyCompetitors, setCompanyCompetitors] = useState([]);
@@ -40,6 +42,7 @@ function NewDashboard() {
   const [selectedChart, setSelectedChart] = useState("");
   const [chartData, setChartData] = useState();
 
+  const companyDic = companyDirectory.findCompanyByName(company);
   // State to track active sections
   const [activeSections, setActiveSections] = useState({ Overview: true });
   // Sections for sidebar; MUST have same title as section id, which might be used in child components
@@ -301,7 +304,7 @@ function NewDashboard() {
           >
             {/* Search Bar */}
             <div className="w-[36rem] mt-2">
-              <SearchBar setCompany={setCompany} />
+              <SearchBar company={company} setCompany={setCompany} />
             </div>
             {/* Company name, country, and comparing section */}
             <div className="mt-6 flex flex-row justify-between w-full items-center">

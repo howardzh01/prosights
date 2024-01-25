@@ -1,0 +1,51 @@
+export const companyList = [
+  {
+    name: "stockx",
+    url: "www.stockx.com",
+    cbSlug: "stockx",
+    displayedName: "StockX",
+    logo: "https://images.crunchbase.com/image/upload/t_cb-default-original/hvhqzscb7we0hifjqr2q",
+  },
+  {
+    name: "goat",
+    url: "www.goat.com",
+    cbSlug: "goatapp",
+    displayedName: "GOAT",
+    logo: "https://images.crunchbase.com/image/upload/c_pad,h_170,w_170,f_auto,b_white,q_auto:eco,dpr_1/vtpvp46fr98de2r1txof",
+  },
+  {
+    name: "flight-club",
+    url: "www.flightclub.com",
+    cbSlug: "flight-club-new-york-ltd",
+    displayedName: "Flight Club",
+    logo: "https://images.crunchbase.com/image/upload/c_pad,h_170,w_170,f_auto,b_white,q_auto:eco,dpr_1/v1423006341/cmctwzqw4fhxhuhv7zwh.png",
+  },
+  {
+    name: "zillow",
+    url: "www.zillow.com",
+    cbSlug: "zillow",
+    displayedName: "Zillow",
+    logo: "https://images.crunchbase.com/image/upload/t_cb-default-original/v1500275099/j2jcc1e5txlw573hwrd2.png",
+  },
+  {
+    name: "hinge",
+    url: "www.hinge.com",
+    cbSlug: "hinge",
+    displayedName: "Hinge",
+    logo: "https://images.crunchbase.com/image/upload/t_cb-default-original/v1476208888/ioqpyzju0fzjm4hinlsk.jpg",
+  },
+  {
+    name: "tinder",
+    url: "www.tinder.com",
+    cbSlug: "tinder",
+    displayedName: "Tinder",
+    logo: "https://images.crunchbase.com/image/upload/t_cb-default-original/v1493769757/m6qsmngji1qacb480jeg.png",
+  },
+  {
+    name: "bumble",
+    url: "www.bumble.com",
+    cbSlug: "bumble",
+    displayedName: "Bumble",
+    logo: "https://images.crunchbase.com/image/upload/t_cb-default-original/g9hbkpvy3xxyo3dzryst",
+  },
+];

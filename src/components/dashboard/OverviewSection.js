@@ -91,7 +91,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
     <div className="mt-8 w-full">
       <p className="text-2xl font-semibold text-gray-800 ml-2">Overview</p>
       <hr className="border-t border-customGray-50 mt-2" />
-      <div className="flex flex-row mt-4 mx-4 space-x-16">
+      <div className="flex flex-row mt-4 ml-4 space-x-16">
         {/* About & Business Model */}
         {companyAbout && companyBusinessModel ? (
           <div className="flex flex-col w-1/2">
@@ -239,7 +239,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
         </div>
       </div>
       {/* Funding and M&A Tables */}
-      <div className="flex space-x-8 mt-6 justify-between ">
+      <div className="flex space-x-8 mt-6 ml-4 justify-between ">
         <div className="w-3/5">
           <p className="text-base font-semibold text-gray-800 mb-3">Funding</p>{" "}
           {crunchbaseData?.["raised_funding_rounds"] ? (
@@ -267,7 +267,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
       </div>
 
       {/* Signals */}
-      <div className="flex flex-col mt-6">
+      <div className="flex flex-col mt-6 ml-4">
         <div className="text-lg font-semibold text-gray-800">Signals</div>
         <div className="space-x-6 items-align flex mt-4 justify-between">
           {headCountData ? (

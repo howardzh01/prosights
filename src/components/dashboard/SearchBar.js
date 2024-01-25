@@ -17,7 +17,6 @@ function SearchBar({ setCompany, isCompetitorSearch = false }) {
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      // if (searchTerm !== "" && resultRef.current === "" && !thinking) {
       if (searchTerm !== "") {
         send();
       }
@@ -25,20 +24,8 @@ function SearchBar({ setCompany, isCompetitorSearch = false }) {
   };
 
   const send = async () => {
-    // setMessages((oldMessages) => {
-    //   const newMessages = [
-    //     ...oldMessages,
-    //     { role: "user", content: searchTerm },
-    //   ];
-    //   getAIResponse(newMessages);
-
-    //   return newMessages;
-    // });
     setCompany(searchTerm.toLowerCase());
     setSearchTerm("");
-    // const container = messagesContainerRef.current;
-    // shouldBeSnapping.current = true;
-    // container.scrollTop = container.scrollHeight;
   };
 
   return (
