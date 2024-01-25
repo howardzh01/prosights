@@ -46,10 +46,11 @@ function HeadCountSignal({ headCountData, startCutoff = new Date("2019") }) {
       rawChartData={headCountData}
       showTimescaleButtons={false}
       formatLabelFunction={formatMoney}
+      location={"Global"}
     />
   );
 
-  return <div>{yearHeadCountGraph}</div>;
+  return yearHeadCountGraph;
 }
 
 export default HeadCountSignal;

@@ -5,6 +5,7 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 import GenericTimeScale from "./GenericTimeScale";
 Chart.register(ChartDataLabels);
 import GenericTable from "./GenericTable";
+import Image from "next/image";
 
 function GenericBar({
   barChartData,
@@ -13,6 +14,7 @@ function GenericBar({
   showTimescaleButtons = true,
   showModalButtons = true,
   showTable = true,
+  location = "",
   timescale,
   setTimescale,
   selectedChart,
@@ -81,6 +83,19 @@ function GenericBar({
           showTimescaleButtons={showTimescaleButtons}
           showModalButtons={showModalButtons}
         />
+      )}
+
+      {location && (
+        <div className="flex flex-row mt-3">
+          <Image
+            src="/assets/globe.svg"
+            alt="Company Logo"
+            className="w-4 h-4 object-contain mr-1"
+            width={128}
+            height={128}
+          />
+          <p className="text-xs font-normal text-customGray-200">{location}</p>
+        </div>
       )}
 
       <div className="h-full w-full">
