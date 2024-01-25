@@ -124,7 +124,15 @@ function NewDashboard() {
       level: 1,
     },
     {
+      title: "$ Ad Spend",
+      level: 2,
+    },
+    {
       title: "Ad Spend Channel Breakdown",
+      level: 2,
+    },
+    {
+      title: "Ad Spend Channel Breakdown vs. Peers",
       level: 2,
     },
   ];
