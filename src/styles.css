@@ -79,28 +79,3 @@ div {
 .section-indent {
   margin-left: 1rem;
 }
-
-/* for side panel scroll */
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: #a0aec0; /* This is a Tailwind gray-400, change as needed */
-}
-
-/* Style the scrollbar handle */
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #4a5568; /* This is a Tailwind gray-700, change as needed */
-}
-
-/* Handle on hover */
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #2d3748; /* This is a Tailwind gray-800, change as needed */
-}
-
-/* Set the width of the scrollbar */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 1px; /* Narrower width */
-}
-
-.custom-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: #2d3748 #4a5568;
-}
