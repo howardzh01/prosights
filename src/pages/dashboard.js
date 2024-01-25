@@ -109,6 +109,14 @@ function NewDashboard() {
       level: 2,
     },
     {
+      title: "Market Share vs. Peers",
+      level: 2,
+    },
+    {
+      title: "Consumer Spend Growth vs. Peers",
+      level: 2,
+    },
+    {
       title: "Ad Spend",
       level: 1,
     },
