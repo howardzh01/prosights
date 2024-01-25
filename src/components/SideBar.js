@@ -11,8 +11,8 @@ function SideBar({ setMessages, recentChatData }) {
       <Image
         src="/assets/fullLogoWhite.png"
         alt="ProSights logo"
-        width={1024}
-        height={1024}
+        width={4096}
+        height={4096}
         className="w-28"
       />
       <div className="w-32">

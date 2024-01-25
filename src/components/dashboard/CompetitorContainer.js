@@ -28,7 +28,7 @@ function CompetitorContainer({ companyCompetitors, setCompanyCompetitors }) {
         className="flex flex-row items-center"
         onClick={() => setShowAutocomplete(true)}
       >
-        <Image
+        <Image  
           src="/assets/compare.svg"
           alt="Compare"
           className="w-4 h-4 mr-1 object-contain"

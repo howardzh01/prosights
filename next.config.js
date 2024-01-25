@@ -25,7 +25,6 @@ module.exports = {
     domains: [
       "lh3.googleusercontent.com",
       "ohozahtshujfrigjhysp.supabase.co",
-      "api.simulationlabs.ai",
       "images.crunchbase.com",
       "imgtr.ee",
     ],

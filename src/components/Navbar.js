@@ -13,8 +13,8 @@ function Navbar() {
                 <Image
                   src="/assets/fullLogoBlack.png"
                   alt="ProSights logo"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                   className="w-24 md:w-28"
                 />
               </Link>

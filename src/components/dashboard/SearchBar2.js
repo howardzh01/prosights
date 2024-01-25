@@ -29,6 +29,22 @@ export default function SearchBar({ company, setCompany }) {
         clearIcon={<span></span>}
         clearOnBlur={true}
         value={value}
+        renderOption={(props, option, { selected }) => (
+          <Box component="li" {...props}>
+            <img
+              src={option.logo}
+              alt={option.name}
+              style={{
+                marginRight: 8,
+                height: "20px",
+                width: "auto",
+                display: "inline-block",
+                borderRadius: "20%",
+              }}
+            />
+            <span className="">{option.url}</span>
+          </Box>
+        )}
         renderInput={(params) => (
           <TextField
             {...params}

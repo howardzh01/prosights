@@ -123,24 +123,24 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
                   src="/assets/graphPictures/totalVisitsByChannelLegend.svg"
                   alt="Company Logo"
                   className="w-10/12 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
               </div>
               <div className="flex flex-col">
                 <Image
                   src="/assets/graphPictures/totalVisitsByChannel.svg"
                   className="h-72 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
                 <div className="overflow-x-auto">
                   <div className="inline-block w-[80rem] pb-2">
                     <Image
                       src="/assets/graphPictures/totalVisitsByChannelTable.svg"
                       className="h-96"
-                      width={1024}
-                      height={1024}
+                      width={4096}
+                      height={4096}
                     />
                   </div>
                 </div>
@@ -182,24 +182,24 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
                   src="/assets/graphPictures/totalVisitsByChannelLegend.svg"
                   alt="Company Logo"
                   className="w-10/12 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
               </div>
               <div className="flex flex-col">
                 <Image
                   src="/assets/graphPictures/totalVisitsByChannelAnnual.svg"
                   className="h-72 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
                 <div className="overflow-x-auto">
                   <div className="inline-block w-[26rem] pt-2 pb-2">
                     <Image
                       src="/assets/graphPictures/totalVisitsByChannelTableAnnual.svg"
                       className="h-96 object-contain"
-                      width={1024}
-                      height={1024}
+                      width={4096}
+                      height={4096}
                     />
                   </div>
                 </div>
@@ -248,24 +248,24 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
                   src="/assets/graphPictures/visitsGrowthLegend.svg"
                   alt="Company Logo"
                   className="w-48 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
               </div>
               <div className="flex flex-col">
                 <Image
                   src="/assets/graphPictures/visitsGrowth.svg"
                   className="h-72 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
                 <div className="overflow-x-auto">
                   <div className="inline-block w-[80rem] h-auto pb-2">
                     <Image
                       src="/assets/graphPictures/visitsGrowthTable.svg"
                       className="h-40 object-contain"
-                      width={1024}
-                      height={1024}
+                      width={4096}
+                      height={4096}
                     />
                   </div>
                 </div>
@@ -307,24 +307,24 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
                   src="/assets/graphPictures/totalVisitsByChannelLegend.svg"
                   alt="Company Logo"
                   className="w-10/12 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
               </div>
               <div className="flex flex-col">
                 <Image
                   src="/assets/graphPictures/visitsGrowthAnnual.svg"
                   className="h-72 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
                 <div className="overflow-x-auto pt-2">
                   <div className="inline-block w-[30rem] px-4 pb-2">
                     <Image
                       src="/assets/graphPictures/visitsGrowthTableAnnual.svg"
                       className="h-40 object-contain"
-                      width={1024}
-                      height={1024}
+                      width={4096}
+                      height={4096}
                     />
                   </div>
                 </div>
@@ -376,24 +376,24 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
                   src="/assets/graphPictures/visitsGrowthLegend.svg"
                   alt="Company Logo"
                   className="w-48 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
               </div>
               <div className="flex flex-col">
                 <Image
                   src="/assets/graphPictures/totalVisitsMarketShare.svg"
                   className="h-72 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
                 <div className="overflow-x-auto">
-                  <div className="inline-block w-[77rem] pb-2 ">
+                  <div className="inline-block pb-2 w-[77rem] px-2">
                     <Image
                       src="/assets/graphPictures/totalVisitsMarketShareTable.svg"
-                      className="h-48"
-                      width={1024}
-                      height={1024}
+                      className="object-contain h-auto "
+                      width={4096}
+                      height={4096}
                     />
                   </div>
                 </div>
@@ -435,24 +435,24 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
                   src="/assets/graphPictures/totalVisitsByChannelLegend.svg"
                   alt="Company Logo"
                   className="w-10/12 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
               </div>
               <div className="flex flex-col">
                 <Image
                   src="/assets/graphPictures/totalVisitsMarketShareAnnual.svg"
                   className="h-72 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
-                <div className="overflow-x-auto pt-2  px-4">
+                <div className="overflow-x-auto pt-2  px-8">
                   <div className="inline-block w-[25rem] pb-2">
                     <Image
                       src="/assets/graphPictures/totalVisitsMarketShareTableAnnual.svg"
-                      className="h-35 object-contain"
-                      width={1024}
-                      height={1024}
+                      className="h-auto object-contain"
+                      width={4096}
+                      height={4096}
                     />
                   </div>
                 </div>
@@ -485,8 +485,8 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
                 <Image
                   src="/assets/graphPictures/visitsBreakdownPeersGeography.svg"
                   className="w-2/3 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
                 <Image
                   src="/assets/graphPictures/visitsBreakdownPeersGeographyLegend.svg"
@@ -524,8 +524,8 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
                 <Image
                   src="/assets/graphPictures/visitsBreakdownPeersDevice.svg"
                   className="w-2/3 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
                 <Image
                   src="/assets/graphPictures/visitsBreakdownPeersDeviceLegend.svg"
@@ -563,8 +563,8 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
                 <Image
                   src="/assets/graphPictures/visitsBreakdownPeersChannel.svg"
                   className="w-2/3 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
                 <Image
                   src="/assets/graphPictures/visitsBreakdownPeersChannelLegend.svg"
@@ -602,8 +602,8 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
                 <Image
                   src="/assets/graphPictures/visitsBreakdownPeersSearch.svg"
                   className="w-3/5 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
                 <Image
                   src="/assets/graphPictures/visitsBreakdownPeersSearchLegend.svg"

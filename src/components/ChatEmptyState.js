@@ -21,8 +21,8 @@ function ChatEmptyState() {
             <Image
               src="/logo.png"
               alt="ProSights Logo"
-              width={1024}
-              height={1024}
+              width={4096}
+              height={4096}
               className="w-12 md:w-16 pb-4 md:pb-0"
             />
           </div>

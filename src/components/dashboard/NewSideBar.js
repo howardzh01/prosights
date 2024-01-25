@@ -20,6 +20,7 @@ function NewSideBar({ sections, activeSections }) {
         alt="ProSights logo"
         width={128}
         height={128}
+        priority
         className="w-28"
       />
       <div className="mt-8 flex-grow relative overflow-y-auto overflow-x-hidden">
@@ -29,8 +30,8 @@ function NewSideBar({ sections, activeSections }) {
               <Image
                 src={`/assets/${section.title.replace(/\s/g, "")}Icon.svg`}
                 alt="Section Icon"
-                width={1024}
-                height={1024}
+                width={4096}
+                height={4096}
                 className="w-4"
               />
             )} */}
@@ -53,6 +54,7 @@ function NewSideBar({ sections, activeSections }) {
                   width={32}
                   height={32}
                   className="w-4 mr-2"
+                  priority={index === 0}
                 />
               )}
               {section.title}

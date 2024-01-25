@@ -58,8 +58,8 @@ function AppUsageSection({}) {
                   src="/assets/graphPictures/visitsGrowthLegend.svg"
                   alt="Company Logo"
                   className="w-48 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
               </div>
               <div className="flex flex-col">
@@ -73,7 +73,7 @@ function AppUsageSection({}) {
                   <div className="inline-block w-[72rem] h-auto pb-2">
                     <Image
                       src="/assets/graphPictures/AppMAUGrowthPeersTable.svg"
-                      className="h-36 object-contain"
+                      className="h-auto object-contain"
                       width={5120}
                       height={5120}
                     />
@@ -117,8 +117,8 @@ function AppUsageSection({}) {
                   src="/assets/graphPictures/totalVisitsByChannelLegend.svg"
                   alt="Company Logo"
                   className="w-10/12 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
               </div>
               <div className="flex flex-col">
@@ -128,7 +128,7 @@ function AppUsageSection({}) {
                   width={5120}
                   height={5120}
                 />
-                <div className="overflow-x-auto pt-2 px-4">
+                <div className="overflow-x-auto pt-2 px-8">
                   <div className="inline-block w-[24rem] pb-2">
                     <Image
                       src="/assets/graphPictures/AppMAUGrowthPeersTableAnnual.svg"
@@ -183,8 +183,8 @@ function AppUsageSection({}) {
                   src="/assets/graphPictures/visitsGrowthLegend.svg"
                   alt="Company Logo"
                   className="w-48 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
               </div>
               <div className="flex flex-col">
@@ -242,8 +242,8 @@ function AppUsageSection({}) {
                   src="/assets/graphPictures/totalVisitsByChannelLegend.svg"
                   alt="Company Logo"
                   className="w-10/12 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
               </div>
               <div className="flex flex-col">
@@ -254,12 +254,12 @@ function AppUsageSection({}) {
                   height={5120}
                 />
                 <div className="overflow-x-auto pt-2">
-                  <div className="inline-block w-[28rem] pb-2 px-4">
+                  <div className="inline-block w-[28rem] pb-2 px-8">
                     <Image
                       src="/assets/graphPictures/AppMAUMarketShareTableAnnual.svg"
                       className="h-35 object-contain"
-                      width={1024}
-                      height={1024}
+                      width={4096}
+                      height={4096}
                     />
                   </div>
                 </div>

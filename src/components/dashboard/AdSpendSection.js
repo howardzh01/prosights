@@ -58,8 +58,8 @@ function AdSpendSection({}) {
                   src="/assets/graphPictures/visitsGrowthLegend.svg"
                   alt="Company Logo"
                   className="w-48 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
               </div>
               <div className="flex flex-col">
@@ -117,8 +117,8 @@ function AdSpendSection({}) {
                   src="/assets/graphPictures/totalVisitsByChannelLegend.svg"
                   alt="Company Logo"
                   className="w-10/12 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
               </div>
               <div className="flex flex-col">
@@ -171,8 +171,8 @@ function AdSpendSection({}) {
                     src="/assets/graphPictures/AdSpendChannelLegend.svg"
                     alt="Company Logo"
                     className="w-[32rem] object-contain"
-                    width={1024}
-                    height={1024}
+                    width={4096}
+                    height={4096}
                   />
                 </div>
                 <div className="flex items-center gap-1">
@@ -294,8 +294,8 @@ function AdSpendSection({}) {
                   src="/assets/graphPictures/AdSpendBreakdownLegend.svg"
                   alt="Company Logo"
                   className="w-2/3 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
               </div>
               <div className="flex flex-col">

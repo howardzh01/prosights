@@ -90,8 +90,8 @@ function ConsumerSpendSection({}) {
                   src="/assets/graphPictures/ConsumerSpendCustomerRetentionLegend.svg"
                   alt="Company Logo"
                   className="w-[28rem] object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
               </div>
               <div className="flex flex-col">
@@ -171,8 +171,8 @@ function ConsumerSpendSection({}) {
                   src="/assets/graphPictures/ConsumerSpendCustomerRetentionPeersLegend.svg"
                   alt="Company Logo"
                   className="w-[22rem] object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
               </div>
               <div className="flex flex-col">
@@ -358,8 +358,8 @@ function ConsumerSpendSection({}) {
                   src="/assets/graphPictures/visitsGrowthLegend.svg"
                   alt="Company Logo"
                   className="w-48 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
               </div>
               <div className="flex flex-col">
@@ -417,8 +417,8 @@ function ConsumerSpendSection({}) {
                   src="/assets/graphPictures/totalVisitsByChannelLegend.svg"
                   alt="Company Logo"
                   className="w-10/12 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
               </div>
               <div className="flex flex-col">
@@ -486,8 +486,8 @@ function ConsumerSpendSection({}) {
                   src="/assets/graphPictures/visitsGrowthLegend.svg"
                   alt="Company Logo"
                   className="w-48 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
               </div>
               <div className="flex flex-col">
@@ -545,8 +545,8 @@ function ConsumerSpendSection({}) {
                   src="/assets/graphPictures/totalVisitsByChannelLegend.svg"
                   alt="Company Logo"
                   className="w-10/12 object-contain"
-                  width={1024}
-                  height={1024}
+                  width={4096}
+                  height={4096}
                 />
               </div>
               <div className="flex flex-col">

@@ -316,6 +316,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
                     className="w-56 object-contain"
                     width={512}
                     height={512}
+                    priority
                   />
                 </div>
               </div>
@@ -323,8 +324,9 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
                 <Image
                   src="/assets/graphPictures/SignalsMAUChartAnnual.svg"
                   className="w-full object-contain"
-                  width={5120}
-                  height={5120}
+                  width={512}
+                  height={512}
+                  priority
                 />
               </div>
             </div>
@@ -368,6 +370,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
                     className="w-52 object-contain"
                     width={512}
                     height={512}
+                    priority
                   />
                 </div>
               </div>
@@ -375,8 +378,9 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
                 <Image
                   src="/assets/graphPictures/SignalsRevenueChartAnnual.svg"
                   className="w-full object-contain"
-                  width={5120}
-                  height={5120}
+                  width={512}
+                  height={512}
+                  priority
                 />
               </div>
             </div>
