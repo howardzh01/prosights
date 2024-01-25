@@ -9,7 +9,7 @@ function NewSideBar({ sections, activeSections }) {
   const scrollToSection = (sectionTitle) => {
     const sectionElement = document.getElementById(sectionTitle);
     if (sectionElement) {
-      sectionElement.scrollIntoView({ behavior: "smooth" });
+      sectionElement.scrollIntoView();
     }
   };
 
