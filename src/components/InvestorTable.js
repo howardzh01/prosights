@@ -37,7 +37,7 @@ function InvestorTable({ fundingData }) {
               <TableHeader
                 text={
                   row["announced_on"]
-                    ? dateToMonths(row["announced_on"])
+                    ? dateToMonths(row["announced_on"], false)
                     : undefined
                 }
                 is_header={false}

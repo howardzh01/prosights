@@ -9,9 +9,13 @@ function InvestmentsTable({ investmentsData }) {
 
   function TableHeader({ text, is_header = true }) {
     if (is_header) {
-      return <th className=" px-4 py-2 text-center">{text}</th>;
+      return <th className=" px-4 py-2 text-center max-w-[8rem]">{text}</th>;
     } else {
-      return <td className="px-4 py-2 text-center">{text}</td>;
+      return (
+        <td className="px-4 py-2 text-center max-w-[8rem] whitespace-normal">
+          {text}
+        </td>
+      );
     }
   }
 
@@ -35,7 +39,7 @@ function InvestmentsTable({ investmentsData }) {
 
     combinedData.push({
       date: acquisition.announced_on.value,
-      announced: dateToMonths(acquisition.announced_on.value),
+      announced: dateToMonths(acquisition.announced_on.value, false),
       type: "Acquistion",
       amount: wholeAmount ? "$" + formatMoney(wholeAmount) : "-",
       company: acquisition.acquiree_identifier?.value,

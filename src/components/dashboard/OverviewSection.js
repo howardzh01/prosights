@@ -97,8 +97,13 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
           Company Overview
         </p>
       </div>
+<<<<<<< Updated upstream
       <hr className="border-none h-px bg-customGray-200" />
       <div className="flex flex-row mt-4 section-indent space-x-16">
+=======
+      <hr className="border-t border-customGray-50 mt-2" />
+      <div className="flex flex-row mt-4 section-indent space-x-24">
+>>>>>>> Stashed changes
         {/* About & Business Model */}
         {companyAbout && companyBusinessModel ? (
           <div className="flex flex-col w-1/2">
@@ -133,7 +138,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
         )}
         {/* Basic Stats */}
         <div
-          className="w-1/2"
+          className="w-1/2 pl-8 pt-4"
           style={{
             display: "grid",
             gridTemplateColumns: "min-content max-content 1fr",
