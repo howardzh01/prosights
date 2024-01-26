@@ -439,7 +439,7 @@ function NewDashboard() {
               ></CompetitorContainer>
             </div>
             {/* Overview Section */}
-            <div id="Company Overview" className="content-section w-full">
+            <div id="Company Overview" className="content-section w-full mb-20">
               <OverviewSection
                 companyAbout={companyDescription}
                 crunchbaseData={crunchbaseData}
@@ -453,16 +453,16 @@ function NewDashboard() {
             {/* Headcount; TODO: MAKE THIS A SEPARATE COMPONENT */}
             <div
               id="Headcount"
-              className="flex flex-col w-full mt-12 content-section"
+              className="flex flex-col w-full mt-12 content-section mb-12"
             >
-              <div className="flex items-center py-1 bg-customGray-50 rounded-md">
-                <HeadcountIcon className="mx-2 filter invert mb-1" />
-                <p className="text-2xl font-semibold text-gray-800">
+              <div className="flex items-center mt-2 mb-3 rounded-md">
+                <HeadcountIcon className="mx-2 filter invert w-6 h-6" />
+                <p className="text-3xl font-semibold text-gray-800 ">
                   Headcount
                 </p>
               </div>
-              <hr className="border-t border-customGray-50 mt-2 mb-4" />
-              <div className="">
+              <hr className="border-none h-px bg-customGray-200" />
+              <div className="mt-6">
                 {headCountData ? (
                   <HeadCountChart headCountData={headCountData} />
                 ) : (
@@ -478,11 +478,11 @@ function NewDashboard() {
               />
             </div>
             {/* App Usage */}
-            <div className="w-full">
+            <div className="w-full mt-12">
               <AppUsageSection />
             </div>
             {/* Consumer Spend */}
-            <div className="w-full">
+            <div className="w-full mt-16">
               <ConsumerSpendSection />
             </div>
             {/* Ad Spend */}

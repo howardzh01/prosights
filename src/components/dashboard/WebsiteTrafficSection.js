@@ -13,19 +13,19 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
     <div className="flex flex-col w-full mt-12">
       <div
         id="Website Traffic"
-        className="content-section flex items-center py-1 bg-customGray-50 rounded-md"
+        className="content-section flex items-center mt-2 mb-3 rounded-md"
       >
-        <WebTrafficIcon className="mx-2 filter invert" />
-        <p className="text-2xl font-semibold text-gray-800">Website Traffic</p>
+        <WebTrafficIcon className="mx-2 filter invert w-6 h-6" />
+        <p className="text-3xl font-semibold text-gray-800 ">Website Traffic</p>
       </div>
+      <hr className="border-none h-px bg-customGray-200" />
       {/* <p
         id="Website Traffic"
         className="content-section text-2xl font-semibold text-gray-800 pl-2 py-1 bg-customGray-50 rounded-md"
       >
         Website Traffic
       </p> */}
-      <hr className="border-t border-customGray-50 mt-2 mb-4" />
-      <div className="flex flex-col section-indent">
+      <div className="flex flex-col section-indent mt-4">
         <div id="Growth" className="content-section">
           {webTrafficData !== undefined &&
           webTrafficGeoData !== null &&

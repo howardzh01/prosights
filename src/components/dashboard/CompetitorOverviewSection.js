@@ -9,15 +9,15 @@ import CompetitorOverviewIcon from "/public/assets/CompetitorOverviewIcon.svg";
 
 function CompetitorOverviewSection({}) {
   return (
-    <div className="flex flex-col w-full mt-12">
-      <div className="flex items-center py-1 bg-customGray-50 rounded-md">
-        <CompetitorOverviewIcon className="mx-2 filter invert" />
-        <p className="text-2xl font-semibold text-gray-800  ">
+    <div className="flex flex-col w-full">
+      <div className="flex items-center mt-2 mb-3 rounded-md">
+        <CompetitorOverviewIcon className="mx-2 filter invert w-6 h-6" />
+        <p className="text-3xl font-semibold text-gray-800 ">
           Competitor Overview
         </p>
       </div>
-      <hr className="border-t border-customGray-50 mt-2" />
-      <div className="lex flex-col items-center w-full overflow-hidden section-indent">
+      <hr className="border-none h-px bg-customGray-200" />
+      <div className="lex flex-col items-center w-full overflow-hidden section-indent mt-4">
         <Image
           src="/assets/graphPictures/competitorOverview.svg"
           className="h-[30rem] object-contain"

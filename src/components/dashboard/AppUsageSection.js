@@ -12,13 +12,13 @@ function AppUsageSection({}) {
     <div className="flex flex-col w-full mt-12 pb-8">
       <div
         id="App Usage"
-        className="content-section flex items-center py-1 bg-customGray-50 rounded-md"
+        className="content-section flex items-center mt-2 mb-3 rounded-md"
       >
-        <AppUsageIcon className="mx-2 filter invert mb-1" />
-        <p className="text-2xl font-semibold text-gray-800">App Usage</p>
+        <AppUsageIcon className="mx-2 filter invert w-6 h-6" />
+        <p className="text-3xl font-semibold text-gray-800 ">App Usage</p>
       </div>
-      <hr className="border-t border-customGray-50 mt-2 mb-4" />
-      <div className="flex flex-col section-indent">
+      <hr className="border-none h-px bg-customGray-200" />
+      <div className="flex flex-col section-indent mt-4">
         <div id="App Growth vs. Peers" className="content-section">
           <p className="text-base font-semibold text-gray-800 mb-3">
             Growth vs. Peers
