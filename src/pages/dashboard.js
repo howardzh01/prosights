@@ -235,7 +235,15 @@ function NewDashboard() {
   }, []);
 
   useEffect(() => {
-    setCompanyCompetitors([]);
+    if (company === "stockx") {
+      setCompanyCompetitors(
+        ["goat", "grailed"].map((name) =>
+          companyDirectory.findCompanyByName(name)
+        )
+      );
+    } else {
+      setCompanyCompetitors([]);
+    }
   }, [company]);
 
   const downloadPDF = async () => {

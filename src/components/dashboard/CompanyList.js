@@ -14,6 +14,13 @@ export const companyList = [
     logo: "https://images.crunchbase.com/image/upload/c_pad,h_170,w_170,f_auto,b_white,q_auto:eco,dpr_1/vtpvp46fr98de2r1txof",
   },
   {
+    name: "grailed",
+    url: "www.grailed.com",
+    cbSlug: "grailed",
+    displayedName: "Grailed",
+    logo: "https://images.crunchbase.com/image/upload/c_pad,h_170,w_170,f_auto,b_white,q_auto:eco,dpr_1/cy5oo3m3njxtojnvz198",
+  },
+  {
     name: "flight-club",
     url: "www.flightclub.com",
     cbSlug: "flight-club-new-york-ltd",
