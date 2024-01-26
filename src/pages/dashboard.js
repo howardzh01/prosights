@@ -348,7 +348,7 @@ function NewDashboard() {
             id="main-content"
             className="flex flex-col w-screen overflow-x-hidden items-center px-10 bg-white bg-repeat bg-center"
             style={{
-              backgroundImage: "url('/assets/backgroundPatternUltraLight.svg')",
+              backgroundImage: "url('/assets/backgroundPatternLight.svg')",
             }}
           >
             {/* Search Bar */}
