@@ -471,7 +471,10 @@ function NewDashboard() {
                 </p>
               </div>
               <hr className="border-none h-px bg-customGray-200" />
-              <div className="mt-6">
+              <div className="mt-6 section-indent">
+                <p className="text-base font-semibold text-gray-800 mb-3">
+                  Employees
+                </p>
                 {headCountData ? (
                   <HeadCountChart headCountData={headCountData} />
                 ) : (
