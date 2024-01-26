@@ -472,9 +472,25 @@ function NewDashboard() {
               </div>
               <hr className="border-none h-px bg-customGray-200" />
               <div className="mt-6 section-indent">
-                <p className="text-base font-semibold text-gray-800 mb-3">
-                  Employees
-                </p>
+                <div className="flex flex-row items-center mb-3">
+                  <p className="text-base font-semibold text-gray-800 mr-2">
+                    Employees
+                  </p>
+                  <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
+                    <Image
+                      src="/assets/downloadInactive.svg"
+                      className="w-5 h-5 opacity-50 object-contain group-hover:hidden"
+                      width={256}
+                      height={256}
+                    />
+                    <Image
+                      src="/assets/downloadActive.svg"
+                      className="w-5 h-5 object-contain hidden group-hover:block"
+                      width={256}
+                      height={256}
+                    />
+                  </div>
+                </div>
                 {headCountData ? (
                   <HeadCountChart headCountData={headCountData} />
                 ) : (

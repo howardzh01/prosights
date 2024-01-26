@@ -11,6 +11,7 @@ import {
 } from "../../utils/Utils";
 import GenericStackedBar from "./templates/GenericStackedBar";
 import { CHARTS } from "../../constants";
+import Image from "next/image";
 
 function WebTrafficChart({
   trafficData,
@@ -141,7 +142,23 @@ function WebTrafficChart({
     default:
       return (
         <div>
-          <p className="text-base font-semibold text-gray-800 mb-3">Growth</p>
+          <div className="flex flex-row items-center mb-3">
+            <p className="text-base font-semibold text-gray-800 mr-2">Growth</p>
+            <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
+              <Image
+                src="/assets/downloadInactive.svg"
+                className="w-5 h-5 object-contain opacity-50 group-hover:hidden"
+                width={256}
+                height={256}
+              />
+              <Image
+                src="/assets/downloadActive.svg"
+                className="w-5 h-5 object-contain hidden group-hover:block"
+                width={256}
+                height={256}
+              />
+            </div>
+          </div>
           <div className="h-fit mb-4">
             <TwoColumnView
               quarterGraph={customTrafficGraph}

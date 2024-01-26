@@ -20,9 +20,25 @@ function AppUsageSection({}) {
       <hr className="border-none h-px bg-customGray-200" />
       <div className="flex flex-col section-indent mt-4">
         <div id="App Growth vs. Peers" className="content-section">
-          <p className="text-base font-semibold text-gray-800 mb-3">
-            Growth vs. Peers
-          </p>
+          <div className="flex flex-row items-center mb-3">
+            <p className="text-base font-semibold text-gray-800 mr-2">
+              Growth vs. Peers
+            </p>
+            <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
+              <Image
+                src="/assets/downloadInactive.svg"
+                className="w-5 h-5 opacity-50 object-contain group-hover:hidden"
+                width={256}
+                height={256}
+              />
+              <Image
+                src="/assets/downloadActive.svg"
+                className="w-5 h-5 object-contain hidden group-hover:block"
+                width={256}
+                height={256}
+              />
+            </div>
+          </div>
           <div className="flex flex-row w-full space-x-8">
             <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-2/3">
               <div className="flex flex-row justify-between w-full items-center mb-4">
@@ -145,9 +161,25 @@ function AppUsageSection({}) {
           </div>
         </div>
         <div id="App Market Share vs. Peers" className="content-section mt-8">
-          <p className="text-base font-semibold text-gray-800 mb-3">
-            Market Share vs. Peers
-          </p>
+          <div className="flex flex-row items-center mb-3">
+            <p className="text-base font-semibold text-gray-800 mr-2">
+              Market Share vs. Peers
+            </p>
+            <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
+              <Image
+                src="/assets/downloadInactive.svg"
+                className="w-5 h-5 opacity-50 object-contain group-hover:hidden"
+                width={256}
+                height={256}
+              />
+              <Image
+                src="/assets/downloadActive.svg"
+                className="w-5 h-5 object-contain hidden group-hover:block"
+                width={256}
+                height={256}
+              />
+            </div>
+          </div>
           <div className="flex flex-row w-full space-x-8">
             <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-2/3">
               <div className="flex flex-row justify-between w-full items-center mb-4">
@@ -270,9 +302,25 @@ function AppUsageSection({}) {
           </div>
         </div>
         <div id="Loyalty vs. Peers" className="content-section mt-8">
-          <p className="text-base font-semibold text-gray-800 mb-3">
-            Loyalty vs. Peers
-          </p>
+          <div className="flex flex-row items-center mb-3">
+            <p className="text-base font-semibold text-gray-800 mr-2">
+              Loyalty vs. Peers
+            </p>
+            <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
+              <Image
+                src="/assets/downloadInactive.svg"
+                className="w-5 h-5 opacity-50 object-contain group-hover:hidden"
+                width={256}
+                height={256}
+              />
+              <Image
+                src="/assets/downloadActive.svg"
+                className="w-5 h-5 object-contain hidden group-hover:block"
+                width={256}
+                height={256}
+              />
+            </div>
+          </div>
           <div className="space-x-6 flex flex-row items-center">
             <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-96">
               <h2 id="trafficByGeo" className="text-sm font-semibold mb-3">
