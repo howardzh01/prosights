@@ -2,12 +2,12 @@ import { useState, useEffect, useRef, Fragment, useContext } from "react";
 import Image from "next/image";
 import { useUser } from "@clerk/clerk-react";
 import { useRouter } from "next/router";
-import HeadCountChart from "../components/charts/HeadCountChart";
-import WebTrafficChart from "../components/charts/WebTrafficChart";
+import HeadCountChart from "../../components/charts/HeadCountChart";
+import WebTrafficChart from "../../components/charts/WebTrafficChart";
 import SearchBoxDashboard from "../components/SearchBoxDashboard";
-import WebGeoTrafficChart from "../components/charts/WebGeoTrafficChart";
+import WebGeoTrafficChart from "../../components/charts/WebGeoTrafficChart";
 import { Dialog, Transition } from "@headlessui/react";
-import UserProfileButton from "../components/UserProfileButton";
+import UserProfileButton from "../../components/UserProfileButton";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import CompanySummaryView from "../components/CompanySummaryView";
 import useSWR from "swr";
@@ -17,10 +17,10 @@ import {
   getTrafficData,
   getCrunchbaseData,
   getCompanyDescription,
-} from "../api";
-import ChartModal from "../components/ChartModal";
+} from "../../api";
+import ChartModal from "../../components/ChartModal";
 import { createContext } from "react";
-import { RELEVANT_CONTINENTS } from "../constants";
+import { RELEVANT_CONTINENTS } from "../../constants";
 
 // id is the id of the heading, level is the header level e.g. 2 = h2
 const headings = [
