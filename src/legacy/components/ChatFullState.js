@@ -4,7 +4,7 @@ import React from "react";
 import { useState, useEffect, useRef } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { useUser } from "@clerk/clerk-react";
-import UserMessage from "./UserMessage";
+import UserMessage from "../../components/UserMessage";
 import AiMessage from "./AiMessage";
 
 function ChatFullState({ messages }) {

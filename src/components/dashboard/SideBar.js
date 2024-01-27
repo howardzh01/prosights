@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Image from "next/image";
 import UserProfileButton from "../UserProfileButton";
 
-function NewSideBar({ sections, activeSections }) {
+function SideBar({ sections, activeSections }) {
   // Determine if we should extend the bar to cover multiple consecutive active sections
   const isSectionActive = (section) => activeSections[section.id];
 
@@ -73,4 +73,4 @@ function NewSideBar({ sections, activeSections }) {
   );
 }
 
-export default NewSideBar;
+export default SideBar;

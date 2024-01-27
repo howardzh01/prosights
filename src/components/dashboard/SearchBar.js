@@ -1,57 +1,92 @@
-import Link from "next/link";
+import * as React from "react";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import { Box, Typography } from "@mui/material";
+import InputAdornment from "@mui/material/InputAdornment";
 import Image from "next/image";
-import React from "react";
-import { useState, useEffect, useRef } from "react";
-import TextareaAutosize from "react-textarea-autosize";
+import Chip from "@mui/material/Chip";
+import { companyList } from "./CompanyList";
 
-function SearchBar({ setCompany, isCompetitorSearch = false }) {
-  // always converts company to lowercase
-  const [searchTerm, setSearchTerm] = useState("");
-  const placeholder = isCompetitorSearch
-    ? "Search for a company..."
-    : "Competitor";
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
-  };
+export default function SearchBar({ company, setCompany }) {
+  const [value, setValue] = React.useState(null);
 
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      if (searchTerm !== "") {
-        send();
-      }
-    }
-  };
-
-  const send = async () => {
-    setCompany(searchTerm.toLowerCase());
-    setSearchTerm("");
-  };
-
+  if (!companyList) {
+    return;
+  }
+  console.log(companyList);
   return (
-    <div className="flex w-full flex-row bg-white border items-center border-customGray-50 rounded-lg px-4 py-1 drop-shadow-sm">
-      <div className="flex flex-row items-center w-full">
-        <Image
-          src="/assets/search.svg"
-          alt="Play"
-          className="w-8 h-8 pr-4 object-contain"
-          width={256}
-          height={256}
-        />
-        <TextareaAutosize
-          type="text"
-          placeholder="Search for a company..."
-          className={`w-full border-none font-nunito text-sm text-customGray-800 px-0 py-0 pr-2 mr-2 resize-none placeholder:text-customGray-150 focus:ring-0 focus:outline-none`}
-          value={searchTerm}
-          maxRows={1} // set to 1 so the textarea doesn't overflow
-          minRows={1}
-          // maxLength={2500}
-          onChange={handleSearch}
-          onKeyDown={handleKeyDown}
-        />
-      </div>
+    <div className="h-12">
+      <Autocomplete
+        freeSolo={false}
+        id="autcomplete-search"
+        autoComplete={true}
+        options={companyList}
+        getOptionLabel={(option) => option.displayedName}
+        onChange={(event, value) => {
+          setCompany(value.name);
+          setValue(null);
+        }}
+        clearIcon={<span></span>}
+        clearOnBlur={true}
+        value={value}
+        renderOption={(props, option, { selected }) => (
+          <Box component="li" {...props}>
+            <img
+              src={option.logo}
+              alt={option.name}
+              style={{
+                marginRight: 8,
+                height: "20px",
+                width: "auto",
+                display: "inline-block",
+                borderRadius: "20%",
+              }}
+            />
+            <span className="">{option.url}</span>
+          </Box>
+        )}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Search for Company"
+            components={{
+              ClearIndicator: () => null,
+            }}
+            InputProps={{
+              ...params.InputProps,
+              // startAdornment: [
+              //   <Image
+              //     src="/assets/search.svg"
+              //     alt="Play"
+              //     width={16} // Adjusted to match the w-4 class in TailwindCSS (1rem = 16px)
+              //     height={16} // Adjusted to match the h-4 class in TailwindCSS (1rem = 16px)
+              //     className="mx-1"
+              //   />,
+              //   params.InputProps.startAdornment,
+              // ],
+              type: "search",
+            }}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                // target the root of the outlined input
+              },
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#EFF1F5", // Hide the default border
+                borderRadius: "0.5rem",
+                boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
+              },
+              "& .MuiOutlinedInput-root": {
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#EFF1F5", // border-customGray-50 on hover
+                },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#EFF1F5", // border-customGray-50 when focused
+                },
+              },
+            }}
+          />
+        )}
+      />
     </div>
   );
 }
-
-export default SearchBar;

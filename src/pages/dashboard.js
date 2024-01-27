@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import NewSideBar from "../components/dashboard/NewSideBar";
-import SearchBar from "../components/dashboard/SearchBar2";
+import SideBar from "../components/dashboard/SideBar";
+import SearchBar from "../components/dashboard/SearchBar";
 import OverviewSection from "../components/dashboard/OverviewSection";
 import WebsiteTrafficSection from "../components/dashboard/WebsiteTrafficSection";
 import AppUsageSection from "../components/dashboard/AppUsageSection";
@@ -349,7 +349,7 @@ function NewDashboard() {
         <div className="flex flex-row">
           {/* Sidebar */}
           <div className="flex-shrink-0 sticky top-0 w-60 h-screen">
-            <NewSideBar sections={sections} activeSections={activeSections} />
+            <SideBar sections={sections} activeSections={activeSections} />
           </div>
           {/* Main Content */}
           <div
