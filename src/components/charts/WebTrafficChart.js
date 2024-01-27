@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import GenericBarAndTable from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
-import ThreeColumnView from "./templates/ThreeColumnView";
 import {
   aggregateData,
   findInsertIndex,

@@ -2,7 +2,9 @@ import { CONSTANTS } from "../constants";
 
 // convert date to months
 export const dateToMonths = (date, shortenYear = true) => {
-  // Convert Date object 2023-01-01 to Jan 23)
+  // Convert Date object 2023-01-01 or String to
+  // 1. shortenYear=true Jan 23
+  // 2. shortenYear=false Jan 2023
   if (date.constructor === String) {
     date = new Date(date);
   }
@@ -45,7 +47,7 @@ export function convertToGrowthData(data) {
 
 export const aggregateData = (
   data,
-  output_key,
+  outputKey,
   agg = "sum",
   timescale = "quarterYear"
 ) => {
@@ -79,9 +81,9 @@ export const aggregateData = (
       Object.entries(data).forEach(([date, dic]) => {
         var timeInput = convertMonthFormat(date);
         if (timeInput === month) {
-          acc[month].sum += dic[output_key];
+          acc[month].sum += dic[outputKey];
           acc[month].count += 1;
-          acc[month].last = dic[output_key];
+          acc[month].last = dic[outputKey];
         }
       });
 
@@ -101,9 +103,9 @@ export const aggregateData = (
         timeInput = new Date(date).getUTCFullYear();
       }
       acc[timeInput] = acc[timeInput] || { sum: 0, count: 0, last: 0 };
-      acc[timeInput].sum += data[date][output_key];
+      acc[timeInput].sum += data[date][outputKey];
       acc[timeInput].count += 1;
-      acc[timeInput].last = data[date][output_key]; // Correctly reflects the last entry for each quarter
+      acc[timeInput].last = data[date][outputKey]; // Correctly reflects the last entry for each quarter
 
       return acc;
     }, {});
@@ -127,6 +129,15 @@ export const aggregateData = (
 };
 
 export function getTableInfo(data) {
+  /*   
+  Each value is a list all of same length
+    labels: data.keys(),
+    values: data.values(),
+    tableHeaders: Top Headers eg. 2019 2020,
+    tableLabels: Individual Labels eg. Q1 Q2 Q3 Q4,
+    growthPercentages: growthPercentages,
+  };
+  */
   let tableHeaders = [];
   let tableLabels = [];
   let growthPercentages = [];
