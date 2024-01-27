@@ -7,7 +7,7 @@ import {
   formatMoney,
   roundPeNumbers,
 } from "../../utils/Utils";
-import GenericBar from "./templates/GenericBar";
+import GenericBarAndTable from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
 import { CHARTS } from "../../constants";
 
@@ -25,10 +25,8 @@ function HeadCountChart({ headCountData, cutOffDate = new Date("2019") }) {
       "left"
     );
 
-    return {
-      tableHeaders: tableHeaders.slice(cutoffIndex),
+    const chartData = {
       labels: labels.slice(cutoffIndex),
-      tableLabels: tableLabels.slice(cutoffIndex),
       datasets: [
         {
           label: "HeadCount",
@@ -39,13 +37,20 @@ function HeadCountChart({ headCountData, cutOffDate = new Date("2019") }) {
           borderWidth: 1,
         },
       ],
+    };
+
+    const tableData = {
+      tableHeaders: tableHeaders.slice(cutoffIndex),
+      tableLabels: tableLabels.slice(cutoffIndex),
       tableDatasets: [
+        ...chartData["datasets"],
         {
           label: "% YoY Growth",
           data: growthPercentages.slice(cutoffIndex),
         },
       ],
     };
+    return { chartData: chartData, tableData: tableData };
   }
 
   const customChartData = convertToChartData(
@@ -57,8 +62,8 @@ function HeadCountChart({ headCountData, cutOffDate = new Date("2019") }) {
   );
 
   const quarterHeadCountGraph = (
-    <GenericBar
-      barChartData={customChartData}
+    <GenericBarAndTable
+      data={customChartData}
       title={"Total Headcount"}
       showDataLabels={timescale !== "month"}
       timescale={timescale}
@@ -72,8 +77,8 @@ function HeadCountChart({ headCountData, cutOffDate = new Date("2019") }) {
   );
 
   const yearHeadCountGraph = (
-    <GenericBar
-      barChartData={yearChartData}
+    <GenericBarAndTable
+      data={yearChartData}
       showTimescaleButtons={false}
       showModalButtons={false}
       scrollStart={"right"}

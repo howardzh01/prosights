@@ -7,8 +7,8 @@ Chart.register(ChartDataLabels);
 import GenericTable from "./GenericTable";
 import Image from "next/image";
 
-function GenericBar({
-  barChartData,
+function GenericBarAndTable({
+  data, // {chartData, tableData}
   title = undefined,
   showDataLabels = true,
   showTimescaleButtons = true,
@@ -20,9 +20,10 @@ function GenericBar({
   selectedChart,
   rawChartData,
   formatLabelFunction = (x) => x,
-  formatTableDataFunction = (x) => x,
+  formatTableDataFunction = (x) => x, //Table Options from here on
   scrollStart = "left",
 }) {
+  const { chartData, tableData } = data;
   const options = {
     plugins: {
       title: {
@@ -100,16 +101,16 @@ function GenericBar({
       )}
 
       <div className="h-full w-full">
-        {barChartData && <Bar data={barChartData} options={options} />}
+        {chartData && <Bar data={chartData} options={options} />}
       </div>
 
       {showTable && (
         <div>
-          {/* Default to use barChartData if tableChartData is undefined */}
+          {/* Default to use data if tableChartData is undefined */}
           <GenericTable
-            chartData={barChartData}
+            chartData={tableData}
             scrollStart={scrollStart}
-            formatDataFunction={formatTableDataFunction}
+            formatTableDataFunction={formatTableDataFunction}
           />
         </div>
       )}
@@ -117,4 +118,4 @@ function GenericBar({
   );
 }
 
-export default GenericBar;
+export default GenericBarAndTable;

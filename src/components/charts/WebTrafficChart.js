@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import GenericBar from "./templates/GenericBar";
+import GenericBarAndTable from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
 import ThreeColumnView from "./templates/ThreeColumnView";
 import {
@@ -47,10 +47,8 @@ function WebTrafficChart({
       cutOffDate,
       "left"
     );
-    return {
-      tableHeaders: tableHeaders.slice(cutoffIndex),
+    const chartData = {
       labels: labels.slice(cutoffIndex),
-      tableLabels: tableLabels.slice(cutoffIndex),
       datasets: [
         {
           label: displayedLabel + " (M)",
@@ -61,18 +59,24 @@ function WebTrafficChart({
           borderWidth: 1,
         },
       ],
+    };
+
+    const tableData = {
+      tableHeaders: tableHeaders.slice(cutoffIndex),
+      tableLabels: tableLabels.slice(cutoffIndex),
       tableDatasets: [
+        ...chartData["datasets"],
         {
           label: "% YoY Growth",
           data: growthPercentages.slice(cutoffIndex),
         },
       ],
     };
+    return { chartData: chartData, tableData: tableData };
   }
-
   const customTrafficGraph = (
-    <GenericBar
-      barChartData={convertToChartData(
+    <GenericBarAndTable
+      data={convertToChartData(
         aggregateData(trafficData, "visits", "sum", trafficTimescale),
         "Visits"
       )}
@@ -88,8 +92,8 @@ function WebTrafficChart({
     />
   );
   const yearTrafficGraph = (
-    <GenericBar
-      barChartData={convertToChartData(
+    <GenericBarAndTable
+      data={convertToChartData(
         aggregateData(trafficData, "visits", "sum", "year"),
         "Visits"
       )}
@@ -102,8 +106,8 @@ function WebTrafficChart({
   );
 
   const customUserGraph = (
-    <GenericBar
-      barChartData={convertToChartData(
+    <GenericBarAndTable
+      data={convertToChartData(
         aggregateData(trafficData, "users", "mean", mauTimescale),
         "Users"
       )}
@@ -120,8 +124,8 @@ function WebTrafficChart({
     />
   );
   const yearUserGraph = (
-    <GenericBar
-      barChartData={convertToChartData(
+    <GenericBarAndTable
+      data={convertToChartData(
         aggregateData(trafficData, "users", "mean", "year"),
         "Users"
       )}

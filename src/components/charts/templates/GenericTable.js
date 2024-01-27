@@ -3,7 +3,11 @@ import Chart from "chart.js/auto";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 Chart.register(ChartDataLabels);
 
-function GenericTable({ chartData, scrollStart = "left", formatDataFunction }) {
+function GenericTable({
+  chartData,
+  scrollStart = "left",
+  formatTableDataFunction,
+}) {
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -58,8 +62,9 @@ function GenericTable({ chartData, scrollStart = "left", formatDataFunction }) {
             ))}
           </tr>
         </thead>
+        {/* // TODO: consider formatting table before loading it in */}
         <tbody className="bg-white">
-          {[datasets, tableDatasets].map((dsetCategory, categoryIndex) =>
+          {[tableDatasets].map((dsetCategory, categoryIndex) =>
             dsetCategory.map((dataset) => (
               <tr key={dataset.label}>
                 <td className="pr-2 py-2 whitespace-nowrap text-sm font-normal text-customGray-500 text-left sticky left-0 z-10 bg-white bg-opacity-100">
@@ -70,7 +75,7 @@ function GenericTable({ chartData, scrollStart = "left", formatDataFunction }) {
                     key={index}
                     className={`whitespace-nowrap text-sm text-customGray-500 text-center`}
                   >
-                    {categoryIndex ? value : formatDataFunction(value)}
+                    {formatTableDataFunction(value)}
                   </td>
                 ))}
               </tr>
