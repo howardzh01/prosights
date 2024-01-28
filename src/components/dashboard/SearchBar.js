@@ -67,15 +67,14 @@ export default function SearchBar({ company, setCompany }) {
               type: "search",
             }}
             sx={{
-              "& .MuiOutlinedInput-root": {
-                // target the root of the outlined input
-              },
               "& .MuiOutlinedInput-notchedOutline": {
                 borderColor: "#EFF1F5", // Hide the default border
                 borderRadius: "0.5rem",
                 boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
               },
               "& .MuiOutlinedInput-root": {
+                backgroundColor: "#FFFFFF",
+
                 "&:hover .MuiOutlinedInput-notchedOutline": {
                   borderColor: "#EFF1F5", // border-customGray-50 on hover
                 },
