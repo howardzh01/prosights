@@ -2,14 +2,20 @@ import { Bar } from "react-chartjs-2";
 import GenericTimeScale from "./GenericTimeScale";
 
 function StackedBarChart({
-  data,
-  title = undefined,
+  data, // {chartData, tableData}
   showDataLabels = true,
   showTimescaleButtons = true,
+  showModalButtons = true,
+  showTable = true,
+  title = undefined, // Timescale component from here on
+  location = "",
   timescale,
   setTimescale,
   selectedChart,
   rawChartData,
+  formatChartLabelFunction: formatChartLabelFunction = (x) => x,
+  formatTableDataFunction = (x) => x, //Table Options from here on
+  scrollStart = "left",
 }) {
   // Normailize values to sum to 100 so bars have equal height
   const totals = data.datasets.reduce((acc, curArr) => {

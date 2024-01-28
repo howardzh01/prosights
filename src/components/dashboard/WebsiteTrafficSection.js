@@ -6,9 +6,13 @@ import Image from "next/image";
 import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 import { Skeleton } from "@nextui-org/react";
 import WebTrafficChart from "../charts/WebTrafficChart";
+import WebTrafficByChannelChart from "../charts/WebTrafficByChannelChart";
 import WebTrafficIcon from "/public/assets/WebsiteTrafficIcon.svg";
 
 function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
+  const webTrafficExists =
+    webTrafficData !== undefined && Object.keys(webTrafficData).length !== 0;
+  const webTrafficGeoDataExists = webTrafficGeoData !== null;
   return (
     <div className="flex flex-col w-full mt-12">
       <div
@@ -27,9 +31,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
       </p> */}
       <div className="flex flex-col section-indent mt-4">
         <div id="Growth" className="content-section">
-          {webTrafficData !== undefined &&
-          webTrafficGeoData !== null &&
-          Object.keys(webTrafficData).length !== 0 ? (
+          {webTrafficExists ? (
             <WebTrafficChart trafficData={webTrafficData}></WebTrafficChart>
           ) : (
             <Skeleton className="w-full h-80 rounded-lg bg-customGray-50" />
@@ -40,6 +42,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
             <p className="text-base font-semibold text-gray-800 mr-2">
               Breakdown
             </p>
+
             <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
               <Image
                 src="/assets/downloadInactive.svg"
@@ -111,6 +114,14 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
             <p className="text-base font-semibold text-gray-800 mr-2">
               Quality Over Time
             </p>
+
+            {/* {webTrafficExists ? (
+              <WebTrafficByChannelChart
+                trafficData={webTrafficData}
+              ></WebTrafficByChannelChart>
+            ) : (
+              <Skeleton className="w-full h-80 rounded-lg bg-customGray-50" />
+            )} */}
             <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
               <Image
                 src="/assets/downloadInactive.svg"

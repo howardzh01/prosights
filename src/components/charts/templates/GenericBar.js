@@ -9,17 +9,17 @@ import Image from "next/image";
 
 function GenericBarAndTable({
   data, // {chartData, tableData}
-  title = undefined,
   showDataLabels = true,
   showTimescaleButtons = true,
   showModalButtons = true,
   showTable = true,
+  title = undefined, // Timescale component from here on
   location = "",
   timescale,
   setTimescale,
   selectedChart,
   rawChartData,
-  formatLabelFunction = (x) => x,
+  formatChartLabelFunction: formatChartLabelFunction = (x) => x,
   formatTableDataFunction = (x) => x, //Table Options from here on
   scrollStart = "left",
 }) {
@@ -44,7 +44,7 @@ function GenericBarAndTable({
         align: "top",
         // formatter: Math.round,
         formatter: function (value, context) {
-          return formatLabelFunction(value);
+          return formatChartLabelFunction(value);
         },
         font: {
           weight: "light",

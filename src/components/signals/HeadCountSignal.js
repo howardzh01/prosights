@@ -48,7 +48,7 @@ function HeadCountSignal({ headCountData, startCutoff = new Date("2019") }) {
       showTable={false}
       rawChartData={headCountData}
       showTimescaleButtons={false}
-      formatLabelFunction={formatMoney}
+      formatChartLabelFunction={formatMoney}
       location={"US"}
     />
   );

@@ -71,7 +71,7 @@ function HeadCountChart({ headCountData, cutOffDate = new Date("2019") }) {
       selectedChart={CHARTS.employeeCount}
       rawChartData={headCountData}
       showModalButtons={false}
-      formatLabelFunction={formatMoney}
+      formatChartLabelFunction={formatMoney}
       formatTableDataFunction={roundPeNumbers}
     />
   );
@@ -82,7 +82,7 @@ function HeadCountChart({ headCountData, cutOffDate = new Date("2019") }) {
       showTimescaleButtons={false}
       showModalButtons={false}
       scrollStart={"right"}
-      formatLabelFunction={formatMoney}
+      formatChartLabelFunction={formatMoney}
       formatTableDataFunction={roundPeNumbers}
     />
   );
