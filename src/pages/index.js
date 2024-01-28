@@ -36,23 +36,27 @@ function App() {
             </p>
           </div>
           <h1 className="text-4xl md:text-6xl font-bold mb-8 md:mb-12 text-center">
-            The AI Copilot for{" "}
+            Research Platform Built <br /> by{" "}
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#009AFF] to-[#B84CEB]">
-              Investors
-            </span>
-            .
+              Private Equity
+            </span>{" "}
+            Investors.
           </h1>
-          <p className="mb-16 md:mb-20 mx-4 md:mx-0 text-base md:text-xl font-light max-w-2xl text-center leading-relaxed">
-            Understand any company in 30 seconds by chatting with ProSights.{" "}
-            <br className="hidden md:flex" />
-            We help you make better decisions by analyzing alternative data.
+          <p className="mb-16 md:mb-20 mx-4 md:mx-0 text-base md:text-xl font-light md:max-w-3xl lg:max-w-5xl text-center leading-relaxed md:leading-relaxed">
+            Aggregate the best alternative data solutions to support the entire
+            deal process: origination, diligence, and portfolio monitoring. Our
+            interface gives quicker, better insights that can be easily shared.
           </p>
           <div className="flex items-center">
-            <Link
-              href="/sign-up"
+            {/* <a
+              href="https://calend.ly/jw00zy"
               className="flex flex-row items-center bg-primary text-white py-2 px-4 md:px-6 rounded-md hover:bg-blue-600 drop-shadow-lg mr-12 transition duration-300"
+            > */}
+            <a
+              href="https://calend.ly/jw00zy"
+              className="flex flex-row items-center bg-primary text-white py-2 px-4 md:px-6 rounded-md hover:bg-blue-600 drop-shadow-lg transition duration-300"
             >
-              <p className="mr-2 md:mr-4 text-base md:text-lg">Try for Free</p>
+              <p className="mr-2 md:mr-4 text-base md:text-lg">Book a Demo</p>
               <Image
                 src="/assets/topRightArrow.png"
                 alt="Go"
@@ -60,8 +64,8 @@ function App() {
                 width={64}
                 height={64}
               />
-            </Link>
-            <Link
+            </a>
+            {/* <Link
               href="#"
               className="group flex flex-row items-center rounded-md"
             >
@@ -80,7 +84,7 @@ function App() {
                 </p>
                 <p className="text-xs md:text-sm text-customGray-600">1 min</p>
               </div>
-            </Link>
+            </Link> */}
           </div>
         </div>
         <div className="relative mt-12 md:mt-24">
@@ -94,8 +98,8 @@ function App() {
             }`}
           >
             <Image
-              src="/assets/preview.svg"
-              alt="Play"
+              src="/assets/preview2.svg"
+              alt="Preview"
               className="w-full h-full drop-shadow-2xl px-4 md:px-16 object-contain"
               width={4096}
               height={4096}

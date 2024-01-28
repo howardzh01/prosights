@@ -14,10 +14,12 @@ function SideBar({ sections, activeSections }) {
       sectionElement.scrollIntoView();
     }
   };
+
   const expandedSections = sections
     .filter((section) => isSectionActive(section))
     .map((section) => section.parentId)
     .filter((parentId, index, self) => self.indexOf(parentId) === index); // This will remove duplicates
+
   return (
     <div className="bg-customGray-900 h-full w-full px-6 py-4 flex flex-col">
       <Image
