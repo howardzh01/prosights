@@ -61,7 +61,10 @@ export default function MyApp({ Component, pageProps }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#000000" />
         {/* Doesn't seem to actually work? */}
-        <meta name="description" content="AI Copilot for Investors" />
+        <meta
+          name="description"
+          content="Research Platform Built by Private Equity Investors"
+        />
         <link rel="apple-touch-icon" href="/favicon.ico" />
         {/* <!--
       manifest.json provides metadata used when your web app is installed on a
