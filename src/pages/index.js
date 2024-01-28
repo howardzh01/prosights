@@ -36,7 +36,7 @@ function App() {
             </p>
           </div>
           <h1 className="text-4xl md:text-6xl font-bold mb-8 md:mb-12 text-center">
-            Research Platform Built <br /> by{" "}
+            Research Platform Built <br className="hidden md:flex" /> by{" "}
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#009AFF] to-[#B84CEB]">
               Private Equity
             </span>{" "}
@@ -98,7 +98,7 @@ function App() {
             }`}
           >
             <Image
-              src="/assets/preview2.svg"
+              src="/assets/preview3.png"
               alt="Preview"
               className="w-full h-full drop-shadow-2xl px-4 md:px-16 object-contain"
               width={4096}
