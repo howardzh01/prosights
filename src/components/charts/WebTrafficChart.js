@@ -146,7 +146,7 @@ function WebTrafficChart({
       return (
         <div>
           <div className="flex flex-row items-center mb-3">
-            <p className="text-base font-semibold text-gray-800 mr-2">Growth</p>
+            <p className="text-lg font-semibold text-gray-800 mr-2">Growth</p>
             <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
               <Image
                 src="/assets/downloadInactive.svg"

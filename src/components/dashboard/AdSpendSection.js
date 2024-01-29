@@ -21,7 +21,7 @@ function AdSpendSection({}) {
       <div className="flex flex-col section-indent mt-4">
         <div id="Market Spend" className="content-section">
           <div className="flex flex-row items-center mb-3">
-            <p className="text-base font-semibold text-gray-800 mr-2">
+            <p className="text-lg font-semibold text-gray-800 mr-2">
               Market Spend
             </p>
             <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
@@ -162,7 +162,7 @@ function AdSpendSection({}) {
         </div>
         <div id="Channel Breakdown" className="content-section mt-8">
           <div className="flex flex-row items-center mb-3">
-            <p className="text-base font-semibold text-gray-800 mr-2">
+            <p className="text-lg font-semibold text-gray-800 mr-2">
               Channel Breakdown
             </p>
             <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
@@ -287,7 +287,7 @@ function AdSpendSection({}) {
         </div>
         <div id="Ad Breakdown vs. Peers" className="content-section mt-8">
           <div className="flex flex-row items-center mb-3">
-            <p className="text-base font-semibold text-gray-800 mr-2">
+            <p className="text-lg font-semibold text-gray-800 mr-2">
               Breakdown vs. Peers
             </p>
             <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">

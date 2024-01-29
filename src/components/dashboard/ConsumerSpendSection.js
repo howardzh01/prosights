@@ -21,7 +21,7 @@ function ConsumerSpendSection({}) {
       <div className="flex flex-col mt-4 section-indent">
         <div id="Customer Loyalty vs. Peers" className="content-section">
           <div className="flex flex-row items-center mb-3">
-            <p className="text-base font-semibold text-gray-800 mr-2">
+            <p className="text-lg font-semibold text-gray-800 mr-2">
               Customer Loyalty vs. Peers
             </p>
             <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
@@ -337,7 +337,7 @@ function ConsumerSpendSection({}) {
         </div>
         <div id="Consumer Growth vs. Peers" className="content-section mt-8">
           <div className="flex flex-row items-center mb-3">
-            <p className="text-base font-semibold text-gray-800 mr-2">
+            <p className="text-lg font-semibold text-gray-800 mr-2">
               Growth vs. Peers
             </p>
             <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
@@ -481,7 +481,7 @@ function ConsumerSpendSection({}) {
           className="content-section mt-8"
         >
           <div className="flex flex-row items-center mb-3">
-            <p className="text-base font-semibold text-gray-800 mr-2">
+            <p className="text-lg font-semibold text-gray-800 mr-2">
               Market Share vs. Peers
             </p>
             <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">

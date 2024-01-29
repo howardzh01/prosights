@@ -21,7 +21,7 @@ function AppUsageSection({}) {
       <div className="flex flex-col section-indent mt-4">
         <div id="App Growth vs. Peers" className="content-section">
           <div className="flex flex-row items-center mb-3">
-            <p className="text-base font-semibold text-gray-800 mr-2">
+            <p className="text-lg font-semibold text-gray-800 mr-2">
               Growth vs. Peers
             </p>
             <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
@@ -162,7 +162,7 @@ function AppUsageSection({}) {
         </div>
         <div id="App Market Share vs. Peers" className="content-section mt-8">
           <div className="flex flex-row items-center mb-3">
-            <p className="text-base font-semibold text-gray-800 mr-2">
+            <p className="text-lg font-semibold text-gray-800 mr-2">
               Market Share vs. Peers
             </p>
             <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
@@ -303,7 +303,7 @@ function AppUsageSection({}) {
         </div>
         <div id="Loyalty vs. Peers" className="content-section mt-8">
           <div className="flex flex-row items-center mb-3">
-            <p className="text-base font-semibold text-gray-800 mr-2">
+            <p className="text-lg font-semibold text-gray-800 mr-2">
               Loyalty vs. Peers
             </p>
             <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">

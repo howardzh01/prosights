@@ -102,11 +102,11 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
         {/* About & Business Model */}
         {companyAbout && companyBusinessModel ? (
           <div className="flex flex-col w-1/2">
-            <div className="text-base font-semibold text-gray-800">About</div>
+            <div className="text-lg font-semibold text-gray-800">About</div>
             <p className="text-sm text-customGray-800 leading-relaxed mt-1">
               {companyAbout["company_description"]}
             </p>
-            <div className="text-base font-semibold text-gray-800 mt-6">
+            <div className="text-lg font-semibold text-gray-800 mt-6">
               Business Model
             </div>
             <p className="text-sm text-customGray-800 whitespace-pre-line leading-relaxed mt-1">
@@ -133,7 +133,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
         )}
         {/* Basic Stats */}
         <div
-          className="w-1/2 pl-8 pt-4"
+          className="w-1/2 pl-8"
           style={{
             display: "grid",
             gridTemplateColumns: "min-content max-content 1fr",
@@ -248,7 +248,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
       {/* Funding and M&A Tables */}
       <div className="flex space-x-8 mt-6 ml-4 justify-between ">
         <div className="w-3/5">
-          <p className="text-base font-semibold text-gray-800 mb-3">Funding</p>{" "}
+          <p className="text-lg font-semibold text-gray-800 mb-3">Funding</p>{" "}
           {crunchbaseData?.["raised_funding_rounds"] ? (
             <InvestorTable
               fundingData={crunchbaseData?.["raised_funding_rounds"]}
@@ -258,7 +258,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
           )}
         </div>
         <div className="w-2/5">
-          <p className="text-base font-semibold text-gray-800 mb-3">M&A</p>
+          <p className="text-lg font-semibold text-gray-800 mb-3">M&A</p>
           {crunchbaseData?.["participated_investments"] &&
           crunchbaseData?.["acquiree_acquisitions"] ? (
             <InvestmentsTable

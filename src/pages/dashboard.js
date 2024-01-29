@@ -473,7 +473,7 @@ function NewDashboard() {
               <hr className="border-none h-px bg-customGray-200" />
               <div className="mt-6 section-indent">
                 <div className="flex flex-row items-center mb-3">
-                  <p className="text-base font-semibold text-gray-800 mr-2">
+                  <p className="text-lg font-semibold text-gray-800 mr-2">
                     Employees
                   </p>
                   <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">

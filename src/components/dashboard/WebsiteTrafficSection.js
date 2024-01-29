@@ -39,7 +39,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
         </div>
         <div id="Breakdown" className="content-section">
           <div className="flex flex-row items-center mb-3">
-            <p className="text-base font-semibold text-gray-800 mr-2">
+            <p className="text-lg font-semibold text-gray-800 mr-2">
               Breakdown
             </p>
 
@@ -111,7 +111,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
         </div>
         <div id="Quality Over Time" className="content-section mt-8">
           <div className="flex flex-row items-center mb-3">
-            <p className="text-base font-semibold text-gray-800 mr-2">
+            <p className="text-lg font-semibold text-gray-800 mr-2">
               Quality Over Time
             </p>
 
@@ -260,8 +260,8 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
         </div>
         <div id="Traffic Growth vs. Peers" className="content-section mt-8">
           <div className="flex flex-row items-center mb-3">
-            <p className="text-base font-semibold text-gray-800 mr-2">
-              Grwoth vs. Peers
+            <p className="text-lg font-semibold text-gray-800 mr-2">
+              Growth vs. Peers
             </p>
             <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
               <Image
@@ -404,7 +404,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
           className="content-section mt-8"
         >
           <div className="flex flex-row items-center mb-3">
-            <p className="text-base font-semibold text-gray-800 mr-2">
+            <p className="text-lg font-semibold text-gray-800 mr-2">
               Market Share vs. Peers
             </p>
             <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
@@ -545,7 +545,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
         </div>
         <div id="Traffic Breakdown vs. Peers" className="content-section mt-8">
           <div className="flex flex-row items-center mb-3">
-            <p className="text-base font-semibold text-gray-800 mr-2">
+            <p className="text-lg font-semibold text-gray-800 mr-2">
               Breakdown vs. Peers
             </p>
             <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
