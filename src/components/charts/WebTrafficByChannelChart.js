@@ -12,6 +12,18 @@ import GenericStackedBar from "./templates/GenericStackedBar";
 import { CHARTS } from "../../constants";
 import Image from "next/image";
 
+const displayedKeyMap = {
+  direct: "Direct",
+  mail: "Mail",
+  referral: "Referral",
+  social: "Social",
+  search_organic: "Organic Search",
+  social_organic: "Organic Social",
+  search_paid: "Paid Search",
+  social_paid: "Paid Social",
+  display_ad: "Display Ad",
+  unknown_channel: "Other",
+};
 function WebTrafficByChannelChart({
   trafficData,
   selectedChart = null,
@@ -20,7 +32,7 @@ function WebTrafficByChannelChart({
   // TODO: make this more compact later - probably 1 useState with an object containing all timescale states, or useReducer
 
   const [trafficByChannelTimescale, setTrafficByChannelTimescale] =
-    useState("year");
+    useState("quarterYear");
 
   if (!trafficData) return null;
   function convertToChannelChartData(
@@ -33,10 +45,14 @@ function WebTrafficByChannelChart({
       relevant_keys = [
         "direct",
         "mail",
-        "social",
-        "search",
         "referral",
+        "social",
+        "search_organic",
+        "social_organic",
+        "search_paid",
+        "social_paid",
         "display_ad",
+        "unknown_channel",
       ];
     } else if (type === "traffic_by_device") {
       relevant_keys = ["mobile_visits", "desktop_visits"];
@@ -59,16 +75,23 @@ function WebTrafficByChannelChart({
     }
 
     const aggData = relevant_keys.reduce((acc, key) => {
-      acc[key] = aggregateData(trafficData, key, "sum", timescale);
+      acc[displayedKeyMap[key]] = aggregateData(
+        trafficData,
+        key,
+        "sum",
+        timescale
+      );
       return acc;
     }, {});
 
     return {
-      labels: Object.keys(aggData[relevant_keys[0]]),
+      labels: Object.keys(aggData[displayedKeyMap[relevant_keys[0]]]),
       datasets: relevant_keys.map((key) => ({
-        data: Object.values(aggData[key]).map((number) => number / 1e6),
+        data: Object.values(aggData[displayedKeyMap[key]]).map(
+          (number) => number / 1e6
+        ),
         borderWidth: 1,
-        label: key,
+        label: displayedKeyMap[key],
       })),
     };
   }
@@ -131,8 +154,8 @@ function WebTrafficByChannelChart({
         "traffic_by_channel",
         trafficByChannelTimescale
       )}
-      title={"% Share"}
-      showDataLabels={false}
+      title={"Total Visits by Channel (%)"}
+      showDataLabels={trafficByChannelTimescale === "quarterYear"}
       timescale={trafficByChannelTimescale}
       setTimescale={setTrafficByChannelTimescale}
       selectedChart={CHARTS.trafficByChannel}
@@ -149,7 +172,9 @@ function WebTrafficByChannelChart({
       return (
         <div>
           <div className="flex flex-row items-center mb-3">
-            <p className="text-base font-semibold text-gray-800 mr-2">Growth</p>
+            <p className="text-lg font-semibold text-gray-800 mr-2">
+              Quality Over Time
+            </p>
             <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
               <Image
                 src="/assets/downloadInactive.svg"

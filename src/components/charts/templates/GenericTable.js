@@ -4,7 +4,7 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 Chart.register(ChartDataLabels);
 
 function GenericTable({
-  chartData,
+  tableData,
   scrollStart = "left",
   formatTableDataFunction,
 }) {
@@ -16,7 +16,7 @@ function GenericTable({
     }
   }, []);
 
-  const { tableHeaders, tableLabels, datasets, tableDatasets } = chartData;
+  const { tableHeaders, tableLabels, tableDatasets } = tableData;
   // console.log("datasets, labels, headers", datasets, labels, headers);
 
   // Prepare header spans

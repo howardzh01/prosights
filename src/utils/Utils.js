@@ -1,5 +1,5 @@
 import { CONSTANTS } from "../constants";
-
+import { cloneDeep } from "lodash";
 // convert date to months
 export const dateToMonths = (date, shortenYear = true) => {
   // Convert Date object 2023-01-01 or String to
@@ -400,4 +400,24 @@ export function convertLabelToDate(label) {
   } else {
     throw new Error("Unknown date format");
   }
+}
+
+export function convertStackedChartDataToPercent(datasets) {
+  // datasets is what is plottled by Chart.js Bar (eg. data.datasets).
+  // For each time period, if there are 5 different datasets we normalize it to percentage form
+
+  // Normailize values to sum to 100 so bars have equal height
+  const newDatasets = cloneDeep(datasets);
+  const totals = newDatasets.reduce((acc, curArr) => {
+    curArr.data.forEach((value, index) => {
+      acc[index] = (acc[index] || 0) + (value || 0);
+    });
+    return acc;
+  }, []);
+  newDatasets.forEach((dataset) => {
+    dataset.data = dataset.data.map((value, i) =>
+      (((value || 0) / totals[i]) * 100).toFixed(1)
+    );
+  });
+  return newDatasets;
 }

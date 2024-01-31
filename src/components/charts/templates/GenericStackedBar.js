@@ -1,11 +1,11 @@
 import { Bar } from "react-chartjs-2";
 import GenericTimeScale from "./GenericTimeScale";
-
+import { convertStackedChartDataToPercent } from "../../../utils/Utils";
 function StackedBarChart({
   data, // {chartData, tableData}
   showDataLabels = true,
   showTimescaleButtons = true,
-  showModalButtons = true,
+  showModalButtons = false,
   showTable = true,
   title = undefined, // Timescale component from here on
   location = "",
@@ -13,38 +13,33 @@ function StackedBarChart({
   setTimescale,
   selectedChart,
   rawChartData,
-  formatChartLabelFunction: formatChartLabelFunction = (x) => x,
+  formatChartLabelFunction = (x) => x,
   formatTableDataFunction = (x) => x, //Table Options from here on
   scrollStart = "left",
 }) {
-  // Normailize values to sum to 100 so bars have equal height
-  const totals = data.datasets.reduce((acc, curArr) => {
-    curArr.data.forEach((value, index) => {
-      acc[index] = (acc[index] || 0) + (value || 0);
-    });
-    return acc;
-  }, []);
-  data.datasets.forEach((dataset) => {
-    dataset.data = dataset.data.map((value, i) =>
-      (((value || 0) / totals[i]) * 100).toFixed(1)
-    );
-  });
+  data.datasets = convertStackedChartDataToPercent(data.datasets);
   //   console.log("normalized", data);
 
   const options = {
     plugins: {
       title: {
-        display: true,
-        text: title,
+        display: false,
+        // text: title,
         align: "start", // Aligns title to the left
         position: "top", // Positions title at the top
       },
       legend: {
         display: true, // Hides the legend
-        position: "right",
+        position: "top",
         labels: {
-          boxWidth: 12, // Set the width of the color box next to the legend text
+          boxHeight: 10, // Set circle height
+          usePointStyle: true, // This changes the legend icons to circles
+          padding: 16,
           // ... other label options
+        },
+        padding: {
+          top: 10, // Adjust the top padding
+          bottom: 40, // Adjust the bottom padding to push the graph down
         },
       },
       //   tooltip: {
@@ -54,7 +49,13 @@ function StackedBarChart({
         display: showDataLabels,
         // anchor: "end",
         // align: "top",
-        formatter: Math.round,
+        formatter: (value, context) => {
+          if (value < 5) {
+            return null;
+          } else {
+            return `${Math.round(value)}%`;
+          }
+        },
         font: {
           weight: "bold",
         },
@@ -69,12 +70,19 @@ function StackedBarChart({
       },
       // TODO: maybe display y-axis if timeline === "month" as data labels are turned off on monthly
       y: {
-        display: false, // Hides the y-axis
+        display: true, // Change this to true to show the y-axis
         grid: {
-          display: false, // Hides y-axis gridlines
+          display: true, // Enables y-axis gridlines
         },
+        border: { dash: [2, 1] },
         stacked: true,
-        max: 102,
+        max: 100, // Set the maximum value of the y-axis to 100%
+        ticks: {
+          stepSize: 10, // Sets the step size between ticks to 10
+          callback: function (value) {
+            return value + "%"; // Appends a '%' sign after each tick value
+          },
+        },
       },
     },
 
@@ -82,19 +90,52 @@ function StackedBarChart({
     responsive: true,
     // other options...
   };
+
+  const plugin = {
+    id: "increase-legend-spacing",
+    beforeInit(chart) {
+      // Get reference to the original fit function
+      const originalFit = chart.legend.fit;
+
+      // Override the fit function
+      chart.legend.fit = function fit() {
+        // Call original function and bind scope in order to use `this` correctly inside it
+        originalFit.bind(chart.legend)();
+        // Change the height as suggested in another answers
+        this.height += 10;
+      };
+    },
+  };
+
   return (
-    <div className="flex flex-col h-full">
-      {showTimescaleButtons && (
+    <div className="flex flex-col h-full w-full">
+      {(showTimescaleButtons || showModalButtons) && (
         <GenericTimeScale
           timescale={timescale}
           setTimescale={setTimescale}
           selectedChart={selectedChart}
           rawChartData={rawChartData}
-        ></GenericTimeScale>
+          title={title}
+          showTimescaleButtons={showTimescaleButtons}
+          showModalButtons={showModalButtons}
+        />
+      )}
+
+      {location && (
+        <div className="flex flex-row mt-3">
+          <Image
+            src="/assets/globe.svg"
+            alt="Company Logo"
+            className="w-4 h-4 object-contain mr-1"
+            width={128}
+            height={128}
+          />
+          <p className="text-xs font-normal text-customGray-200">{location}</p>
+        </div>
       )}
 
       <div className="h-full">
-        <Bar data={data} options={options} />
+        <Bar data={data} options={options} plugins={[plugin]} />
       </div>
     </div>
   );

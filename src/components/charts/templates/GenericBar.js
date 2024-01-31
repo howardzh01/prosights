@@ -27,7 +27,7 @@ function GenericBarAndTable({
   const options = {
     plugins: {
       title: {
-        display: true,
+        display: true, //adds extra padding
         // text: title,
         align: "start", // Aligns title to the left
         position: "top", // Positions title at the top
@@ -108,7 +108,7 @@ function GenericBarAndTable({
         <div>
           {/* Default to use data if tableChartData is undefined */}
           <GenericTable
-            chartData={tableData}
+            tableData={tableData}
             scrollStart={scrollStart}
             formatTableDataFunction={formatTableDataFunction}
           />

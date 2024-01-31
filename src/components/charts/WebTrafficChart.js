@@ -86,7 +86,7 @@ function WebTrafficChart({
       selectedChart={CHARTS.traffic}
       rawChartData={trafficData}
       showModalButtons={false}
-      formatLabelFunction={roundPeNumbers}
+      formatChartLabelFunction={roundPeNumbers}
       formatTableDataFunction={roundPeNumbers}
     />
   );
@@ -99,7 +99,7 @@ function WebTrafficChart({
       showTimescaleButtons={false}
       showModalButtons={false}
       scrollStart={"right"}
-      formatLabelFunction={roundPeNumbers}
+      formatChartLabelFunction={roundPeNumbers}
       formatTableDataFunction={roundPeNumbers}
     />
   );
@@ -118,7 +118,7 @@ function WebTrafficChart({
       // showTimescaleButtons={false}
       rawChartData={trafficData}
       showModalButtons={false}
-      formatLabelFunction={roundPeNumbers}
+      formatChartLabelFunction={roundPeNumbers}
       formatTableDataFunction={roundPeNumbers}
     />
   );
@@ -131,7 +131,7 @@ function WebTrafficChart({
       showTimescaleButtons={false}
       showModalButtons={false}
       scrollStart={"right"}
-      formatLabelFunction={roundPeNumbers}
+      formatChartLabelFunction={roundPeNumbers}
       formatTableDataFunction={roundPeNumbers}
     />
   );
