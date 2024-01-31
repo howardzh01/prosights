@@ -1,5 +1,4 @@
 import { CONSTANTS } from "../constants";
-import { cloneDeep } from "lodash";
 // convert date to months
 export const dateToMonths = (date, shortenYear = true) => {
   // Convert Date object 2023-01-01 or String to
@@ -407,7 +406,7 @@ export function convertStackedChartDataToPercent(datasets) {
   // For each time period, if there are 5 different datasets we normalize it to percentage form
 
   // Normailize values to sum to 100 so bars have equal height
-  const newDatasets = cloneDeep(datasets);
+  const newDatasets = structuredClone(datasets);
   const totals = newDatasets.reduce((acc, curArr) => {
     curArr.data.forEach((value, index) => {
       acc[index] = (acc[index] || 0) + (value || 0);
