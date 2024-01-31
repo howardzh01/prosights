@@ -11,7 +11,7 @@ function Navbar() {
             <div>
               <Link href="/" className="flex items-center py-5 text-black">
                 <Image
-                  src="/assets/fullLogoBlack.png"
+                  src="/assets/fullLogoWhite.png"
                   alt="ProSights logo"
                   width={4096}
                   height={4096}
