@@ -7,6 +7,7 @@ import {
   getTableInfo,
   convertLabelToDate,
   roundPeNumbers,
+  normalizeStackedAggData,
 } from "../../utils/Utils";
 import GenericStackedBar from "./templates/GenericStackedBar";
 import { CHARTS } from "../../constants";
@@ -24,6 +25,13 @@ const displayedKeyMap = {
   display_ad: "Display Ad",
   unknown_channel: "Other",
 };
+const hqTrafficKeys = [
+  "direct",
+  "mail",
+  "referral",
+  "search_organic",
+  "social_organic",
+];
 function WebTrafficByChannelChart({
   trafficData,
   selectedChart = null,
@@ -46,7 +54,6 @@ function WebTrafficByChannelChart({
         "direct",
         "mail",
         "referral",
-        "social",
         "search_organic",
         "social_organic",
         "search_paid",
@@ -84,16 +91,63 @@ function WebTrafficByChannelChart({
       return acc;
     }, {});
 
-    return {
-      labels: Object.keys(aggData[displayedKeyMap[relevant_keys[0]]]),
+    // aggData: {direct: {time_key: output_key}, mail: {time_key: output_key}, ...}
+    const firstChannelData = aggData[displayedKeyMap[relevant_keys[0]]]; // use to extract timescale
+    const percentAggData = normalizeStackedAggData(aggData);
+    console.log("percentAggData", percentAggData);
+    const chartData = {
+      labels: Object.keys(firstChannelData),
       datasets: relevant_keys.map((key) => ({
-        data: Object.values(aggData[displayedKeyMap[key]]).map(
-          (number) => number / 1e6
+        data: Object.values(percentAggData[displayedKeyMap[key]]).map((x) =>
+          Number(roundPeNumbers(x))
         ),
         borderWidth: 1,
         label: displayedKeyMap[key],
       })),
     };
+    // chartData.datasets = convertStackedChartDataToPercent(chartData.datasets); // convert to percent so bars add to 100%
+
+    let { tableHeaders, tableLabels } = getTableInfo(firstChannelData);
+
+    const cutoffIndex = 0;
+
+    // Initialize an array to hold the sum of values for hq trafficeach time scale [0]
+    const hqTrafficData = Array(Object.keys(firstChannelData).length).fill(0);
+    // Sum up the values for each quarter
+    relevant_keys.forEach((key) => {
+      if (!hqTrafficKeys.includes(key)) return; // Skip if not hq traffic
+      const channelData = percentAggData[displayedKeyMap[key]]; // Get the data for the channel
+      Object.keys(channelData).forEach((quarter, ind) => {
+        hqTrafficData[ind] += channelData[quarter]; // Sum up the values
+      });
+    });
+
+    const hqTrafficRow = {
+      data: hqTrafficData,
+      label: "HQ Traffic",
+    };
+    const totalTrafficRow = {
+      data: Array(tableLabels.length).fill(100),
+      label: "Total Traffic",
+    }; // denotes 100%
+
+    const tableData = {
+      tableHeaders: tableHeaders.slice(cutoffIndex),
+      tableLabels: tableLabels.slice(cutoffIndex),
+      tableDatasets: [
+        ...chartData["datasets"].slice(0, hqTrafficKeys.length),
+        hqTrafficRow,
+        ...chartData["datasets"].slice(hqTrafficKeys.length),
+        totalTrafficRow,
+      ],
+      topBorderedRows: [hqTrafficRow.label, totalTrafficRow.label],
+      highlightedRows: {
+        Direct: "bg-primaryLight",
+        [hqTrafficRow.label]: "bg-customGray-75",
+        [totalTrafficRow.label]: "bg-customGray-75",
+      },
+    };
+    return { chartData: chartData, tableData: tableData };
   }
 
   function convertToChartData(data, displayedLabel) {
@@ -143,7 +197,6 @@ function WebTrafficByChannelChart({
       showModalButtons={false}
       scrollStart={"right"}
       formatChartLabelFunction={roundPeNumbers}
-      formatTableDataFunction={roundPeNumbers}
     />
   );
 
@@ -160,6 +213,7 @@ function WebTrafficByChannelChart({
       setTimescale={setTrafficByChannelTimescale}
       selectedChart={CHARTS.trafficByChannel}
       rawChartData={trafficData}
+      formatTableDataFunction={(x) => roundPeNumbers(x) + "%"}
     ></GenericStackedBar>
   );
 

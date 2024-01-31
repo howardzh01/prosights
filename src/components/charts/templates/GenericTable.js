@@ -16,7 +16,13 @@ function GenericTable({
     }
   }, []);
 
-  const { tableHeaders, tableLabels, tableDatasets } = tableData;
+  const {
+    tableHeaders,
+    tableLabels,
+    tableDatasets,
+    topBorderedRows, //array
+    highlightedRows, //dict of label->bg-color
+  } = tableData;
   // console.log("datasets, labels, headers", datasets, labels, headers);
 
   // Prepare header spans
@@ -27,7 +33,7 @@ function GenericTable({
       return spans;
     }, {});
   }
-
+  console.log(highlightedRows, "highlightedRows");
   // console.log("headerSpans", headerSpans);
 
   return (
@@ -43,7 +49,7 @@ function GenericTable({
                 colSpan={headerSpans[header]}
                 className={`text-xs font-medium tracking-wider text-center`}
               >
-                <div className="inline-block bg-customGray-50 text-customGray-500 rounded-md w-11/12 py-1">
+                <div className="inline-block bg-customGray-50 text-customGray-500 rounded-md w-11/12 py-1 ">
                   {header}
                 </div>
               </th>
@@ -63,23 +69,38 @@ function GenericTable({
           </tr>
         </thead>
         {/* // TODO: consider formatting table before loading it in */}
-        <tbody className="bg-white">
+        <tbody className="bg-white ">
           {[tableDatasets].map((dsetCategory, categoryIndex) =>
-            dsetCategory.map((dataset) => (
-              <tr key={dataset.label}>
-                <td className="pr-2 py-2 whitespace-nowrap text-sm font-normal text-customGray-500 text-left sticky left-0 z-10 bg-white bg-opacity-100">
-                  {dataset.label}
-                </td>
-                {dataset.data.map((value, index) => (
+            dsetCategory.map((dataset) => {
+              const bgColor = highlightedRows?.[dataset.label] || "bg-white";
+              {
+                console.log(dataset.label, bgColor, "bgColor");
+              }
+              return (
+                <tr
+                  key={dataset.label}
+                  className={
+                    topBorderedRows?.includes(dataset.label)
+                      ? `border-t ${bgColor}`
+                      : bgColor
+                  }
+                >
                   <td
-                    key={index}
-                    className={`whitespace-nowrap text-sm text-customGray-500 text-center`}
+                    className={`pr-2 pt-1 pb-2 whitespace-nowrap text-sm font-normal text-customGray-500 text-left sticky left-0 z-10 ${bgColor} bg-opacity-100`}
                   >
-                    {formatTableDataFunction(value)}
+                    {dataset.label}
                   </td>
-                ))}
-              </tr>
-            ))
+                  {dataset.data.map((value, index) => (
+                    <td
+                      key={index}
+                      className={`whitespace-nowrap text-sm text-customGray-500 text-center`}
+                    >
+                      {formatTableDataFunction(value)}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })
           )}
         </tbody>
       </table>

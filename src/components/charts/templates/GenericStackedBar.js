@@ -1,6 +1,7 @@
 import { Bar } from "react-chartjs-2";
 import GenericTimeScale from "./GenericTimeScale";
-import { convertStackedChartDataToPercent } from "../../../utils/Utils";
+import GenericTable from "./GenericTable";
+
 function StackedBarChart({
   data, // {chartData, tableData}
   showDataLabels = true,
@@ -17,7 +18,7 @@ function StackedBarChart({
   formatTableDataFunction = (x) => x, //Table Options from here on
   scrollStart = "left",
 }) {
-  data.datasets = convertStackedChartDataToPercent(data.datasets);
+  const { chartData, tableData } = data;
   //   console.log("normalized", data);
 
   const options = {
@@ -47,8 +48,8 @@ function StackedBarChart({
       //   },
       datalabels: {
         display: showDataLabels,
-        // anchor: "end",
-        // align: "top",
+        // anchor: "left",
+        // align: "center",
         formatter: (value, context) => {
           if (value < 5) {
             return null;
@@ -134,9 +135,19 @@ function StackedBarChart({
         </div>
       )}
 
-      <div className="h-full">
-        <Bar data={data} options={options} plugins={[plugin]} />
+      <div className="h-64">
+        <Bar data={chartData} options={options} plugins={[plugin]} />
       </div>
+      {showTable && (
+        <div>
+          {/* Default to use data if tableChartData is undefined */}
+          <GenericTable
+            tableData={tableData}
+            scrollStart={scrollStart}
+            formatTableDataFunction={formatTableDataFunction}
+          />
+        </div>
+      )}
     </div>
   );
 }

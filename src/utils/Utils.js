@@ -320,8 +320,9 @@ export function formatMoney(amount) {
   return result % 1 === 0 ? result.toFixed(0) + unit : result.toFixed(1) + unit;
 }
 
-export function roundPeNumbers(amount) {
-  // make numbers 1 sig fig if <10 else integers
+export function roundPeNumbers(amount, decimalZero = true) {
+  // make numbers 1 decimal if <10 else integers
+  if (decimalZero && amount == 0) return "0.0"; // == because no type conversion
   if (!amount) {
     return amount;
   }
@@ -401,22 +402,29 @@ export function convertLabelToDate(label) {
   }
 }
 
-export function convertStackedChartDataToPercent(datasets) {
-  // datasets is what is plottled by Chart.js Bar (eg. data.datasets).
-  // For each time period, if there are 5 different datasets we normalize it to percentage form
+export function normalizeStackedAggData(aggData) {
+  // Calculate the total for each time_key across all channels
+  const relevantKeys = Object.keys(aggData);
+  const totalsByTimeKey = Object.keys(aggData[relevantKeys[0]]).reduce(
+    (acc, timeKey) => {
+      acc[timeKey] = relevantKeys.reduce(
+        (total, key) => total + aggData[key][timeKey],
+        0
+      );
+      return acc;
+    },
+    {}
+  );
 
-  // Normailize values to sum to 100 so bars have equal height
-  const newDatasets = structuredClone(datasets);
-  const totals = newDatasets.reduce((acc, curArr) => {
-    curArr.data.forEach((value, index) => {
-      acc[index] = (acc[index] || 0) + (value || 0);
+  // Normalize each channel's value to sum to 100% for each time_key
+  const normalizedData = relevantKeys.reduce((acc, key) => {
+    acc[key] = {};
+    Object.keys(aggData[key]).forEach((timeKey) => {
+      const value = aggData[key][timeKey];
+      const total = totalsByTimeKey[timeKey];
+      acc[key][timeKey] = (value / total) * 100; // Convert to percentage
     });
     return acc;
-  }, []);
-  newDatasets.forEach((dataset) => {
-    dataset.data = dataset.data.map((value, i) =>
-      (((value || 0) / totals[i]) * 100).toFixed(1)
-    );
-  });
-  return newDatasets;
+  }, {});
+  return normalizedData;
 }
