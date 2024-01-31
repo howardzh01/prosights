@@ -13,7 +13,16 @@ function App() {
   const { isSignedIn, user, isLoaded } = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
-  const credentialImages = [
+  const credentialImagesMobile = [
+    "/assets/credentialsLogos/permira.png",
+    "/assets/credentialsLogos/goldman.png",
+    "/assets/credentialsLogos/ycombinator.png",
+    "/assets/credentialsLogos/apple.png",
+    "/assets/credentialsLogos/jane.png",
+    "/assets/credentialsLogos/citi.png",
+    "/assets/credentialsLogos/credit.png",
+  ];
+  const credentialImagesRegular = [
     "/assets/credentialsLogos/permira.svg",
     "/assets/credentialsLogos/goldman.svg",
     "/assets/credentialsLogos/ycombinator.svg",
@@ -22,8 +31,6 @@ function App() {
     "/assets/credentialsLogos/citi.svg",
     "/assets/credentialsLogos/credit.svg",
   ];
-  const heightRef = useRef(null);
-  const [backgroundHeight, setBackgroundHeight] = useState(0);
 
   const handleVideoModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -34,26 +41,6 @@ function App() {
       router.push("/dashboard");
     }
   }, [isLoaded, router]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (heightRef.current) {
-        const rect = heightRef.current.getBoundingClientRect();
-        setBackgroundHeight(rect.top);
-      }
-    };
-
-    // Delay the initial measure just a bit to allow for the layout to settle
-    const timeoutId = setTimeout(handleResize, 300); // Adjust the delay as needed
-
-    window.addEventListener("resize", handleResize);
-
-    // Clean up the event listener and the timeout when the component unmounts
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      clearTimeout(timeoutId);
-    };
-  }, []); // Empty array ensures this effect runs only on mount
 
   return (
     isLoaded &&
@@ -79,23 +66,17 @@ function App() {
           </div>
         )}
         <div
-          className="hidden md:flex w-full absolute top-0 left-0 bg-cover bg-center bg-customGray-800"
+          className="hidden md:flex md:h-[750px] w-full absolute top-0 left-0 bg-cover bg-center bg-customGray-800"
           style={{
-            height: `${backgroundHeight}px`,
             backgroundImage: "url('/assets/backgroundPatternUberLight.svg')",
-            clipPath: `ellipse(60% ${backgroundHeight / 2}px at 50% ${
-              backgroundHeight / 2
-            }px)`,
+            clipPath: `ellipse(75% 90% at 50% 0%)`,
           }}
         />
         <div
-          className="flex md:hidden w-full absolute top-0 left-0 bg-cover bg-center bg-customGray-800"
+          className="flex h-[550px] md:hidden w-full absolute top-0 left-0 bg-cover bg-center bg-customGray-800"
           style={{
-            height: `${backgroundHeight}px`,
             backgroundImage: "url('/assets/backgroundPatternUberLight.svg')",
-            clipPath: `ellipse(100% ${backgroundHeight / 2}px at 50% ${
-              backgroundHeight / 2
-            }px)`,
+            clipPath: `ellipse(150% 100% at 50% 0%)`,
           }}
         />
         <div
@@ -166,13 +147,25 @@ function App() {
               </Link>
             </div>
           </div>
-          <div ref={heightRef}></div>
-          <div className="flex flex-col justify-center items-center pt-24 md:pt-36">
+          <div className="flex flex-col justify-center items-center pt-[10vh] md:pt-36">
             <p className="font-bold text-sm md:text-base lg:text-lg text-center text-customGray-800">
               Built by ex-private equity and tech professionals from
             </p>
-            <div className="flex flex-wrap justify-center items-center mt-8 gap-x-8 md:gap-x-12 gap-y-6 md:gap-y-8">
-              {credentialImages.map((image, index) => (
+            <div className="flex flex-wrap justify-center items-center mt-8 gap-x-8 md:gap-x-12 gap-y-6 md:gap-y-8 md:hidden">
+              {credentialImagesMobile.map((image, index) => (
+                <div key={index}>
+                  <Image
+                    src={image}
+                    alt="Preview"
+                    className="h-8 md:h-10 lg:h-12 w-auto object-contain"
+                    width={128}
+                    height={128}
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="hidden md:flex flex-wrap justify-center items-center mt-8 gap-x-8 md:gap-x-12 gap-y-6 md:gap-y-8">
+              {credentialImagesRegular.map((image, index) => (
                 <div key={index}>
                   <Image
                     src={image}
@@ -185,14 +178,14 @@ function App() {
               ))}
             </div>
           </div>
-          <div className="relative mt-12 md:mt-36">
+          <div className="relative mt-24 md:mt-36">
             <div className="absolute top-0 left-0 flex justify-center items-center w-full h-full">
               <div className="w-full h-full bg-gradient-to-br from-primary to-secondary opacity-50 rounded-full filter blur-[100px]" />
             </div>
             <div
               ref={ref}
-              className={`transition-all duration-500 ${
-                inView ? "scale-100" : "scale-90"
+              className={`md:transition-all md:duration-500 ${
+                inView ? "md:scale-100" : "md:scale-90"
               }`}
             >
               <Image
