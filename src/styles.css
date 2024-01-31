@@ -79,3 +79,8 @@ div {
 .section-indent {
   margin-left: 1rem;
 }
+
+.ellipse-rounded {
+  border-bottom-right-radius: 1000px 300px;
+  border-bottom-left-radius: 1000px 300px;
+}

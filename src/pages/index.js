@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import Image from "next/image";
 import Navbar from "../components/Navbar";
 import { useInView } from "react-intersection-observer";
@@ -22,6 +22,8 @@ function App() {
     "/assets/credentialsLogos/citi.svg",
     "/assets/credentialsLogos/credit.svg",
   ];
+  const heightRef = useRef(null);
+  const [backgroundHeight, setBackgroundHeight] = useState(0);
 
   const handleVideoModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -33,10 +35,30 @@ function App() {
     }
   }, [isLoaded, router]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (heightRef.current) {
+        const rect = heightRef.current.getBoundingClientRect();
+        setBackgroundHeight(rect.top);
+      }
+    };
+
+    // Delay the initial measure just a bit to allow for the layout to settle
+    const timeoutId = setTimeout(handleResize, 300); // Adjust the delay as needed
+
+    window.addEventListener("resize", handleResize);
+
+    // Clean up the event listener and the timeout when the component unmounts
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(timeoutId);
+    };
+  }, []); // Empty array ensures this effect runs only on mount
+
   return (
     isLoaded &&
     !isSignedIn && (
-      <div className="px-2">
+      <div className="">
         {isModalOpen && (
           <div
             className="fixed z-50 top-0 left-0 px-8 w-full h-full flex items-center justify-center bg-customGray-800 bg-opacity-90"
@@ -57,12 +79,32 @@ function App() {
           </div>
         )}
         <div
-          class="absolute transform -translate-x-1/2 -translate-y-1/2 -top-[100%] left-1/2 w-[250%] md:w-[180%] max-w-[250rem] h-[235rem] md:h-[245rem] bg-customGray-800 rounded-full"
+          className="hidden md:flex w-full absolute top-0 left-0 bg-cover bg-center bg-customGray-800"
+          style={{
+            height: `${backgroundHeight}px`,
+            backgroundImage: "url('/assets/backgroundPatternUberLight.svg')",
+            clipPath: `ellipse(60% ${backgroundHeight / 2}px at 50% ${
+              backgroundHeight / 2
+            }px)`,
+          }}
+        />
+        <div
+          className="flex md:hidden w-full absolute top-0 left-0 bg-cover bg-center bg-customGray-800"
+          style={{
+            height: `${backgroundHeight}px`,
+            backgroundImage: "url('/assets/backgroundPatternUberLight.svg')",
+            clipPath: `ellipse(100% ${backgroundHeight / 2}px at 50% ${
+              backgroundHeight / 2
+            }px)`,
+          }}
+        />
+        <div
+          className="w-full absolute top-0 left-0 h-72 bg-cover bg-center bg-customGray-800"
           style={{
             backgroundImage: "url('/assets/backgroundPatternUberLight.svg')",
           }}
         />
-        <div className="absolute m-0 p-0">
+        <div className="absolute m-0 px-2">
           <Navbar />
           <div className="flex flex-col items-center text-customGray-50 mt-8 md:mt-16 bg-opacity-50 pb-16">
             <div className="mb-4 md:mb-6">
@@ -124,7 +166,8 @@ function App() {
               </Link>
             </div>
           </div>
-          <div className="flex flex-col justify-center items-center pt-32 md:pt-36">
+          <div ref={heightRef}></div>
+          <div className="flex flex-col justify-center items-center pt-24 md:pt-36">
             <p className="font-bold text-sm md:text-base lg:text-lg text-center text-customGray-800">
               Built by ex-private equity and tech professionals from
             </p>
