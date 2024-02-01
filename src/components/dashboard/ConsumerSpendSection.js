@@ -122,7 +122,7 @@ function ConsumerSpendSection({}) {
                 <div className="overflow-x-auto">
                   <div className="inline-block h-auto pb-2">
                     <Image
-                      src="/assets/graphPictures/ConsumerSpendCustomerRetentionTableQuarterly.svg"
+                      src="/assets/graphPictures/ConsumerSpendCustomerRetentionTableMonthly.svg"
                       className="h-54 object-contain"
                       width={5120}
                       height={5120}
@@ -203,7 +203,7 @@ function ConsumerSpendSection({}) {
                 <div className="overflow-x-auto pt-2">
                   <div className="inline-block pb-2">
                     <Image
-                      src="/assets/graphPictures/ConsumerSpendCustomerRetentionPeersTableQuarterly.svg"
+                      src="/assets/graphPictures/ConsumerSpendCustomerRetentionPeersTableMonthly.svg"
                       className="h-54 object-contain"
                       width={5120}
                       height={5120}
