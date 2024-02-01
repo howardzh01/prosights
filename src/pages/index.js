@@ -31,6 +31,7 @@ function App() {
     "/assets/credentialsLogos/citi.svg",
     "/assets/credentialsLogos/credit.svg",
   ];
+  const today = new Date().toLocaleDateString("en-CA"); // Get today's date in yyyy-mm-dd format
 
   const handleVideoModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -41,6 +42,14 @@ function App() {
       router.push("/dashboard");
     }
   }, [isLoaded, router]);
+  // Add this useEffect hook to handle the Escape key press
+  useEffect(() => {
+    const closeOnEscapeKey = (e) => {
+      if (e.key === "Escape") setIsModalOpen(false);
+    };
+    document.body.addEventListener("keydown", closeOnEscapeKey);
+    return () => document.body.removeEventListener("keydown", closeOnEscapeKey);
+  }, []);
 
   return (
     isLoaded &&
@@ -52,13 +61,19 @@ function App() {
             onClick={handleVideoModal}
           >
             <div
-              className="drop-shadow-lg"
+              className="drop-shadow-lg flex flex-row items-center justify-center w-3/4"
               onClick={(e) => e.stopPropagation()} // Add this line
             >
-              <button onClick={handleVideoModal} className="float-right">
+              {/* <button onClick={handleVideoModal} className="float-right">
                 Close
+              </button> */}
+              <button
+                onClick={handleVideoModal}
+                className="absolute z-50 top-3 right-2 text-4xl text-customGray-300 hover:text-customGray-100 transition duration-300"
+              >
+                &times; {/* This is the X button */}
               </button>
-              <video controls autoPlay className="mt-4">
+              <video controls autoPlay className="mt-4 ">
                 <source src="/assets/ProSightsDemo.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
@@ -108,7 +123,7 @@ function App() {
             </p>
             <div className="flex items-center">
               <a
-                href="https://calendly.com/prosightsdemo"
+                href={`https://calendly.com/prosightsdemo/30min?date=${today}}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex flex-row items-center bg-primary text-customGray-50 py-2 px-4 md:px-6 rounded-md hover:bg-blue-600 drop-shadow-lg mr-8 md:mr-12 transition duration-300"
