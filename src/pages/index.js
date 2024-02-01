@@ -201,12 +201,12 @@ function App() {
               ref={ref}
               className={`md:transition-all md:duration-500 ${
                 inView ? "md:scale-100" : "md:scale-90"
-              }`}
+              } px-4 md:px-16 `}
             >
               <Image
                 src="/assets/preview4.png"
                 alt="Preview"
-                className="w-full h-full drop-shadow-2xl px-4 md:px-16 object-contain rounded-md"
+                className="w-full h-full drop-shadow-2xl object-contain rounded-xl"
                 width={4096}
                 height={4096}
               />
