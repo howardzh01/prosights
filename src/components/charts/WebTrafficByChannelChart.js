@@ -32,6 +32,8 @@ const hqTrafficKeys = [
   "search_organic",
   "social_organic",
 ];
+const paidTrafficKeys = ["search_paid", "social_paid", "display_ad"];
+const paidTrafficRowName = "Paid Visits";
 function WebTrafficByChannelChart({
   trafficData,
   selectedChart = null,
@@ -48,7 +50,8 @@ function WebTrafficByChannelChart({
     type = "traffic_by_channel",
     timescale
   ) {
-    let relevant_keys;
+    let relevant_keys,
+      condensePaidKeys = false;
     if (type === "traffic_by_channel") {
       relevant_keys = [
         "direct",
@@ -61,6 +64,7 @@ function WebTrafficByChannelChart({
         "display_ad",
         "unknown_channel",
       ];
+      condensePaidKeys = true;
     } else if (type === "traffic_by_device") {
       relevant_keys = ["mobile_visits", "desktop_visits"];
     } else if (type === "users_by_device") {
@@ -82,12 +86,12 @@ function WebTrafficByChannelChart({
     }
 
     const aggData = relevant_keys.reduce((acc, key) => {
-      acc[displayedKeyMap[key]] = aggregateData(
-        trafficData,
-        key,
-        "sum",
-        timescale
-      );
+      const displayedKey =
+        condensePaidKeys && paidTrafficKeys.includes(key)
+          ? paidTrafficRowName
+          : displayedKeyMap[key];
+
+      acc[displayedKey] = aggregateData(trafficData, key, "sum", timescale);
       return acc;
     }, {});
 
@@ -97,12 +101,12 @@ function WebTrafficByChannelChart({
     console.log("percentAggData", percentAggData);
     const chartData = {
       labels: Object.keys(firstChannelData),
-      datasets: relevant_keys.map((key) => ({
-        data: Object.values(percentAggData[displayedKeyMap[key]]).map((x) =>
+      datasets: Object.keys(aggData).map((key) => ({
+        data: Object.values(percentAggData[key]).map((x) =>
           Number(roundPeNumbers(x))
         ),
         borderWidth: 1,
-        label: displayedKeyMap[key],
+        label: key,
       })),
     };
     // chartData.datasets = convertStackedChartDataToPercent(chartData.datasets); // convert to percent so bars add to 100%
@@ -111,94 +115,19 @@ function WebTrafficByChannelChart({
 
     const cutoffIndex = 0;
 
-    // Initialize an array to hold the sum of values for hq trafficeach time scale [0]
-    const hqTrafficData = Array(Object.keys(firstChannelData).length).fill(0);
-    // Sum up the values for each quarter
-    relevant_keys.forEach((key) => {
-      if (!hqTrafficKeys.includes(key)) return; // Skip if not hq traffic
-      const channelData = percentAggData[displayedKeyMap[key]]; // Get the data for the channel
-      Object.keys(channelData).forEach((quarter, ind) => {
-        hqTrafficData[ind] += channelData[quarter]; // Sum up the values
-      });
-    });
-
-    const hqTrafficRow = {
-      data: hqTrafficData,
-      label: "HQ Traffic",
-    };
-    const totalTrafficRow = {
-      data: Array(tableLabels.length).fill(100),
-      label: "Total Traffic",
-    }; // denotes 100%
-
     const tableData = {
       tableHeaders: tableHeaders.slice(cutoffIndex),
       tableLabels: tableLabels.slice(cutoffIndex),
-      tableDatasets: [
-        ...chartData["datasets"].slice(0, hqTrafficKeys.length),
-        hqTrafficRow,
-        ...chartData["datasets"].slice(hqTrafficKeys.length),
-        totalTrafficRow,
-      ],
-      topBorderedRows: [hqTrafficRow.label, totalTrafficRow.label],
+      tableDatasets: [...chartData["datasets"]],
+      topBorderedRows: [paidTrafficRowName],
       highlightedRows: {
         Direct: "bg-primaryLight",
-        [hqTrafficRow.label]: "bg-customGray-75",
-        [totalTrafficRow.label]: "bg-customGray-75",
+        [paidTrafficRowName]: "bg-customGray-75",
+        // [totalTrafficRow.label]: "bg-customGray-75",
       },
     };
     return { chartData: chartData, tableData: tableData };
   }
-
-  function convertToChartData(data, displayedLabel) {
-    // input: {time_key: output_key}
-    let { labels, values, tableHeaders, tableLabels, growthPercentages } =
-      getTableInfo(data);
-    const cutoffIndex = findInsertIndex(
-      labels.map((x) => convertLabelToDate(x)),
-      cutOffDate,
-      "left"
-    );
-    const chartData = {
-      labels: labels.slice(cutoffIndex),
-      datasets: [
-        {
-          label: displayedLabel + " (M)",
-          data: values
-            .map((item) => (item == null ? "--" : (item / 1e6).toFixed(1)))
-            .slice(cutoffIndex),
-          backgroundColor: "rgba(0, 154, 255, 1)",
-          borderWidth: 1,
-        },
-      ],
-    };
-
-    const tableData = {
-      tableHeaders: tableHeaders.slice(cutoffIndex),
-      tableLabels: tableLabels.slice(cutoffIndex),
-      tableDatasets: [
-        ...chartData["datasets"],
-        {
-          label: "% YoY Growth",
-          data: growthPercentages.slice(cutoffIndex),
-        },
-      ],
-    };
-    return { chartData: chartData, tableData: tableData };
-  }
-
-  const yearTrafficGraph = (
-    <GenericBarAndTable
-      data={convertToChartData(
-        aggregateData(trafficData, "visits", "sum", "year"),
-        "Visits"
-      )}
-      showTimescaleButtons={false}
-      showModalButtons={false}
-      scrollStart={"right"}
-      formatChartLabelFunction={roundPeNumbers}
-    />
-  );
 
   const trafficByChannel = (
     <GenericStackedBar
@@ -213,6 +142,19 @@ function WebTrafficByChannelChart({
       setTimescale={setTrafficByChannelTimescale}
       selectedChart={CHARTS.trafficByChannel}
       rawChartData={trafficData}
+      formatTableDataFunction={(x) => roundPeNumbers(x) + "%"}
+    ></GenericStackedBar>
+  );
+  const yearTrafficByChannelGraph = (
+    <GenericStackedBar
+      data={convertToChannelChartData(
+        trafficData,
+        "traffic_by_channel",
+        "year"
+      )}
+      showTimescaleButtons={false}
+      showModalButtons={false}
+      scrollStart={"right"}
       formatTableDataFunction={(x) => roundPeNumbers(x) + "%"}
     ></GenericStackedBar>
   );
@@ -247,7 +189,7 @@ function WebTrafficByChannelChart({
           <div className="h-fit mb-4">
             <TwoColumnView
               quarterGraph={trafficByChannel}
-              yearGraph={yearTrafficGraph}
+              yearGraph={yearTrafficByChannelGraph}
             />
           </div>
         </div>

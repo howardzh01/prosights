@@ -135,7 +135,7 @@ function StackedBarChart({
         </div>
       )}
 
-      <div className="h-64">
+      <div className="h-84">
         <Bar data={chartData} options={options} plugins={[plugin]} />
       </div>
       {showTable && (

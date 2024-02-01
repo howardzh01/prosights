@@ -49,6 +49,9 @@ module.exports = {
       borderWidth: {
         0.5: "0.5px",
       },
+      height: {
+        84: "21rem",
+      },
     },
   },
   darkMode: "class",

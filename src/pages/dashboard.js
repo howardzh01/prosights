@@ -282,58 +282,142 @@ function NewDashboard() {
       });
   };
 
-  // API Data
-  const { data: headCountData, error: headCountError } = useSWR(
-    user && company ? [`/api/private/getHeadCount`, user.id, company] : null,
-    getHeadCount,
-    { revalidateOnFocus: false }
-  );
+  // // API Data
+  // const { data: headCountData, error: headCountError } = useSWR(
+  //   user && company ? [`/api/private/getHeadCount`, user.id, company] : null,
+  //   getHeadCount,
+  //   { revalidateOnFocus: false }
+  // );
 
-  const { data: webTrafficData, error: webTrafficError } = useSWR(
-    user && company && country
-      ? [`/api/private/getWebTrafficData`, user.id, company + ".com", country]
-      : null,
+  // const { data: webTrafficData, error: webTrafficError } = useSWR(
+  //   user && company && country
+  //     ? [`/api/private/getWebTrafficData`, user.id, company + ".com", country]
+  //     : null,
 
-    getTrafficData,
-    { revalidateOnFocus: false }
-  );
+  //   getTrafficData,
+  //   { revalidateOnFocus: false }
+  // );
 
-  const { data: webTrafficGeoData, error: webTrafficGeoError } = useSWR(
-    user && company
-      ? [
-          `/api/private/getWebTrafficGeoData`,
+  // const { data: webTrafficGeoData, error: webTrafficGeoError } = useSWR(
+  //   user && company
+  //     ? [
+  //         `/api/private/getWebTrafficGeoData`,
+  //         user.id,
+  //         company + ".com",
+  //         RELEVANT_CONTINENTS,
+  //       ]
+  //     : null,
+  //   getGeoTrafficData,
+  //   { revalidateOnFocus: false }
+  // );
+
+  // const { data: crunchbaseData, error: crunchbaseError } = useSWR(
+  //   user && company
+  //     ? [`/api/private/getCrunchbaseData`, user.id, company]
+  //     : null,
+  //   getCrunchbaseData,
+  //   { revalidateOnFocus: false }
+  // );
+
+  // const { data: companyDescription, error: companyDescriptionError } = useSWR(
+  //   user && company && crunchbaseData
+  //     ? [`/api/private/getCompanyDescription`, company, crunchbaseData]
+  //     : null,
+  //   ([url, company, crunchbaseData]) => {
+  //     return getCompanyDescription([
+  //       url,
+  //       user.id,
+  //       company,
+  //       crunchbaseData["fields"]["description"],
+  //     ]);
+  //   },
+  //   { revalidateOnFocus: false }
+  // );
+
+  function getApiData(company) {
+    // API Data
+    const { data: headCountData, error: headCountError } = useSWR(
+      user && company ? [`/api/private/getHeadCount`, user.id, company] : null,
+      getHeadCount,
+      { revalidateOnFocus: false }
+    );
+
+    const { data: webTrafficData, error: webTrafficError } = useSWR(
+      user && company && country
+        ? [`/api/private/getWebTrafficData`, user.id, company + ".com", country]
+        : null,
+
+      getTrafficData,
+      { revalidateOnFocus: false }
+    );
+
+    const { data: webTrafficGeoData, error: webTrafficGeoError } = useSWR(
+      user && company
+        ? [
+            `/api/private/getWebTrafficGeoData`,
+            user.id,
+            company + ".com",
+            RELEVANT_CONTINENTS,
+          ]
+        : null,
+      getGeoTrafficData,
+      { revalidateOnFocus: false }
+    );
+
+    const { data: crunchbaseData, error: crunchbaseError } = useSWR(
+      user && company
+        ? [`/api/private/getCrunchbaseData`, user.id, company]
+        : null,
+      getCrunchbaseData,
+      { revalidateOnFocus: false }
+    );
+
+    const { data: companyDescription, error: companyDescriptionError } = useSWR(
+      user && company && crunchbaseData
+        ? [`/api/private/getCompanyDescription`, company, crunchbaseData]
+        : null,
+      ([url, company, crunchbaseData]) => {
+        return getCompanyDescription([
+          url,
           user.id,
-          company + ".com",
-          RELEVANT_CONTINENTS,
-        ]
-      : null,
-    getGeoTrafficData,
-    { revalidateOnFocus: false }
-  );
-
-  const { data: crunchbaseData, error: crunchbaseError } = useSWR(
-    user && company
-      ? [`/api/private/getCrunchbaseData`, user.id, company]
-      : null,
-    getCrunchbaseData,
-    { revalidateOnFocus: false }
-  );
-
-  const { data: companyDescription, error: companyDescriptionError } = useSWR(
-    user && company && crunchbaseData
-      ? [`/api/private/getCompanyDescription`, company, crunchbaseData]
-      : null,
-    ([url, company, crunchbaseData]) => {
-      return getCompanyDescription([
-        url,
-        user.id,
-        company,
-        crunchbaseData["fields"]["description"],
-      ]);
-    },
-    { revalidateOnFocus: false }
-  );
-
+          company,
+          crunchbaseData["fields"]["description"],
+        ]);
+      },
+      { revalidateOnFocus: false }
+    );
+    return {
+      headCountData,
+      headCountError,
+      webTrafficData,
+      webTrafficError,
+      webTrafficGeoData,
+      webTrafficGeoError,
+      crunchbaseData,
+      crunchbaseError,
+      companyDescription,
+      companyDescriptionError,
+    };
+  }
+  const {
+    headCountData,
+    headCountError,
+    webTrafficData,
+    webTrafficError,
+    webTrafficGeoData,
+    webTrafficGeoError,
+    crunchbaseData,
+    crunchbaseError,
+    companyDescription,
+    companyDescriptionError,
+  } = getApiData(company);
+  console.log({
+    headCountData,
+    webTrafficData,
+    webTrafficGeoData,
+    crunchbaseData,
+    companyDescription,
+  });
   return (
     <SelectedChartContext.Provider value={{ selectedChart, setSelectedChart }}>
       <ChartDataContext.Provider value={{ chartData, setChartData }}>
