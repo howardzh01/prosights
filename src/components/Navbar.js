@@ -4,7 +4,7 @@ import React from "react";
 
 function Navbar() {
   return (
-    <nav className="bg-transparent ">
+    <nav className="bg-transparent">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="flex justify-between">
           <div className="flex space-x-4">
@@ -13,6 +13,7 @@ function Navbar() {
                 <Image
                   src="/assets/fullLogoWhite.png"
                   alt="ProSights logo"
+                  priority
                   width={4096}
                   height={4096}
                   className="w-24 md:w-28"

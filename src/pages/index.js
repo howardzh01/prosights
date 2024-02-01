@@ -45,7 +45,7 @@ function App() {
   return (
     isLoaded &&
     !isSignedIn && (
-      <div className="">
+      <div className="flex flex-col items-center">
         {isModalOpen && (
           <div
             className="fixed z-50 top-0 left-0 px-8 w-full h-full flex items-center justify-center bg-customGray-800 bg-opacity-90"
