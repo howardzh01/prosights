@@ -123,7 +123,7 @@ function App() {
             </p>
             <div className="flex items-center">
               <a
-                href={`https://calendly.com/prosightsdemo/30min?date=${today}}`}
+                href={`https://calendly.com/prosightsdemo/30min?date=${today}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex flex-row items-center bg-primary text-customGray-50 py-2 px-4 md:px-6 rounded-md hover:bg-blue-600 drop-shadow-lg mr-8 md:mr-12 transition duration-300"
@@ -139,7 +139,7 @@ function App() {
               </a>
               <Link
                 onClick={handleVideoModal}
-                href="#"
+                href=""
                 className="group flex flex-row items-center rounded-md"
               >
                 <div className="bg-primary group-hover:bg-blue-600 rounded-full flex items-center justify-center w-8 h-8 md:w-10 md:h-10 mr-3 drop-shadow-md transition duration-300">
