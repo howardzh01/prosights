@@ -193,7 +193,7 @@ function App() {
               ))}
             </div>
           </div>
-          <div className="relative mt-24 md:mt-36">
+          <div className="relative mt-24 md:mt-36 max-w-screen-2xl">
             <div className="absolute top-0 left-0 flex justify-center items-center w-full h-full">
               <div className="w-full h-full bg-gradient-to-br from-primary to-secondary opacity-50 rounded-full filter blur-[100px]" />
             </div>
@@ -204,9 +204,9 @@ function App() {
               }`}
             >
               <Image
-                src="/assets/preview3.png"
+                src="/assets/preview4.png"
                 alt="Preview"
-                className="w-full h-full drop-shadow-2xl px-4 md:px-16 object-contain"
+                className="w-full h-full drop-shadow-2xl px-4 md:px-16 object-contain rounded-md"
                 width={4096}
                 height={4096}
               />
