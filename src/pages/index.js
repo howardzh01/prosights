@@ -204,7 +204,7 @@ function App() {
               } px-4 md:px-16 `}
             >
               <Image
-                src="/assets/preview4.png"
+                src="/assets/preview5.png"
                 alt="Preview"
                 className="w-full h-full drop-shadow-2xl object-contain rounded-xl"
                 width={4096}
