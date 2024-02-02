@@ -33,8 +33,6 @@ function HeadCountChart({ headCountData, cutOffDate = new Date("2019") }) {
           data: values
             .map((item) => (item == null ? "--" : item))
             .slice(cutoffIndex),
-          backgroundColor: "rgba(0, 154, 255, 1)",
-          borderWidth: 1,
         },
       ],
     };

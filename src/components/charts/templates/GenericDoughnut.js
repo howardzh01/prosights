@@ -8,11 +8,9 @@ Chart.register(ChartDataLabels);
 function GenericDoughnut({ chartData, title = undefined }) {
   const options = {
     plugins: {
+      myColorPlugin: false,
       title: {
         display: false,
-        // text: title,
-        // align: "start",
-        // position: "top",
       },
       legend: {
         display: true,
@@ -28,7 +26,9 @@ function GenericDoughnut({ chartData, title = undefined }) {
         color: (context) => {
           // Get the background color of the current segment
           const backgroundColor =
-            context.dataset.backgroundColor[context.dataIndex];
+            typeof context.dataset.backgroundColor === "string"
+              ? context.dataset.backgroundColor
+              : context.dataset.backgroundColor[context.dataIndex];
           // Convert the color to its RGB components
           const [r, g, b] = rgbToComponents(backgroundColor);
           // Set the color based on the luminance

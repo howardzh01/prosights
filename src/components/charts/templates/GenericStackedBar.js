@@ -1,6 +1,11 @@
 import { Bar } from "react-chartjs-2";
 import GenericTimeScale from "./GenericTimeScale";
+import { isColorLight, rgbToComponents } from "../../../utils/Utils.js";
 import GenericTable from "./GenericTable";
+import Chart from "chart.js/auto";
+import { CHARTJS_COLOR_PLUGIN } from "../../../constants";
+Chart.register(CHARTJS_COLOR_PLUGIN);
+// import { Colors } from "chart.js";
 
 function StackedBarChart({
   data, // {chartData, tableData}
@@ -48,8 +53,6 @@ function StackedBarChart({
       //   },
       datalabels: {
         display: showDataLabels,
-        // anchor: "left",
-        // align: "center",
         formatter: (value, context) => {
           if (value < 5) {
             return null;
@@ -59,6 +62,17 @@ function StackedBarChart({
         },
         font: {
           weight: "bold",
+        },
+        color: (context) => {
+          // Get the background color of the current segment
+          const backgroundColor =
+            typeof context.dataset.backgroundColor === "string"
+              ? context.dataset.backgroundColor
+              : context.dataset.backgroundColor[context.dataIndex];
+          // Convert the color to its RGB components
+          const [r, g, b] = rgbToComponents(backgroundColor);
+          // Set the color based on the luminance
+          return isColorLight(r, g, b) ? "#242931" : "white";
         },
       },
     },
@@ -89,6 +103,7 @@ function StackedBarChart({
 
     maintainAspectRatio: false,
     responsive: true,
+
     // other options...
   };
 
@@ -105,6 +120,9 @@ function StackedBarChart({
         // Change the height as suggested in another answers
         this.height += 10;
       };
+    },
+    colors: {
+      enabled: false,
     },
   };
 

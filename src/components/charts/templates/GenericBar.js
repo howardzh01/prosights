@@ -46,10 +46,6 @@ function GenericBarAndTable({
         formatter: function (value, context) {
           return formatChartLabelFunction(value);
         },
-        font: {
-          weight: "light",
-        },
-        color: "#828BA4",
       },
     },
     scales: {
@@ -100,7 +96,7 @@ function GenericBarAndTable({
         </div>
       )}
 
-      <div className="h-full w-full">
+      <div className="">
         {chartData && <Bar data={chartData} options={options} />}
       </div>
 

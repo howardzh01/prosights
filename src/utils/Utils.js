@@ -292,6 +292,7 @@ export function isColorLight(r, g, b) {
 
 export function rgbToComponents(rgbString) {
   // This will turn "rgb(255, 255, 255)" into [255, 255, 255]
+  console.log(rgbString);
   return rgbString.match(/\d+/g).map(Number);
 }
 

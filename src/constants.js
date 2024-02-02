@@ -4,6 +4,25 @@ export const CONSTANTS = {
   cutoffDate: new Date("2024-01-01"),
 };
 
+export const CHARTJS_COLOR_PLUGIN = {
+  id: "myColorPlugin",
+  beforeUpdate: (chart) => {
+    const backgroundColors = [
+      "rgba(0, 165, 241, 1)",
+      "rgba(255, 84, 130, 1)",
+      "rgba(0, 195, 193, 1)",
+      "rgba(255, 153, 24, 1)",
+      "rgba(166, 99, 255, 1)",
+      "rgba(255, 203, 52, 1)",
+      "rgba(201, 203, 207, 1)",
+      // ...add as many colors as you need
+    ];
+    chart.data.datasets.forEach((dataset, index) => {
+      dataset.backgroundColor =
+        backgroundColors[index % backgroundColors.length];
+    });
+  },
+};
 export const UN_M49_CONTINENTS = {
   19: "North America",
   150: "Europe",
