@@ -444,7 +444,7 @@ function NewDashboard() {
             }}
           >
             {/* Search Bar */}
-            <div className="w-[36rem] mt-2">
+            <div className="w-[36rem] mt-4">
               <SearchBar company={company} setCompany={setCompany} />
             </div>
             {/* Company name, country, and comparing section */}

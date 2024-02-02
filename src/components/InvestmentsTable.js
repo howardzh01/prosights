@@ -6,6 +6,7 @@ function InvestmentsTable({ investmentsData }) {
   if (!investmentsData) {
     return <div>Loading</div>;
   }
+  console.log(investmentsData);
 
   function TableHeader({ text, is_header = true }) {
     if (is_header) {
@@ -27,7 +28,7 @@ function InvestmentsTable({ investmentsData }) {
 
     combinedData.push({
       date: investment.announced_on,
-      announced: dateToMonths(investment.announced_on),
+      announced: dateToMonths(investment.announced_on, false),
       type: formatDealRound(investment.funding_round_investment_type),
       amount: wholeAmount ? "$" + formatMoney(wholeAmount) : "-",
       company: investment.organization_identifier?.value,

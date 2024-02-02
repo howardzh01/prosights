@@ -142,7 +142,7 @@ function App() {
                 href=""
                 className="group flex flex-row items-center rounded-md"
               >
-                <div className="bg-primary group-hover:bg-blue-600 rounded-full flex items-center justify-center w-8 h-8 md:w-10 md:h-10 mr-3 drop-shadow-md transition duration-300">
+                <div className="bg-primary group-hover:bg-blue-600 rounded-full flex items-center justify-center w-8 h-8 md:w-10 md:h-10 pl-1 mr-3 drop-shadow-md transition duration-300">
                   <Image
                     src="/assets/play.png"
                     alt="Play"

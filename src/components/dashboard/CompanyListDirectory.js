@@ -5,7 +5,9 @@ export class CompanyDirectory {
 
   // Method to find a company by name and return the dictionary (object)
   findCompanyByName(name) {
-    console.log("name", name);
+    console.log(name);
+
+    if (!name) return null;
     return (
       this.companyList.find(
         (company) => company.name.toLowerCase() === name.toLowerCase()

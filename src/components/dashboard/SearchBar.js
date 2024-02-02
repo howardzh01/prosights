@@ -13,17 +13,23 @@ export default function SearchBar({ company, setCompany }) {
   if (!companyList) {
     return;
   }
-  console.log(companyList);
+
   return (
     <div className="h-12">
       <Autocomplete
-        freeSolo={false}
+        freeSolo={true}
         id="autcomplete-search"
         autoComplete={true}
         options={companyList}
-        getOptionLabel={(option) => option.displayedName}
+        getOptionLabel={(option) =>
+          typeof option === "string" ? option : option.displayedName
+        }
         onChange={(event, value) => {
-          setCompany(value.name);
+          if (typeof value === "string") {
+            setCompany(value);
+          } else {
+            setCompany(value.name);
+          }
           setValue(null);
         }}
         clearIcon={<span></span>}
