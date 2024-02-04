@@ -181,6 +181,11 @@ function NewDashboard() {
       level: 2,
     },
   ];
+  const todaysDate = new Date()
+    .toLocaleDateString("en-CA", {
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    })
+    .replaceAll("-", ".");
 
   useEffect(() => {
     if (!dataLoading) {
@@ -560,7 +565,11 @@ function NewDashboard() {
                   <p className="text-lg font-semibold text-gray-800 mr-2">
                     Employees
                   </p>
-                  <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
+                  <a
+                    className="group inline-flex items-center hover:cursor-pointer hover:text-primary"
+                    href="/assets/excelFiles/StockX_Headcount_2024.02.04.xlsx"
+                    download={`StockX_Headcount_${todaysDate}.xlsx`}
+                  >
                     <Image
                       src="/assets/downloadInactive.svg"
                       className="w-5 h-5 opacity-50 object-contain group-hover:hidden"
@@ -573,7 +582,7 @@ function NewDashboard() {
                       width={256}
                       height={256}
                     />
-                  </div>
+                  </a>
                 </div>
                 {headCountData ? (
                   <HeadCountChart headCountData={headCountData} />
