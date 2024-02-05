@@ -278,7 +278,21 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
         <div className="space-x-6 items-align flex mt-4 justify-between">
           {headCountData ? (
             <div className="md:w-64 2xl:w-96 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-white border border-customGray-50 h-60">
-              <HeadCountSignal headCountData={headCountData} />
+              <div className="">
+                <HeadCountSignal headCountData={headCountData} />
+              </div>
+              <div className="flex flex-row items-center">
+                <span className="ml-3 mr-2 italic text-xs text-[#C3C3C3]">
+                  Powered by
+                </span>
+                <Image
+                  src="/assets/poweredByLogos/coresignal_logo.svg"
+                  alt="coresignal"
+                  width="72"
+                  height="72"
+                  className=""
+                />
+              </div>
             </div>
           ) : (
             <Skeleton className="md:w-64 2xl:w-96 h-52 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
@@ -331,6 +345,18 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
                   width={512}
                   height={512}
                   priority
+                />
+              </div>
+              <div className="flex flex-row items-center">
+                <span className="ml-3 mr-1 italic text-xs text-[#B2B2B2]">
+                  Powered by
+                </span>
+                <Image
+                  src="/assets/poweredByLogos/semrush_logo.svg"
+                  alt="semrush"
+                  width="84"
+                  height="84"
+                  className=""
                 />
               </div>
             </div>
@@ -387,56 +413,78 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
                   priority
                 />
               </div>
+
+              <div className="flex flex-row items-center">
+                <span className="ml-3 italic text-xs text-[#B2B2B2]">
+                  Powered by
+                </span>
+                <Image
+                  src="/assets/poweredByLogos/consumer_edge_logo.svg"
+                  alt="consumer_edge"
+                  width="64"
+                  height="64"
+                />
+              </div>
             </div>
           ) : (
             <Skeleton className="md:w-64 2xl:w-96 h-52 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
           )}
           {headCountData ? (
             <div className="flex flex-col justify-between rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 py-3 w-96 h-60">
-              <div>
-                <div className="flex justify-between mb-2">
-                  <div className="items-center gap-1 text-sm font-medium">
-                    Ad Spend
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <button type="button" onClick={() => {}}>
-                      <Image
-                        src="/assets/expand.svg"
-                        alt="Company Logo"
-                        className="w-4 h-4 object-contain"
-                        width={128}
-                        height={128}
-                      />
-                    </button>
-                  </div>
+              <div className="flex justify-between mb-2">
+                <div className="items-center gap-1 text-sm font-medium">
+                  Ad Spend
                 </div>
-                <div className="flex flex-row items-center">
-                  <div className="flex flex-row mr-8 pb-1">
+                <div className="flex items-center gap-1">
+                  <button type="button" onClick={() => {}}>
                     <Image
-                      src="/assets/globe.svg"
+                      src="/assets/expand.svg"
                       alt="Company Logo"
-                      className="w-4 h-4 object-contain mr-1"
+                      className="w-4 h-4 object-contain"
                       width={128}
                       height={128}
                     />
-                    <p className="text-xs font-normal text-customGray-200">
-                      US
-                    </p>
-                  </div>
-                  <Image
-                    src="/assets/graphPictures/SignalsAdSpendLegend.svg"
-                    className="w-40 object-contain"
-                    width={512}
-                    height={512}
-                  />
+                  </button>
                 </div>
               </div>
+              <div className="flex flex-row items-center">
+                <div className="flex flex-row mr-8 pb-1">
+                  <Image
+                    src="/assets/globe.svg"
+                    alt="Company Logo"
+                    className="w-4 h-4 object-contain mr-1"
+                    width={128}
+                    height={128}
+                  />
+                  <p className="text-xs font-normal text-customGray-200">US</p>
+                </div>
+                <Image
+                  src="/assets/graphPictures/SignalsAdSpendLegend.svg"
+                  className="w-40 object-contain"
+                  width={512}
+                  height={512}
+                />
+              </div>
+
               <div className="flex justify-center flex-row space-x-4">
                 <Image
                   src="/assets/graphPictures/SignalsAdSpendChartAnnual.svg"
                   className="w-full object-contain"
                   width={5120}
                   height={5120}
+                />
+              </div>
+
+              <div className="flex flex-row items-center">
+                <span className="ml-3 mr-1 italic text-xs text-[#B2B2B2]">
+                  Powered by
+                </span>
+                <Image
+                  src="/assets/poweredByLogos/pathmatics_logo.svg"
+                  alt="pathmatics"
+                  width="64"
+                  height="64"
+                  className=""
                 />
               </div>
             </div>

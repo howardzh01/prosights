@@ -42,7 +42,7 @@ export default function SearchBar({ company, setCompany }) {
               alt={option.name}
               style={{
                 marginRight: 8,
-                height: "20px",
+                height: "12px",
                 width: "auto",
                 display: "inline-block",
                 borderRadius: "20%",
@@ -71,7 +71,10 @@ export default function SearchBar({ company, setCompany }) {
               //   params.InputProps.startAdornment,
               // ],
               type: "search",
+
+              style: { fontSize: "0.875rem" },
             }}
+            InputLabelProps={{ style: { fontSize: "0.875rem" } }}
             sx={{
               "& .MuiOutlinedInput-notchedOutline": {
                 borderColor: "#EFF1F5", // Hide the default border
@@ -80,6 +83,7 @@ export default function SearchBar({ company, setCompany }) {
               },
               "& .MuiOutlinedInput-root": {
                 backgroundColor: "#FFFFFF",
+                fontSize: "0.75rem",
 
                 "&:hover .MuiOutlinedInput-notchedOutline": {
                   borderColor: "#EFF1F5", // border-customGray-50 on hover
