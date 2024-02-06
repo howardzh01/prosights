@@ -29,14 +29,14 @@ function WebTrafficChart({
     useState("year");
 
   if (!trafficData) return null;
-  console.log(
-    Object.keys(trafficData).map((key) => {
-      let date = new Date(key);
-      let year = date.getUTCFullYear().toString().substr(-2);
-      let month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
-      return [`${month}-${year}`, trafficData[key]];
-    })
-  );
+  // console.log(
+  //   Object.keys(trafficData).map((key) => {
+  //     let date = new Date(key);
+  //     let year = date.getUTCFullYear().toString().substr(-2);
+  //     let month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+  //     return [`${month}-${year}`, trafficData[key]];
+  //   })
+  // );
   function convertToChartData(data, displayedLabel) {
     // input: {time_key: output_key}
     let { labels, values, tableHeaders, tableLabels, growthPercentages } =

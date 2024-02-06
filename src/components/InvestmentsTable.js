@@ -6,7 +6,6 @@ function InvestmentsTable({ investmentsData }) {
   if (!investmentsData) {
     return <div>Loading</div>;
   }
-  console.log(investmentsData);
 
   function TableHeader({ text, is_header = true }) {
     if (is_header) {

@@ -12,10 +12,22 @@ function AppUsageSection({}) {
     <div className="flex flex-col w-full mt-12 pb-8">
       <div
         id="App Usage"
-        className="content-section flex items-center mt-2 mb-3 rounded-md"
+        className="content-section flex items-end justify-between mt-2 mb-3 rounded-md"
       >
-        <AppUsageIcon className="mx-2 filter invert w-6 h-6" />
-        <p className="text-3xl font-semibold text-gray-800 ">App Usage</p>
+        <div className="flex flex-row items-center">
+          <AppUsageIcon className="mx-2 filter invert w-6 h-6" />
+          <p className="text-3xl font-semibold text-gray-800 ">App Usage</p>
+        </div>
+        {/* <div className="flex flex-row items-center ml-4">
+          <span className="mr-2 italic text-sm text-[#C3C3C3]">Powered by</span>
+          <Image
+            src="/assets/poweredByLogos/semrush_logo.svg"
+            alt="coresignal"
+            width="120"
+            height="120"
+            className="h-4 w-auto"
+          />
+        </div> */}
       </div>
       <hr className="border-none h-px bg-customGray-200" />
       <div className="flex flex-col section-indent mt-4">

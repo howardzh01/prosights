@@ -31,7 +31,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
   }
 
   const cbfields = crunchbaseData?.["fields"] || {};
-  console.log("CB FIELDS", cbfields);
+  // console.log("CB FIELDS", cbfields);
   let companyFoundedYear = cbfields["founded_on"]
     ? new Date(cbfields["founded_on"]?.["value"]).getUTCFullYear()
     : "";
@@ -282,7 +282,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
                 <HeadCountSignal headCountData={headCountData} />
               </div>
               <div className="flex flex-row items-center">
-                <span className="ml-3 mr-2 italic text-xs text-[#C3C3C3]">
+                <span className="mr-2 italic text-xs text-[#C3C3C3]">
                   Powered by
                 </span>
                 <Image
@@ -348,7 +348,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
                 />
               </div>
               <div className="flex flex-row items-center">
-                <span className="ml-3 mr-1 italic text-xs text-[#B2B2B2]">
+                <span className="mr-1 italic text-xs text-[#B2B2B2]">
                   Powered by
                 </span>
                 <Image
@@ -415,7 +415,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
               </div>
 
               <div className="flex flex-row items-center">
-                <span className="ml-3 italic text-xs text-[#B2B2B2]">
+                <span className="mr-2 italic text-xs text-[#B2B2B2]">
                   Powered by
                 </span>
                 <Image
@@ -476,7 +476,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
               </div>
 
               <div className="flex flex-row items-center">
-                <span className="ml-3 mr-1 italic text-xs text-[#B2B2B2]">
+                <span className="mr-2 italic text-xs text-[#B2B2B2]">
                   Powered by
                 </span>
                 <Image

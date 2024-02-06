@@ -3,7 +3,6 @@ import Image from "next/image";
 import { formatMoney, formatDealRound, dateToMonths } from "../utils/Utils";
 
 function InvestorTable({ fundingData }) {
-  console.log(fundingData);
   if (!fundingData) {
     return <div>Loading</div>;
   }

@@ -37,7 +37,6 @@ function NewDashboard() {
   const [company, setCompany] = useState("zillow");
   const [country, setCountry] = useState("US");
   const [companyCompetitors, setCompanyCompetitors] = useState([]);
-  console.log(companyCompetitors);
   const [dataLoading, setDataLoading] = useState(true);
 
   const [selectedChart, setSelectedChart] = useState("");
@@ -416,13 +415,7 @@ function NewDashboard() {
     companyDescription,
     companyDescriptionError,
   } = getApiData(company);
-  console.log({
-    headCountData,
-    webTrafficData,
-    webTrafficGeoData,
-    crunchbaseData,
-    companyDescription,
-  });
+
   return (
     <SelectedChartContext.Provider value={{ selectedChart, setSelectedChart }}>
       <ChartDataContext.Provider value={{ chartData, setChartData }}>
@@ -553,11 +546,25 @@ function NewDashboard() {
               id="Headcount"
               className="flex flex-col w-full mt-12 content-section mb-12"
             >
-              <div className="flex items-center mt-2 mb-3 rounded-md">
-                <HeadcountIcon className="mx-2 filter invert w-6 h-6" />
-                <p className="text-3xl font-semibold text-gray-800 ">
-                  Headcount
-                </p>
+              <div className="flex items-end justify-between mt-2 mb-3 rounded-md">
+                <div className="flex flex-row items-center">
+                  <HeadcountIcon className="mx-2 filter invert w-6 h-6" />
+                  <p className="text-3xl font-semibold text-gray-800 ">
+                    Headcount
+                  </p>
+                </div>
+                <div className="flex flex-row items-center ml-4">
+                  <span className="mr-2 italic text-sm text-[#C3C3C3]">
+                    Powered by
+                  </span>
+                  <Image
+                    src="/assets/poweredByLogos/coresignal_logo.svg"
+                    alt="coresignal"
+                    width="120"
+                    height="120"
+                    className="h-4 w-auto"
+                  />
+                </div>
               </div>
               <hr className="border-none h-px bg-customGray-200" />
               <div className="mt-6 section-indent">

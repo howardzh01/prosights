@@ -98,7 +98,7 @@ function WebTrafficByChannelChart({
     // aggData: {direct: {time_key: output_key}, mail: {time_key: output_key}, ...}
     const firstChannelData = aggData[displayedKeyMap[relevant_keys[0]]]; // use to extract timescale
     const percentAggData = normalizeStackedAggData(aggData);
-    console.log("percentAggData", percentAggData);
+    // console.log("percentAggData", percentAggData);
     const chartData = {
       labels: Object.keys(firstChannelData),
       datasets: Object.keys(aggData).map((key) => ({

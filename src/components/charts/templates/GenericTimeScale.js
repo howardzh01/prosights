@@ -23,7 +23,7 @@ function GenericTimeScale({
   const { selectedChart: chart, setSelectedChart } =
     useContext(SelectedChartContext);
   const { setChartData } = useContext(ChartDataContext);
-  console.log("TIMESCALE", selectedChart, timescale);
+  // console.log("TIMESCALE", selectedChart, timescale);
   return (
     <div className="flex justify-between">
       <div className="items-center gap-1 text-sm font-medium">{title}</div>
@@ -50,11 +50,11 @@ function GenericTimeScale({
               type="button"
               disabled={timescale === "month"}
               onClick={() => {
-                console.log(
-                  "CLICK",
-                  timescale,
-                  TIMESCALE_TRANSITION_DIC[timescale][0]
-                );
+                // console.log(
+                //   "CLICK",
+                //   timescale,
+                //   TIMESCALE_TRANSITION_DIC[timescale][0]
+                // );
                 setTimescale(TIMESCALE_TRANSITION_DIC[timescale][0]);
               }}
             >

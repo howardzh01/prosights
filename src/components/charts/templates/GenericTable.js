@@ -33,7 +33,7 @@ function GenericTable({
       return spans;
     }, {});
   }
-  console.log(highlightedRows, "highlightedRows");
+  // console.log(highlightedRows, "highlightedRows");
   // console.log("headerSpans", headerSpans);
 
   return (
@@ -73,9 +73,9 @@ function GenericTable({
           {[tableDatasets].map((dsetCategory, categoryIndex) =>
             dsetCategory.map((dataset) => {
               const bgColor = highlightedRows?.[dataset.label] || "bg-white";
-              {
-                console.log(dataset.label, bgColor, "bgColor");
-              }
+              // {
+              //   console.log(dataset.label, bgColor, "bgColor");
+              // }
               return (
                 <tr
                   key={dataset.label}
