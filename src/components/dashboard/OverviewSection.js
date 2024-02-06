@@ -91,13 +91,13 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
   return (
     <div className="mt-8 w-full">
       {/* <hr className="border-none h-px bg-customGray-200" /> */}
-      <div className="flex items-center mt-2 mb-3 rounded-md">
+      {/* <div className="flex items-center mt-2 mb-3 rounded-md">
         <CompanyOverviewIcon className="mx-2 filter invert w-6 h-6" />
         <p className="text-3xl font-semibold text-gray-800  ">
           Company Overview
         </p>
       </div>
-      <hr className="border-none h-px bg-customGray-200" />
+      <hr className="border-none h-px bg-customGray-200" /> */}
       <div className="flex flex-row mt-4 section-indent space-x-24">
         {/* About & Business Model */}
         {companyAbout && companyBusinessModel ? (

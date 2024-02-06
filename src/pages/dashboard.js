@@ -465,12 +465,12 @@ function NewDashboard() {
                 ) : (
                   <Skeleton className="w-10 h-10 mr-2 rounded-md bg-customGray-50" />
                 )}
-                <p className="text-4xl font-bold text-gray-800 pl-1">
+                <p className="text-3xl font-bold text-gray-800 pl-1">
                   {companyDirectory.findCompanyByName(company)?.displayedName ||
                     company}
                 </p>
                 <select
-                  className="h-10 drop-shadow-sm border-customGray-50 text-customGray-500 rounded-md font-nunitoSans text-sm font-normal text-left focus:outline-none focus:ring-0 ml-6"
+                  className="h-10 text-customGray-500 rounded-md font-nunitoSans text-sm font-normal text-left focus:outline-none focus:ring-0 ml-6"
                   onChange={(e) => {
                     const newCompanyLocation = e.target.value;
                     setCountry(newCompanyLocation);

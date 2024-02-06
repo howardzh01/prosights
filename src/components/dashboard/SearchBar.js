@@ -48,7 +48,7 @@ export default function SearchBar({ company, setCompany }) {
                 borderRadius: "20%",
               }}
             />
-            <span className="">{option.url}</span>
+            <span className="text-sm text-customGray-800">{option.url}</span>
           </Box>
         )}
         renderInput={(params) => (
@@ -71,10 +71,21 @@ export default function SearchBar({ company, setCompany }) {
               //   params.InputProps.startAdornment,
               // ],
               type: "search",
-
-              style: { fontSize: "0.875rem" },
+              // classes: {
+              //   input: {}
+              // }
+              style: {
+                fontSize: "0.875rem",
+                fontFamily: "Inter",
+              },
             }}
-            InputLabelProps={{ style: { fontSize: "0.875rem" } }}
+            InputLabelProps={{
+              style: {
+                fontSize: "0.875rem",
+                color: "#A9B1C7",
+                fontFamily: "Inter",
+              },
+            }}
             sx={{
               "& .MuiOutlinedInput-notchedOutline": {
                 borderColor: "#EFF1F5", // Hide the default border
