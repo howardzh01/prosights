@@ -288,8 +288,8 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
                 <Image
                   src="/assets/poweredByLogos/coresignal_logo.svg"
                   alt="coresignal"
-                  width="72"
-                  height="72"
+                  width="64"
+                  height="64"
                   className=""
                 />
               </div>

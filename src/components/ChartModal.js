@@ -78,6 +78,8 @@ export default function ChartModal({
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={setOpen}>
+        <Dialog.Title></Dialog.Title>
+        {/* Need to include Dialog.Title to prevent modal closing on first open click. See https://github.com/tailwindlabs/headlessui/issues/2535#issuecomment-1672667145*/}
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -89,8 +91,7 @@ export default function ChartModal({
         >
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
         </Transition.Child>
-
-        <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+        <div className="fixed inset-0 w-screen overflow-y-auto">
           <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
             <Transition.Child
               as={Fragment}
@@ -112,7 +113,7 @@ export default function ChartModal({
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
                 </div>
-                <div className="z-20">{chart}</div>
+                <div className="">{chart}</div>
               </Dialog.Panel>
             </Transition.Child>
           </div>
