@@ -16,7 +16,7 @@ function Navbar() {
                   priority
                   width={4096}
                   height={4096}
-                  className="w-24 md:w-28"
+                  className="w-28 md:w-32"
                 />
               </Link>
             </div>

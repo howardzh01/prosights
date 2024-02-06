@@ -449,7 +449,7 @@ function NewDashboard() {
             }}
           >
             {/* Search Bar */}
-            <div className="w-[36rem] mt-4">
+            <div id="Company Overview" className="w-[36rem] pt-4">
               <SearchBar company={company} setCompany={setCompany} />
             </div>
             {/* Company name, country, and comparing section */}
@@ -537,7 +537,7 @@ function NewDashboard() {
               ></CompetitorContainer>
             </div>
             {/* Overview Section */}
-            <div id="Company Overview" className="content-section w-full mb-20">
+            <div className="content-section w-full mb-20">
               <OverviewSection
                 companyAbout={companyDescription}
                 crunchbaseData={crunchbaseData}
