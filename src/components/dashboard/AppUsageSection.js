@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { RELEVANT_CONTINENTS, CHARTS } from "../../constants";
-import WebGeoTrafficChart from "../charts/WebGeoTrafficChart";
+import WebGeoTrafficDoughnut from "../charts/WebGeoTrafficDoughnut";
 import WebTrafficDoughnut from "../charts/WebTrafficDoughnut";
 import Image from "next/image";
 import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/outline";

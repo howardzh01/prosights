@@ -8,16 +8,8 @@ import ConsumerSpendSection from "../components/dashboard/ConsumerSpendSection";
 import AdSpendSection from "../components/dashboard/AdSpendSection";
 import CompetitorOverviewSection from "../components/dashboard/CompetitorOverviewSection";
 import Image from "next/image";
-import useSWR from "swr";
 import { useUser } from "@clerk/clerk-react";
-import {
-  getGeoTrafficData,
-  getHeadCount,
-  getTrafficData,
-  getCrunchbaseData,
-  getCompanyDescription,
-} from "../api";
-import { RELEVANT_CONTINENTS } from "../constants";
+import { getApiData } from "../api";
 import { createContext } from "react";
 import ChartModal from "../components/ChartModal";
 import HeadCountChart from "../components/charts/HeadCountChart";
@@ -34,9 +26,10 @@ export const ChartDataContext = createContext();
 function NewDashboard() {
   const { isSignedIn, user, isLoaded } = useUser();
   const companyDirectory = new CompanyDirectory(companyList);
-  const [company, setCompany] = useState("zillow");
+  const [company, setCompany] = useState("stockx");
   const [country, setCountry] = useState("US");
-  const [companyCompetitors, setCompanyCompetitors] = useState([]);
+  const [companyCompetitors, setCompanyCompetitors] = useState([]); // Array of company names
+
   const [dataLoading, setDataLoading] = useState(true);
 
   const [selectedChart, setSelectedChart] = useState("");
@@ -285,124 +278,7 @@ function NewDashboard() {
         console.error("Error exporting PDF:", err);
       });
   };
-
-  // // API Data
-  // const { data: headCountData, error: headCountError } = useSWR(
-  //   user && company ? [`/api/private/getHeadCount`, user.id, company] : null,
-  //   getHeadCount,
-  //   { revalidateOnFocus: false }
-  // );
-
-  // const { data: webTrafficData, error: webTrafficError } = useSWR(
-  //   user && company && country
-  //     ? [`/api/private/getWebTrafficData`, user.id, company + ".com", country]
-  //     : null,
-
-  //   getTrafficData,
-  //   { revalidateOnFocus: false }
-  // );
-
-  // const { data: webTrafficGeoData, error: webTrafficGeoError } = useSWR(
-  //   user && company
-  //     ? [
-  //         `/api/private/getWebTrafficGeoData`,
-  //         user.id,
-  //         company + ".com",
-  //         RELEVANT_CONTINENTS,
-  //       ]
-  //     : null,
-  //   getGeoTrafficData,
-  //   { revalidateOnFocus: false }
-  // );
-
-  // const { data: crunchbaseData, error: crunchbaseError } = useSWR(
-  //   user && company
-  //     ? [`/api/private/getCrunchbaseData`, user.id, company]
-  //     : null,
-  //   getCrunchbaseData,
-  //   { revalidateOnFocus: false }
-  // );
-
-  // const { data: companyDescription, error: companyDescriptionError } = useSWR(
-  //   user && company && crunchbaseData
-  //     ? [`/api/private/getCompanyDescription`, company, crunchbaseData]
-  //     : null,
-  //   ([url, company, crunchbaseData]) => {
-  //     return getCompanyDescription([
-  //       url,
-  //       user.id,
-  //       company,
-  //       crunchbaseData["fields"]["description"],
-  //     ]);
-  //   },
-  //   { revalidateOnFocus: false }
-  // );
-
-  function getApiData(company) {
-    // API Data
-    const { data: headCountData, error: headCountError } = useSWR(
-      user && company ? [`/api/private/getHeadCount`, user.id, company] : null,
-      getHeadCount,
-      { revalidateOnFocus: false }
-    );
-
-    const { data: webTrafficData, error: webTrafficError } = useSWR(
-      user && company && country
-        ? [`/api/private/getWebTrafficData`, user.id, company + ".com", country]
-        : null,
-
-      getTrafficData,
-      { revalidateOnFocus: false }
-    );
-
-    const { data: webTrafficGeoData, error: webTrafficGeoError } = useSWR(
-      user && company
-        ? [
-            `/api/private/getWebTrafficGeoData`,
-            user.id,
-            company + ".com",
-            RELEVANT_CONTINENTS,
-          ]
-        : null,
-      getGeoTrafficData,
-      { revalidateOnFocus: false }
-    );
-
-    const { data: crunchbaseData, error: crunchbaseError } = useSWR(
-      user && company
-        ? [`/api/private/getCrunchbaseData`, user.id, company]
-        : null,
-      getCrunchbaseData,
-      { revalidateOnFocus: false }
-    );
-
-    const { data: companyDescription, error: companyDescriptionError } = useSWR(
-      user && company && crunchbaseData
-        ? [`/api/private/getCompanyDescription`, company, crunchbaseData]
-        : null,
-      ([url, company, crunchbaseData]) => {
-        return getCompanyDescription([
-          url,
-          user.id,
-          company,
-          crunchbaseData["fields"]["description"],
-        ]);
-      },
-      { revalidateOnFocus: false }
-    );
-    return {
-      headCountData,
-      headCountError,
-      webTrafficData,
-      webTrafficError,
-      webTrafficGeoData,
-      webTrafficGeoError,
-      crunchbaseData,
-      crunchbaseError,
-      companyDescription,
-      companyDescriptionError,
-    };
-  }
+  console.log([company] + companyCompetitors.map((company) => company.name));
   const {
     headCountData,
     headCountError,
@@ -414,8 +290,18 @@ function NewDashboard() {
     crunchbaseError,
     companyDescription,
     companyDescriptionError,
-  } = getApiData(company);
+  } = getApiData(user, [company], country);
 
+  // const competitorData = getApiData(user, competitor.name, country);
+
+  console.log({
+    headCountData,
+    webTrafficData,
+    webTrafficGeoData,
+    crunchbaseData,
+    companyDescription,
+  });
+  // console.log(competitorData);
   return (
     <SelectedChartContext.Provider value={{ selectedChart, setSelectedChart }}>
       <ChartDataContext.Provider value={{ chartData, setChartData }}>
@@ -451,9 +337,9 @@ function NewDashboard() {
             {/* Company name, country, and comparing section */}
             <div className="mt-6 flex flex-row justify-between w-full items-center">
               <div className="flex flex-row items-center">
-                {crunchbaseData?.["fields"]?.["image_url"] ? (
+                {crunchbaseData?.[company]?.["fields"]?.["image_url"] ? (
                   <Image
-                    src={crunchbaseData["fields"]["image_url"]}
+                    src={crunchbaseData[company]["fields"]["image_url"]}
                     className="w-10 h-10 mr-2 object-contain rounded-md"
                     width={256}
                     height={256}
@@ -535,9 +421,9 @@ function NewDashboard() {
             {/* Overview Section */}
             <div className="content-section w-full mb-20">
               <OverviewSection
-                companyAbout={companyDescription}
-                crunchbaseData={crunchbaseData}
-                headCountData={headCountData}
+                companyAbout={companyDescription?.[company]}
+                crunchbaseData={crunchbaseData?.[company]}
+                headCountData={headCountData?.[company]}
               />
             </div>
             {/* Competitor Overview */}
@@ -595,7 +481,7 @@ function NewDashboard() {
                   </a>
                 </div>
                 {headCountData ? (
-                  <HeadCountChart headCountData={headCountData} />
+                  <HeadCountChart headCountData={headCountData?.[company]} />
                 ) : (
                   <Skeleton className="w-full h-80 rounded-lg bg-customGray-50" />
                 )}
@@ -604,8 +490,8 @@ function NewDashboard() {
             {/* Website Traffic */}
             <div className="w-full">
               <WebsiteTrafficSection
-                webTrafficData={webTrafficData}
-                webTrafficGeoData={webTrafficGeoData}
+                webTrafficData={webTrafficData?.[company]}
+                webTrafficGeoData={webTrafficGeoData?.[company]}
               />
             </div>
             {/* App Usage */}

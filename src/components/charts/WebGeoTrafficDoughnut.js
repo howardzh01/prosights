@@ -11,7 +11,7 @@ import { generateQuarters } from "../../utils/Utils";
 import { CHARTS } from "../../constants";
 import Image from "next/image";
 
-function WebGeoTrafficChart({
+function WebGeoTrafficDoughnut({
   geoTrafficData,
   relevant_continents,
   startDate = "2019",
@@ -162,4 +162,4 @@ function WebGeoTrafficChart({
   );
 }
 
-export default WebGeoTrafficChart;
+export default WebGeoTrafficDoughnut;

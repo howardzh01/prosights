@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { RELEVANT_CONTINENTS, CHARTS } from "../../constants";
-import WebGeoTrafficChart from "../charts/WebGeoTrafficChart";
+import WebGeoTrafficDoughnut from "../charts/WebGeoTrafficDoughnut";
 import WebTrafficDoughnut from "../charts/WebTrafficDoughnut";
 import Image from "next/image";
 import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
@@ -77,7 +77,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
             webTrafficGeoData !== null &&
             Object.keys(webTrafficGeoData).length !== 0 ? (
               <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6">
-                <WebGeoTrafficChart
+                <WebGeoTrafficDoughnut
                   geoTrafficData={webTrafficGeoData}
                   relevant_continents={RELEVANT_CONTINENTS}
                 />

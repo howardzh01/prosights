@@ -1,6 +1,107 @@
 import api from "gpt-tokenizer/esm/encoding/cl100k_base";
-import { UN_M49_CONTINENTS } from "./constants";
+import { UN_M49_CONTINENTS, RELEVANT_CONTINENTS } from "./constants";
 import { assert } from "./utils/Utils";
+import useSWR from "swr";
+
+async function apiMultiCall(companyList, func, args) {
+  const promises = companyList.map((company) => func(args));
+  const results = await Promise.all(promises);
+  return companyList.reduce((acc, company, index) => {
+    acc[company] = results[index];
+    return acc;
+  }, {});
+}
+export function getApiData(user, companyList, country) {
+  // Fill API Data calls here. So far, headcount, web traffic, crunchbase, company description
+  const { data: headCountData, error: headCountError } = useSWR(
+    user && companyList
+      ? [`/api/private/getHeadCount`, user.id, companyList]
+      : null,
+    (args) => {
+      return apiMultiCall(companyList, getHeadCount, args);
+    },
+    { revalidateOnFocus: false }
+  );
+  console.log(companyList);
+  const { data: webTrafficData, error: webTrafficError } = useSWR(
+    user && companyList && country
+      ? [
+          `/api/private/getWebTrafficData`,
+          user.id,
+          companyList.map((company) => company + ".com"),
+          country,
+        ]
+      : null,
+
+    (args) => {
+      return apiMultiCall(companyList, getTrafficData, args);
+    },
+    { revalidateOnFocus: false }
+  );
+
+  const { data: webTrafficGeoData, error: webTrafficGeoError } = useSWR(
+    user && companyList
+      ? [
+          `/api/private/getWebTrafficGeoData`,
+          user.id,
+          companyList.map((company) => company + ".com"),
+          RELEVANT_CONTINENTS,
+        ]
+      : null,
+    (args) => {
+      return apiMultiCall(companyList, getGeoTrafficData, args);
+    },
+    { revalidateOnFocus: false }
+  );
+
+  const { data: crunchbaseData, error: crunchbaseError } = useSWR(
+    user && companyList
+      ? [`/api/private/getCrunchbaseData`, user.id, companyList]
+      : null,
+    (args) => {
+      return apiMultiCall(companyList, getCrunchbaseData, args);
+    },
+    { revalidateOnFocus: false }
+  );
+
+  // NOTE: companyDescription depends on crunchbase data
+  const { data: companyDescription, error: companyDescriptionError } = useSWR(
+    user && companyList && crunchbaseData
+      ? [`/api/private/getCompanyDescription`, companyList, crunchbaseData]
+      : null,
+
+    async ([url, companyList, crunchbaseData]) => {
+      const promises = companyList.map((company) =>
+        getCrunchbaseData([
+          url,
+          user.id,
+          company,
+          crunchbaseData[company]["fields"]["description"],
+        ])
+      );
+      const results = await Promise.all(promises);
+      return companyList.reduce((acc, company, index) => {
+        acc[company] = results[index];
+        return acc;
+      }, {});
+      return apiMultiCall(companyList, getCrunchbaseData);
+    },
+    { revalidateOnFocus: false }
+  );
+  console.log(companyDescriptionError);
+  return {
+    headCountData,
+    headCountError,
+    webTrafficData,
+    webTrafficError,
+    webTrafficGeoData,
+    webTrafficGeoError,
+    crunchbaseData,
+    crunchbaseError,
+    companyDescription,
+    companyDescriptionError,
+  };
+}
 
 export const getHeadCount = async ([api_url, userId, companyName]) => {
   // expect `/api/private/getHeadCount`

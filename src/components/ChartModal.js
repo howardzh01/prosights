@@ -3,7 +3,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import HeadCountChart from "./charts/HeadCountChart";
 import { CHARTS, RELEVANT_CONTINENTS } from "../constants";
-import WebGeoTrafficChart from "./charts/WebGeoTrafficChart";
+import WebGeoTrafficDoughnut from "./charts/WebGeoTrafficDoughnut";
 import WebTrafficChart from "./charts/WebTrafficChart";
 
 export default function ChartModal({
@@ -20,7 +20,7 @@ export default function ChartModal({
       break;
     case CHARTS.trafficByGeo:
       chart = (
-        <WebGeoTrafficChart
+        <WebGeoTrafficDoughnut
           geoTrafficData={chartData}
           relevant_continents={RELEVANT_CONTINENTS}
         />
