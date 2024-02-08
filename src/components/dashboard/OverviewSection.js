@@ -278,7 +278,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
         <div className="space-x-6 items-align flex mt-4 justify-between">
           {headCountData ? (
             <div className="md:w-64 2xl:w-96 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-white border border-customGray-50 h-60">
-              <div className="">
+              <div className="bg-white">
                 <HeadCountSignal headCountData={headCountData} />
               </div>
               <div className="flex flex-row items-center">
@@ -298,7 +298,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
             <Skeleton className="md:w-64 2xl:w-96 h-52 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
           )}
           {headCountData ? (
-            <div className="flex flex-col justify-between rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 py-3 w-96 h-60">
+            <div className="flex flex-col justify-between rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-white border border-customGray-50 px-6 py-3 w-96 h-60">
               <div>
                 <div className="flex justify-between mb-2">
                   <div className="items-center gap-1 text-sm font-medium">
@@ -364,7 +364,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
             <Skeleton className="md:w-64 2xl:w-96 h-52 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
           )}
           {headCountData ? (
-            <div className="flex flex-col justify-between rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 py-2 w-96 h-60">
+            <div className="flex flex-col justify-between rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-white border border-customGray-50 px-6 py-2 w-96 h-60">
               <div>
                 <div className="flex justify-between mb-2">
                   <div className="items-center gap-1 text-sm font-medium">
@@ -430,7 +430,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
             <Skeleton className="md:w-64 2xl:w-96 h-52 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
           )}
           {headCountData ? (
-            <div className="flex flex-col justify-between rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 py-2 w-96 h-60">
+            <div className="flex flex-col justify-between rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-white border border-customGray-50 px-6 py-2 w-96 h-60">
               <div className="flex justify-between mb-2">
                 <div className="items-center gap-1 text-sm font-medium">
                   Ad Spend
