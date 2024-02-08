@@ -98,10 +98,10 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
         </p>
       </div>
       <hr className="border-none h-px bg-customGray-200" /> */}
-      <div className="flex flex-row mt-4 section-indent space-x-24">
+      <div className="flex flex-row mt-4 section-indent w-full">
         {/* About & Business Model */}
         {companyAbout && companyBusinessModel ? (
-          <div className="flex flex-col w-1/2">
+          <div className="flex flex-col w-3/5 pr-16">
             <div className="text-lg font-semibold text-gray-800">About</div>
             <p className="text-sm text-customGray-800 leading-relaxed mt-1">
               {companyAbout["company_description"]}
@@ -114,7 +114,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
             </p>
           </div>
         ) : (
-          <div className="flex flex-col w-1/2 space-y-5">
+          <div className="flex flex-col w-3/5 pr-16">
             <Skeleton className="bg-customGray-50 text-base font-semibold text-gray-800 w-16 h-6 rounded-lg" />
             <Skeleton className="bg-customGray-50 text-sm text-customGray-800 leading-relaxed mt-1 rounded-lg">
               Zillow is a leading online real estate marketplace that provides
@@ -133,7 +133,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
         )}
         {/* Basic Stats */}
         <div
-          className="w-1/2 pl-8"
+          className="w-2/5"
           style={{
             display: "grid",
             gridTemplateColumns: "min-content max-content 1fr",
@@ -246,8 +246,8 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
         </div>
       </div>
       {/* Funding and M&A Tables */}
-      <div className="flex space-x-8 mt-6 ml-4 justify-between ">
-        <div className="w-3/5">
+      <div className="flex mt-6 ml-4 justify-between w-full">
+        <div className="w-3/5 pr-16">
           <p className="text-lg font-semibold text-gray-800 mb-3">Funding</p>{" "}
           {crunchbaseData?.["raised_funding_rounds"] ? (
             <InvestorTable
