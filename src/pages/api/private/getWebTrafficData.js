@@ -12,16 +12,15 @@ export const config = {
 };
 
 const getSemrushWebTraffic = async (
-  companiesUrl,
+  companyUrl,
   exportColumns,
   displayDate,
   country = "global"
 ) => {
   // monthly headcount data in reverse chronological order
-  //   console.log(companiesUrl, exportColumns, displayDate);
   const url = new URL("https://api.semrush.com/analytics/ta/api/v3/summary");
   url.search = new URLSearchParams({
-    targets: companiesUrl,
+    targets: companyUrl,
     export_columns: exportColumns,
     key: process.env.SEMRUSH_API_KEY,
     display_date: displayDate,
@@ -29,6 +28,7 @@ const getSemrushWebTraffic = async (
   if (country !== "global") {
     url.searchParams.append("country", country);
   }
+  ow;
   const output = await cachedFetch(
     url,
     {
@@ -44,13 +44,13 @@ const handler = async (req) => {
   // Extract the messages parameter from the request query
   // reqJSON.userId, reqJSON.messages
   const reqJSON = await req.json();
-  const { userId, companiesUrl, exportColumns, country, don } = reqJSON;
+  const { userId, companyUrl, exportColumns, country, don } = reqJSON;
   const displayDates = generateMonthsFromStartYear(2019);
   //   const displayDates = ["2023-10-01"];
   // "categories" cannot be in  exportColumns due to parseSemrushOutput handling ;
   const promises = displayDates.map(async (date) => {
     const webTrafficData = await getSemrushWebTraffic(
-      companiesUrl,
+      companyUrl.toLowerCase(),
       exportColumns,
       date,
       country

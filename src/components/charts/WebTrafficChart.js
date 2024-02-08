@@ -20,13 +20,6 @@ function WebTrafficChart({
   // TODO: make this more compact later - probably 1 useState with an object containing all timescale states, or useReducer
   const [trafficTimescale, setTrafficTimescale] = useState("quarterYear");
   const [mauTimescale, setMauTimescale] = useState("quarterYear");
-  const [trafficByChannelTimescale, setTrafficByChannelTimescale] =
-    useState("year");
-  const [trafficByDeviceTimescale, setTrafficByDeviceTimescale] =
-    useState("year");
-  const [usersByDeviceTimescale, setUsersByDeviceTimescale] = useState("year");
-  const [trafficByOrganicVsPaidTimescale, setTrafficByOrganicVsPaidTimescale] =
-    useState("year");
 
   if (!trafficData) return null;
   // console.log(

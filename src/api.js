@@ -4,7 +4,10 @@ import { assert } from "./utils/Utils";
 import useSWR from "swr";
 
 async function apiMultiCall(companyList, func, args) {
-  const promises = companyList.map((company) => func(args));
+  // Make sure first element of args is the company names
+  const promises = companyList.map(
+    (company, ind) => func([args[0][ind], ...args.slice(1)]) // replace args companyList with specific company
+  );
   const results = await Promise.all(promises);
   return companyList.reduce((acc, company, index) => {
     acc[company] = results[index];
@@ -13,22 +16,23 @@ async function apiMultiCall(companyList, func, args) {
 }
 export function getApiData(user, companyList, country) {
   // Fill API Data calls here. So far, headcount, web traffic, crunchbase, company description
+  // Make sure last argument of each function is the company names
   const { data: headCountData, error: headCountError } = useSWR(
     user && companyList
-      ? [`/api/private/getHeadCount`, user.id, companyList]
+      ? [companyList, `/api/private/getHeadCount`, user.id]
       : null,
     (args) => {
       return apiMultiCall(companyList, getHeadCount, args);
     },
     { revalidateOnFocus: false }
   );
-  console.log(companyList);
+
   const { data: webTrafficData, error: webTrafficError } = useSWR(
     user && companyList && country
       ? [
+          companyList.map((company) => company + ".com"),
           `/api/private/getWebTrafficData`,
           user.id,
-          companyList.map((company) => company + ".com"),
           country,
         ]
       : null,
@@ -42,9 +46,9 @@ export function getApiData(user, companyList, country) {
   const { data: webTrafficGeoData, error: webTrafficGeoError } = useSWR(
     user && companyList
       ? [
+          companyList.map((company) => company + ".com"),
           `/api/private/getWebTrafficGeoData`,
           user.id,
-          companyList.map((company) => company + ".com"),
           RELEVANT_CONTINENTS,
         ]
       : null,
@@ -56,7 +60,7 @@ export function getApiData(user, companyList, country) {
 
   const { data: crunchbaseData, error: crunchbaseError } = useSWR(
     user && companyList
-      ? [`/api/private/getCrunchbaseData`, user.id, companyList]
+      ? [companyList, `/api/private/getCrunchbaseData`, user.id]
       : null,
     (args) => {
       return apiMultiCall(companyList, getCrunchbaseData, args);
@@ -67,15 +71,15 @@ export function getApiData(user, companyList, country) {
   // NOTE: companyDescription depends on crunchbase data
   const { data: companyDescription, error: companyDescriptionError } = useSWR(
     user && companyList && crunchbaseData
-      ? [`/api/private/getCompanyDescription`, companyList, crunchbaseData]
+      ? [companyList, `/api/private/getCompanyDescription`, crunchbaseData]
       : null,
 
-    async ([url, companyList, crunchbaseData]) => {
+    async ([companyList, url, crunchbaseData]) => {
       const promises = companyList.map((company) =>
         getCrunchbaseData([
+          company,
           url,
           user.id,
-          company,
           crunchbaseData[company]["fields"]["description"],
         ])
       );
@@ -84,7 +88,6 @@ export function getApiData(user, companyList, country) {
         acc[company] = results[index];
         return acc;
       }, {});
-      return apiMultiCall(companyList, getCrunchbaseData);
     },
     { revalidateOnFocus: false }
   );
@@ -103,7 +106,7 @@ export function getApiData(user, companyList, country) {
   };
 }
 
-export const getHeadCount = async ([api_url, userId, companyName]) => {
+export const getHeadCount = async ([companyName, api_url, userId]) => {
   // expect `/api/private/getHeadCount`
   const response = await fetch(api_url, {
     method: "POST",
@@ -133,9 +136,9 @@ export const getHeadCount = async ([api_url, userId, companyName]) => {
 };
 
 export const getTrafficData = async ([
+  companyUrl,
   api_url,
   userId,
-  companyUrl,
   country,
 ]) => {
   // expect `/api/private/getWebTrafficData`
@@ -144,7 +147,7 @@ export const getTrafficData = async ([
 
   const bodyObj = {
     userId: userId,
-    companiesUrl: companyUrl,
+    companyUrl: companyUrl,
     exportColumns: exportColumns,
     country: country,
   };
@@ -185,9 +188,9 @@ export const getTrafficData = async ([
 };
 
 export const getGeoTrafficData = async ([
+  companyUrl,
   api_url,
   userId,
-  companyUrl,
   relevant_continents,
 ]) => {
   //`/api/private/getWebTrafficGeoData`
@@ -260,7 +263,7 @@ export const getGeoTrafficData = async ([
   return data;
 };
 
-export const getCrunchbaseData = async ([api_url, userId, companyName]) => {
+export const getCrunchbaseData = async ([companyName, api_url, userId]) => {
   // `/api/private/getCrunchbaseData`;
   const response = await fetch(api_url, {
     method: "POST",
@@ -283,9 +286,9 @@ export const getCrunchbaseData = async ([api_url, userId, companyName]) => {
 };
 
 export const getCompanyDescription = async ([
+  companyName,
   api_url,
   userId,
-  companyName,
   crunchbaseDescription,
 ]) => {
   //`/api/private/getCompanyDescription`
