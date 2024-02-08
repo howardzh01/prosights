@@ -28,7 +28,6 @@ const getSemrushWebTraffic = async (
   if (country !== "global") {
     url.searchParams.append("country", country);
   }
-  ow;
   const output = await cachedFetch(
     url,
     {
@@ -48,6 +47,7 @@ const handler = async (req) => {
   const displayDates = generateMonthsFromStartYear(2019);
   //   const displayDates = ["2023-10-01"];
   // "categories" cannot be in  exportColumns due to parseSemrushOutput handling ;
+  console.log(companyUrl, typeof companyUrl);
   const promises = displayDates.map(async (date) => {
     const webTrafficData = await getSemrushWebTraffic(
       companyUrl.toLowerCase(),
