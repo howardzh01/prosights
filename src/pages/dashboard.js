@@ -532,6 +532,7 @@ function NewDashboard() {
                 setCompanyCompetitors={setCompanyCompetitors}
               ></CompetitorContainer>
             </div>
+            <hr className="border-none h-px bg-customGray-100 w-full mt-2" />
             {/* Overview Section */}
             <div className="content-section w-full mb-20">
               <OverviewSection
@@ -569,7 +570,7 @@ function NewDashboard() {
                   />
                 </div>
               </div>
-              <hr className="border-none h-px bg-customGray-200" />
+              <hr className="border-none h-px bg-customGray-100" />
               <div className="mt-6 section-indent">
                 <div className="flex flex-row items-center mb-3">
                   <p className="text-lg font-semibold text-gray-800 mr-2">

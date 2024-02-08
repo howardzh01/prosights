@@ -89,7 +89,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
   );
 
   return (
-    <div className="mt-8 w-full">
+    <div className="mt-4 w-full">
       {/* <hr className="border-none h-px bg-customGray-200" /> */}
       {/* <div className="flex items-center mt-2 mb-3 rounded-md">
         <CompanyOverviewIcon className="mx-2 filter invert w-6 h-6" />
@@ -98,7 +98,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
         </p>
       </div>
       <hr className="border-none h-px bg-customGray-200" /> */}
-      <div className="flex flex-row mt-4 section-indent w-full">
+      <div className="flex flex-row mt-0 section-indent w-full">
         {/* About & Business Model */}
         {companyAbout && companyBusinessModel ? (
           <div className="flex flex-col w-3/5 pr-16">

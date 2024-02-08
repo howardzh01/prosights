@@ -56,6 +56,13 @@ export default function SearchBar({
               borderRadius: "0.375rem", // Equivalent to Tailwind's rounded-lg
             }}
             className="flex-1 min-w-0"
+            InputLabelProps={{
+              style: {
+                fontSize: "0.875rem",
+                color: "#A9B1C7",
+                fontFamily: "Inter",
+              },
+            }}
             InputProps={{
               ...params.InputProps,
               startAdornment: [

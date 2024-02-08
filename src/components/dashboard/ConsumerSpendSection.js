@@ -31,7 +31,7 @@ function ConsumerSpendSection({}) {
           />
         </div>
       </div>
-      <hr className="border-none h-px bg-customGray-200" />
+      <hr className="border-none h-px bg-customGray-100" />
       <div className="flex flex-col mt-4 section-indent">
         <div id="Customer Loyalty vs. Peers" className="content-section">
           <div className="flex flex-row items-center mb-3">
