@@ -89,7 +89,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
   );
 
   return (
-    <div className="mt-8 w-full">
+    <div className="mt-4 w-full">
       {/* <hr className="border-none h-px bg-customGray-200" /> */}
       {/* <div className="flex items-center mt-2 mb-3 rounded-md">
         <CompanyOverviewIcon className="mx-2 filter invert w-6 h-6" />
@@ -98,10 +98,10 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
         </p>
       </div>
       <hr className="border-none h-px bg-customGray-200" /> */}
-      <div className="flex flex-row mt-4 section-indent space-x-24">
+      <div className="flex flex-row mt-0 section-indent w-full">
         {/* About & Business Model */}
         {companyAbout && companyBusinessModel ? (
-          <div className="flex flex-col w-1/2">
+          <div className="flex flex-col w-3/5 pr-16">
             <div className="text-lg font-semibold text-gray-800">About</div>
             <p className="text-sm text-customGray-800 leading-relaxed mt-1">
               {companyAbout["company_description"]}
@@ -114,7 +114,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
             </p>
           </div>
         ) : (
-          <div className="flex flex-col w-1/2 space-y-5">
+          <div className="flex flex-col w-3/5 pr-16">
             <Skeleton className="bg-customGray-50 text-base font-semibold text-gray-800 w-16 h-6 rounded-lg" />
             <Skeleton className="bg-customGray-50 text-sm text-customGray-800 leading-relaxed mt-1 rounded-lg">
               Zillow is a leading online real estate marketplace that provides
@@ -133,7 +133,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
         )}
         {/* Basic Stats */}
         <div
-          className="w-1/2 pl-8"
+          className="w-2/5"
           style={{
             display: "grid",
             gridTemplateColumns: "min-content max-content 1fr",
@@ -246,8 +246,8 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
         </div>
       </div>
       {/* Funding and M&A Tables */}
-      <div className="flex space-x-8 mt-6 ml-4 justify-between ">
-        <div className="w-3/5">
+      <div className="flex mt-6 ml-4 justify-between w-full">
+        <div className="w-3/5 pr-16">
           <p className="text-lg font-semibold text-gray-800 mb-3">Funding</p>{" "}
           {crunchbaseData?.["raised_funding_rounds"] ? (
             <InvestorTable
@@ -278,7 +278,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
         <div className="space-x-6 items-align flex mt-4 justify-between">
           {headCountData ? (
             <div className="md:w-64 2xl:w-96 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-white border border-customGray-50 h-60">
-              <div className="">
+              <div className="bg-white">
                 <HeadCountSignal headCountData={headCountData} />
               </div>
               <div className="flex flex-row items-center">
@@ -298,7 +298,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
             <Skeleton className="md:w-64 2xl:w-96 h-52 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
           )}
           {headCountData ? (
-            <div className="flex flex-col justify-between rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 py-3 w-96 h-60">
+            <div className="flex flex-col justify-between rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-white border border-customGray-50 px-6 py-3 w-96 h-60">
               <div>
                 <div className="flex justify-between mb-2">
                   <div className="items-center gap-1 text-sm font-medium">
@@ -364,7 +364,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
             <Skeleton className="md:w-64 2xl:w-96 h-52 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
           )}
           {headCountData ? (
-            <div className="flex flex-col justify-between rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 py-2 w-96 h-60">
+            <div className="flex flex-col justify-between rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-white border border-customGray-50 px-6 py-2 w-96 h-60">
               <div>
                 <div className="flex justify-between mb-2">
                   <div className="items-center gap-1 text-sm font-medium">
@@ -430,7 +430,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
             <Skeleton className="md:w-64 2xl:w-96 h-52 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
           )}
           {headCountData ? (
-            <div className="flex flex-col justify-between rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 py-2 w-96 h-60">
+            <div className="flex flex-col justify-between rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-white border border-customGray-50 px-6 py-2 w-96 h-60">
               <div className="flex justify-between mb-2">
                 <div className="items-center gap-1 text-sm font-medium">
                   Ad Spend

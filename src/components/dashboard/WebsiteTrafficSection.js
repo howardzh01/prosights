@@ -36,7 +36,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
           />
         </div>
       </div>
-      <hr className="border-none h-px bg-customGray-200" />
+      <hr className="border-none h-px bg-customGray-100" />
       {/* <p
         id="Website Traffic"
         className="content-section text-2xl font-semibold text-gray-800 pl-2 py-1 bg-customGray-50 rounded-md"

@@ -28,7 +28,7 @@ function CompetitorOverviewSection({}) {
           />
         </div>
       </div>
-      <hr className="border-none h-px bg-customGray-200" />
+      <hr className="border-none h-px bg-customGray-100" />
       <div className="lex flex-col items-center w-full overflow-hidden section-indent mt-4">
         <Image
           src="/assets/graphPictures/competitorOverview.svg"
