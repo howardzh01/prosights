@@ -278,7 +278,7 @@ function NewDashboard() {
         console.error("Error exporting PDF:", err);
       });
   };
-  console.log([company] + companyCompetitors.map((company) => company.name));
+
   const {
     headCountData,
     headCountError,
@@ -290,7 +290,11 @@ function NewDashboard() {
     crunchbaseError,
     companyDescription,
     companyDescriptionError,
-  } = getApiData(user, [company], country);
+  } = getApiData(
+    user,
+    [company, ...companyCompetitors.map((company) => company.name)],
+    country
+  );
 
   // const competitorData = getApiData(user, competitor.name, country);
 
@@ -491,8 +495,9 @@ function NewDashboard() {
             {/* Website Traffic */}
             <div className="w-full">
               <WebsiteTrafficSection
-                webTrafficData={webTrafficData?.[company]}
-                webTrafficGeoData={webTrafficGeoData?.[company]}
+                company={company}
+                webTrafficDic={webTrafficData}
+                webTrafficGeoDic={webTrafficGeoData}
               />
             </div>
             {/* App Usage */}

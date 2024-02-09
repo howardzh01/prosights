@@ -34,7 +34,8 @@ const getSemrushWebTraffic = async (
       method: "GET",
     },
     serviceSup,
-    "text"
+    "text",
+    "api_calls_semrush"
   );
   return output;
 };
@@ -43,7 +44,7 @@ const handler = async (req) => {
   // Extract the messages parameter from the request query
   // reqJSON.userId, reqJSON.messages
   const reqJSON = await req.json();
-  const { userId, companyUrl, exportColumns, country, don } = reqJSON;
+  const { userId, companyUrl, exportColumns, country } = reqJSON;
   const displayDates = generateMonthsFromStartYear(2019);
   //   const displayDates = ["2023-10-01"];
   // "categories" cannot be in  exportColumns due to parseSemrushOutput handling ;
@@ -59,7 +60,6 @@ const handler = async (req) => {
   });
 
   const webTrafficHistoricalData = await Promise.all(promises);
-
   return new Response(JSON.stringify(webTrafficHistoricalData), {
     status: 200,
     headers: {

@@ -51,26 +51,6 @@ function WebGeoTrafficDoughnut({
 
   if (!geoTrafficData) return null;
 
-  function convertToGeoChartData(trafficData, outputKey = "traffic") {
-    const aggData = relevant_continents.reduce((acc, key) => {
-      acc[key] = aggregateData(trafficData[key], outputKey, "sum", timescale);
-      return acc;
-    }, {});
-
-    return {
-      labels: displayedLabels,
-      datasets: relevant_continents.map((key) => {
-        return {
-          data: displayedLabels.map((time) =>
-            aggData[key] ? aggData[key][time] / 1e6 : 0
-          ),
-          borderWidth: 1,
-          label: key,
-        };
-      }),
-    };
-  }
-
   function convertToGeoDoughnutData(geoTrafficData, outputKey = "traffic") {
     // Find the most recent date in the data
     const mostRecentDate = new Date(

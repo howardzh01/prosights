@@ -8,8 +8,13 @@ import { Skeleton } from "@nextui-org/react";
 import WebTrafficChart from "../charts/WebTrafficChart";
 import WebTrafficByChannelChart from "../charts/WebTrafficByChannelChart";
 import WebTrafficIcon from "/public/assets/WebsiteTrafficIcon.svg";
+import WebTrafficStackedBarPeers from "../charts/WebTrafficStackedBarPeers";
 
-function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
+function WebsiteTrafficSection({ company, webTrafficDic, webTrafficGeoDic }) {
+  // Expect webTrafficDic = {company1: trafficData, company2: trafficData, ...}
+  const webTrafficData = webTrafficDic?.[company];
+  const webTrafficGeoData = webTrafficGeoDic?.[company];
+  console.log("webTrafficData", webTrafficGeoData);
   const webTrafficExists =
     webTrafficData !== undefined && Object.keys(webTrafficData).length !== 0;
   const webTrafficGeoDataExists = webTrafficGeoData !== null;
@@ -252,6 +257,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
             </div>
           </div> */}
         </div>
+
         <div id="Traffic Growth vs. Peers" className="content-section mt-8">
           <div className="flex flex-row items-center mb-3">
             <p className="text-lg font-semibold text-gray-800 mr-2">
@@ -397,6 +403,15 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
           id="Traffic Market Share vs. Peers"
           className="content-section mt-8"
         >
+          {/* <div id="Quality Over Time" className="content-section mt-8">
+            {webTrafficExists ? (
+              <WebTrafficStackedBarPeers
+                multiCompanyTrafficData={webTrafficDic}
+              ></WebTrafficStackedBarPeers>
+            ) : (
+              <Skeleton className="w-full h-80 rounded-lg bg-customGray-50" />
+            )}
+          </div> */}
           <div className="flex flex-row items-center mb-3">
             <p className="text-lg font-semibold text-gray-800 mr-2">
               Market Share vs. Peers
@@ -537,6 +552,7 @@ function WebsiteTrafficSection({ webTrafficData, webTrafficGeoData }) {
             </div>
           </div>
         </div>
+
         <div id="Traffic Breakdown vs. Peers" className="content-section mt-8">
           <div className="flex flex-row items-center mb-3">
             <p className="text-lg font-semibold text-gray-800 mr-2">

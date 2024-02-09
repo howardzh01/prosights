@@ -19,7 +19,8 @@ const getCSignalHeadCount = async (company) => {
       },
     },
     serviceSup,
-    "json"
+    "json",
+    "api_calls_coresignal"
   );
   if (!output) {
     return;

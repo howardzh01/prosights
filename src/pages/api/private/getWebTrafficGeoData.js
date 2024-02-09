@@ -29,7 +29,8 @@ const getSemrushGeoTraffic = async (
       method: "GET",
     },
     serviceSup,
-    "text"
+    "text",
+    "api_calls_semrush"
   );
   return output;
 };
