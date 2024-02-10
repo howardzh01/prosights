@@ -29,7 +29,7 @@ export default function SearchBar({ company, setCompany }) {
             if (value.includes(".")) {
               setCompany({ name: value.split(".")[0], url: value });
             } else {
-              setCompany({ name: value.name, url: value.name + ".com" });
+              setCompany({ name: value, url: value + ".com" });
             }
           } else {
             setCompany({ name: value.name, url: value.url });
