@@ -22,6 +22,7 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
   const companyUrlList = companyDicList.map(
     (company) => company.url || company.name + ".com"
   );
+
   const { data: headCountData, error: headCountError } = useSWR(
     user && companyNameList
       ? [companyNameList, `/api/private/getHeadCount`, user.id]

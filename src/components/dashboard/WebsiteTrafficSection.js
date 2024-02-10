@@ -403,7 +403,7 @@ function WebsiteTrafficSection({ company, webTrafficDic, webTrafficGeoDic }) {
           id="Traffic Market Share vs. Peers"
           className="content-section mt-8"
         >
-          {/* <div id="Quality Over Time" className="content-section mt-8">
+          <div id="Quality Over Time" className="content-section mt-8">
             {webTrafficExists ? (
               <WebTrafficStackedBarPeers
                 multiCompanyTrafficData={webTrafficDic}
@@ -411,7 +411,7 @@ function WebsiteTrafficSection({ company, webTrafficDic, webTrafficGeoDic }) {
             ) : (
               <Skeleton className="w-full h-80 rounded-lg bg-customGray-50" />
             )}
-          </div> */}
+          </div>
           <div className="flex flex-row items-center mb-3">
             <p className="text-lg font-semibold text-gray-800 mr-2">
               Market Share vs. Peers

@@ -43,9 +43,9 @@ function WebTrafficChart({
       labels: labels.slice(cutoffIndex),
       datasets: [
         {
-          label: displayedLabel + " (M)",
+          label: displayedLabel + " (K)",
           data: values
-            .map((item) => (item == null ? "--" : (item / 1e6).toFixed(1)))
+            .map((item) => (item == null ? "--" : (item / 1e3).toFixed(1)))
             .slice(cutoffIndex),
         },
       ],
@@ -70,7 +70,7 @@ function WebTrafficChart({
         aggregateData(trafficData, "visits", "sum", trafficTimescale),
         "Visits"
       )}
-      title={"Total Visits (M)"}
+      title={"Total Visits (K)"}
       showDataLabels={trafficTimescale !== "month"}
       timescale={trafficTimescale}
       setTimescale={setTrafficTimescale}
@@ -101,7 +101,7 @@ function WebTrafficChart({
         aggregateData(trafficData, "users", "mean", mauTimescale),
         "Users"
       )}
-      title={"Web Users (M)"}
+      title={"Web Users (K)"}
       showDataLabels={mauTimescale !== "month"}
       timescale={mauTimescale}
       setTimescale={setMauTimescale}

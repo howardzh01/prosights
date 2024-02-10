@@ -23,7 +23,7 @@ import HeadcountIcon from "/public/assets/HeadcountIcon.svg";
 export const SelectedChartContext = createContext();
 export const ChartDataContext = createContext();
 
-function Dashboard({ enableCrunchbase = true }) {
+function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
   const { isSignedIn, user, isLoaded } = useUser();
   const companyDirectory = new CompanyDirectory(companyList);
   const [companyDic, setCompanyDic] = useState(
