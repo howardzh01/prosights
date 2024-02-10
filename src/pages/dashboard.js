@@ -26,7 +26,9 @@ export const ChartDataContext = createContext();
 function Dashboard({ enableCrunchbase = true }) {
   const { isSignedIn, user, isLoaded } = useUser();
   const companyDirectory = new CompanyDirectory(companyList);
-  const [company, setCompany] = useState("stockx");
+  const [companyDic, setCompanyDic] = useState(
+    companyDirectory.findCompanyByName("stockx")
+  );
   const [country, setCountry] = useState("US");
   const [companyCompetitors, setCompanyCompetitors] = useState([]); // Array of company names
 
@@ -34,8 +36,9 @@ function Dashboard({ enableCrunchbase = true }) {
 
   const [selectedChart, setSelectedChart] = useState("");
   const [chartData, setChartData] = useState();
-
-  const companyDic = companyDirectory.findCompanyByName(company);
+  console.log(companyDic);
+  const company = companyDic.name;
+  // const companyDic = companyDirectory.findCompanyByName(company);
   // State to track active sections
   const [activeSections, setActiveSections] = useState({ Overview: true });
   // Sections for sidebar; MUST have same title as section id, which might be used in child components
@@ -278,7 +281,7 @@ function Dashboard({ enableCrunchbase = true }) {
         console.error("Error exporting PDF:", err);
       });
   };
-
+  console.log([companyDic, ...companyCompetitors]);
   const {
     headCountData,
     headCountError,
@@ -292,7 +295,7 @@ function Dashboard({ enableCrunchbase = true }) {
     companyDescriptionErrorPull,
   } = getApiData(
     user,
-    [company, ...companyCompetitors.map((company) => company.name)],
+    [companyDic, ...companyCompetitors],
     country,
     enableCrunchbase
   );
@@ -330,7 +333,7 @@ function Dashboard({ enableCrunchbase = true }) {
               id="Company Overview"
               className="content-section w-[36rem] pt-4"
             >
-              <SearchBar company={company} setCompany={setCompany} />
+              <SearchBar company={company} setCompany={setCompanyDic} />
             </div>
             {/* Company name, country, and comparing section */}
             <div className="mt-6 flex flex-row justify-between w-full items-center">

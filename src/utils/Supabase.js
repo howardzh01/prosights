@@ -27,7 +27,7 @@ export async function cachedFetch(
   options,
   serviceSup,
   responseFormat = "json",
-  table_name = "api_calls"
+  table_name
 ) {
   const cacheKey = url.toString() + JSON.stringify(options);
 
@@ -38,6 +38,9 @@ export async function cachedFetch(
   // console.log("Pre-fetch Supabase INFO", rows, error);
 
   if (error || !rows || rows.length === 0) {
+    if (error) {
+      console.log("Initial Fetch Error", error);
+    }
     const new_response = await fetch(url, options);
     if (!new_response.ok) {
       console.log(
@@ -65,14 +68,14 @@ export async function cachedFetch(
       return;
     }
 
-    const { error: insertError } = await serviceSup.from("api_calls").insert({
+    const { error: insertError } = await serviceSup.from(table_name).insert({
       query: cacheKey,
       response: data,
     });
 
     if (insertError) {
       console.error("Error inserting data into cache:", insertError);
-      return;
+      return data; // TODO: buggy here where insert error should never happen
     }
     return data;
   }
@@ -85,7 +88,7 @@ export async function cachedBucketFetch(
   options,
   serviceSup,
   responseFormat = "json",
-  table_name = "api_calls"
+  table_name
 ) {
   const cacheKey = url.toString() + JSON.stringify(options);
 
@@ -97,7 +100,7 @@ export async function cachedBucketFetch(
 
   if (error || !rows || rows.length === 0) {
     if (error) {
-      console.log(error);
+      console.error("Initial Fetch Error", error);
     }
     const new_response = await fetch(url, options);
     if (!new_response.ok) {
@@ -139,7 +142,7 @@ export async function cachedBucketFetch(
       return; //TODO: make it return data. Left it like this so more apparent of cache errors for testing
     }
     const { data: bucketData, error: bucketError } = await serviceSup.storage
-      .from("api_calls")
+      .from(table_name)
       .upload(`${table_name}/${insertData[0].id}.json`, data, {
         cacheControl: "3600",
         upsert: true,

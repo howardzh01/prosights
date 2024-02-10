@@ -26,9 +26,13 @@ export default function SearchBar({ company, setCompany }) {
         }
         onChange={(event, value) => {
           if (typeof value === "string") {
-            setCompany(value);
+            if (value.includes(".")) {
+              setCompany({ name: value.split(".")[0], url: value });
+            } else {
+              setCompany({ name: value.name });
+            }
           } else {
-            setCompany(value.name);
+            setCompany({ name: value.name, url: value.url });
           }
           setValue(null);
         }}

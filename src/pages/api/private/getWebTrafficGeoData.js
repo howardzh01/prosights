@@ -4,7 +4,10 @@
 
 import { serviceSup, cachedFetch } from "../../../utils/Supabase.js";
 import { parseSemrushOutput } from "../../../utils/BackendUtils.js";
-import { generateMonthsFromStartYear } from "../../../utils/Utils.js";
+import {
+  generateMonthsFromStartYear,
+  reformatWebsiteUrl,
+} from "../../../utils/Utils.js";
 
 export const config = {
   runtime: "edge",
@@ -45,7 +48,7 @@ const handler = async (req) => {
   //   const displayDates = ["2023-10-01"];
   const promises = displayDates.map(async (date) => {
     const webTrafficData = await getSemrushGeoTraffic(
-      companyUrl,
+      reformatWebsiteUrl(companyUrl),
       date,
       geoType
     );

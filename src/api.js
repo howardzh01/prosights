@@ -15,46 +15,45 @@ async function apiMultiCall(companyList, func, args) {
   }, {});
 }
 
-export function getApiData(user, companyList, country, enableCrunchbase) {
+export function getApiData(user, companyDicList, country, enableCrunchbase) {
   // Fill API Data calls here. So far, headcount, web traffic, crunchbase, company description
   // Make sure last argument of each function is the company names
+  const companyNameList = companyDicList.map((company) => company.name);
+  const companyUrlList = companyDicList.map(
+    (company) => company.url || company.name + ".com"
+  );
   const { data: headCountData, error: headCountError } = useSWR(
-    user && companyList
-      ? [companyList, `/api/private/getHeadCount`, user.id]
+    user && companyNameList
+      ? [companyNameList, `/api/private/getHeadCount`, user.id]
       : null,
     (args) => {
-      return apiMultiCall(companyList, getHeadCount, args);
+      return apiMultiCall(companyNameList, getHeadCount, args);
     },
     { revalidateOnFocus: false }
   );
 
   const { data: webTrafficData, error: webTrafficError } = useSWR(
-    user && companyList && country
-      ? [
-          companyList.map((company) => company + ".com"),
-          `/api/private/getWebTrafficData`,
-          user.id,
-          country,
-        ]
+    user && companyNameList && country
+      ? [companyUrlList, `/api/private/getWebTrafficData`, user.id, country]
       : null,
 
     (args) => {
-      return apiMultiCall(companyList, getTrafficData, args);
+      return apiMultiCall(companyNameList, getTrafficData, args);
     },
     { revalidateOnFocus: false }
   );
 
   const { data: webTrafficGeoData, error: webTrafficGeoError } = useSWR(
-    user && companyList
+    user && companyNameList
       ? [
-          companyList.map((company) => company + ".com"),
+          companyUrlList,
           `/api/private/getWebTrafficGeoData`,
           user.id,
           RELEVANT_CONTINENTS,
         ]
       : null,
     (args) => {
-      return apiMultiCall(companyList, getGeoTrafficData, args);
+      return apiMultiCall(companyNameList, getGeoTrafficData, args);
     },
     { revalidateOnFocus: false }
   );
@@ -65,19 +64,23 @@ export function getApiData(user, companyList, country, enableCrunchbase) {
     companyDescriptionErrorPull;
   if (enableCrunchbase) {
     const { data: crunchbaseData, error: crunchbaseError } = useSWR(
-      user && companyList
-        ? [companyList, `/api/private/getCrunchbaseData`, user.id]
+      user && companyNameList
+        ? [companyNameList, `/api/private/getCrunchbaseData`, user.id]
         : null,
       (args) => {
-        return apiMultiCall(companyList, getCrunchbaseData, args);
+        return apiMultiCall(companyNameList, getCrunchbaseData, args);
       },
       { revalidateOnFocus: false }
     );
 
     // NOTE: companyDescription depends on crunchbase data
     const { data: companyDescription, error: companyDescriptionError } = useSWR(
-      user && companyList && crunchbaseData
-        ? [companyList, `/api/private/getCompanyDescription`, crunchbaseData]
+      user && companyNameList && crunchbaseData
+        ? [
+            companyNameList,
+            `/api/private/getCompanyDescription`,
+            crunchbaseData,
+          ]
         : null,
 
       async ([companyList, url, crunchbaseData]) => {

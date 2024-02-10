@@ -428,3 +428,12 @@ export function normalizeStackedAggData(aggData) {
   }, {});
   return normalizedData;
 }
+
+export function reformatWebsiteUrl(unformattedUrl) {
+  return unformattedUrl
+    .replace("www.", "")
+    .replace("http://", "")
+    .replace("https://", "")
+    .replace(/\/$/, "") // replace trailing slash
+    .toLowerCase();
+}
