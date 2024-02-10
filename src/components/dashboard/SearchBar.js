@@ -27,7 +27,10 @@ export default function SearchBar({ company, setCompany }) {
         onChange={(event, value) => {
           if (typeof value === "string") {
             if (value.includes(".")) {
-              setCompany({ name: value.split(".")[0], url: value });
+              setCompany({
+                name: value.split(".").slice(0, -1).join("."), // Remove .com,.org...etc
+                url: value,
+              });
             } else {
               setCompany({ name: value, url: value + ".com" });
             }
