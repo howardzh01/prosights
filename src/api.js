@@ -14,7 +14,8 @@ async function apiMultiCall(companyList, func, args) {
     return acc;
   }, {});
 }
-export function getApiData(user, companyList, country) {
+
+export function getApiData(user, companyList, country, enableCrunchbase) {
   // Fill API Data calls here. So far, headcount, web traffic, crunchbase, company description
   // Make sure last argument of each function is the company names
   const { data: headCountData, error: headCountError } = useSWR(
@@ -58,40 +59,51 @@ export function getApiData(user, companyList, country) {
     { revalidateOnFocus: false }
   );
 
-  const { data: crunchbaseData, error: crunchbaseError } = useSWR(
-    user && companyList
-      ? [companyList, `/api/private/getCrunchbaseData`, user.id]
-      : null,
-    (args) => {
-      return apiMultiCall(companyList, getCrunchbaseData, args);
-    },
-    { revalidateOnFocus: false }
-  );
+  let crunchbaseDataPull,
+    crunchbaseErrorPull,
+    companyDescriptionPull,
+    companyDescriptionErrorPull;
+  if (enableCrunchbase) {
+    const { data: crunchbaseData, error: crunchbaseError } = useSWR(
+      user && companyList
+        ? [companyList, `/api/private/getCrunchbaseData`, user.id]
+        : null,
+      (args) => {
+        return apiMultiCall(companyList, getCrunchbaseData, args);
+      },
+      { revalidateOnFocus: false }
+    );
 
-  // NOTE: companyDescription depends on crunchbase data
-  const { data: companyDescription, error: companyDescriptionError } = useSWR(
-    user && companyList && crunchbaseData
-      ? [companyList, `/api/private/getCompanyDescription`, crunchbaseData]
-      : null,
+    // NOTE: companyDescription depends on crunchbase data
+    const { data: companyDescription, error: companyDescriptionError } = useSWR(
+      user && companyList && crunchbaseData
+        ? [companyList, `/api/private/getCompanyDescription`, crunchbaseData]
+        : null,
 
-    async ([companyList, url, crunchbaseData]) => {
-      const promises = companyList.map((company) =>
-        getCrunchbaseData([
-          company,
-          url,
-          user.id,
-          crunchbaseData[company]["fields"]["description"],
-        ])
-      );
-      const results = await Promise.all(promises);
-      return companyList.reduce((acc, company, index) => {
-        acc[company] = results[index];
-        return acc;
-      }, {});
-    },
-    { revalidateOnFocus: false }
-  );
-  console.log(companyDescriptionError);
+      async ([companyList, url, crunchbaseData]) => {
+        const promises = companyList.map((company) =>
+          getCrunchbaseData([
+            company,
+            url,
+            user.id,
+            crunchbaseData[company]["fields"]["description"],
+          ])
+        );
+        const results = await Promise.all(promises);
+        return companyList.reduce((acc, company, index) => {
+          acc[company] = results[index];
+          return acc;
+        }, {});
+      },
+      { revalidateOnFocus: false }
+    );
+
+    crunchbaseDataPull = crunchbaseData;
+    crunchbaseErrorPull = crunchbaseError;
+    companyDescriptionPull = companyDescription;
+    companyDescriptionErrorPull = companyDescriptionError;
+  }
+
   return {
     headCountData,
     headCountError,
@@ -99,10 +111,10 @@ export function getApiData(user, companyList, country) {
     webTrafficError,
     webTrafficGeoData,
     webTrafficGeoError,
-    crunchbaseData,
-    crunchbaseError,
-    companyDescription,
-    companyDescriptionError,
+    crunchbaseDataPull,
+    crunchbaseErrorPull,
+    companyDescriptionPull,
+    companyDescriptionErrorPull,
   };
 }
 

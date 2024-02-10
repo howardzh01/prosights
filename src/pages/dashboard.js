@@ -23,7 +23,7 @@ import HeadcountIcon from "/public/assets/HeadcountIcon.svg";
 export const SelectedChartContext = createContext();
 export const ChartDataContext = createContext();
 
-function NewDashboard() {
+function Dashboard({ enableCrunchbase = true }) {
   const { isSignedIn, user, isLoaded } = useUser();
   const companyDirectory = new CompanyDirectory(companyList);
   const [company, setCompany] = useState("stockx");
@@ -286,25 +286,19 @@ function NewDashboard() {
     webTrafficError,
     webTrafficGeoData,
     webTrafficGeoError,
-    crunchbaseData,
-    crunchbaseError,
-    companyDescription,
-    companyDescriptionError,
+    crunchbaseDataPull,
+    crunchbaseErrorPull,
+    companyDescriptionPull,
+    companyDescriptionErrorPull,
   } = getApiData(
     user,
     [company, ...companyCompetitors.map((company) => company.name)],
-    country
+    country,
+    enableCrunchbase
   );
 
   // const competitorData = getApiData(user, competitor.name, country);
 
-  console.log({
-    headCountData,
-    webTrafficData,
-    webTrafficGeoData,
-    crunchbaseData,
-    companyDescription,
-  });
   // console.log(competitorData);
   return (
     <SelectedChartContext.Provider value={{ selectedChart, setSelectedChart }}>
@@ -341,9 +335,9 @@ function NewDashboard() {
             {/* Company name, country, and comparing section */}
             <div className="mt-6 flex flex-row justify-between w-full items-center">
               <div className="flex flex-row items-center">
-                {crunchbaseData?.[company]?.["fields"]?.["image_url"] ? (
+                {crunchbaseDataPull?.[company]?.["fields"]?.["image_url"] ? (
                   <Image
-                    src={crunchbaseData[company]["fields"]["image_url"]}
+                    src={crunchbaseDataPull[company]["fields"]["image_url"]}
                     className="w-10 h-10 mr-2 object-contain rounded-md"
                     width={256}
                     height={256}
@@ -426,8 +420,8 @@ function NewDashboard() {
             {/* Overview Section */}
             <div className="content-section w-full mb-20">
               <OverviewSection
-                companyAbout={companyDescription?.[company]}
-                crunchbaseData={crunchbaseData?.[company]}
+                companyAbout={companyDescriptionPull?.[company]}
+                crunchbaseData={crunchbaseDataPull?.[company]}
                 headCountData={headCountData?.[company]}
               />
             </div>
@@ -519,4 +513,4 @@ function NewDashboard() {
   );
 }
 
-export default NewDashboard;
+export default Dashboard;
