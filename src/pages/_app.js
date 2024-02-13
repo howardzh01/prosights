@@ -1,17 +1,19 @@
 import "../styles.css";
-import Script from "next/script";
 import Head from "next/head";
 import { ClerkProvider } from "@clerk/nextjs";
 import { NextUIProvider } from "@nextui-org/react";
-import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { SessionContextProvider } from "@supabase/auth-helpers-react";
-import { useState, useEffect } from "react";
-import { Analytics } from "@vercel/analytics/react";
-import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
-// import LogRocket from "logrocket";
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
-import { useRouter } from "next/router";
+
+if (typeof window !== "undefined") {
+  // checks that we are client-side
+  posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
+    api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://app.posthog.com",
+    loaded: (posthog) => {
+      if (process.env.NODE_ENV === "development") posthog.debug(); // debug mode in development
+    },
+  });
+}
 
 // LogRocket.init("hw9ggu/negotiate");
 
@@ -100,11 +102,13 @@ export default function MyApp({ Component, pageProps }) {
           supabaseClient={supabaseClient}
           initialSession={pageProps.initialSession}
         > */}
-      <ClerkProvider {...pageProps}>
-        <NextUIProvider>
-          <Component {...pageProps} />
-        </NextUIProvider>
-      </ClerkProvider>
+      <PostHogProvider client={posthog}>
+        <ClerkProvider {...pageProps}>
+          <NextUIProvider>
+            <Component {...pageProps} />
+          </NextUIProvider>
+        </ClerkProvider>
+      </PostHogProvider>
       {/* </SessionContextProvider>
       </PostHogProvider> */}
     </>
