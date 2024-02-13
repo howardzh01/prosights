@@ -105,7 +105,7 @@ export async function cachedBucketFetch(
     const new_response = await fetch(url, options);
     if (!new_response.ok) {
       console.log(
-        "cachedFetch Error",
+        "cachedFetchBucket Error",
         url.toString(),
         new_response.status,
         new_response.statusText

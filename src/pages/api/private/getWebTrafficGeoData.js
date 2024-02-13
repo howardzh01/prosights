@@ -44,8 +44,7 @@ const handler = async (req) => {
   // console.log(req.companyName);
   const reqJSON = await req.json();
   const { userId, companyUrl, geoType } = reqJSON;
-  const displayDates = generateMonthsFromStartYear(2019);
-  //   const displayDates = ["2023-10-01"];
+  const displayDates = generateMonthsFromStartYear(2019); // array of format ["2023-10-01", ...]
   const promises = displayDates.map(async (date) => {
     const webTrafficData = await getSemrushGeoTraffic(
       reformatWebsiteUrl(companyUrl),
