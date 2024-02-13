@@ -20,16 +20,16 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
   // Make sure last argument of each function is the company names
   if (!companyDicList) {
     return {
-      headCountData: null,
-      headCountError: null,
-      webTrafficData: null,
-      webTrafficError: null,
-      webTrafficGeoData: null,
-      webTrafficGeoError: null,
-      crunchbaseDataPull: null,
-      crunchbaseErrorPull: null,
-      companyDescriptionPull: null,
-      companyDescriptionErrorPull: null,
+      headCountData: undefined,
+      headCountError: undefined,
+      webTrafficData: undefined,
+      webTrafficError: undefined,
+      webTrafficGeoData: undefined,
+      webTrafficGeoError: undefined,
+      crunchbaseDataPull: undefined,
+      crunchbaseErrorPull: undefined,
+      companyDescriptionPull: undefined,
+      companyDescriptionErrorPull: undefined,
     };
   }
 
@@ -150,7 +150,7 @@ export const getHeadCount = async ([companyName, api_url, userId]) => {
     }),
   });
   if (!response.ok) {
-    return;
+    return null;
   }
   var data = await response.json();
   data = data.reverse();
@@ -191,7 +191,7 @@ export const getTrafficData = async ([
   });
   if (!response.ok) {
     console.log(response.status);
-    return;
+    return null;
   }
   var data = await response.json();
   // transform data into {month: {key:value}}
@@ -253,6 +253,7 @@ export const getGeoTrafficData = async ([
   });
   if (!response.ok) {
     console.log(response.status);
+    return null;
   }
   var data = await response.json();
   // transform data into {month: {key:value}}
@@ -308,7 +309,7 @@ export const getCrunchbaseData = async ([companyName, api_url, userId]) => {
   });
   if (!response.ok) {
     console.log(response.status);
-    return;
+    return null;
   }
   var data = await response.json();
 

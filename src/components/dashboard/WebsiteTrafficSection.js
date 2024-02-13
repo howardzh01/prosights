@@ -14,10 +14,7 @@ function WebsiteTrafficSection({ company, webTrafficDic, webTrafficGeoDic }) {
   // Expect webTrafficDic = {company1: trafficData, company2: trafficData, ...}
   const webTrafficData = webTrafficDic?.[company];
   const webTrafficGeoData = webTrafficGeoDic?.[company];
-  console.log("webTrafficData", webTrafficGeoData);
-  const webTrafficExists =
-    webTrafficData !== undefined && Object.keys(webTrafficData).length !== 0;
-  const webTrafficGeoDataExists = webTrafficGeoData !== null;
+
   return (
     <div className="flex flex-col w-full mt-12">
       <div
@@ -50,10 +47,17 @@ function WebsiteTrafficSection({ company, webTrafficDic, webTrafficGeoDic }) {
       </p> */}
       <div className="flex flex-col section-indent mt-4">
         <div id="Growth" className="content-section">
-          {webTrafficExists ? (
-            <WebTrafficChart trafficData={webTrafficData}></WebTrafficChart>
+          {webTrafficDic === undefined ||
+          Object.keys(webTrafficDic).length === 0 ? (
+            <Skeleton className="w-full mt-2 mb-6 h-80 rounded-lg bg-customGray-50" />
+          ) : Object.keys(webTrafficData).length === 0 ? (
+            <div className="w-full h-80 rounded-lg mt-2 mb-6 bg-customGray-50 flex items-center justify-center">
+              <p className="text-sm text-customGray-200">
+                No Growth Data Available
+              </p>
+            </div>
           ) : (
-            <Skeleton className="w-full h-80 rounded-lg bg-customGray-50" />
+            <WebTrafficChart trafficData={webTrafficData} />
           )}
         </div>
         <div id="Breakdown" className="content-section">
@@ -87,8 +91,17 @@ function WebsiteTrafficSection({ company, webTrafficDic, webTrafficGeoDic }) {
                   relevant_continents={RELEVANT_CONTINENTS}
                 />
               </div>
+            ) : webTrafficGeoData !== undefined &&
+              Object.keys(webTrafficGeoData).length === 0 ? (
+              <div className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50">
+                <div className="flex flex-col items-center justify-center h-full">
+                  <p className="text-sm text-customGray-200">
+                    No Geography Data Available
+                  </p>
+                </div>
+              </div>
             ) : (
-              <Skeleton className="inline-block w-80 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
+              <Skeleton className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
             )}
             {webTrafficData !== undefined &&
             webTrafficData !== null &&
@@ -99,8 +112,17 @@ function WebsiteTrafficSection({ company, webTrafficDic, webTrafficGeoDic }) {
                   selectedChart={CHARTS.trafficByDevice}
                 />
               </div>
+            ) : webTrafficData !== undefined &&
+              Object.keys(webTrafficData).length === 0 ? (
+              <div className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50">
+                <div className="flex flex-col items-center justify-center h-full">
+                  <p className="text-sm text-customGray-200">
+                    No Device Data Available
+                  </p>
+                </div>
+              </div>
             ) : (
-              <Skeleton className="inline-block w-80 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
+              <Skeleton className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
             )}
             {webTrafficData !== undefined &&
             webTrafficData !== null &&
@@ -111,8 +133,17 @@ function WebsiteTrafficSection({ company, webTrafficDic, webTrafficGeoDic }) {
                   selectedChart={CHARTS.trafficByChannel}
                 />
               </div>
+            ) : webTrafficData !== undefined &&
+              Object.keys(webTrafficData).length === 0 ? (
+              <div className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50">
+                <div className="flex flex-col items-center justify-center h-full">
+                  <p className="text-sm text-customGray-200">
+                    No Channel Data Available
+                  </p>
+                </div>
+              </div>
             ) : (
-              <Skeleton className="inline-block w-80 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
+              <Skeleton className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
             )}
             {webTrafficData !== undefined &&
             webTrafficData !== null &&
@@ -123,16 +154,33 @@ function WebsiteTrafficSection({ company, webTrafficDic, webTrafficGeoDic }) {
                   selectedChart={CHARTS.trafficByOrganicVsPaid}
                 />
               </div>
+            ) : webTrafficData !== undefined &&
+              Object.keys(webTrafficData).length === 0 ? (
+              <div className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50">
+                <div className="flex flex-col items-center justify-center h-full">
+                  <p className="text-sm text-customGray-200">
+                    No Search Data Available
+                  </p>
+                </div>
+              </div>
             ) : (
-              <Skeleton className="inline-block w-80 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
+              <Skeleton className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
             )}
           </div>
         </div>
         <div id="Quality Over Time" className="content-section mt-8">
-          {webTrafficExists ? (
+          {webTrafficData !== undefined &&
+          Object.keys(webTrafficData).length !== 0 ? (
             <WebTrafficByChannelChart
               trafficData={webTrafficData}
             ></WebTrafficByChannelChart>
+          ) : webTrafficData !== undefined &&
+            Object.keys(webTrafficData).length === 0 ? (
+            <div className="w-full h-80 rounded-lg mt-2 mb-6 bg-customGray-50 flex items-center justify-center">
+              <p className="text-sm text-customGray-200">
+                No Quality Over Time Data Available
+              </p>
+            </div>
           ) : (
             <Skeleton className="w-full h-80 rounded-lg bg-customGray-50" />
           )}

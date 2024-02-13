@@ -430,7 +430,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
               <div className="content-section w-full mb-20">
                 <OverviewSection
                   companyAbout={companyDescriptionPull?.[companyDic.name]}
-                  crunchbaseData={crunchbaseDataPull?.[companyDic.name]}
+                  crunchbaseData={crunchbaseDataPull?.[companyDic.name]} // {companyName: null} if no data
                   headCountData={headCountData?.[companyDic.name]}
                 />
               </div>
@@ -488,12 +488,20 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                       />
                     </a>
                   </div>
-                  {headCountData ? (
+                  {headCountData && headCountData?.[companyDic.name] ? (
                     <HeadCountChart
                       headCountData={headCountData?.[companyDic.name]}
                     />
-                  ) : (
+                  ) : headCountData?.[companyDic.name] === undefined ? (
                     <Skeleton className="w-full h-80 rounded-lg bg-customGray-50" />
+                  ) : (
+                    <div className="w-full h-80 rounded-lg bg-customGray-50">
+                      <div className="flex flex-col items-center justify-center h-full">
+                        <p className="text-sm text-customGray-200">
+                          No Headcount Data Available
+                        </p>
+                      </div>
+                    </div>
                   )}
                 </div>
               </div>

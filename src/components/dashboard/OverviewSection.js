@@ -31,7 +31,6 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
   }
 
   const cbfields = crunchbaseData?.["fields"] || {};
-  // console.log("CB FIELDS", cbfields);
   let companyFoundedYear = cbfields["founded_on"]
     ? new Date(cbfields["founded_on"]?.["value"]).getUTCFullYear()
     : "";
@@ -53,20 +52,18 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
     : "";
   let companyValuation = cbfields["valuation"]?.["value_usd"]
     ? "$" + formatMoney(cbfields["valuation"]["value_usd"])
-    : undefined;
+    : "";
 
   let companyLastRoundSize = cbfields["last_equity_funding_total"]?.[
     "value_usd"
   ]
     ? "$" + formatMoney(cbfields["last_equity_funding_total"]?.["value_usd"])
-    : undefined;
+    : "";
   let companyLastDealType = cbfields["last_funding_type"]
     ? formatDealRound(cbfields["last_funding_type"])
     : "";
 
-  {
-    /* Business Model */
-  }
+  /* Business Model */
   let companyBusinessModel = companyAbout && (
     <div>
       <ul className="list-disc pl-3">
@@ -100,28 +97,36 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
       <hr className="border-none h-px bg-customGray-200" /> */}
       <div className="flex flex-row mt-0 section-indent w-full">
         {/* About & Business Model */}
-        {companyAbout && companyBusinessModel ? (
-          <div className="flex flex-col w-3/5 pr-16">
-            <div className="text-lg font-semibold text-gray-800">About</div>
+        <div className="flex flex-col w-3/5 pr-16">
+          <div className="text-lg font-semibold text-gray-800">About</div>
+          {/* NOTE: companyAbout depends on crunchbase data */}
+          {companyAbout ? (
             <p className="text-sm text-customGray-800 leading-relaxed mt-1">
               {companyAbout["company_description"]}
             </p>
-            <div className="text-lg font-semibold text-gray-800 mt-6">
-              Business Model
-            </div>
-            <p className="text-sm text-customGray-800 whitespace-pre-line leading-relaxed mt-1">
-              {companyBusinessModel}
+          ) : crunchbaseData === null ? (
+            <p className="text-sm text-customGray-300 italic leading-relaxed mt-1">
+              Description not available
             </p>
-          </div>
-        ) : (
-          <div className="flex flex-col w-3/5 pr-16">
-            <Skeleton className="bg-customGray-50 text-base font-semibold text-gray-800 w-16 h-6 rounded-lg" />
+          ) : (
             <Skeleton className="bg-customGray-50 text-sm text-customGray-800 leading-relaxed mt-1 rounded-lg">
               Zillow is a leading online real estate marketplace that provides
               comprehensive data, tools, and services for buying, selling,
               renting, and financing homes.
             </Skeleton>
-            <Skeleton className="bg-customGray-50 text-base font-semibold text-gray-800 mt-6 w-16 h-6 rounded-lg"></Skeleton>
+          )}
+          <div className="text-lg font-semibold text-gray-800 mt-6">
+            Business Model
+          </div>
+          {companyBusinessModel ? (
+            <p className="text-sm text-customGray-800 whitespace-pre-line leading-relaxed mt-1">
+              {companyBusinessModel}
+            </p>
+          ) : crunchbaseData === null ? (
+            <p className="text-sm text-customGray-300 italic leading-relaxed mt-1">
+              Business model not available
+            </p>
+          ) : (
             <Skeleton className="bg-customGray-50 text-sm text-customGray-800 whitespace-pre-line leading-relaxed mt-1 rounded-lg">
               Advertising (primary): Zillow generates revenue through targeted
               advertising services sold to real estate professionals.
@@ -129,8 +134,8 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
               mortgage shoppers with professionals, earning money from lead
               generation and other marketplace services.
             </Skeleton>
-          </div>
-        )}
+          )}
+        </div>
         {/* Basic Stats */}
         <div
           className="w-2/5"
@@ -139,6 +144,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
             gridTemplateColumns: "min-content max-content 1fr",
             gridTemplateRows: "auto auto",
             columnGap: "2.5rem",
+            rowGap: "1rem",
           }}
         >
           <div
@@ -148,10 +154,12 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
             <div className="text-primary font-bold text-4xl">
               {companyFoundedYear ? (
                 companyFoundedYear
-              ) : (
+              ) : crunchbaseData === undefined ? (
                 <Skeleton className="text-primary font-bold text-4xl rounded-lg bg-customGray-50">
                   2005
                 </Skeleton>
+              ) : (
+                "—"
               )}
             </div>
             <div className="text-sm text-customGray-500 font-light mt-1">
@@ -165,10 +173,12 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
             <div className="text-primary font-bold text-4xl">
               {companyHeadcount ? (
                 companyHeadcount
-              ) : (
+              ) : headCountData === undefined ? (
                 <Skeleton className="text-primary font-bold text-4xl rounded-lg bg-customGray-50">
                   7,901
                 </Skeleton>
+              ) : (
+                "—"
               )}
             </div>
             <div className="text-sm text-customGray-500 font-light mt-1">
@@ -182,10 +192,12 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
             <div className="text-primary font-bold text-4xl">
               {companyHeadquarters ? (
                 companyHeadquarters
-              ) : (
+              ) : crunchbaseData === undefined ? (
                 <Skeleton className="text-primary font-bold text-4xl rounded-lg bg-customGray-50">
                   Seattle, WA
                 </Skeleton>
+              ) : (
+                "—"
               )}
             </div>
             <div className="text-sm text-customGray-500 font-light mt-1">
@@ -199,10 +211,12 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
             <div className="text-primary font-bold text-4xl">
               {companyValuation ? (
                 companyValuation
-              ) : (
+              ) : crunchbaseData === undefined ? (
                 <Skeleton className="text-primary font-bold text-4xl rounded-lg bg-customGray-50">
                   $350M
                 </Skeleton>
+              ) : (
+                "—"
               )}
             </div>
             <div className="text-sm text-customGray-500 font-light mt-1">
@@ -216,10 +230,12 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
             <div className="text-primary font-bold text-4xl">
               {companyLastRoundSize ? (
                 companyLastRoundSize
-              ) : (
+              ) : crunchbaseData === undefined ? (
                 <Skeleton className="text-primary font-bold text-4xl rounded-lg bg-customGray-50">
                   $4.1M
                 </Skeleton>
+              ) : (
+                "—"
               )}
             </div>
             <div className="text-sm text-customGray-500 font-light mt-1">
@@ -233,10 +249,12 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
             <div className="text-primary font-bold text-4xl">
               {companyLastDealType ? (
                 companyLastDealType
-              ) : (
+              ) : crunchbaseData === undefined ? (
                 <Skeleton className="text-primary font-bold text-4xl rounded-lg bg-customGray-50">
                   Post-IPO
                 </Skeleton>
+              ) : (
+                "—"
               )}
             </div>
             <div className="text-sm text-customGray-500 font-light mt-1">
@@ -253,8 +271,14 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
             <InvestorTable
               fundingData={crunchbaseData?.["raised_funding_rounds"]}
             ></InvestorTable>
-          ) : (
+          ) : crunchbaseData === undefined ? (
             <Skeleton className="bg-customGray-50 w-full h-36 rounded-lg" />
+          ) : (
+            <div className="bg-customGray-50 w-full h-36 rounded-lg flex items-center justify-center">
+              <p className="text-sm text-customGray-200">
+                No Funding Data Available
+              </p>
+            </div>
           )}
         </div>
         <div className="w-2/5">
@@ -267,8 +291,14 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
                 acquisitions: crunchbaseData?.["acquiree_acquisitions"],
               }}
             />
+          ) : crunchbaseData === undefined ? (
+            <Skeleton className="bg-customGray-50 h-36 w-full rounded-lg" />
           ) : (
-            <Skeleton className="bg-customGray-50 h-36 w-96 rounded-lg" />
+            <div className="bg-customGray-50 h-36 w-full rounded-lg flex items-center justify-center">
+              <p className="text-sm text-customGray-200">
+                No M&A Data Available
+              </p>
+            </div>
           )}
         </div>
       </div>
@@ -294,8 +324,16 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
                 />
               </div>
             </div>
+          ) : headCountData === undefined ? (
+            <Skeleton className="md:w-64 2xl:w-96 h-60 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
           ) : (
-            <Skeleton className="md:w-64 2xl:w-96 h-52 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
+            <div className="md:w-64 2xl:w-96 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50 h-60">
+              <div className="flex flex-col items-center justify-center h-full">
+                <p className="text-sm text-customGray-200">
+                  No Headcount Data Available
+                </p>
+              </div>
+            </div>
           )}
           {headCountData ? (
             <div className="flex flex-col justify-between rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-white border border-customGray-50 px-6 py-3 w-96 h-60">
@@ -360,8 +398,16 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
                 />
               </div>
             </div>
+          ) : headCountData === undefined ? (
+            <Skeleton className="md:w-64 2xl:w-96 h-60 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
           ) : (
-            <Skeleton className="md:w-64 2xl:w-96 h-52 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
+            <div className="md:w-64 2xl:w-96 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50 h-60">
+              <div className="flex flex-col items-center justify-center h-full">
+                <p className="text-sm text-customGray-200">
+                  No Headcount Data Available
+                </p>
+              </div>
+            </div>
           )}
           {headCountData ? (
             <div className="flex flex-col justify-between rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-white border border-customGray-50 px-6 py-2 w-96 h-60">
@@ -426,8 +472,16 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
                 />
               </div>
             </div>
+          ) : headCountData === undefined ? (
+            <Skeleton className="md:w-64 2xl:w-96 h-60 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
           ) : (
-            <Skeleton className="md:w-64 2xl:w-96 h-52 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
+            <div className="md:w-64 2xl:w-96 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50 h-60">
+              <div className="flex flex-col items-center justify-center h-full">
+                <p className="text-sm text-customGray-200">
+                  No Headcount Data Available
+                </p>
+              </div>
+            </div>
           )}
           {headCountData ? (
             <div className="flex flex-col justify-between rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-white border border-customGray-50 px-6 py-2 w-96 h-60">
@@ -488,8 +542,16 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
                 />
               </div>
             </div>
+          ) : headCountData === undefined ? (
+            <Skeleton className="md:w-64 2xl:w-96 h-60 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
           ) : (
-            <Skeleton className="md:w-64 2xl:w-96 h-52 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
+            <div className="md:w-64 2xl:w-96 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50 h-60">
+              <div className="flex flex-col items-center justify-center h-full">
+                <p className="text-sm text-customGray-200">
+                  No Headcount Data Available
+                </p>
+              </div>
+            </div>
           )}
         </div>
       </div>
