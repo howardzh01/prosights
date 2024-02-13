@@ -9,24 +9,13 @@ import { useRouter } from "next/router";
 import { useUser } from "@clerk/clerk-react";
 import PostHogUserTracker from "../components/PostHogUserTracker";
 
-// if (typeof window !== "undefined" &&
-// !window.location.host.includes("localhost")) {
-//   // checks that we are client-side
-//   posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
-//     api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://app.posthog.com",
-//     loaded: (posthog) => {
-//       if (process.env.NODE_ENV === "development") posthog.debug(); // debug mode in development
-//     },
-//   });
-// }
-
 if (
   typeof window !== "undefined" &&
   !window.location.host.includes("localhost")
 ) {
   // checks that we are client-side
-  posthog.init("phc_o9KYDXanMjHT7AvO9PIOJzHnA8BJKL9P1AKuImWt42u", {
-    api_host: "https://app.posthog.com" || "https://app.posthog.com",
+  posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
+    api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://app.posthog.com",
     loaded: (posthog) => {
       if (process.env.NODE_ENV === "development") posthog.debug(); // debug mode in development
     },
