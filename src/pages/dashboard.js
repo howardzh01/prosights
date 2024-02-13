@@ -27,7 +27,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
   const { isSignedIn, user, isLoaded } = useUser();
   const companyDirectory = new CompanyDirectory(companyList);
   const [companyDic, setCompanyDic] = useState(
-    companyDirectory.findCompanyByName("stockx")
+    companyDirectory.findCompanyByName("")
   );
   const [country, setCountry] = useState("US");
   const [companyCompetitors, setCompanyCompetitors] = useState([]); // Array of company names
@@ -37,10 +37,9 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
   const [selectedChart, setSelectedChart] = useState("");
   const [chartData, setChartData] = useState();
   console.log(companyDic);
-  const company = companyDic.name;
   // const companyDic = companyDirectory.findCompanyByName(company);
   // State to track active sections
-  const [activeSections, setActiveSections] = useState({ Overview: true });
+  const [activeSections, setActiveSections] = useState({});
   // Sections for sidebar; MUST have same title as section id, which might be used in child components
   const sections = [
     {
@@ -183,7 +182,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
     .replaceAll("-", ".");
 
   useEffect(() => {
-    if (!dataLoading) {
+    if (!dataLoading && companyDic) {
       let observer;
 
       const observerCallback = (entries) => {
@@ -222,7 +221,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
         }
       };
     }
-  }, [dataLoading]);
+  }, [dataLoading, companyDic]);
 
   useEffect(() => {
     if (dataLoading) {
@@ -235,7 +234,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
   }, []);
 
   useEffect(() => {
-    if (company === "stockx") {
+    if (companyDic && companyDic.name === "stockx") {
       setCompanyCompetitors(
         ["goat", "grailed"].map((name) =>
           companyDirectory.findCompanyByName(name)
@@ -244,7 +243,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
     } else {
       setCompanyCompetitors([]);
     }
-  }, [company]);
+  }, [companyDic]);
 
   const downloadPDF = async () => {
     const { default: html2pdf } = await import("html2pdf.js");
@@ -295,7 +294,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
     companyDescriptionErrorPull,
   } = getApiData(
     user,
-    [companyDic, ...companyCompetitors],
+    companyDic ? [companyDic, ...companyCompetitors] : [],
     country,
     enableCrunchbase
   );
@@ -320,91 +319,98 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
           <div className="flex-shrink-0 sticky top-0 w-60 h-screen">
             <SideBar sections={sections} activeSections={activeSections} />
           </div>
-          {/* Main Content */}
-          <div
-            id="main-content"
-            className="flex flex-col w-screen overflow-x-hidden items-center px-10 bg-white bg-repeat bg-center"
-            style={{
-              backgroundImage: "url('/assets/backgroundPatternLight.svg')",
-            }}
-          >
-            {/* Search Bar */}
+          {companyDic && companyDic.name ? (
+            // Main Content
             <div
-              id="Company Overview"
-              className="content-section w-[36rem] pt-4"
+              id="main-content"
+              className="flex flex-col w-screen overflow-x-hidden items-center px-10 bg-white bg-repeat bg-center"
+              style={{
+                backgroundImage: "url('/assets/backgroundPatternLight.svg')",
+              }}
             >
-              <SearchBar company={company} setCompany={setCompanyDic} />
-            </div>
-            {/* Company name, country, and comparing section */}
-            <div className="mt-6 flex flex-row justify-between w-full items-center">
-              <div className="flex flex-row items-center">
-                {crunchbaseDataPull?.[company]?.["fields"]?.["image_url"] ? (
-                  <Image
-                    src={crunchbaseDataPull[company]["fields"]["image_url"]}
-                    className="w-10 h-10 mr-2 object-contain rounded-md"
-                    width={256}
-                    height={256}
-                  />
-                ) : (
-                  <Skeleton className="w-10 h-10 mr-2 rounded-md bg-customGray-50" />
-                )}
-                <p className="text-3xl font-bold text-gray-800 pl-1">
-                  {companyDirectory.findCompanyByName(company)?.displayedName ||
-                    company}
-                </p>
-                <select
-                  className="h-10 text-customGray-500 rounded-md font-nunitoSans text-sm font-normal text-left focus:outline-none focus:ring-0 ml-6"
-                  onChange={(e) => {
-                    const newCompanyLocation = e.target.value;
-                    setCountry(newCompanyLocation);
-                  }}
-                >
-                  <option value="us">US</option>
-                  <option value="asia">Asia</option>
-                </select>
-                <div
-                  className="group flex flex-row items-center ml-8 hover:cursor-pointer hover:text-primary"
-                  onClick={downloadPDF}
-                >
-                  <div className="group">
-                    <Image
-                      src="/assets/downloadInactive.svg"
-                      className="w-4 h-4 object-contain mr-1 group-hover:hidden"
-                      width={256}
-                      height={256}
-                    />
-                    <Image
-                      src="/assets/downloadActive.svg"
-                      className="w-4 h-4 object-contain mr-1 hidden group-hover:block"
-                      width={256}
-                      height={256}
-                    />
-                  </div>
-                  <p className="text-sm text-customGray-500 group-hover:text-primary">
-                    Download PDF
-                  </p>
-                </div>
-                <div className="group flex flex-row items-center ml-4 hover:cursor-pointer hover:text-primary">
-                  <div className="group">
-                    <Image
-                      src="/assets/downloadInactive.svg"
-                      className="w-4 h-4 object-contain mr-1 group-hover:hidden"
-                      width={256}
-                      height={256}
-                    />
-                    <Image
-                      src="/assets/downloadActive.svg"
-                      className="w-4 h-4 object-contain mr-1 hidden group-hover:block"
-                      width={256}
-                      height={256}
-                    />
-                  </div>
-                  <p className="text-sm text-customGray-500 group-hover:text-primary">
-                    Download XLS
-                  </p>
-                </div>
+              {/* Search Bar */}
+              <div
+                id="Company Overview"
+                className="content-section w-[36rem] pt-4"
+              >
+                <SearchBar setCompany={setCompanyDic} />
               </div>
-              {/* <div className="flex flex-row items-center">
+              {/* Company name, country, and comparing section */}
+              <div className="mt-6 flex flex-row justify-between w-full items-center">
+                <div className="flex flex-row items-center">
+                  {crunchbaseDataPull?.[companyDic.name]?.["fields"]?.[
+                    "image_url"
+                  ] ? (
+                    <Image
+                      src={
+                        crunchbaseDataPull[companyDic.name]["fields"][
+                          "image_url"
+                        ]
+                      }
+                      className="w-10 h-10 mr-2 object-contain rounded-md"
+                      width={256}
+                      height={256}
+                    />
+                  ) : (
+                    <Skeleton className="w-10 h-10 mr-2 rounded-md bg-customGray-50" />
+                  )}
+                  <p className="text-3xl font-bold text-gray-800 pl-1">
+                    {companyDirectory.findCompanyByName(companyDic.name)
+                      ?.displayedName || companyDic.name}
+                  </p>
+                  <select
+                    className="h-10 text-customGray-500 rounded-md font-nunitoSans text-sm font-normal text-left focus:outline-none focus:ring-0 ml-6"
+                    onChange={(e) => {
+                      const newCompanyLocation = e.target.value;
+                      setCountry(newCompanyLocation);
+                    }}
+                  >
+                    <option value="us">US</option>
+                    <option value="asia">Asia</option>
+                  </select>
+                  <div
+                    className="group flex flex-row items-center ml-8 hover:cursor-pointer hover:text-primary"
+                    onClick={downloadPDF}
+                  >
+                    <div className="group">
+                      <Image
+                        src="/assets/downloadInactive.svg"
+                        className="w-4 h-4 object-contain mr-1 group-hover:hidden"
+                        width={256}
+                        height={256}
+                      />
+                      <Image
+                        src="/assets/downloadActive.svg"
+                        className="w-4 h-4 object-contain mr-1 hidden group-hover:block"
+                        width={256}
+                        height={256}
+                      />
+                    </div>
+                    <p className="text-sm text-customGray-500 group-hover:text-primary">
+                      Download PDF
+                    </p>
+                  </div>
+                  <div className="group flex flex-row items-center ml-4 hover:cursor-pointer hover:text-primary">
+                    <div className="group">
+                      <Image
+                        src="/assets/downloadInactive.svg"
+                        className="w-4 h-4 object-contain mr-1 group-hover:hidden"
+                        width={256}
+                        height={256}
+                      />
+                      <Image
+                        src="/assets/downloadActive.svg"
+                        className="w-4 h-4 object-contain mr-1 hidden group-hover:block"
+                        width={256}
+                        height={256}
+                      />
+                    </div>
+                    <p className="text-sm text-customGray-500 group-hover:text-primary">
+                      Download XLS
+                    </p>
+                  </div>
+                </div>
+                {/* <div className="flex flex-row items-center">
                 <Image
                   src="/assets/compare.svg"
                   alt="Compare"
@@ -414,102 +420,145 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                 />
                 <p className="text-base text-customGray-500">Compare</p>
               </div> */}
-              <CompetitorContainer
-                companyCompetitors={companyCompetitors}
-                setCompanyCompetitors={setCompanyCompetitors}
-              ></CompetitorContainer>
+                <CompetitorContainer
+                  companyCompetitors={companyCompetitors}
+                  setCompanyCompetitors={setCompanyCompetitors}
+                ></CompetitorContainer>
+              </div>
+              <hr className="border-none h-px bg-customGray-100 w-full mt-2" />
+              {/* Overview Section */}
+              <div className="content-section w-full mb-20">
+                <OverviewSection
+                  companyAbout={companyDescriptionPull?.[companyDic.name]}
+                  crunchbaseData={crunchbaseDataPull?.[companyDic.name]}
+                  headCountData={headCountData?.[companyDic.name]}
+                />
+              </div>
+              {/* Competitor Overview */}
+              <div id="Competitor Overview" className="content-section w-full">
+                <CompetitorOverviewSection />
+              </div>
+              {/* Headcount; TODO: MAKE THIS A SEPARATE COMPONENT */}
+              <div
+                id="Headcount"
+                className="flex flex-col w-full mt-12 content-section mb-12"
+              >
+                <div className="flex items-end justify-between mt-2 mb-3 rounded-md">
+                  <div className="flex flex-row items-center">
+                    <HeadcountIcon className="mx-2 filter invert w-6 h-6" />
+                    <p className="text-3xl font-semibold text-gray-800 ">
+                      Headcount
+                    </p>
+                  </div>
+                  <div className="flex flex-row items-center ml-4">
+                    <span className="mr-2 italic text-sm text-[#C3C3C3]">
+                      Powered by
+                    </span>
+                    <Image
+                      src="/assets/poweredByLogos/coresignal_logo.svg"
+                      alt="coresignal"
+                      width="120"
+                      height="120"
+                      className="h-4 w-auto"
+                    />
+                  </div>
+                </div>
+                <hr className="border-none h-px bg-customGray-100" />
+                <div className="mt-6 section-indent">
+                  <div className="flex flex-row items-center mb-3">
+                    <p className="text-lg font-semibold text-gray-800 mr-2">
+                      Employees
+                    </p>
+                    <a
+                      className="group inline-flex items-center hover:cursor-pointer hover:text-primary"
+                      href="/assets/excelFiles/StockX_Headcount_2024.02.04.xlsx"
+                      download={`StockX_Headcount_${todaysDate}.xlsx`}
+                    >
+                      <Image
+                        src="/assets/downloadInactive.svg"
+                        className="w-5 h-5 opacity-50 object-contain group-hover:hidden"
+                        width={256}
+                        height={256}
+                      />
+                      <Image
+                        src="/assets/downloadActive.svg"
+                        className="w-5 h-5 object-contain hidden group-hover:block"
+                        width={256}
+                        height={256}
+                      />
+                    </a>
+                  </div>
+                  {headCountData ? (
+                    <HeadCountChart
+                      headCountData={headCountData?.[companyDic.name]}
+                    />
+                  ) : (
+                    <Skeleton className="w-full h-80 rounded-lg bg-customGray-50" />
+                  )}
+                </div>
+              </div>
+              {/* Website Traffic */}
+              <div className="w-full">
+                <WebsiteTrafficSection
+                  company={companyDic?.name}
+                  webTrafficDic={webTrafficData}
+                  webTrafficGeoDic={webTrafficGeoData}
+                />
+              </div>
+              {/* App Usage */}
+              <div className="w-full mt-12">
+                <AppUsageSection />
+              </div>
+              {/* Consumer Spend */}
+              <div className="w-full mt-16">
+                <ConsumerSpendSection />
+              </div>
+              {/* Ad Spend */}
+              <div className="w-full">
+                <AdSpendSection />
+              </div>
             </div>
-            <hr className="border-none h-px bg-customGray-100 w-full mt-2" />
-            {/* Overview Section */}
-            <div className="content-section w-full mb-20">
-              <OverviewSection
-                companyAbout={companyDescriptionPull?.[company]}
-                crunchbaseData={crunchbaseDataPull?.[company]}
-                headCountData={headCountData?.[company]}
-              />
-            </div>
-            {/* Competitor Overview */}
-            <div id="Competitor Overview" className="content-section w-full">
-              <CompetitorOverviewSection />
-            </div>
-            {/* Headcount; TODO: MAKE THIS A SEPARATE COMPONENT */}
+          ) : (
             <div
-              id="Headcount"
-              className="flex flex-col w-full mt-12 content-section mb-12"
+              id="main-content"
+              className="flex flex-col w-screen overflow-x-hidden items-center px-10 bg-white bg-repeat bg-center"
+              style={{
+                backgroundImage: "url('/assets/backgroundPatternLight.svg')",
+              }}
             >
-              <div className="flex items-end justify-between mt-2 mb-3 rounded-md">
-                <div className="flex flex-row items-center">
-                  <HeadcountIcon className="mx-2 filter invert w-6 h-6" />
-                  <p className="text-3xl font-semibold text-gray-800 ">
-                    Headcount
-                  </p>
+              <div className="relative flex flex-col items-center justify-center h-2/3">
+                <div className="absolute top-0 left-0 flex justify-center items-center w-full h-full">
+                  <div className="w-full h-full bg-gradient-to-br from-primary to-secondary opacity-[0.12] rounded-full filter blur-[100px]" />
                 </div>
-                <div className="flex flex-row items-center ml-4">
-                  <span className="mr-2 italic text-sm text-[#C3C3C3]">
-                    Powered by
-                  </span>
-                  <Image
-                    src="/assets/poweredByLogos/coresignal_logo.svg"
-                    alt="coresignal"
-                    width="120"
-                    height="120"
-                    className="h-4 w-auto"
-                  />
+                <div className="">
+                  <div className="flex flex-col-reverse md:flex-row justify-between">
+                    <div className="">
+                      <h1 className="text-xl md:text-2xl font-bold text-gray-800 mb-1">
+                        Welcome!
+                      </h1>
+                      <p className="text-sm md:text-base text-gray-600 mb-6">
+                        Which company are you interested in?
+                      </p>
+                    </div>
+
+                    <div className="">
+                      <Image
+                        src="/logo.png"
+                        alt="ProSights Logo"
+                        width={4096}
+                        height={4096}
+                        className="w-12 md:w-16 pb-4 md:pb-0"
+                      />
+                    </div>
+                  </div>
+                  {/* Search Bar */}
+                  <div className="content-section w-[36rem] pt-4">
+                    <SearchBar setCompany={setCompanyDic} />
+                  </div>
                 </div>
               </div>
-              <hr className="border-none h-px bg-customGray-100" />
-              <div className="mt-6 section-indent">
-                <div className="flex flex-row items-center mb-3">
-                  <p className="text-lg font-semibold text-gray-800 mr-2">
-                    Employees
-                  </p>
-                  <a
-                    className="group inline-flex items-center hover:cursor-pointer hover:text-primary"
-                    href="/assets/excelFiles/StockX_Headcount_2024.02.04.xlsx"
-                    download={`StockX_Headcount_${todaysDate}.xlsx`}
-                  >
-                    <Image
-                      src="/assets/downloadInactive.svg"
-                      className="w-5 h-5 opacity-50 object-contain group-hover:hidden"
-                      width={256}
-                      height={256}
-                    />
-                    <Image
-                      src="/assets/downloadActive.svg"
-                      className="w-5 h-5 object-contain hidden group-hover:block"
-                      width={256}
-                      height={256}
-                    />
-                  </a>
-                </div>
-                {headCountData ? (
-                  <HeadCountChart headCountData={headCountData?.[company]} />
-                ) : (
-                  <Skeleton className="w-full h-80 rounded-lg bg-customGray-50" />
-                )}
-              </div>
             </div>
-            {/* Website Traffic */}
-            <div className="w-full">
-              <WebsiteTrafficSection
-                company={company}
-                webTrafficDic={webTrafficData}
-                webTrafficGeoDic={webTrafficGeoData}
-              />
-            </div>
-            {/* App Usage */}
-            <div className="w-full mt-12">
-              <AppUsageSection />
-            </div>
-            {/* Consumer Spend */}
-            <div className="w-full mt-16">
-              <ConsumerSpendSection />
-            </div>
-            {/* Ad Spend */}
-            <div className="w-full">
-              <AdSpendSection />
-            </div>
-          </div>
+          )}
         </div>
       </ChartDataContext.Provider>
     </SelectedChartContext.Provider>
