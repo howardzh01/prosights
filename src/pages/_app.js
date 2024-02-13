@@ -1,9 +1,13 @@
 import "../styles.css";
 import Head from "next/head";
+import { useState, useEffect } from "react";
 import { ClerkProvider } from "@clerk/nextjs";
 import { NextUIProvider } from "@nextui-org/react";
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
+import { useRouter } from "next/router";
+import { useUser } from "@clerk/clerk-react";
+import PostHogUserTracker from "../components/PostHogUserTracker";
 
 if (typeof window !== "undefined") {
   // checks that we are client-side
@@ -33,6 +37,7 @@ if (typeof window !== "undefined") {
 // }
 
 export default function MyApp({ Component, pageProps }) {
+  const router = useRouter();
   // const session = useSession();
   // Create a new supabase browser client on every first render.
   // const [supabaseClient] = useState(() => createBrowserSupabaseClient());
@@ -54,6 +59,27 @@ export default function MyApp({ Component, pageProps }) {
   //     router.events.off("routeChangeComplete", handleRouteChange);
   //   };
   // }, []);
+
+  // useEffect(() => {
+  //   // Check auth condition
+  //   console.log("value", user);
+  //   if (user.id) {
+  //     console.log("valueeee", user.id, user.primaryEmailAddress);
+  //     posthog.identify(user.id, {
+  //       email: user.primaryEmailAddress.emailAddress,
+  //     });
+  //   }
+  // }, [user]);
+
+  useEffect(() => {
+    // Track page views
+    const handleRouteChange = () => posthog.capture("$pageview");
+    router.events.on("routeChangeComplete", handleRouteChange);
+
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, []);
 
   return (
     <>
@@ -102,13 +128,14 @@ export default function MyApp({ Component, pageProps }) {
           supabaseClient={supabaseClient}
           initialSession={pageProps.initialSession}
         > */}
-      <PostHogProvider client={posthog}>
-        <ClerkProvider {...pageProps}>
+      <ClerkProvider {...pageProps}>
+        <PostHogProvider client={posthog}>
           <NextUIProvider>
+            <PostHogUserTracker />
             <Component {...pageProps} />
           </NextUIProvider>
-        </ClerkProvider>
-      </PostHogProvider>
+        </PostHogProvider>
+      </ClerkProvider>
       {/* </SessionContextProvider>
       </PostHogProvider> */}
     </>
