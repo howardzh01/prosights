@@ -7,7 +7,7 @@ import Image from "next/image";
 import Chip from "@mui/material/Chip";
 import { companyList } from "./CompanyList";
 
-export default function SearchBar({ company, setCompany }) {
+export default function SearchBar({ setCompany }) {
   const [value, setValue] = React.useState(null);
 
   if (!companyList) {
@@ -58,7 +58,7 @@ export default function SearchBar({ company, setCompany }) {
         renderInput={(params) => (
           <TextField
             {...params}
-            label="Search for Company"
+            label="Search with a company URL"
             components={{
               ClearIndicator: () => null,
             }}

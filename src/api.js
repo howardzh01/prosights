@@ -18,6 +18,21 @@ async function apiMultiCall(companyList, func, args) {
 export function getApiData(user, companyDicList, country, enableCrunchbase) {
   // Fill API Data calls here. So far, headcount, web traffic, crunchbase, company description
   // Make sure last argument of each function is the company names
+  if (!companyDicList) {
+    return {
+      headCountData: null,
+      headCountError: null,
+      webTrafficData: null,
+      webTrafficError: null,
+      webTrafficGeoData: null,
+      webTrafficGeoError: null,
+      crunchbaseDataPull: null,
+      crunchbaseErrorPull: null,
+      companyDescriptionPull: null,
+      companyDescriptionErrorPull: null,
+    };
+  }
+
   const companyNameList = companyDicList.map((company) => company.name);
   const companyUrlList = companyDicList.map(
     (company) => company.url || company.name + ".com"

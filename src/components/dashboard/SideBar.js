@@ -41,13 +41,17 @@ function SideBar({ sections, activeSections }) {
           return (
             <div className="flex flex-row">
               <div
-                className={`py-2 pr-2 text-sm flex items-center cursor-pointer hover:bg-primaryLight hover:rounded-tr-md hover:rounded-br-md hover:bg-opacity-20 transform transition duration-300 ${
+                className={`py-2 pr-2 text-sm flex items-center ${
                   section.level === 1 ? "" : "ml-8"
-                } text-customGray-25 border-l-2 border-primaryMedium ${
+                } ${
+                  Object.keys(activeSections).length === 0
+                    ? "text-customGray-500 cursor-default"
+                    : "text-customGray-25 cursor-pointer hover:bg-primaryLight hover:rounded-tr-md hover:rounded-br-md hover:bg-opacity-20 transform transition duration-300 hover:translate-x-2"
+                } border-l-2 border-primaryMedium ${
                   isSectionActive(section)
                     ? "text-primaryMedium border-opacity-100"
                     : "border-opacity-0 hover:rounded-md"
-                } pl-2 hover:translate-x-2`}
+                } pl-2`}
                 onClick={() => scrollToSection(section.id)}
               >
                 {section.level === 1 && (
@@ -58,7 +62,11 @@ function SideBar({ sections, activeSections }) {
                     alt="Section Icon"
                     width={32}
                     height={32}
-                    className="w-4 mr-2"
+                    className={`w-4 mr-2 ${
+                      Object.keys(activeSections).length === 0
+                        ? "opacity-20"
+                        : "opacity-100"
+                    }`}
                     priority={index === 0}
                   />
                 )}
