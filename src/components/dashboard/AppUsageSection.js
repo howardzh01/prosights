@@ -6,8 +6,10 @@ import Image from "next/image";
 import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 import { Skeleton } from "@nextui-org/react";
 import AppUsageIcon from "/public/assets/AppUsageIcon.svg";
+import AppVisitsStackedBarPeers from "../charts/AppVisitsStackedBarPeers";
 
-function AppUsageSection({}) {
+function AppUsageSection({ company, appDataDic }) {
+  console.log(appDataDic);
   return (
     <div className="flex flex-col w-full mt-12 pb-8">
       <div
@@ -313,6 +315,17 @@ function AppUsageSection({}) {
             </div>
           </div>
         </div>
+
+        <div id="App Market Share vs. Peers" className="content-section mt-8">
+          {appDataDic === undefined ? (
+            <div> MISSING</div>
+          ) : (
+            <AppVisitsStackedBarPeers
+              appDataDic={appDataDic}
+            ></AppVisitsStackedBarPeers>
+          )}
+        </div>
+
         <div id="Loyalty vs. Peers" className="content-section mt-8">
           <div className="flex flex-row items-center mb-3">
             <p className="text-lg font-semibold text-gray-800 mr-2">

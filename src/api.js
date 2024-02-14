@@ -4,13 +4,14 @@ import { assert } from "./utils/Utils";
 import useSWR from "swr";
 import { data } from "autoprefixer";
 
-async function apiMultiCall(companyList, func, args) {
+async function apiMultiCall(companyDisplayedNameList, func, args) {
   // Make sure first element of args is the company names or urls
-  const promises = companyList.map(
+  console.log("API MULTICALL", companyDisplayedNameList, args);
+  const promises = companyDisplayedNameList.map(
     (company, ind) => func([args[0][ind], ...args.slice(1)]) // replace args companyList with specific company
   );
   const results = await Promise.all(promises);
-  return companyList.reduce((acc, company, index) => {
+  return companyDisplayedNameList.reduce((acc, company, index) => {
     acc[company] = results[index];
     return acc;
   }, {});
@@ -31,10 +32,15 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
       crunchbaseErrorPull: undefined,
       companyDescriptionPull: undefined,
       companyDescriptionErrorPull: undefined,
+      dataAIData: undefined,
+      dataAIError: undefined,
     };
   }
 
   const companyNameList = companyDicList.map((company) => company.name);
+  const companyDisplayedNameList = companyDicList.map(
+    (company) => company.displayedName
+  );
   const companyUrlList = companyDicList.map(
     (company) => company.url || company.name + ".com"
   );
@@ -44,7 +50,7 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
       ? [companyNameList, `/api/private/getHeadCount`, user.id]
       : null,
     (args) => {
-      return apiMultiCall(companyNameList, getHeadCount, args);
+      return apiMultiCall(companyDisplayedNameList, getHeadCount, args);
     },
     { revalidateOnFocus: false }
   );
@@ -55,7 +61,7 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
       : null,
 
     (args) => {
-      return apiMultiCall(companyNameList, getTrafficData, args);
+      return apiMultiCall(companyDisplayedNameList, getTrafficData, args);
     },
     { revalidateOnFocus: false }
   );
@@ -70,7 +76,7 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
         ]
       : null,
     (args) => {
-      return apiMultiCall(companyNameList, getGeoTrafficData, args);
+      return apiMultiCall(companyDisplayedNameList, getGeoTrafficData, args);
     },
     { revalidateOnFocus: false }
   );
@@ -85,7 +91,7 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
         ? [companyNameList, `/api/private/getCrunchbaseData`, user.id]
         : null,
       (args) => {
-        return apiMultiCall(companyNameList, getCrunchbaseData, args);
+        return apiMultiCall(companyDisplayedNameList, getCrunchbaseData, args);
       },
       { revalidateOnFocus: false }
     );
@@ -101,16 +107,18 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
         : null,
 
       async ([companyList, url, crunchbaseData]) => {
-        const promises = companyList.map((company) =>
-          getCrunchbaseData([
+        const promises = companyList.map((company, ind) =>
+          getCompanyDescription([
             company,
             url,
             user.id,
-            crunchbaseData[company]["fields"]["description"],
+            crunchbaseData[companyDisplayedNameList[ind]]["fields"][
+              "description"
+            ],
           ])
         );
         const results = await Promise.all(promises);
-        return companyList.reduce((acc, company, index) => {
+        return companyDisplayedNameList.reduce((acc, company, index) => {
           acc[company] = results[index];
           return acc;
         }, {});
@@ -124,23 +132,33 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
     companyDescriptionErrorPull = companyDescriptionError;
   }
 
-  let dataAiDataPull, dataAIErrorPull;
-  // const { data: dataAIData, error: dataAIError } = useSWR(
-  //   user && companyNameList
-  //     ? [
-  //         companyDicList.map((company) => company.appId),
-  //         `/api/private/getDataAI`,
-  //         user.id,
-  //       ]
-  //     : null,
-  //   (args) => {
-  //     return apiMultiCall(companyNameList, getDataAIData, args);
-  //   },
-  //   { revalidateOnFocus: false }
-  // );
-  // dataAiDataPull = dataAIData;
-  // dataAIErrorPull = dataAIError;
-
+  const { data: dataAIData, error: dataAIError } = useSWR(
+    user && companyNameList
+      ? [
+          companyDicList.map((company) => company.appId),
+          `/api/private/getDataAI`,
+          user.id,
+        ]
+      : null,
+    (args) => {
+      return apiMultiCall(companyDisplayedNameList, getDataAIData, args);
+    },
+    { revalidateOnFocus: false }
+  );
+  console.log({
+    headCountData,
+    headCountError,
+    webTrafficData,
+    webTrafficError,
+    webTrafficGeoData,
+    webTrafficGeoError,
+    crunchbaseDataPull,
+    crunchbaseErrorPull,
+    companyDescriptionPull,
+    companyDescriptionErrorPull,
+    dataAIData,
+    dataAIError,
+  });
   return {
     headCountData,
     headCountError,
@@ -152,8 +170,8 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
     crunchbaseErrorPull,
     companyDescriptionPull,
     companyDescriptionErrorPull,
-    dataAiDataPull,
-    dataAIErrorPull,
+    dataAIData,
+    dataAIError,
   };
 }
 
@@ -389,7 +407,15 @@ export const getDataAIData = async ([unifiedProductId, api_url, userId]) => {
     return null;
   }
   var data = await response.json();
-
-  // Make request to refine the company description
-  return data;
+  if (!data) return;
+  // Convert to {Date: item} and sort by Date
+  const sortedData = data["app_performance"]
+    .map((item) => ({ date: new Date(item.start_date), item }))
+    .sort((a, b) => a.date - b.date)
+    .reduce((acc, { date, item }) => {
+      acc[date] = item;
+      return acc;
+    }, {});
+  // replace app_performance with sortedData
+  return { ...data, app_performance: sortedData };
 };

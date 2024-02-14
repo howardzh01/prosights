@@ -30,7 +30,6 @@ function WebTrafficStackedBarPeers({
       acc[key] = aggregateData(trafficData[key], ouputKey, "sum", timescale);
       return acc;
     }, {});
-    console.log("aggData", aggData);
 
     // aggData: {direct: {time_key: output_key}, mail: {time_key: output_key}, ...}
     const firstChannelData = aggData[companyNames[0]]; // use to extract timescale

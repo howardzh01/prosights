@@ -27,7 +27,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
   const { isSignedIn, user, isLoaded } = useUser();
   const companyDirectory = new CompanyDirectory(companyList);
   const [companyDic, setCompanyDic] = useState(
-    companyDirectory.findCompanyByName("")
+    companyDirectory.findCompanyByName("stockx")
   );
   const [country, setCountry] = useState("US");
   const [companyCompetitors, setCompanyCompetitors] = useState([]); // Array of company names
@@ -36,7 +36,6 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
 
   const [selectedChart, setSelectedChart] = useState("");
   const [chartData, setChartData] = useState();
-  console.log(companyDic);
   // const companyDic = companyDirectory.findCompanyByName(company);
   // State to track active sections
   const [activeSections, setActiveSections] = useState({});
@@ -280,7 +279,6 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
         console.error("Error exporting PDF:", err);
       });
   };
-  console.log([companyDic, ...companyCompetitors]);
   const {
     headCountData,
     headCountError,
@@ -292,8 +290,8 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
     crunchbaseErrorPull,
     companyDescriptionPull,
     companyDescriptionErrorPull,
-    // dataAiDataPull,
-    // dataAiDataPull
+    dataAIData,
+    dataAIError,
   } = getApiData(
     user,
     companyDic ? [companyDic, ...companyCompetitors] : [],
@@ -340,12 +338,12 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
               {/* Company name, country, and comparing section */}
               <div className="mt-6 flex flex-row justify-between w-full items-center">
                 <div className="flex flex-row items-center">
-                  {crunchbaseDataPull?.[companyDic.name]?.["fields"]?.[
+                  {crunchbaseDataPull?.[companyDic.displayedName]?.["fields"]?.[
                     "image_url"
                   ] ? (
                     <Image
                       src={
-                        crunchbaseDataPull[companyDic.name]["fields"][
+                        crunchbaseDataPull[companyDic.displayedName]["fields"][
                           "image_url"
                         ]
                       }
@@ -357,8 +355,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                     <Skeleton className="w-10 h-10 mr-2 rounded-md bg-customGray-50" />
                   )}
                   <p className="text-3xl font-bold text-gray-800 pl-1">
-                    {companyDirectory.findCompanyByName(companyDic.name)
-                      ?.displayedName || companyDic.name}
+                    {companyDic.displayedName}
                   </p>
                   <select
                     className="h-10 text-customGray-500 rounded-md font-nunitoSans text-sm font-normal text-left focus:outline-none focus:ring-0 ml-6"
@@ -431,9 +428,13 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
               {/* Overview Section */}
               <div className="content-section w-full mb-20">
                 <OverviewSection
-                  companyAbout={companyDescriptionPull?.[companyDic.name]}
-                  crunchbaseData={crunchbaseDataPull?.[companyDic.name]} // {companyName: null} if no data
-                  headCountData={headCountData?.[companyDic.name]}
+                  companyAbout={
+                    companyDescriptionPull?.[companyDic.displayedName]
+                  }
+                  crunchbaseData={
+                    crunchbaseDataPull?.[companyDic.displayedName]
+                  } // {companyName: null} if no data
+                  headCountData={headCountData?.[companyDic.displayedName]}
                 />
               </div>
               {/* Competitor Overview */}
@@ -490,11 +491,13 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                       />
                     </a>
                   </div>
-                  {headCountData && headCountData?.[companyDic.name] ? (
+                  {headCountData &&
+                  headCountData?.[companyDic.displayedName] ? (
                     <HeadCountChart
-                      headCountData={headCountData?.[companyDic.name]}
+                      headCountData={headCountData?.[companyDic.displayedName]}
                     />
-                  ) : headCountData?.[companyDic.name] === undefined ? (
+                  ) : headCountData?.[companyDic.displayedName] ===
+                    undefined ? (
                     <Skeleton className="w-full h-80 rounded-lg bg-customGray-50" />
                   ) : (
                     <div className="w-full h-80 rounded-lg bg-customGray-50">
@@ -510,14 +513,17 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
               {/* Website Traffic */}
               <div className="w-full">
                 <WebsiteTrafficSection
-                  company={companyDic?.name}
+                  company={companyDic?.displayedName || companyDic?.name}
                   webTrafficDic={webTrafficData}
                   webTrafficGeoDic={webTrafficGeoData}
                 />
               </div>
               {/* App Usage */}
               <div className="w-full mt-12">
-                <AppUsageSection />
+                <AppUsageSection
+                  company={companyDic?.displayedName || companyDic?.name}
+                  appDataDic={dataAIData}
+                />
               </div>
               {/* Consumer Spend */}
               <div className="w-full mt-16">
