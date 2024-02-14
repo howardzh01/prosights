@@ -24,6 +24,7 @@ function StackedBarChart({
   scrollStart = "left",
   height = "h-84",
   legendPosition = "top",
+  displayLegend = true,
 }) {
   const { chartData, tableData } = data;
   //   console.log("normalized", data);
@@ -37,7 +38,7 @@ function StackedBarChart({
         position: "top", // Positions title at the top
       },
       legend: {
-        display: true, // Hides the legend
+        display: displayLegend,
         position: legendPosition,
         labels: {
           boxHeight: 10, // Set circle height
@@ -129,7 +130,7 @@ function StackedBarChart({
   };
 
   return (
-    <div className="flex flex-col h-full w-full">
+    <div className="flex flex-col h-full w-full justify-end">
       {(showTimescaleButtons || showModalButtons) && (
         <GenericTimeScale
           timescale={timescale}

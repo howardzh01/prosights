@@ -143,7 +143,7 @@ function WebTrafficByChannelChart({
       selectedChart={CHARTS.trafficByChannel}
       rawChartData={trafficData}
       formatTableDataFunction={(x) => roundPeNumbers(x) + "%"}
-    ></GenericStackedBar>
+    />
   );
   const yearTrafficByChannelGraph = (
     <GenericStackedBar
@@ -156,7 +156,8 @@ function WebTrafficByChannelChart({
       showModalButtons={false}
       scrollStart={"right"}
       formatTableDataFunction={(x) => roundPeNumbers(x) + "%"}
-    ></GenericStackedBar>
+      displayLegend={false}
+    />
   );
 
   switch (selectedChart) {

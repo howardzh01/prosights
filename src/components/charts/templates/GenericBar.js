@@ -70,7 +70,7 @@ function GenericBarAndTable({
   };
 
   return (
-    <div className="flex flex-col h-full w-full">
+    <div className="flex flex-col h-full w-full justify-end">
       {(showTimescaleButtons || showModalButtons) && (
         <GenericTimeScale
           timescale={timescale}
