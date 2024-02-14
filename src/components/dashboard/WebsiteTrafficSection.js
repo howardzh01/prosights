@@ -9,6 +9,8 @@ import WebTrafficChart from "../charts/WebTrafficChart";
 import WebTrafficByChannelChart from "../charts/WebTrafficByChannelChart";
 import WebTrafficIcon from "/public/assets/WebsiteTrafficIcon.svg";
 import WebTrafficStackedBarPeers from "../charts/WebTrafficStackedBarPeers";
+import WebTrafficBreakdownVsPeers from "../charts/WebTrafficBreakdownVsPeers";
+import WebTrafficBreakdownVsPeersGeography from "../charts/WebTrafficBreakdownVsPeersGeography";
 
 function WebsiteTrafficSection({ company, webTrafficDic, webTrafficGeoDic }) {
   // Expect webTrafficDic = {company1: trafficData, company2: trafficData, ...}
@@ -623,152 +625,28 @@ function WebsiteTrafficSection({ company, webTrafficDic, webTrafficGeoDic }) {
           </div>
           <div className="space-x-8 flex flex-row items-center justify-start">
             <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-96">
-              <h2 id="trafficByGeo" className="text-sm font-semibold mb-3">
-                Geography
-              </h2>
-              <div className="flex flex-row items-center mb-6">
-                <Image
-                  src="/assets/calendar.svg"
-                  alt="Company Logo"
-                  className="w-4 h-4 object-contain mr-1"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-xs font-normal text-customGray-200">
-                  Last 12 Months
-                </p>
-              </div>
-              <div className="flex flex-row space-x-4">
-                <Image
-                  src="/assets/graphPictures/visitsBreakdownPeersGeography.svg"
-                  className="w-2/3 object-contain"
-                  width={4096}
-                  height={4096}
-                />
-                <Image
-                  src="/assets/graphPictures/visitsBreakdownPeersGeographyLegend.svg"
-                  className="w-24 h-auto object-contain"
-                  width={512}
-                  height={512}
-                />
-              </div>
+              <WebTrafficBreakdownVsPeersGeography
+                geoTrafficData={webTrafficGeoDic}
+                relevant_continents={RELEVANT_CONTINENTS}
+              />
             </div>
             <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-96">
-              <h2 id="trafficByGeo" className="text-sm font-semibold mb-3">
-                Device
-              </h2>
-              <div className="flex flex-row items-center mb-6">
-                <Image
-                  src="/assets/calendar.svg"
-                  alt="Company Logo"
-                  className="w-4 h-4 object-contain mr-1"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-xs font-normal text-customGray-200">
-                  Last 12 Months
-                </p>
-                <Image
-                  src="/assets/globe.svg"
-                  alt="Company Logo"
-                  className="w-4 h-4 object-contain mr-1 ml-4"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-xs font-normal text-customGray-200">US</p>
-              </div>
-              <div className="flex flex-row space-x-4">
-                <Image
-                  src="/assets/graphPictures/visitsBreakdownPeersDevice.svg"
-                  className="w-2/3 object-contain"
-                  width={4096}
-                  height={4096}
-                />
-                <Image
-                  src="/assets/graphPictures/visitsBreakdownPeersDeviceLegend.svg"
-                  className="w-20 h-auto object-contain"
-                  width={512}
-                  height={512}
-                />
-              </div>
+              <WebTrafficBreakdownVsPeers
+                trafficData={webTrafficDic}
+                selectedChart={CHARTS.trafficByDevice}
+              />
             </div>
             <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-96">
-              <h2 id="trafficByGeo" className="text-sm font-semibold mb-3">
-                Channel
-              </h2>
-              <div className="flex flex-row items-center mb-6">
-                <Image
-                  src="/assets/calendar.svg"
-                  alt="Company Logo"
-                  className="w-4 h-4 object-contain mr-1"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-xs font-normal text-customGray-200">
-                  Last 12 Months
-                </p>
-                <Image
-                  src="/assets/globe.svg"
-                  alt="Company Logo"
-                  className="w-4 h-4 object-contain mr-1 ml-4"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-xs font-normal text-customGray-200">US</p>
-              </div>
-              <div className="flex flex-row space-x-4">
-                <Image
-                  src="/assets/graphPictures/visitsBreakdownPeersChannel.svg"
-                  className="w-2/3 object-contain"
-                  width={4096}
-                  height={4096}
-                />
-                <Image
-                  src="/assets/graphPictures/visitsBreakdownPeersChannelLegend.svg"
-                  className="w-24 h-auto object-contain"
-                  width={512}
-                  height={512}
-                />
-              </div>
+              <WebTrafficBreakdownVsPeers
+                trafficData={webTrafficDic}
+                selectedChart={CHARTS.trafficByChannel}
+              />
             </div>
             <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-96">
-              <h2 id="trafficByGeo" className="text-sm font-semibold mb-3">
-                Search
-              </h2>
-              <div className="flex flex-row items-center mb-6">
-                <Image
-                  src="/assets/calendar.svg"
-                  alt="Company Logo"
-                  className="w-4 h-4 object-contain mr-1"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-xs font-normal text-customGray-200">
-                  Last 12 Months
-                </p>
-                <Image
-                  src="/assets/globe.svg"
-                  alt="Company Logo"
-                  className="w-4 h-4 object-contain mr-1 ml-4"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-xs font-normal text-customGray-200">US</p>
-              </div>
-              <div className="flex flex-row space-x-4 pt-6">
-                <Image
-                  src="/assets/graphPictures/visitsBreakdownPeersSearch.svg"
-                  className="w-3/5 object-contain"
-                  width={4096}
-                  height={4096}
-                />
-                <Image
-                  src="/assets/graphPictures/visitsBreakdownPeersSearchLegend.svg"
-                  className="w-24 h-auto object-contain"
-                  width={512}
-                  height={512}
-                />
-              </div>
+              <WebTrafficBreakdownVsPeers
+                trafficData={webTrafficDic}
+                selectedChart={CHARTS.trafficByOrganicVsPaid}
+              />
             </div>
           </div>
         </div>

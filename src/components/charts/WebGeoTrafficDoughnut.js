@@ -11,65 +11,20 @@ import { generateQuarters } from "../../utils/Utils";
 import { CHARTS } from "../../constants";
 import Image from "next/image";
 
-function WebGeoTrafficDoughnut({
-  geoTrafficData,
-  relevant_continents,
-  startDate = "2019",
-}) {
-  const [startDateState, setStartDateState] = useState(startDate);
-  const [timescale, setTimescale] = useState("year");
-
-  const monthLabels = useMemo(
-    () => generateMonthsFromStartYear(startDateState),
-    [startDateState]
-  ).map((date) => convertMonthFormat(date));
-
-  const quarterLabels = useMemo(
-    () => generateQuarters(startDateState),
-    [startDateState]
-  );
-
-  const yearLabels = useMemo(
-    () => generateYears(startDateState),
-    [startDateState]
-  );
-
-  let displayedLabels;
-  switch (timescale) {
-    case "month":
-      displayedLabels = monthLabels;
-      break;
-    case "quarterYear":
-      displayedLabels = quarterLabels;
-      break;
-    case "year":
-      displayedLabels = yearLabels;
-      break;
-    default:
-      displayedLabels = yearLabels;
-  }
-
+function WebGeoTrafficDoughnut({ geoTrafficData, relevant_continents }) {
   if (!geoTrafficData) return null;
 
   function convertToGeoDoughnutData(geoTrafficData, outputKey = "traffic") {
-    // Find the most recent date in the data
-    const mostRecentDate = new Date(
-      Math.max(
-        ...Object.values(geoTrafficData).flatMap((continentData) =>
-          Object.keys(continentData).map((date) => new Date(date))
-        )
-      )
-    );
+    // Get the date 12 months ago from today
+    const date12MonthsAgo = new Date();
+    date12MonthsAgo.setMonth(date12MonthsAgo.getUTCMonth() - 12);
 
-    // Format the date to match the keys in the geoTrafficData object
-    const mostRecentYear = mostRecentDate.getUTCFullYear();
-
-    // Aggregate data for the most recent year
+    // Aggregate data for the last 12 months
     const aggregatedData = Object.entries(geoTrafficData).reduce(
       (acc, [continent, data]) => {
         const yearlyData = Object.entries(data).reduce((sum, [date, value]) => {
-          const year = new Date(date).getUTCFullYear();
-          if (year === mostRecentYear) {
+          const entryDate = new Date(date);
+          if (entryDate >= date12MonthsAgo) {
             sum += value[outputKey] || 0;
           }
           return sum;
@@ -80,7 +35,7 @@ function WebGeoTrafficDoughnut({
       {}
     );
 
-    // Calculate the total sum of all traffic data for the most recent year
+    // Calculate the total sum of all traffic data for the last 12 months
     const totalTraffic = Object.values(aggregatedData).reduce(
       (sum, value) => sum + value,
       0

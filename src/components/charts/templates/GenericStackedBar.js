@@ -22,6 +22,8 @@ function StackedBarChart({
   formatChartLabelFunction = (x) => x,
   formatTableDataFunction = (x) => x, //Table Options from here on
   scrollStart = "left",
+  height = "h-84",
+  legendPosition = "top",
 }) {
   const { chartData, tableData } = data;
   //   console.log("normalized", data);
@@ -36,7 +38,7 @@ function StackedBarChart({
       },
       legend: {
         display: true, // Hides the legend
-        position: "top",
+        position: legendPosition,
         labels: {
           boxHeight: 10, // Set circle height
           usePointStyle: true, // This changes the legend icons to circles
@@ -85,7 +87,7 @@ function StackedBarChart({
       },
       // TODO: maybe display y-axis if timeline === "month" as data labels are turned off on monthly
       y: {
-        display: true, // Change this to true to show the y-axis
+        display: false, // Change this to true to show the y-axis
         grid: {
           display: true, // Enables y-axis gridlines
         },
@@ -153,7 +155,7 @@ function StackedBarChart({
         </div>
       )}
 
-      <div className="h-84">
+      <div className={`${height}`}>
         <Bar data={chartData} options={options} plugins={[plugin]} />
       </div>
       {showTable && (
