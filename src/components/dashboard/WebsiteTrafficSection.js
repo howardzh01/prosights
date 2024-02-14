@@ -26,7 +26,7 @@ function WebsiteTrafficSection({ company, webTrafficDic, webTrafficGeoDic }) {
         <div className="flex flex-row items-center">
           <WebTrafficIcon className="mx-2 filter invert w-6 h-6" />
           <p className="text-3xl font-semibold text-gray-800 ">
-            Website Traffic
+            {company} -- Website Traffic
           </p>
         </div>
         <div className="flex flex-row items-center ml-4">
@@ -65,7 +65,7 @@ function WebsiteTrafficSection({ company, webTrafficDic, webTrafficGeoDic }) {
         <div id="Breakdown" className="content-section">
           <div className="flex flex-row items-center mb-3">
             <p className="text-lg font-semibold text-gray-800 mr-2">
-              Breakdown
+              {company} -- Breakdown
             </p>
 
             <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">

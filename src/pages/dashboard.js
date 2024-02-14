@@ -23,7 +23,7 @@ import HeadcountIcon from "/public/assets/HeadcountIcon.svg";
 export const SelectedChartContext = createContext();
 export const ChartDataContext = createContext();
 
-function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
+function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic = false }) {
   const { isSignedIn, user, isLoaded } = useUser();
   const companyDirectory = new CompanyDirectory(companyList);
   const [companyDic, setCompanyDic] = useState(
@@ -304,6 +304,55 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
   // const competitorData = getApiData(user, competitor.name, country);
 
   // console.log(competitorData);
+  if (enableOnlyWebTraffic) {
+    return (
+      <SelectedChartContext.Provider
+        value={{ selectedChart, setSelectedChart }}
+      >
+        <ChartDataContext.Provider value={{ chartData, setChartData }}>
+          <ChartModal
+            open={!!selectedChart && !!chartData}
+            setOpen={() => {
+              setSelectedChart("");
+              setChartData(null);
+            }}
+            selectedChart={selectedChart}
+            chartData={chartData}
+          />
+          <div className="flex flex-row">
+            {/* Sidebar */}
+            <div className="flex-shrink-0 sticky top-0 w-60 h-screen">
+              <SideBar sections={sections} activeSections={activeSections} />
+            </div>
+            {/* Main Content */}
+            <div
+              id="main-content"
+              className="flex flex-col w-screen overflow-x-hidden items-center px-10 bg-white bg-repeat bg-center"
+              style={{
+                backgroundImage: "url('/assets/backgroundPatternLight.svg')",
+              }}
+            >
+              {/* Search Bar */}
+              <div
+                id="Company Overview"
+                className="content-section w-[36rem] pt-4"
+              >
+                <SearchBar company={company} setCompany={setCompanyDic} />
+              </div>
+              {/* Website Traffic */}
+              <div className="w-full">
+                <WebsiteTrafficSection
+                  company={company}
+                  webTrafficDic={webTrafficData}
+                  webTrafficGeoDic={webTrafficGeoData}
+                />
+              </div>
+            </div>
+          </div>
+        </ChartDataContext.Provider>
+      </SelectedChartContext.Provider>
+    );
+  }
   return (
     <SelectedChartContext.Provider value={{ selectedChart, setSelectedChart }}>
       <ChartDataContext.Provider value={{ chartData, setChartData }}>

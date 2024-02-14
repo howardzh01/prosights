@@ -13,7 +13,7 @@ function JustinDashboard() {
       <h1 className="w-full flex flex-row justify-center bg-red-500 text-white">
         Yo. Yo. Yo. Yo. Yo. Yo. Yo. This is your dashboard, Justin dawg
       </h1>
-      <Dashboard enableCrunchbase={false} />
+      <Dashboard enableCrunchbase={false} enableOnlyWebTraffic={true} />
     </>
   );
 }
