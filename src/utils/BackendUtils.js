@@ -21,3 +21,7 @@ export function parseSemrushOutput(output) {
   }
   return ret;
 }
+
+export async function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}

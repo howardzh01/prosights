@@ -27,7 +27,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
   const { isSignedIn, user, isLoaded } = useUser();
   const companyDirectory = new CompanyDirectory(companyList);
   const [companyDic, setCompanyDic] = useState(
-    companyDirectory.findCompanyByName("")
+    companyDirectory.findCompanyByName("stockx")
   );
   const [country, setCountry] = useState("US");
   const [companyCompetitors, setCompanyCompetitors] = useState([]); // Array of company names
@@ -292,6 +292,8 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
     crunchbaseErrorPull,
     companyDescriptionPull,
     companyDescriptionErrorPull,
+    // dataAiDataPull,
+    // dataAiDataPull
   } = getApiData(
     user,
     companyDic ? [companyDic, ...companyCompetitors] : [],

@@ -2,9 +2,10 @@ import api from "gpt-tokenizer/esm/encoding/cl100k_base";
 import { UN_M49_CONTINENTS, RELEVANT_CONTINENTS } from "./constants";
 import { assert } from "./utils/Utils";
 import useSWR from "swr";
+import { data } from "autoprefixer";
 
 async function apiMultiCall(companyList, func, args) {
-  // Make sure first element of args is the company names
+  // Make sure first element of args is the company names or urls
   const promises = companyList.map(
     (company, ind) => func([args[0][ind], ...args.slice(1)]) // replace args companyList with specific company
   );
@@ -123,6 +124,26 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
     companyDescriptionErrorPull = companyDescriptionError;
   }
 
+  let dataAiDataPull, dataAIErrorPull;
+  console.log(companyNameList, [
+    companyDicList.map((company) => company.appId),
+  ]);
+  const { data: dataAIData, error: dataAIError } = useSWR(
+    user && companyNameList
+      ? [
+          companyDicList.map((company) => company.appId),
+          `/api/private/getDataAI`,
+          user.id,
+        ]
+      : null,
+    (args) => {
+      return apiMultiCall(companyNameList, getDataAIData, args);
+    },
+    { revalidateOnFocus: false }
+  );
+  dataAiDataPull = dataAIData;
+  dataAIErrorPull = dataAIError;
+
   return {
     headCountData,
     headCountError,
@@ -134,6 +155,8 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
     crunchbaseErrorPull,
     companyDescriptionPull,
     companyDescriptionErrorPull,
+    dataAiDataPull,
+    dataAIErrorPull,
   };
 }
 
@@ -173,6 +196,9 @@ export const getTrafficData = async ([
   country,
 ]) => {
   // expect `/api/private/getWebTrafficData`
+  if (!companyUrl) {
+    return null;
+  }
   const exportColumns =
     "target,rank,visits,desktop_visits,mobile_visits,users,desktop_users,mobile_users,desktop_hits,mobile_hits,direct,search_organic,search_paid,social_organic,social_paid,referral,mail,display_ad,search,social,paid,unknown_channel,time_on_site,desktop_time_on_site,mobile_time_on_site,pages_per_visit,desktop_pages_per_visit,mobile_pages_per_visit,bounce_rate,desktop_bounce_rate,mobile_bounce_rate,desktop_share,mobile_share,accuracy,display_date,country,device_type";
 
@@ -190,7 +216,6 @@ export const getTrafficData = async ([
     body: JSON.stringify(bodyObj),
   });
   if (!response.ok) {
-    console.log(response.status);
     return null;
   }
   var data = await response.json();
@@ -346,4 +371,28 @@ export const getCompanyDescription = async ([
     "Missing company_description or business_model"
   );
   return json_content;
+};
+export const getDataAIData = async ([unifiedProductId, api_url, userId]) => {
+  // `/api/private/getDataAIData`;
+  if (!unifiedProductId) {
+    return null;
+  }
+  const response = await fetch(api_url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      userId: userId,
+      unifiedProductId: unifiedProductId,
+    }),
+  });
+  if (!response.ok) {
+    console.log(response.status);
+    return null;
+  }
+  var data = await response.json();
+
+  // Make request to refine the company description
+  return data;
 };

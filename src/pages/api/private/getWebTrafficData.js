@@ -31,15 +31,15 @@ const getSemrushWebTraffic = async (
   if (country !== "global") {
     url.searchParams.append("country", country);
   }
-  const output = await cachedFetch(
-    url,
-    {
+  const output = await cachedFetch({
+    url: url,
+    options: {
       method: "GET",
     },
-    serviceSup,
-    "text",
-    "api_calls_semrush"
-  );
+    serviceSup: serviceSup,
+    responseFormat: "text",
+    tableName: "api_calls_semrush",
+  });
   return output;
 };
 // TODO: UNSECURE, add errors

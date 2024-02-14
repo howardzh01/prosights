@@ -22,16 +22,16 @@ const getCrunchbaseData = async (companyName, cardNames) => {
   url.search = new URLSearchParams({
     card_ids: cardNames.join(","),
   });
-  const output = await cachedBucketFetch(
-    url,
-    {
+  const output = await cachedBucketFetch({
+    url: url,
+    options: {
       method: "GET",
       headers: headers,
     },
-    serviceSup,
-    "json",
-    "crunchbase_api_calls"
-  );
+    serviceSup: serviceSup,
+    responseFormat: "json",
+    table_name: "crunchbase_api_calls",
+  });
   if (!output) {
     return;
   }
