@@ -125,24 +125,21 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
   }
 
   let dataAiDataPull, dataAIErrorPull;
-  console.log(companyNameList, [
-    companyDicList.map((company) => company.appId),
-  ]);
-  const { data: dataAIData, error: dataAIError } = useSWR(
-    user && companyNameList
-      ? [
-          companyDicList.map((company) => company.appId),
-          `/api/private/getDataAI`,
-          user.id,
-        ]
-      : null,
-    (args) => {
-      return apiMultiCall(companyNameList, getDataAIData, args);
-    },
-    { revalidateOnFocus: false }
-  );
-  dataAiDataPull = dataAIData;
-  dataAIErrorPull = dataAIError;
+  // const { data: dataAIData, error: dataAIError } = useSWR(
+  //   user && companyNameList
+  //     ? [
+  //         companyDicList.map((company) => company.appId),
+  //         `/api/private/getDataAI`,
+  //         user.id,
+  //       ]
+  //     : null,
+  //   (args) => {
+  //     return apiMultiCall(companyNameList, getDataAIData, args);
+  //   },
+  //   { revalidateOnFocus: false }
+  // );
+  // dataAiDataPull = dataAIData;
+  // dataAIErrorPull = dataAIError;
 
   return {
     headCountData,

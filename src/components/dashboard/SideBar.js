@@ -30,9 +30,9 @@ function SideBar({ sections, activeSections }) {
         priority
         className="w-28"
       />
-      <p className="pt-3 text-white text-base font-semibold">
+      {/* <p className="pt-3 text-white text-base font-semibold">
         Queries Left: 50
-      </p>
+      </p> */}
       <div className="mt-8 flex-grow relative overflow-y-auto overflow-x-hidden">
         {sections.map((section, index) => {
           if (
