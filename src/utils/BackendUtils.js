@@ -28,7 +28,6 @@ export async function sleep(ms) {
 }
 
 export function convertToChartData(data, cutOffDate) {
-  console.log("cutOffDate", cutOffDate);
   let { labels, values, tableHeaders, tableLabels, growthPercentages } =
     getTableInfo(data);
   const cutoffIndex = findInsertIndex(

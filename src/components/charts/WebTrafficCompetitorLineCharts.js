@@ -27,7 +27,7 @@ function WebTrafficCompetitorLineCharts({
   function convertToLineChartData(trafficData, timescale) {
     const companyNames = Object.keys(trafficData);
     const aggData = companyNames.reduce((acc, key) => {
-      acc[key] = aggregateData(trafficData[key], ouputKey, "sum", timescale);
+      acc[key] = aggregateData(trafficData[key], ouputKey, "mean", timescale);
       return acc;
     }, {});
     // aggData: {company1: {timekey: visits}, company2: {timekey: visits}, ...}

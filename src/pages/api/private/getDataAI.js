@@ -12,6 +12,7 @@ export const config = {
 
 const customDataAIFetch = async (url, options) => {
   if (disableDataAI) {
+    console.log("DataAI is disabled");
     return;
   }
   const response = await fetch(url, options);
@@ -33,7 +34,7 @@ const customDataAIFetch = async (url, options) => {
 
   let report;
   for (let i = 0; i < 10; i++) {
-    await sleep(1000); // sleep 1 second
+    await sleep(2000); // sleep 1 second
     const response = await fetch(
       `https://api.data.ai/v2.0/portfolio/fetch-data?report_id=${outputReport["report_id"]}`,
       options
@@ -53,6 +54,7 @@ const customDataAIFetch = async (url, options) => {
 const getDataAIData = async (
   unifiedProductId,
   bundleNames,
+  country,
   startDate,
   endDate
 ) => {
@@ -68,7 +70,7 @@ const getDataAIData = async (
   url.search = new URLSearchParams({
     unified_product_id: unifiedProductId,
     granularity: "monthly",
-    countries: "US",
+    countries: country,
     devices: "all",
     bundles: bundleNames.join(","),
     start_date: startDate,
@@ -101,7 +103,7 @@ const handler = async (req) => {
   // reqJSON.userId, reqJSON.messages
   // console.log(req.companyName);
   const reqJSON = await req.json();
-  const { userId, companyName, unifiedProductId } = reqJSON;
+  const { userId, companyName, unifiedProductId, country } = reqJSON;
   const bundleNames = [
     "download_revenue",
     "active_users",
@@ -113,6 +115,7 @@ const handler = async (req) => {
   const dataAiData = await getDataAIData(
     unifiedProductId,
     bundleNames,
+    country,
     startDate,
     endDate
   );

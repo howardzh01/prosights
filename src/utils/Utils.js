@@ -213,7 +213,6 @@ const generateMonthsBetweenDates = (startDate, endDate) => {
   let allMonths = [];
 
   while (start <= end) {
-    console.log("s", start);
     allMonths.push(dateToMonths(start));
     start.setUTCMonth(start.getUTCMonth() + 1);
   }

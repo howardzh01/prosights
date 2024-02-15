@@ -248,7 +248,10 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
       setCompanyCompetitors([]);
     }
   }, [companyDic]);
-
+  // useEffect(() => {
+  //   setWebsiteTrafficData(null);
+  //   setAppUsageData(null);
+  // }, [country]);
   async function downloadExcel() {
     try {
       const timeFrames = ["month", "quarterYear", "year"];
@@ -426,11 +429,11 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                   ) : (
                     <Skeleton className="w-10 h-10 mr-2 rounded-md bg-customGray-50" />
                   )}
-                  {console.log(crunchbaseDataPull)}
+                  {/* {console.log(crunchbaseDataPull)} */}
                   <p className="text-3xl font-bold text-gray-800 pl-1">
                     {companyDic.displayedName}
                   </p>
-                  <CountrySelector setCountry={setCountry} />
+                  <CountrySelector country={country} setCountry={setCountry} />
                   <div
                     className="group flex flex-row items-center ml-8 hover:cursor-pointer hover:text-primary"
                     onClick={downloadPDF}

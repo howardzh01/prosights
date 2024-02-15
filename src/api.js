@@ -132,14 +132,16 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
   }
 
   const { data: dataAIData, error: dataAIError } = useSWR(
-    user && companyNameList
+    user && companyDicList && country
       ? [
           companyDicList.map((company) => company.appId),
           `/api/private/getDataAI`,
           user.id,
+          country,
         ]
       : null,
     (args) => {
+      console.log("DATA AI", dataAIData);
       return apiMultiCall(companyDisplayedNameList, getDataAIData, args);
     },
     { revalidateOnFocus: false }
@@ -374,9 +376,15 @@ export const getCompanyDescription = async ([
   return json_content;
 };
 
-export const getDataAIData = async ([unifiedProductId, api_url, userId]) => {
+export const getDataAIData = async ([
+  unifiedProductId,
+  api_url,
+  userId,
+  country,
+]) => {
   // `/api/private/getDataAIData`;
   if (!unifiedProductId) {
+    console.log("NO UNIFIED PRODUCT ID");
     return null;
   }
   const response = await fetch(api_url, {
@@ -387,6 +395,7 @@ export const getDataAIData = async ([unifiedProductId, api_url, userId]) => {
     body: JSON.stringify({
       userId: userId,
       unifiedProductId: unifiedProductId,
+      country: country,
     }),
   });
   if (!response.ok) {

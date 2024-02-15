@@ -36,6 +36,7 @@ export const companyList = [
     cbSlug: "zillow",
     displayedName: "Zillow",
     logo: "https://images.crunchbase.com/image/upload/t_cb-default-original/v1500275099/j2jcc1e5txlw573hwrd2.png",
+    appId: "1000600000438182",
   },
   {
     name: "hinge",

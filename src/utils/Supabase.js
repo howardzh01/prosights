@@ -49,19 +49,16 @@ export async function cachedFetch({
       new_response = await fetch(url, options);
     }
     if (!new_response) {
-      console.log(
-        "cachedFetch Error with undefined new_response",
-        url.toString()
-      );
+      console.log("1ch Error with undefined new_response", url.toString());
       return;
     }
     if (!new_response.ok) {
-      console.log(
-        "cachedFetch Error",
-        url.toString(),
-        new_response.status,
-        new_response.statusText
-      );
+      // console.log(
+      //   "cachedFetch Error",
+      //   url.toString(),
+      //   new_response.status,
+      //   new_response.statusText
+      // );
       return;
     }
     let data;
