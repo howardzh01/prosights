@@ -142,6 +142,7 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
         ]
       : null,
     (args) => {
+      console.log("DATAI", companyDisplayedNameList, args);
       return apiMultiCall(companyDisplayedNameList, getDataAIData, args);
     },
     { revalidateOnFocus: false }

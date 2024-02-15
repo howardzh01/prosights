@@ -13,27 +13,6 @@ import GenericStackedBar from "./templates/GenericStackedBar";
 import { CHARTS } from "../../constants";
 import Image from "next/image";
 
-const displayedKeyMap = {
-  direct: "Direct",
-  mail: "Mail",
-  referral: "Referral",
-  social: "Social",
-  search_organic: "Organic Search",
-  social_organic: "Organic Social",
-  search_paid: "Paid Search",
-  social_paid: "Paid Social",
-  display_ad: "Display Ad",
-  unknown_channel: "Other",
-};
-const hqTrafficKeys = [
-  "direct",
-  "mail",
-  "referral",
-  "search_organic",
-  "social_organic",
-];
-const paidTrafficKeys = ["search_paid", "social_paid", "display_ad"];
-const paidTrafficRowName = "Paid Visits";
 function WebTrafficByChannelChart({
   trafficData,
   selectedChart = null,
@@ -50,6 +29,27 @@ function WebTrafficByChannelChart({
     type = "traffic_by_channel",
     timescale
   ) {
+    const displayedKeyMap = {
+      direct: "Direct",
+      mail: "Mail",
+      referral: "Referral",
+      social: "Social",
+      search_organic: "Organic Search",
+      social_organic: "Organic Social",
+      search_paid: "Paid Search",
+      social_paid: "Paid Social",
+      display_ad: "Display Ad",
+      unknown_channel: "Other",
+    };
+    const hqTrafficKeys = [
+      "direct",
+      "mail",
+      "referral",
+      "search_organic",
+      "social_organic",
+    ];
+    const paidTrafficKeys = ["search_paid", "social_paid", "display_ad"];
+    const paidTrafficRowName = "Paid Visits";
     let relevant_keys,
       condensePaidKeys = false;
     if (type === "traffic_by_channel") {

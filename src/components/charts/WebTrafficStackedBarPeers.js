@@ -106,12 +106,14 @@ function WebTrafficStackedBarPeers({
                 className="w-5 h-5 object-contain opacity-50 group-hover:hidden"
                 width={256}
                 height={256}
+                alt="Download Icon"
               />
               <Image
                 src="/assets/downloadActive.svg"
                 className="w-5 h-5 object-contain hidden group-hover:block"
                 width={256}
                 height={256}
+                alt="Download Icon"
               />
             </div>
           </div>

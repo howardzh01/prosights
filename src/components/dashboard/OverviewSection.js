@@ -119,9 +119,9 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
             Business Model
           </div>
           {companyBusinessModel ? (
-            <p className="text-sm text-customGray-800 whitespace-pre-line leading-relaxed mt-1">
+            <div className="text-sm text-customGray-800 whitespace-pre-line leading-relaxed mt-1">
               {companyBusinessModel}
-            </p>
+            </div>
           ) : crunchbaseData === null ? (
             <p className="text-sm text-customGray-300 italic leading-relaxed mt-1">
               Business model not available
@@ -320,7 +320,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
                   alt="coresignal"
                   width="64"
                   height="64"
-                  className=""
+                  className
                 />
               </div>
             </div>
@@ -379,6 +379,7 @@ function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
               <div className="flex flex-row justify-center space-x-4">
                 <Image
                   src="/assets/graphPictures/SignalsMAUChartAnnual.svg"
+                  alt="Signal MAU"
                   className="w-full object-contain"
                   width={512}
                   height={512}

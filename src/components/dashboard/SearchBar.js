@@ -6,6 +6,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Image from "next/image";
 import Chip from "@mui/material/Chip";
 import { companyList } from "./CompanyList";
+import { CompanyDirectory } from "./CompanyListDirectory";
 
 export default function SearchBar({ setCompany, setCompanyCompetitors }) {
   const [value, setValue] = React.useState(null);
@@ -16,20 +17,28 @@ export default function SearchBar({ setCompany, setCompanyCompetitors }) {
   const createCompanyDic = (value) => {
     // Assuming value can be a string or an object with properties like name, url, and displayedName
     if (typeof value === "string") {
-      return value.includes(".")
-        ? {
+      if (value.includes(".")) {
+        // check url
+        const company = CompanyDirectory.findCompanyByUrl(value);
+        return (
+          company || {
             name: value.split(".")[0],
             url: value,
             displayedName: value.split(".")[0],
           }
-        : { name: value, url: `${value}.com`, displayedName: value };
+        );
+      } else {
+        const company = CompanyDirectory.findCompanyByName(value);
+        return (
+          company || { name: value, url: `${value}.com`, displayedName: value }
+        );
+      }
     } else {
       // Ensure displayedName is always set, defaulting to name if not provided
-      return {
-        name: value.name,
-        url: value.url,
-        displayedName: value.displayedName || value.name,
-      };
+      if (!value.displayedName) {
+        value.displayedName = value.name;
+      }
+      return value;
     }
   };
   return (
@@ -86,9 +95,6 @@ export default function SearchBar({ setCompany, setCompanyCompetitors }) {
               //   params.InputProps.startAdornment,
               // ],
               type: "search",
-              // classes: {
-              //   input: {}
-              // }
               style: {
                 fontSize: "0.875rem",
                 fontFamily: "Inter",

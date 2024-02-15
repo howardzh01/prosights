@@ -42,7 +42,7 @@ function SideBar({ sections, activeSections }) {
             return;
           }
           return (
-            <div className="flex flex-row">
+            <div key={section.id} className="flex flex-row">
               <div
                 className={`py-2 pr-2 text-sm flex items-center ${
                   section.level === 1 ? "" : "ml-8"
