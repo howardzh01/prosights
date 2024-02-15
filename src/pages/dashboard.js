@@ -19,7 +19,7 @@ import { Skeleton } from "@nextui-org/react";
 import { CompanyDirectory } from "../components/dashboard/CompanyListDirectory";
 import { companyList } from "../components/dashboard/CompanyList";
 import HeadcountIcon from "/public/assets/HeadcountIcon.svg";
-import CountrySelector from "../components/dashboard/CountrySelector";
+// import CountrySelector from "../components/dashboard/CountrySelector";
 import { aggregateData } from "../utils/Utils";
 import { convertToChartData } from "../utils/BackendUtils";
 
@@ -430,7 +430,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                   <p className="text-3xl font-bold text-gray-800 pl-1">
                     {companyDic.displayedName}
                   </p>
-                  <CountrySelector setCountry={setCountry} />
+                  {/* <CountrySelector setCountry={setCountry} /> */}
                   <div
                     className="group flex flex-row items-center ml-8 hover:cursor-pointer hover:text-primary"
                     onClick={downloadPDF}
