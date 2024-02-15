@@ -18,14 +18,17 @@ function AppVisitsStackedBarPeers({
   cutOffDate = new Date("2019"),
 }) {
   // TODO: make this more compact later - probably 1 useState with an object containing all timescale states, or useReducer
+  if (!appDataDic) return;
   const multiCompanyAppData = Object.keys(appDataDic).reduce(
     (acc, companyName) => {
-      acc[companyName] = appDataDic[companyName]["app_performance"];
+      if (appDataDic[companyName]) {
+        acc[companyName] = appDataDic[companyName]["app_performance"];
+      }
       return acc;
     },
     {}
   );
-
+  if (Object.keys(multiCompanyAppData).length === 0) return;
   const [appByChannelTimescale, setAppByChannelTimescale] =
     useState("quarterYear");
   const ouputKey = "est_average_active_users";

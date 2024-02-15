@@ -30,16 +30,21 @@ function WebTrafficCompetitorLineCharts({
       acc[key] = aggregateData(trafficData[key], ouputKey, "sum", timescale);
       return acc;
     }, {});
-
     // aggData: {company1: {timekey: visits}, company2: {timekey: visits}, ...}
 
     const firstCompanyData = aggData[companyNames[0]]; // use to extract timescale
+    const cutoffIndex = findInsertIndex(
+      Object.keys(firstCompanyData).map((x) => convertLabelToDate(x)),
+      cutOffDate,
+      "left"
+    );
+
     const growthAggData = companyNames.reduce((acc, key) => {
-      acc[key] = convertToGrowthData(aggData[key], "number");
+      acc[key] = convertToGrowthData(aggData[key], "number").slice(cutoffIndex);
       return acc;
     }, {});
     const chartData = {
-      labels: Object.keys(firstCompanyData),
+      labels: Object.keys(firstCompanyData).slice(cutoffIndex),
       datasets: Object.keys(aggData).map((key) => ({
         data: Object.values(growthAggData[key]).map(
           (x) => (x ? Number(roundPeNumbers(x)) : null) // this will convert null to 0
@@ -50,8 +55,6 @@ function WebTrafficCompetitorLineCharts({
     };
 
     let { tableHeaders, tableLabels } = getTableInfo(firstCompanyData);
-
-    const cutoffIndex = 0;
 
     const tableData = {
       tableHeaders: tableHeaders.slice(cutoffIndex),

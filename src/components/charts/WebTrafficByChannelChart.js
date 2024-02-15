@@ -97,14 +97,19 @@ function WebTrafficByChannelChart({
 
     // aggData: {direct: {time_key: output_key}, mail: {time_key: output_key}, ...}
     const firstChannelData = aggData[displayedKeyMap[relevant_keys[0]]]; // use to extract timescale
+    const cutoffIndex = findInsertIndex(
+      Object.keys(firstChannelData).map((x) => convertLabelToDate(x)),
+      cutOffDate,
+      "left"
+    );
     const percentAggData = normalizeStackedAggData(aggData);
     // console.log("percentAggData", percentAggData);
     const chartData = {
-      labels: Object.keys(firstChannelData),
+      labels: Object.keys(firstChannelData).slice(cutoffIndex),
       datasets: Object.keys(aggData).map((key) => ({
-        data: Object.values(percentAggData[key]).map((x) =>
-          Number(roundPeNumbers(x))
-        ),
+        data: Object.values(percentAggData[key])
+          .slice(cutoffIndex)
+          .map((x) => Number(roundPeNumbers(x))),
         borderWidth: 1,
         label: key,
       })),
@@ -112,8 +117,6 @@ function WebTrafficByChannelChart({
     // chartData.datasets = convertStackedChartDataToPercent(chartData.datasets); // convert to percent so bars add to 100%
 
     let { tableHeaders, tableLabels } = getTableInfo(firstChannelData);
-
-    const cutoffIndex = 0;
 
     const tableData = {
       tableHeaders: tableHeaders.slice(cutoffIndex),

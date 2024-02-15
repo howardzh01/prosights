@@ -23,7 +23,6 @@ function GenericTimeScale({
   const { selectedChart: chart, setSelectedChart } =
     useContext(SelectedChartContext);
   const { setChartData } = useContext(ChartDataContext);
-  // console.log("TIMESCALE", selectedChart, timescale);
   return (
     <div className="flex justify-between">
       <div className="items-center gap-1 text-sm font-medium">{title}</div>

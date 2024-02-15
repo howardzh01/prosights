@@ -31,7 +31,7 @@ function WebTrafficStackedBarPeers({
     }, {});
 
     // aggData: {company1: {timekey: visits}, company2: {timekey: visits}, ...}
-    const firstChannelData = aggData[companyNames[0]]; // use to extract timescale
+    const firstChannelData = aggData[companyNames[0]]; // use to extract timescale\
     const percentAggData = normalizeStackedAggData(aggData);
     // console.log("percentAggData", percentAggData);
     const chartData = {
@@ -48,7 +48,12 @@ function WebTrafficStackedBarPeers({
 
     let { tableHeaders, tableLabels } = getTableInfo(firstChannelData);
 
-    const cutoffIndex = 0;
+    const cutoffIndex = findInsertIndex(
+      Object.keys(firstChannelData).map((x) => convertLabelToDate(x)),
+      cutOffDate,
+      "left"
+    );
+    // console.log("WEBSTAc cutoff", cutoffIndex, Object.keys(firstChannelData));
 
     const tableData = {
       tableHeaders: tableHeaders.slice(cutoffIndex),
@@ -70,7 +75,7 @@ function WebTrafficStackedBarPeers({
       showDataLabels={trafficByChannelTimescale === "quarterYear"}
       timescale={trafficByChannelTimescale}
       setTimescale={setTrafficByChannelTimescale}
-      selectedChart={CHARTS.trafficByChannel}
+      // selectedChart={CHARTS.trafficByChannel}
       rawChartData={multiCompanyTrafficData}
       formatTableDataFunction={(x) => roundPeNumbers(x) + "%"}
     ></GenericStackedBar>

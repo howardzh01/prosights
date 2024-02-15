@@ -173,7 +173,7 @@ function AppUsageSection({ company, appDataDic }) {
             </div>
           </div>
         </div>
-        <div id="App Market Share vs. Peers" className="content-section mt-8">
+        {/* <div id="App Market Share vs. Peers" className="content-section mt-8">
           <div className="flex flex-row items-center mb-3">
             <p className="text-lg font-semibold text-gray-800 mr-2">
               Market Share vs. Peers
@@ -313,11 +313,11 @@ function AppUsageSection({ company, appDataDic }) {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div id="App Market Share vs. Peers" className="content-section mt-8">
           {appDataDic === undefined ? (
-            <div> MISSING</div>
+            <div> </div>
           ) : (
             <AppVisitsStackedBarPeers
               appDataDic={appDataDic}

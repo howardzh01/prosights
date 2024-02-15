@@ -33,6 +33,21 @@ export const UN_M49_CONTINENTS = {
   2: "Africa",
 };
 
+export const MONTH_NAMES = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
 export const TIMESCALE_TRANSITION_DIC = {
   month: [undefined, "quarterYear"],
   quarterYear: ["month", "year"],

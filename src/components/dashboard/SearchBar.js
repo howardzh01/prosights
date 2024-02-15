@@ -13,7 +13,25 @@ export default function SearchBar({ setCompany }) {
   if (!companyList) {
     return;
   }
-
+  const createCompanyDic = (value) => {
+    // Assuming value can be a string or an object with properties like name, url, and displayedName
+    if (typeof value === "string") {
+      return value.includes(".")
+        ? {
+            name: value.split(".")[0],
+            url: value,
+            displayedName: value.split(".")[0],
+          }
+        : { name: value, url: `${value}.com`, displayedName: value };
+    } else {
+      // Ensure displayedName is always set, defaulting to name if not provided
+      return {
+        name: value.name,
+        url: value.url,
+        displayedName: value.displayedName || value.name,
+      };
+    }
+  };
   return (
     <div className="h-12">
       <Autocomplete
@@ -25,15 +43,7 @@ export default function SearchBar({ setCompany }) {
           typeof option === "string" ? option : option.displayedName
         }
         onChange={(event, value) => {
-          if (typeof value === "string") {
-            if (value.includes(".")) {
-              setCompany({ name: value.split(".")[0], url: value });
-            } else {
-              setCompany({ name: value.name, url: value.name + ".com" });
-            }
-          } else {
-            setCompany({ name: value.name, url: value.url });
-          }
+          setCompany(createCompanyDic(value));
           setValue(null);
         }}
         clearIcon={<span></span>}

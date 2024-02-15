@@ -1,13 +1,12 @@
-import { CONSTANTS } from "../constants";
+import { CONSTANTS, MONTH_NAMES } from "../constants";
 // convert date to months
 export const dateToMonths = (date, shortenYear = true) => {
   // Convert Date object 2023-01-01 or String to
   // 1. shortenYear=true Jan 23
   // 2. shortenYear=false Jan 2023
-  if (date.constructor === String) {
-    date = new Date(date);
-  }
-  const month = date.toLocaleString("default", { month: "short" });
+  date = new Date(date);
+
+  const month = MONTH_NAMES[date.getUTCMonth()];
   const year = shortenYear
     ? String(date.getUTCFullYear()).slice(-2)
     : String(date.getUTCFullYear());
@@ -17,9 +16,7 @@ export const dateToMonths = (date, shortenYear = true) => {
 
 export const dateToQuarters = (date) => {
   // Convert Date object 2023-01-01 to 1Q23)
-  if (date.constructor === String) {
-    date = new Date(date);
-  }
+  date = new Date(date);
   const quarter = Math.floor(date.getUTCMonth() / 3) + 1;
   const quarterString = `${quarter}Q${date
     .getUTCFullYear()
@@ -88,6 +85,7 @@ export const aggregateData = (
   }
 
   // Sort the keys (dates) of the data object
+  // console.log("AGG KEYS", JSON.stringify(Object.keys(data)));
   const sortedKeys = Object.keys(data).sort(
     (dateA, dateB) => new Date(dateA) - new Date(dateB)
   );
@@ -108,7 +106,7 @@ export const aggregateData = (
       acc[month] = { sum: 0, count: 0, last: 0 };
 
       Object.entries(data).forEach(([date, dic]) => {
-        var timeInput = convertMonthFormat(date);
+        var timeInput = dateToMonths(date);
         if (timeInput === month) {
           acc[month].sum += dic[outputKey];
           acc[month].count += 1;
@@ -215,10 +213,10 @@ const generateMonthsBetweenDates = (startDate, endDate) => {
   let allMonths = [];
 
   while (start <= end) {
-    allMonths.push(convertMonthFormat(start));
-    start.setMonth(start.getMonth() + 1);
+    console.log("s", start);
+    allMonths.push(dateToMonths(start));
+    start.setUTCMonth(start.getUTCMonth() + 1);
   }
-
   return allMonths;
 };
 
@@ -260,13 +258,6 @@ export const generateYears = (startYear) => {
     years.push(year);
   }
   return years;
-};
-
-export const convertMonthFormat = (date) => {
-  const newDate = new Date(date);
-  const month = newDate.toLocaleString("default", { month: "short" });
-  const year = newDate.getUTCFullYear().toString().slice(2);
-  return `${month} ${year}`;
 };
 
 export function assert(condition, message) {
@@ -395,7 +386,7 @@ export function convertLabelToDate(label) {
     // Extract the month and year
     const monthName = label.split(" ")[0];
     const year = parseInt(label.split(" ")[1]) + 2000;
-    const month = new Date(`${monthName} 1, 2000`).getMonth(); // Use a dummy year to get the month index
+    const month = new Date(`${monthName} 1, 2000`).getUTCMonth(); // Use a dummy year to get the month index
     return new Date(year, month, 1);
   } else if (yearlyRegex.test(label)) {
     // Just the year is provided
