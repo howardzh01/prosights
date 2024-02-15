@@ -244,6 +244,37 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
     }
   }, [companyDic]);
 
+  function downloadExcel() {
+    console.log("Downloading Excel");
+    fetch("/api/public/generate_excel")
+      .then((response) => response.blob())
+      .then((blob) => {
+        console.log("GOT BLOB", blob);
+        // Create a new URL for the blob object
+        const url = window.URL.createObjectURL(blob);
+
+        // Create a link element
+        const a = document.createElement("a");
+
+        // Set the download attribute with a filename
+        a.href = url;
+        a.download = "test.xlsx";
+
+        // Append the link to the body
+        document.body.appendChild(a);
+
+        // Trigger a click on the link to download the file
+        a.click();
+
+        // Clean up by revoking the object URL and removing the link
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      })
+      .catch((error) =>
+        console.error("Error downloading the Excel file:", error)
+      );
+  }
+
   const downloadPDF = async () => {
     const { default: html2pdf } = await import("html2pdf.js");
 
@@ -389,7 +420,10 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                       Download PDF
                     </p>
                   </div>
-                  <div className="group flex flex-row items-center ml-4 hover:cursor-pointer hover:text-primary">
+                  <div
+                    className="group flex flex-row items-center ml-4 hover:cursor-pointer hover:text-primary"
+                    onClick={downloadExcel}
+                  >
                     <div className="group">
                       <Image
                         src="/assets/downloadInactive.svg"
