@@ -20,6 +20,8 @@ import { CompanyDirectory } from "../components/dashboard/CompanyListDirectory";
 import { companyList } from "../components/dashboard/CompanyList";
 import HeadcountIcon from "/public/assets/HeadcountIcon.svg";
 import CountrySelector from "../components/dashboard/CountrySelector";
+import { aggregateData } from "../utils/Utils";
+import { convertToChartData } from "../utils/BackendUtils";
 
 export const SelectedChartContext = createContext();
 export const ChartDataContext = createContext();
@@ -34,6 +36,8 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
   const [companyCompetitors, setCompanyCompetitors] = useState([]); // Array of company names
 
   const [dataLoading, setDataLoading] = useState(true);
+
+  const dataCutoffDate = new Date("2019");
 
   const [selectedChart, setSelectedChart] = useState("");
   const [chartData, setChartData] = useState();
@@ -245,35 +249,66 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
     }
   }, [companyDic]);
 
-  function downloadExcel() {
-    console.log("Downloading Excel");
-    fetch("/api/public/generate_excel")
-      .then((response) => response.blob())
-      .then((blob) => {
-        console.log("GOT BLOB", blob);
-        // Create a new URL for the blob object
-        const url = window.URL.createObjectURL(blob);
-
-        // Create a link element
-        const a = document.createElement("a");
-
-        // Set the download attribute with a filename
-        a.href = url;
-        a.download = "test.xlsx";
-
-        // Append the link to the body
-        document.body.appendChild(a);
-
-        // Trigger a click on the link to download the file
-        a.click();
-
-        // Clean up by revoking the object URL and removing the link
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(a);
-      })
-      .catch((error) =>
-        console.error("Error downloading the Excel file:", error)
+  async function downloadExcel() {
+    try {
+      const timeFrames = ["month", "quarterYear", "year"];
+      const chartData = Object.fromEntries(
+        timeFrames.map((timeFrame) => [
+          `${timeFrame}ChartData`,
+          convertToChartData(
+            aggregateData(
+              headCountData?.[companyDic.displayedName],
+              "headcount",
+              "last",
+              timeFrame
+            ),
+            dataCutoffDate
+          ),
+        ])
       );
+      const { monthChartData, quarterYearChartData, yearChartData } = chartData;
+
+      const columnTitles = [
+        "Date",
+        ...monthChartData.tableData.tableDatasets.map(
+          (dataset) => dataset.label
+        ),
+      ];
+      const datasets = Object.values(chartData).map((data) => {
+        return columnTitles.reduce((acc, title, index) => {
+          if (index === 0) {
+            acc[title] = data.chartData.labels;
+          } else {
+            acc[title] = data.tableData.tableDatasets[index - 1].data;
+          }
+          return acc;
+        }, {});
+      });
+
+      const response = await fetch(
+        "https://kev2010--generate-excel-generate-excel-dev.modal.run",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ columnTitles, datasets }),
+        }
+      );
+
+      if (!response.ok) throw new Error("Network response was not ok");
+      const blob = await response.blob();
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = downloadUrl;
+      a.download = "excel-file.xlsx";
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(downloadUrl);
+      a.remove();
+    } catch (error) {
+      console.error("Error downloading the file:", error);
+    }
   }
 
   const downloadPDF = async () => {
