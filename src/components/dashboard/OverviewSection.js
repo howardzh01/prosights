@@ -17,8 +17,7 @@ export const SelectedChartContext = createContext();
 export const ChartDataContext = createContext();
 
 function OverviewSection({ companyAbout, crunchbaseData, headCountData }) {
-  // headccountData comes sorted by date
-  console.log("CRUNCHBASE", crunchbaseData);
+  // headcountData comes sorted by date
   function formatCrunchbaseHeadcount(headcountRange) {
     // c_01001_05000 => 1001-5000
     if (headcountRange === "c_10001_max") {

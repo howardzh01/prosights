@@ -9,7 +9,6 @@ import AppUsageIcon from "/public/assets/AppUsageIcon.svg";
 import AppVisitsStackedBarPeers from "../charts/AppVisitsStackedBarPeers";
 
 function AppUsageSection({ company, appDataDic }) {
-  console.log(appDataDic);
   return (
     <div className="flex flex-col w-full mt-12 pb-8">
       <div

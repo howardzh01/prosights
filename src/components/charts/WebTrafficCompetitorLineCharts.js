@@ -8,22 +8,23 @@ import {
   convertLabelToDate,
   roundPeNumbers,
   normalizeStackedAggData,
+  convertToGrowthData,
 } from "../../utils/Utils";
-import GenericStackedBar from "./templates/GenericStackedBar";
+import GenericLine from "./templates/GenericLine";
 import { CHARTS } from "../../constants";
 import Image from "next/image";
 
-function WebTrafficStackedBarPeers({
+function WebTrafficCompetitorLineCharts({
   multiCompanyTrafficData,
   selectedChart = null,
   cutOffDate = new Date("2019"),
 }) {
   // TODO: make this more compact later - probably 1 useState with an object containing all timescale states, or useReducer
-  const [trafficByChannelTimescale, setTrafficByChannelTimescale] =
-    useState("quarterYear");
+  const [timescale, setTimeScale] = useState("quarterYear");
   const ouputKey = "visits";
   if (!multiCompanyTrafficData) return null;
-  function convertToChannelChartData(trafficData, timescale) {
+
+  function convertToLineChartData(trafficData, timescale) {
     const companyNames = Object.keys(trafficData);
     const aggData = companyNames.reduce((acc, key) => {
       acc[key] = aggregateData(trafficData[key], ouputKey, "sum", timescale);
@@ -31,22 +32,24 @@ function WebTrafficStackedBarPeers({
     }, {});
 
     // aggData: {company1: {timekey: visits}, company2: {timekey: visits}, ...}
-    const firstChannelData = aggData[companyNames[0]]; // use to extract timescale
-    const percentAggData = normalizeStackedAggData(aggData);
-    // console.log("percentAggData", percentAggData);
+
+    const firstCompanyData = aggData[companyNames[0]]; // use to extract timescale
+    const growthAggData = companyNames.reduce((acc, key) => {
+      acc[key] = convertToGrowthData(aggData[key], "number");
+      return acc;
+    }, {});
     const chartData = {
-      labels: Object.keys(firstChannelData),
+      labels: Object.keys(firstCompanyData),
       datasets: Object.keys(aggData).map((key) => ({
-        data: Object.values(percentAggData[key]).map((x) =>
-          Number(roundPeNumbers(x))
+        data: Object.values(growthAggData[key]).map(
+          (x) => (x ? Number(roundPeNumbers(x)) : null) // this will convert null to 0
         ),
-        borderWidth: 1,
+        borderWidth: 2,
         label: key,
       })),
     };
-    // chartData.datasets = convertStackedChartDataToPercent(chartData.datasets); // convert to percent so bars add to 100%
 
-    let { tableHeaders, tableLabels } = getTableInfo(firstChannelData);
+    let { tableHeaders, tableLabels } = getTableInfo(firstCompanyData);
 
     const cutoffIndex = 0;
 
@@ -60,29 +63,26 @@ function WebTrafficStackedBarPeers({
     return { chartData: chartData, tableData: tableData };
   }
 
-  const trafficByChannel = (
-    <GenericStackedBar
-      data={convertToChannelChartData(
-        multiCompanyTrafficData,
-        trafficByChannelTimescale
-      )}
-      title={"Total Visits Market Share (%)"}
-      showDataLabels={trafficByChannelTimescale === "quarterYear"}
-      timescale={trafficByChannelTimescale}
-      setTimescale={setTrafficByChannelTimescale}
-      selectedChart={CHARTS.trafficByChannel}
+  const trafficGrowth = (
+    <GenericLine
+      data={convertToLineChartData(multiCompanyTrafficData, timescale)}
+      title={"Visits Growth"}
+      showDataLabels={timescale === "quarterYear"}
+      timescale={timescale}
+      setTimescale={setTimeScale}
+      // selectedChart={CHARTS.trafficByChannel}
       rawChartData={multiCompanyTrafficData}
-      formatTableDataFunction={(x) => roundPeNumbers(x) + "%"}
-    ></GenericStackedBar>
+      formatTableDataFunction={(x) => (x ? roundPeNumbers(x) + "%" : "--")}
+    ></GenericLine>
   );
-  const yearTrafficByChannelGraph = (
-    <GenericStackedBar
-      data={convertToChannelChartData(multiCompanyTrafficData, "year")}
+  const yearTrafficGrowth = (
+    <GenericLine
+      data={convertToLineChartData(multiCompanyTrafficData, "year")}
       showTimescaleButtons={false}
       showModalButtons={false}
       scrollStart={"right"}
-      formatTableDataFunction={(x) => roundPeNumbers(x) + "%"}
-    ></GenericStackedBar>
+      formatTableDataFunction={(x) => (x ? roundPeNumbers(x) + "%" : "--")}
+    ></GenericLine>
   );
 
   switch (selectedChart) {
@@ -91,8 +91,8 @@ function WebTrafficStackedBarPeers({
       return (
         <div>
           <div className="flex flex-row items-center mb-3">
-            <p className="text-lg font-semibold text-gray-800 mr-2">
-              Market Share vs. Peers
+            <p className="text-lg font-semibold text-grxay-800 mr-2">
+              Growth vs. Peers
             </p>
             <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
               <Image
@@ -111,8 +111,8 @@ function WebTrafficStackedBarPeers({
           </div>
           <div className="h-fit mb-4">
             <TwoColumnView
-              quarterGraph={trafficByChannel}
-              yearGraph={yearTrafficByChannelGraph}
+              quarterGraph={trafficGrowth}
+              yearGraph={yearTrafficGrowth}
             />
           </div>
         </div>
@@ -120,4 +120,4 @@ function WebTrafficStackedBarPeers({
   }
 }
 
-export default WebTrafficStackedBarPeers;
+export default WebTrafficCompetitorLineCharts;

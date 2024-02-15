@@ -18,7 +18,6 @@ function AppVisitsStackedBarPeers({
   cutOffDate = new Date("2019"),
 }) {
   // TODO: make this more compact later - probably 1 useState with an object containing all timescale states, or useReducer
-  console.log(appDataDic);
   const multiCompanyAppData = Object.keys(appDataDic).reduce(
     (acc, companyName) => {
       acc[companyName] = appDataDic[companyName]["app_performance"];
@@ -26,7 +25,6 @@ function AppVisitsStackedBarPeers({
     },
     {}
   );
-  console.log(multiCompanyAppData);
 
   const [appByChannelTimescale, setAppByChannelTimescale] =
     useState("quarterYear");
@@ -38,9 +36,8 @@ function AppVisitsStackedBarPeers({
       acc[key] = aggregateData(appData[key], ouputKey, "sum", timescale);
       return acc;
     }, {});
-    console.log("aggData", aggData);
 
-    // aggData: {direct: {time_key: output_key}, mail: {time_key: output_key}, ...}
+    // aggData: {company1: {timekey: visits}, company2: {timekey: visits}, ...}
     const firstChannelData = aggData[companyNames[0]]; // use to extract timescale
     const percentAggData = normalizeStackedAggData(aggData);
     const chartData = {

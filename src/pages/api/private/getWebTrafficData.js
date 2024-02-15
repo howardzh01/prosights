@@ -48,7 +48,7 @@ const handler = async (req) => {
   // reqJSON.userId, reqJSON.messages
   const reqJSON = await req.json();
   const { userId, companyUrl, exportColumns, country } = reqJSON;
-  const displayDates = generateMonthsFromStartYear(2018);
+  const displayDates = generateMonthsFromStartYear(2019);
   //   const displayDates = ["2023-10-01"];
   // "categories" cannot be in  exportColumns due to parseSemrushOutput handling ;
   console.log(companyUrl, typeof companyUrl);

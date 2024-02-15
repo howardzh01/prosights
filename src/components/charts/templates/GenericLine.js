@@ -1,13 +1,13 @@
-import { Bar } from "react-chartjs-2";
-import GenericTimeScale from "./GenericTimeScale";
+import { Line } from "react-chartjs-2";
+import GenericTimeScale from "./GenericTimeScale.js";
 import { isColorLight, rgbToComponents } from "../../../utils/Utils.js";
-import GenericTable from "./GenericTable";
+import GenericTable from "./GenericTable.js";
 import Chart from "chart.js/auto";
-import { CHARTJS_COLOR_PLUGIN } from "../../../constants";
+import { CHARTJS_COLOR_PLUGIN } from "../../../constants.js";
 Chart.register(CHARTJS_COLOR_PLUGIN);
 // import { Colors } from "chart.js";
 
-function StackedBarChart({
+function GenericLineChart({
   data, // {chartData, tableData}
   showDataLabels = true,
   showTimescaleButtons = true,
@@ -27,9 +27,18 @@ function StackedBarChart({
   displayLegend = true,
 }) {
   const { chartData, tableData } = data;
-  //   console.log("normalized", data);
-
   const options = {
+    elements: {
+      line: {
+        tension: 0.4, // Adjust this value for smoothness (0 for straight lines)
+        borderColor: function (context) {
+          return context.dataset.backgroundColor;
+        }, // Use any color you like
+      },
+      point: {
+        radius: 0, // Set to 0 to remove points
+      },
+    },
     plugins: {
       title: {
         display: false,
@@ -51,32 +60,12 @@ function StackedBarChart({
           bottom: 40, // Adjust the bottom padding to push the graph down
         },
       },
-      //   tooltip: {
-      //     enabled: false, // Hides the tooltip
-      //   },
+      tooltip: {
+        enabled: false, // Hides the tooltip
+      },
+
       datalabels: {
-        display: showDataLabels,
-        formatter: (value, context) => {
-          if (value < 5) {
-            return null;
-          } else {
-            return `${Math.round(value)}%`;
-          }
-        },
-        font: {
-          weight: "bold",
-        },
-        color: (context) => {
-          // Get the background color of the current segment
-          const backgroundColor =
-            typeof context.dataset.backgroundColor === "string"
-              ? context.dataset.backgroundColor
-              : context.dataset.backgroundColor[context.dataIndex];
-          // Convert the color to its RGB components
-          const [r, g, b] = rgbToComponents(backgroundColor);
-          // Set the color based on the luminance
-          return isColorLight(r, g, b) ? "#242931" : "white";
-        },
+        display: false,
       },
     },
     scales: {
@@ -88,18 +77,18 @@ function StackedBarChart({
       },
       // TODO: maybe display y-axis if timeline === "month" as data labels are turned off on monthly
       y: {
-        display: false, // Change this to true to show the y-axis
-        grid: {
-          display: true, // Enables y-axis gridlines
-        },
-        border: { dash: [2, 1] },
-        stacked: true,
-        max: 100, // Set the maximum value of the y-axis to 100%
+        beginAtZero: false,
         ticks: {
-          stepSize: 10, // Sets the step size between ticks to 10
           callback: function (value) {
-            return value + "%"; // Appends a '%' sign after each tick value
+            return value > 0
+              ? value + "%"
+              : value < 0
+              ? `(${-1 * value}%)`
+              : "--";
           },
+          // Set the minimum and maximum values explicitly if needed
+          // min: -100, // Minimum value for y-axis
+          // max: 100, // Maximum value for y-axis
         },
       },
     },
@@ -157,7 +146,7 @@ function StackedBarChart({
       )}
 
       <div className={`${height}`}>
-        <Bar
+        <Line
           data={chartData}
           options={options}
           plugins={[legendSpacingPlugin]}
@@ -177,4 +166,4 @@ function StackedBarChart({
   );
 }
 
-export default StackedBarChart;
+export default GenericLineChart;

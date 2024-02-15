@@ -29,19 +29,49 @@ export const dateToQuarters = (date) => {
   return quarterString;
 };
 
-export function convertToGrowthData(data) {
+export function convertToGrowthData(data, returnType = "string") {
   // input: {time_key: output_key}
   // output: [-, %, % ...]
-  if (!data) {
-    return;
+  let growthPercentages = [];
+  const labels = Object.keys(data);
+  let values = Object.values(data);
+  // Regular expressions to identify label formats
+  const monthlyRegex = /^[A-Za-z]+/;
+  const quarterlyRegex = /^[1-4]Q/;
+  const yearlyRegex = /^\d{4}$/;
+
+  // Determine timescale based on the format of labels
+  const isMonthly = labels.some((label) => monthlyRegex.test(label));
+  const isQuarterly = labels.some((label) => quarterlyRegex.test(label));
+  const isYearly = labels.some((label) => yearlyRegex.test(label));
+
+  // Determine offset for growth calculation
+  const offset = isYearly ? 1 : isMonthly ? 12 : isQuarterly ? 4 : 1; // Default to 1 if none match
+
+  // Calculate the growth percentages
+  for (let i = 0; i < values.length; i++) {
+    if (
+      i < offset ||
+      values[i - offset] === 0 ||
+      values[i - offset] == null ||
+      values[i] == null
+    ) {
+      if (returnType == "string") {
+        growthPercentages.push("--");
+      } else {
+        growthPercentages.push(null);
+      }
+    } else {
+      const growth =
+        ((values[i] - values[i - offset]) / values[i - offset]) * 100;
+      if (returnType == "string") {
+        growthPercentages.push(`${Math.round(growth)}%`);
+      } else {
+        growthPercentages.push(growth);
+      }
+    }
   }
-  const values = Object.values(data);
-  const percentGrowth = values.slice(1).map((value, index) => {
-    const previousValue = values[index];
-    const growth = ((value - previousValue) / previousValue) * 100;
-    return growth.toFixed(0); // to keep 2 decimal places
-  });
-  return ["-", ...percentGrowth];
+  return growthPercentages;
 }
 
 export const aggregateData = (
@@ -129,6 +159,7 @@ export const aggregateData = (
 
 export function getTableInfo(data) {
   /*   
+  data is output from aggregateData()
   Each value is a list all of same length
     labels: data.keys(),
     values: data.values(),
@@ -137,40 +168,11 @@ export function getTableInfo(data) {
     growthPercentages: growthPercentages,
   };
   */
-  let tableHeaders = [];
-  let tableLabels = [];
-  let growthPercentages = [];
   const labels = Object.keys(data);
   let values = Object.values(data);
-  // Regular expressions to identify label formats
-  const monthlyRegex = /^[A-Za-z]+/;
-  const quarterlyRegex = /^[1-4]Q/;
-  const yearlyRegex = /^\d{4}$/;
-
-  // Determine timescale based on the format of labels
-  const isMonthly = labels.some((label) => monthlyRegex.test(label));
-  const isQuarterly = labels.some((label) => quarterlyRegex.test(label));
-  const isYearly = labels.some((label) => yearlyRegex.test(label));
-
-  // Determine offset for growth calculation
-  const offset = isYearly ? 1 : isMonthly ? 12 : isQuarterly ? 4 : 1; // Default to 1 if none match
-
-  // Calculate the growth percentages
-  for (let i = 0; i < values.length; i++) {
-    if (
-      i < offset ||
-      values[i - offset] === 0 ||
-      values[i - offset] == null ||
-      values[i] == null
-    ) {
-      growthPercentages.push("--");
-    } else {
-      const growth =
-        ((values[i] - values[i - offset]) / values[i - offset]) * 100;
-      growthPercentages.push(`${Math.round(growth)}%`);
-    }
-  }
-
+  let tableHeaders = [];
+  let tableLabels = [];
+  let growthPercentages = convertToGrowthData(data);
   // Process labels and headers
   const isAllAnnual = labels.every((label) => /^\d{4}$/.test(label));
 
@@ -239,6 +241,7 @@ export const generateQuarters = (startYear) => {
   let quarters = [];
   const today = CONSTANTS.cutoffDate;
   const currentYear = today.getUTCFullYear();
+  m;
   const currentQuarter = Math.floor((today.getUTCMonth() - 1) / 3) + 1; // -1 month to ensure quarter outputs after month ends
   for (let year = startYear; year <= currentYear; year++) {
     let endQuarter = year === currentYear ? currentQuarter : 4;
@@ -329,21 +332,22 @@ export function roundPeNumbers(amount, decimalZero = true) {
   if (isNaN(amount)) return amount;
 
   let result;
-  if (amount < 1e1) {
-    result = Number(amount).toFixed(1);
+  const absAmount = Math.abs(amount);
+  if (absAmount < 1e1) {
+    result = Number(absAmount).toFixed(1);
   } else {
-    result = Number(amount).toFixed(0);
+    result = Number(absAmount).toFixed(0);
   }
   // Add commas as thousand separators
   if (Number(result) >= 1000) {
     result = Number(result).toLocaleString();
   }
-  // if (result === NaN) {
-  //   return "--";
-  // }
+  // Prepend a minus sign if the original amount was negative
+  if (amount < 0) {
+    result = "-" + result;
+  }
   return result;
 }
-
 // CRUNCHBASE API UTILS
 export function formatDealRound(dealRound) {
   // secondary_market -> Secondary

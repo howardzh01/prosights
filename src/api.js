@@ -6,7 +6,6 @@ import { data } from "autoprefixer";
 
 async function apiMultiCall(companyDisplayedNameList, func, args) {
   // Make sure first element of args is the company names or urls
-  console.log("API MULTICALL", companyDisplayedNameList, args);
   const promises = companyDisplayedNameList.map(
     (company, ind) => func([args[0][ind], ...args.slice(1)]) // replace args companyList with specific company
   );
@@ -145,20 +144,7 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
     },
     { revalidateOnFocus: false }
   );
-  console.log({
-    headCountData,
-    headCountError,
-    webTrafficData,
-    webTrafficError,
-    webTrafficGeoData,
-    webTrafficGeoError,
-    crunchbaseDataPull,
-    crunchbaseErrorPull,
-    companyDescriptionPull,
-    companyDescriptionErrorPull,
-    dataAIData,
-    dataAIError,
-  });
+
   return {
     headCountData,
     headCountError,

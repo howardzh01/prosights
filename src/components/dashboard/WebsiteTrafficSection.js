@@ -11,6 +11,7 @@ import WebTrafficIcon from "/public/assets/WebsiteTrafficIcon.svg";
 import WebTrafficStackedBarPeers from "../charts/WebTrafficStackedBarPeers";
 import WebTrafficBreakdownVsPeers from "../charts/WebTrafficBreakdownVsPeers";
 import WebTrafficBreakdownVsPeersGeography from "../charts/WebTrafficBreakdownVsPeersGeography";
+import WebTrafficCompetitorLineCharts from "../charts/WebTrafficCompetitorLineCharts";
 
 function WebsiteTrafficSection({ company, webTrafficDic, webTrafficGeoDic }) {
   // Expect webTrafficDic = {company1: trafficData, company2: trafficData, ...}
@@ -43,7 +44,6 @@ function WebsiteTrafficSection({ company, webTrafficDic, webTrafficGeoDic }) {
       <hr className="border-none h-px bg-customGray-100" />
 
       <div className="flex flex-col section-indent mt-4">
-        {console.log("webTrafficDic", webTrafficDic)}
         <div id="Growth" className="content-section">
           {webTrafficDic === undefined ||
           Object.keys(webTrafficDic).length === 0 ? (
@@ -185,25 +185,10 @@ function WebsiteTrafficSection({ company, webTrafficDic, webTrafficGeoDic }) {
         </div>
 
         <div id="Traffic Growth vs. Peers" className="content-section mt-8">
-          <div className="flex flex-row items-center mb-3">
-            <p className="text-lg font-semibold text-gray-800 mr-2">
-              Growth vs. Peers
-            </p>
-            <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
-              <Image
-                src="/assets/downloadInactive.svg"
-                className="w-5 h-5 opacity-50 object-contain group-hover:hidden"
-                width={256}
-                height={256}
-              />
-              <Image
-                src="/assets/downloadActive.svg"
-                className="w-5 h-5 object-contain hidden group-hover:block"
-                width={256}
-                height={256}
-              />
-            </div>
-          </div>
+          <WebTrafficCompetitorLineCharts
+            multiCompanyTrafficData={webTrafficDic}
+          />
+
           <div className="flex flex-row w-full justify-between space-x-8">
             <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-2/3">
               <div className="flex flex-row justify-between w-full items-center mb-4">
