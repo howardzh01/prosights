@@ -7,7 +7,7 @@ import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 import { Skeleton } from "@nextui-org/react";
 import AppUsageIcon from "/public/assets/AppUsageIcon.svg";
 import AppVisitsStackedBarPeers from "../charts/AppVisitsStackedBarPeers";
-// import AppVisitsCompetitorLineChart from "../charts/AppVisitsCompetitorLineChart";
+import AppVisitsCompetitorLineChart from "../charts/AppVisitsCompetitorLineChart";
 
 function AppUsageSection({ company, multiCompanyAppData }) {
   return (
@@ -319,10 +319,9 @@ function AppUsageSection({ company, multiCompanyAppData }) {
           {multiCompanyAppData === undefined ? (
             <div> </div>
           ) : (
-            // <AppVisitsCompetitorLineChart
-            //   multiCompanyAppData={multiCompanyAppData}
-            // ></AppVisitsCompetitorLineChart>
-            <div> </div>
+            <AppVisitsCompetitorLineChart
+              multiCompanyAppData={multiCompanyAppData}
+            ></AppVisitsCompetitorLineChart>
           )}
         </div>
 
