@@ -1,5 +1,19 @@
 import { CONSTANTS, MONTH_NAMES } from "../constants";
 // convert date to months
+export function isEmpty(value) {
+  if (!value) {
+    // Checks for null or undefined
+    return true;
+  }
+  if (Array.isArray(value) && value.length === 0) {
+    return true;
+  }
+  if (value.constructor === Object && Object.keys(value).length === 0) {
+    return true;
+  }
+  return false;
+}
+
 export const dateToMonths = (date, shortenYear = true) => {
   // Convert Date object 2023-01-01 or String to
   // 1. shortenYear=true Jan 23
@@ -398,7 +412,12 @@ export function convertLabelToDate(label) {
 
 export function normalizeStackedAggData(aggData) {
   // Calculate the total for each time_key across all channels
-  const relevantKeys = Object.keys(aggData);
+  // Two cases: {channel: {timekey: value}} or {company: {timekey: value}}
+  // Missing values are treated as as {company: {}}
+  const relevantKeys = Object.entries(aggData)
+    .filter(([key, value]) => !isEmpty(value)) // Filter out entries where dic is null
+    .map(([key, value]) => key); // Extract the names
+
   const totalsByTimeKey = Object.keys(aggData[relevantKeys[0]]).reduce(
     (acc, timeKey) => {
       acc[timeKey] = relevantKeys.reduce(
@@ -411,8 +430,12 @@ export function normalizeStackedAggData(aggData) {
   );
 
   // Normalize each channel's value to sum to 100% for each time_key
-  const normalizedData = relevantKeys.reduce((acc, key) => {
+  const normalizedData = Object.keys(aggData).reduce((acc, key) => {
     acc[key] = {};
+    if (!aggData[key]) {
+      return;
+    }
+    // Note: Use Object.keys instead of relevant keys so emptyValues stay empty {}
     Object.keys(aggData[key]).forEach((timeKey) => {
       const value = aggData[key][timeKey];
       const total = totalsByTimeKey[timeKey];
@@ -420,6 +443,7 @@ export function normalizeStackedAggData(aggData) {
     });
     return acc;
   }, {});
+
   return normalizedData;
 }
 

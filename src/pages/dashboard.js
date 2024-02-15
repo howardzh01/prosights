@@ -368,7 +368,8 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
     country,
     enableCrunchbase
   );
-  // console.log(dataAIData);
+  // console.log("Web Traffic", webTrafficData);
+  // console.log("DAATA AI", dataAIData);
 
   // const competitorData = getApiData(user, competitor.name, country);
 

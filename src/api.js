@@ -19,6 +19,7 @@ async function apiMultiCall(companyDisplayedNameList, func, args) {
 export function getApiData(user, companyDicList, country, enableCrunchbase) {
   // Fill API Data calls here. So far, headcount, web traffic, crunchbase, company description
   // Make sure last argument of each function is the company names
+  // console.log(companyDicList);
   if (!companyDicList) {
     return {
       headCountData: undefined,
@@ -141,7 +142,6 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
         ]
       : null,
     (args) => {
-      console.log("DATA AI", dataAIData);
       return apiMultiCall(companyDisplayedNameList, getDataAIData, args);
     },
     { revalidateOnFocus: false }
