@@ -557,7 +557,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
               <div className="w-full mt-12">
                 <AppUsageSection
                   company={companyDic?.displayedName || companyDic?.name}
-                  appDataDic={dataAIData}
+                  multiCompanyAppData={dataAIData}
                 />
               </div>
               {/* Consumer Spend */}

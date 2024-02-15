@@ -14,25 +14,28 @@ import { CHARTS } from "../../constants";
 import Image from "next/image";
 
 function AppVisitsStackedBarPeers({
-  appDataDic,
+  multiCompanyAppData,
   cutOffDate = new Date("2019"),
 }) {
   // TODO: make this more compact later - probably 1 useState with an object containing all timescale states, or useReducer
-  if (!appDataDic) return;
-  const multiCompanyAppData = Object.keys(appDataDic).reduce(
+  if (!multiCompanyAppData) return null;
+  const multiCompanyAppPerformance = Object.keys(multiCompanyAppData).reduce(
     (acc, companyName) => {
-      if (appDataDic[companyName]) {
-        acc[companyName] = appDataDic[companyName]["app_performance"];
+      if (multiCompanyAppData[companyName]) {
+        acc[companyName] = multiCompanyAppData[companyName]["app_performance"];
       }
       return acc;
     },
     {}
   );
-  if (Object.keys(multiCompanyAppData).length === 0) return;
+  if (
+    !multiCompanyAppPerformance ||
+    Object.keys(multiCompanyAppPerformance).length === 0
+  )
+    return null;
   const [appByChannelTimescale, setAppByChannelTimescale] =
     useState("quarterYear");
   const ouputKey = "est_average_active_users";
-  if (!multiCompanyAppData) return null;
   function convertToChannelChartData(appData, timescale) {
     const companyNames = Object.keys(appData);
     const aggData = companyNames.reduce((acc, key) => {
@@ -72,7 +75,7 @@ function AppVisitsStackedBarPeers({
   const appByChannel = (
     <GenericStackedBar
       data={convertToChannelChartData(
-        multiCompanyAppData,
+        multiCompanyAppPerformance,
         appByChannelTimescale
       )}
       title={"Average App MAU Market Share (%)"}
@@ -80,13 +83,13 @@ function AppVisitsStackedBarPeers({
       timescale={appByChannelTimescale}
       setTimescale={setAppByChannelTimescale}
       selectedChart={CHARTS.appByChannel}
-      rawChartData={multiCompanyAppData}
+      rawChartData={multiCompanyAppPerformance}
       formatTableDataFunction={(x) => roundPeNumbers(x) + "%"}
     ></GenericStackedBar>
   );
   const yearAppByChannelGraph = (
     <GenericStackedBar
-      data={convertToChannelChartData(multiCompanyAppData, "year")}
+      data={convertToChannelChartData(multiCompanyAppPerformance, "year")}
       showTimescaleButtons={false}
       showModalButtons={false}
       scrollStart={"right"}

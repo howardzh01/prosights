@@ -7,8 +7,9 @@ import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 import { Skeleton } from "@nextui-org/react";
 import AppUsageIcon from "/public/assets/AppUsageIcon.svg";
 import AppVisitsStackedBarPeers from "../charts/AppVisitsStackedBarPeers";
+import AppVisitsCompetitorLineChart from "../charts/AppVisitsCompetitorLineChart";
 
-function AppUsageSection({ company, appDataDic }) {
+function AppUsageSection({ company, multiCompanyAppData }) {
   return (
     <div className="flex flex-col w-full mt-12 pb-8">
       <div
@@ -32,7 +33,7 @@ function AppUsageSection({ company, appDataDic }) {
       </div>
       <hr className="border-none h-px bg-customGray-100" />
       <div className="flex flex-col section-indent mt-4">
-        <div id="App Growth vs. Peers" className="content-section">
+        {/* <div id="App Growth vs. Peers" className="content-section">
           <div className="flex flex-row items-center mb-3">
             <p className="text-lg font-semibold text-gray-800 mr-2">
               Growth vs. Peers
@@ -172,7 +173,7 @@ function AppUsageSection({ company, appDataDic }) {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
         {/* <div id="App Market Share vs. Peers" className="content-section mt-8">
           <div className="flex flex-row items-center mb-3">
             <p className="text-lg font-semibold text-gray-800 mr-2">
@@ -314,13 +315,22 @@ function AppUsageSection({ company, appDataDic }) {
             </div>
           </div>
         </div> */}
+        <div id="App Growth vs. Peers" className="content-section mt-8">
+          {multiCompanyAppData === undefined ? (
+            <div> </div>
+          ) : (
+            <AppVisitsCompetitorLineChart
+              multiCompanyAppData={multiCompanyAppData}
+            ></AppVisitsCompetitorLineChart>
+          )}
+        </div>
 
         <div id="App Market Share vs. Peers" className="content-section mt-8">
-          {appDataDic === undefined ? (
+          {multiCompanyAppData === undefined ? (
             <div> </div>
           ) : (
             <AppVisitsStackedBarPeers
-              appDataDic={appDataDic}
+              multiCompanyAppData={multiCompanyAppData}
             ></AppVisitsStackedBarPeers>
           )}
         </div>
