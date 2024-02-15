@@ -88,6 +88,7 @@ function AppVisitsStackedBarPeers({
       showModalButtons={false}
       scrollStart={"right"}
       formatTableDataFunction={(x) => roundPeNumbers(x) + "%"}
+      displayLegend={false}
     ></GenericStackedBar>
   );
 

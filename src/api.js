@@ -373,6 +373,7 @@ export const getCompanyDescription = async ([
   );
   return json_content;
 };
+
 export const getDataAIData = async ([unifiedProductId, api_url, userId]) => {
   // `/api/private/getDataAIData`;
   if (!unifiedProductId) {

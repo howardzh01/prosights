@@ -82,6 +82,7 @@ function WebTrafficStackedBarPeers({
       showModalButtons={false}
       scrollStart={"right"}
       formatTableDataFunction={(x) => roundPeNumbers(x) + "%"}
+      displayLegend={false}
     ></GenericStackedBar>
   );
 
