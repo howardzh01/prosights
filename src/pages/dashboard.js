@@ -19,6 +19,7 @@ import { Skeleton } from "@nextui-org/react";
 import { CompanyDirectory } from "../components/dashboard/CompanyListDirectory";
 import { companyList } from "../components/dashboard/CompanyList";
 import HeadcountIcon from "/public/assets/HeadcountIcon.svg";
+import CountrySelector from "../components/dashboard/CountrySelector";
 
 export const SelectedChartContext = createContext();
 export const ChartDataContext = createContext();
@@ -394,16 +395,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                   <p className="text-3xl font-bold text-gray-800 pl-1">
                     {companyDic.displayedName}
                   </p>
-                  <select
-                    className="h-10 text-customGray-500 rounded-md font-nunitoSans text-sm font-normal text-left focus:outline-none focus:ring-0 ml-6"
-                    onChange={(e) => {
-                      const newCompanyLocation = e.target.value;
-                      setCountry(newCompanyLocation);
-                    }}
-                  >
-                    <option value="us">US</option>
-                    <option value="asia">Asia</option>
-                  </select>
+                  <CountrySelector setCountry={setCountry} />
                   <div
                     className="group flex flex-row items-center ml-8 hover:cursor-pointer hover:text-primary"
                     onClick={downloadPDF}
