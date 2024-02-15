@@ -289,7 +289,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
       });
 
       const response = await fetch(
-        "https://kev2010--generate-excel-generate-excel-dev.modal.run",
+        "https://kev2010--generate-excel-generate-excel.modal.run/",
         {
           method: "POST",
           headers: {
