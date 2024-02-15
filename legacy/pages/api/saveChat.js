@@ -1,4 +1,4 @@
-import { serviceSup } from "../../../utils/Supabase.js";
+import { serviceSup } from "../../../src/utils/Supabase.js";
 
 export const config = {
   runtime: "edge",
