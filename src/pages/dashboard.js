@@ -365,7 +365,10 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                 id="Company Overview"
                 className="content-section w-[36rem] pt-4"
               >
-                <SearchBar setCompany={setCompanyDic} />
+                <SearchBar
+                  setCompany={setCompanyDic}
+                  setCompanyCompetitors={setCompanyCompetitors}
+                />
               </div>
               {/* Company name, country, and comparing section */}
               <div className="mt-6 flex flex-row justify-between w-full items-center">
@@ -382,10 +385,12 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                       className="w-10 h-10 mr-2 object-contain rounded-md"
                       width={256}
                       height={256}
+                      alt="Company Logo"
                     />
                   ) : (
                     <Skeleton className="w-10 h-10 mr-2 rounded-md bg-customGray-50" />
                   )}
+                  {console.log(crunchbaseDataPull)}
                   <p className="text-3xl font-bold text-gray-800 pl-1">
                     {companyDic.displayedName}
                   </p>
@@ -604,7 +609,10 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                   </div>
                   {/* Search Bar */}
                   <div className="content-section w-[36rem] pt-4">
-                    <SearchBar setCompany={setCompanyDic} />
+                    <SearchBar
+                      setCompany={setCompanyDic}
+                      setCompanyCompetitors={setCompanyCompetitors}
+                    />
                   </div>
                 </div>
               </div>

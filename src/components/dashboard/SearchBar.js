@@ -7,7 +7,7 @@ import Image from "next/image";
 import Chip from "@mui/material/Chip";
 import { companyList } from "./CompanyList";
 
-export default function SearchBar({ setCompany }) {
+export default function SearchBar({ setCompany, setCompanyCompetitors }) {
   const [value, setValue] = React.useState(null);
 
   if (!companyList) {
@@ -44,6 +44,7 @@ export default function SearchBar({ setCompany }) {
         }
         onChange={(event, value) => {
           setCompany(createCompanyDic(value));
+          setCompanyCompetitors([]);
           setValue(null);
         }}
         clearIcon={<span></span>}
