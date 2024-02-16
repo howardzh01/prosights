@@ -3,19 +3,19 @@ import { aggregateData, formatMoney, roundPeNumbers } from "../../utils/Utils";
 import GenericBarAndTable from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
 import { CHARTS } from "../../constants";
-import { convertToChartData } from "../../utils/BackendUtils";
+import { convertToHeadcountChartData } from "../../utils/ChartUtils";
 
 function HeadCountChart({ headCountData, cutOffDate = new Date("2019") }) {
   const [timescale, setTimescale] = useState("quarterYear");
 
   if (!headCountData) return null;
 
-  const customChartData = convertToChartData(
+  const customChartData = convertToHeadcountChartData(
     aggregateData(headCountData, "headcount", "last", timescale),
     cutOffDate
   );
 
-  const yearChartData = convertToChartData(
+  const yearChartData = convertToHeadcountChartData(
     aggregateData(headCountData, "headcount", "last", "year"),
     cutOffDate
   );

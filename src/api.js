@@ -417,3 +417,31 @@ export const getDataAIData = async ([
   // replace app_performance with sortedData
   return { ...data, app_performance: sortedData };
 };
+
+export const getExcelDownload = async (columnTitles, datasets) => {
+  try {
+    const response = await fetch(
+      "https://kev2010--generate-excel-generate-excel.modal.run/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ columnTitles, datasets }),
+      }
+    );
+
+    if (!response.ok) throw new Error("Network response was not ok");
+    const blob = await response.blob();
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = downloadUrl;
+    a.download = "excel-file.xlsx";
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(downloadUrl);
+    a.remove();
+  } catch (error) {
+    console.error("Error downloading the file:", error);
+  }
+};
