@@ -22,14 +22,19 @@ function SideBar({ sections, activeSections }) {
 
   return (
     <div className="bg-customGray-900 h-full w-full px-6 py-4 flex flex-col">
-      <Image
-        src="/assets/fullLogoWhite.png"
-        alt="ProSights logo"
-        width={128}
-        height={128}
-        priority
-        className="w-28"
-      />
+      <button
+        onClick={() => scrollToSection(sections[0].id)}
+        className="focus:outline-none"
+      >
+        <Image
+          src="/assets/fullLogoWhite.png"
+          alt="ProSights logo"
+          width={128}
+          height={128}
+          priority
+          className="w-28"
+        />
+      </button>
       {/* <p className="pt-3 text-white text-base font-semibold">
         Queries Left: 50
       </p> */}

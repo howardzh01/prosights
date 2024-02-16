@@ -414,10 +414,14 @@ export function normalizeStackedAggData(aggData) {
   // Calculate the total for each time_key across all channels
   // Two cases: {channel: {timekey: value}} or {company: {timekey: value}}
   // Missing values are treated as as {company: {}}
+  console.log(aggData);
   const relevantKeys = Object.entries(aggData)
     .filter(([key, value]) => !isEmpty(value)) // Filter out entries where dic is null
     .map(([key, value]) => key); // Extract the names
 
+  if (relevantKeys.length === 0) {
+    return aggData; //means aggData values all empty dic
+  }
   const totalsByTimeKey = Object.keys(aggData[relevantKeys[0]]).reduce(
     (acc, timeKey) => {
       acc[timeKey] = relevantKeys.reduce(
@@ -443,7 +447,7 @@ export function normalizeStackedAggData(aggData) {
     });
     return acc;
   }, {});
-
+  console.log(normalizedData);
   return normalizedData;
 }
 

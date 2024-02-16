@@ -13,6 +13,7 @@ const countryList = {
   IT: "Italy",
   DE: "Germany",
   ES: "Spain",
+  WW: "Worldwide",
 };
 
 const CountrySelector = ({ country, setCountry }) => {

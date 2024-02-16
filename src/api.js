@@ -384,6 +384,7 @@ export const getDataAIData = async ([
   country,
 ]) => {
   // `/api/private/getDataAIData`;
+  console.log;
   if (!unifiedProductId) {
     console.log("NO UNIFIED PRODUCT ID");
     return null;

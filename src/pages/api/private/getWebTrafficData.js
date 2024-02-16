@@ -28,7 +28,7 @@ const getSemrushWebTraffic = async (
     key: process.env.SEMRUSH_API_KEY,
     display_date: displayDate,
   });
-  if (country !== "global") {
+  if (country !== "global" && country !== "WW") {
     url.searchParams.append("country", country);
   }
   const output = await cachedFetch({
