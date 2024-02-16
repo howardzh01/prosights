@@ -12,11 +12,13 @@ function HeadCountChart({ headCountData, cutOffDate = new Date("2019") }) {
 
   const customChartData = convertToHeadcountChartData(
     aggregateData(headCountData, "headcount", "last", timescale),
+    "Headcount",
     cutOffDate
   );
 
   const yearChartData = convertToHeadcountChartData(
     aggregateData(headCountData, "headcount", "last", "year"),
+    "Headcount",
     cutOffDate
   );
 
