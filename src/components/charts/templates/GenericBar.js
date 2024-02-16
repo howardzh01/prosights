@@ -95,7 +95,6 @@ function GenericBarAndTable({
           <p className="text-xs font-normal text-customGray-200">{location}</p>
         </div>
       )}
-
       <div className="">
         {chartData && <Bar data={chartData} options={options} />}
       </div>

@@ -84,7 +84,6 @@ function WebTrafficByChannelChart({
         "social_paid",
       ];
     }
-
     const aggData = relevant_keys.reduce((acc, key) => {
       const displayedKey =
         condensePaidKeys && paidTrafficKeys.includes(key)
@@ -94,7 +93,6 @@ function WebTrafficByChannelChart({
       acc[displayedKey] = aggregateData(trafficData, key, "sum", timescale);
       return acc;
     }, {});
-
     // aggData: {direct: {time_key: output_key}, mail: {time_key: output_key}, ...}
     const firstChannelData = aggData[displayedKeyMap[relevant_keys[0]]]; // use to extract timescale
     const cutoffIndex = findInsertIndex(

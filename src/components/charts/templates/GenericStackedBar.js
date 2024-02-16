@@ -103,7 +103,6 @@ function StackedBarChart({
         },
       },
     },
-
     maintainAspectRatio: false,
     responsive: true,
 
