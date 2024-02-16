@@ -12,7 +12,7 @@ stub = modal.Stub("generate_bar_excel")
 
 @stub.function(image=xlsxwriter_image)
 @modal.web_endpoint(method="POST")
-def generate_excel(req: Dict):
+def generate_bar_excel(req: Dict):
     """
     'req' follows the structure:
 
