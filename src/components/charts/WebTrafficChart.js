@@ -1,13 +1,8 @@
 import { useState, useEffect } from "react";
 import GenericBarAndTable from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
-import {
-  aggregateData,
-  findInsertIndex,
-  getTableInfo,
-  convertLabelToDate,
-  roundPeNumbers,
-} from "../../utils/Utils";
+import { aggregateData, roundPeNumbers } from "../../utils/Utils";
+import { convertToGrowthChartData } from "../../utils/ChartUtils";
 import GenericStackedBar from "./templates/GenericStackedBar";
 import { CHARTS } from "../../constants";
 import Image from "next/image";
@@ -30,45 +25,13 @@ function WebTrafficChart({
   //     return [`${month}-${year}`, trafficData[key]];
   //   })
   // );
-  function convertToChartData(data, displayedLabel) {
-    // input: {time_key: output_key}
-    let { labels, values, tableHeaders, tableLabels, growthPercentages } =
-      getTableInfo(data);
-    const cutoffIndex = findInsertIndex(
-      labels.map((x) => convertLabelToDate(x)),
-      cutOffDate,
-      "left"
-    );
-    const chartData = {
-      labels: labels.slice(cutoffIndex),
-      datasets: [
-        {
-          label: displayedLabel + " (M)",
-          data: values
-            .map((item) => (item == null ? "--" : (item / 1e6).toFixed(1)))
-            .slice(cutoffIndex),
-        },
-      ],
-    };
 
-    const tableData = {
-      tableHeaders: tableHeaders.slice(cutoffIndex),
-      tableLabels: tableLabels.slice(cutoffIndex),
-      tableDatasets: [
-        ...chartData["datasets"],
-        {
-          label: "% YoY Growth",
-          data: growthPercentages.slice(cutoffIndex),
-        },
-      ],
-    };
-    return { chartData: chartData, tableData: tableData };
-  }
   const customTrafficGraph = (
     <GenericBarAndTable
-      data={convertToChartData(
+      data={convertToGrowthChartData(
         aggregateData(trafficData, "visits", "sum", trafficTimescale),
-        "Visits"
+        "Visits",
+        cutOffDate
       )}
       title={"Total Visits (M)"}
       showDataLabels={trafficTimescale !== "month"}
@@ -81,11 +44,13 @@ function WebTrafficChart({
       formatTableDataFunction={roundPeNumbers}
     />
   );
+
   const yearTrafficGraph = (
     <GenericBarAndTable
-      data={convertToChartData(
+      data={convertToGrowthChartData(
         aggregateData(trafficData, "visits", "sum", "year"),
-        "Visits"
+        "Visits",
+        cutOffDate
       )}
       showTimescaleButtons={false}
       showModalButtons={false}
@@ -97,9 +62,10 @@ function WebTrafficChart({
 
   const customUserGraph = (
     <GenericBarAndTable
-      data={convertToChartData(
+      data={convertToGrowthChartData(
         aggregateData(trafficData, "users", "mean", mauTimescale),
-        "Users"
+        "Users",
+        cutOffDate
       )}
       title={"Web Users (M)"}
       showDataLabels={mauTimescale !== "month"}
@@ -115,9 +81,10 @@ function WebTrafficChart({
   );
   const yearUserGraph = (
     <GenericBarAndTable
-      data={convertToChartData(
+      data={convertToGrowthChartData(
         aggregateData(trafficData, "users", "mean", "year"),
-        "Users"
+        "Users",
+        cutOffDate
       )}
       showTimescaleButtons={false}
       showModalButtons={false}

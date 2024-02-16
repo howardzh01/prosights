@@ -3,7 +3,6 @@ import { UN_M49_CONTINENTS, RELEVANT_CONTINENTS } from "./constants";
 import { assert } from "./utils/Utils";
 import useSWR from "swr";
 import { data } from "autoprefixer";
-import { convertHeadCountChartDataToExcelFormat } from "./utils/ChartUtils";
 
 async function apiMultiCall(companyDisplayedNameList, func, args) {
   // Make sure first element of args is the company names or urls
@@ -418,13 +417,8 @@ export const getDataAIData = async ([
   return { ...data, app_performance: sortedData };
 };
 
-export const downloadHeadcountExcel = async (headCountData, dataCutoffDate) => {
+export const getExcelDownload = async (columnTitles, datasets) => {
   try {
-    const { columnTitles, datasets } = convertHeadCountChartDataToExcelFormat(
-      headCountData,
-      dataCutoffDate
-    );
-
     const response = await fetch(
       "https://kev2010--generate-excel-generate-excel.modal.run/",
       {

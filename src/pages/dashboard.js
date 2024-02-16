@@ -9,7 +9,7 @@ import AdSpendSection from "../components/dashboard/AdSpendSection";
 import CompetitorOverviewSection from "../components/dashboard/CompetitorOverviewSection";
 import Image from "next/image";
 import { useUser } from "@clerk/clerk-react";
-import { getApiData, downloadHeadcountExcel } from "../api";
+import { getApiData, getExcelDownload } from "../api";
 import { createContext } from "react";
 import ChartModal from "../components/ChartModal";
 import HeadCountChart from "../components/charts/HeadCountChart";
@@ -20,6 +20,10 @@ import { CompanyDirectory } from "../components/dashboard/CompanyListDirectory";
 import { companyList } from "../components/dashboard/CompanyList";
 import HeadcountIcon from "/public/assets/HeadcountIcon.svg";
 import CountrySelector from "../components/dashboard/CountrySelector";
+import {
+  convertHeadCountChartDataToExcelFormat,
+  convertTotalVisitsChartDataToExcelFormat,
+} from "../utils/ChartUtils";
 
 export const SelectedChartContext = createContext();
 export const ChartDataContext = createContext();
@@ -253,10 +257,17 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
   // }, [country]);
 
   function downloadExcel() {
-    downloadHeadcountExcel(
-      headCountData?.[companyDic.displayedName],
+    // const { columnTitles, datasets } = convertHeadCountChartDataToExcelFormat(
+    //   headCountData?.[companyDic.displayedName],
+    //   dataCutoffDate
+    // );
+
+    const { columnTitles, datasets } = convertTotalVisitsChartDataToExcelFormat(
+      webTrafficData?.[companyDic.displayedName],
       dataCutoffDate
     );
+
+    getExcelDownload(columnTitles, datasets);
   }
 
   const downloadPDF = async () => {
