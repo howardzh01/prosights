@@ -9,7 +9,7 @@ import AdSpendSection from "../components/dashboard/AdSpendSection";
 import CompetitorOverviewSection from "../components/dashboard/CompetitorOverviewSection";
 import Image from "next/image";
 import { useUser } from "@clerk/clerk-react";
-import { getApiData } from "../api";
+import { getApiData, downloadHeadcountExcel } from "../api";
 import { createContext } from "react";
 import ChartModal from "../components/ChartModal";
 import HeadCountChart from "../components/charts/HeadCountChart";
@@ -20,8 +20,6 @@ import { CompanyDirectory } from "../components/dashboard/CompanyListDirectory";
 import { companyList } from "../components/dashboard/CompanyList";
 import HeadcountIcon from "/public/assets/HeadcountIcon.svg";
 import CountrySelector from "../components/dashboard/CountrySelector";
-import { aggregateData } from "../utils/Utils";
-import { convertToChartData } from "../utils/BackendUtils";
 
 export const SelectedChartContext = createContext();
 export const ChartDataContext = createContext();
@@ -248,70 +246,17 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
       setCompanyCompetitors([]);
     }
   }, [companyDic]);
+
   // useEffect(() => {
   //   setWebsiteTrafficData(null);
   //   setAppUsageData(null);
   // }, [country]);
-  async function downloadExcel() {
-    try {
-      const timeFrames = ["month", "quarterYear", "year"];
-      const chartData = Object.fromEntries(
-        timeFrames.map((timeFrame) => [
-          `${timeFrame}ChartData`,
-          convertToChartData(
-            aggregateData(
-              headCountData?.[companyDic.displayedName],
-              "headcount",
-              "last",
-              timeFrame
-            ),
-            dataCutoffDate
-          ),
-        ])
-      );
-      const { monthChartData, quarterYearChartData, yearChartData } = chartData;
 
-      const columnTitles = [
-        "Date",
-        ...monthChartData.tableData.tableDatasets.map(
-          (dataset) => dataset.label
-        ),
-      ];
-      const datasets = Object.values(chartData).map((data) => {
-        return columnTitles.reduce((acc, title, index) => {
-          if (index === 0) {
-            acc[title] = data.chartData.labels;
-          } else {
-            acc[title] = data.tableData.tableDatasets[index - 1].data;
-          }
-          return acc;
-        }, {});
-      });
-
-      const response = await fetch(
-        "https://kev2010--generate-excel-generate-excel.modal.run/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ columnTitles, datasets }),
-        }
-      );
-
-      if (!response.ok) throw new Error("Network response was not ok");
-      const blob = await response.blob();
-      const downloadUrl = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = downloadUrl;
-      a.download = "excel-file.xlsx";
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(downloadUrl);
-      a.remove();
-    } catch (error) {
-      console.error("Error downloading the file:", error);
-    }
+  function downloadExcel() {
+    downloadHeadcountExcel(
+      headCountData?.[companyDic.displayedName],
+      dataCutoffDate
+    );
   }
 
   const downloadPDF = async () => {
