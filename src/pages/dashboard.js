@@ -24,6 +24,7 @@ import {
   convertHeadCountChartDataToExcelFormat,
   convertTotalVisitsChartDataToExcelFormat,
   convertWebUsersChartDataToExcelFormat,
+  convertBreakdownChartDataToExcelFormat,
 } from "../utils/ChartUtils";
 
 export const SelectedChartContext = createContext();
@@ -268,12 +269,18 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
     //   dataCutoffDate
     // );
 
-    const { columnTitles, datasets } = convertWebUsersChartDataToExcelFormat(
+    // const { columnTitles, datasets } = convertWebUsersChartDataToExcelFormat(
+    //   webTrafficData?.[companyDic.displayedName],
+    //   dataCutoffDate
+    // );
+
+    const { columnTitles, datasets } = convertBreakdownChartDataToExcelFormat(
+      webTrafficGeoData?.[companyDic.displayedName],
       webTrafficData?.[companyDic.displayedName],
       dataCutoffDate
     );
 
-    getExcelDownload(columnTitles, datasets);
+    getExcelDownload(columnTitles, datasets, "doughnut");
   }
 
   const downloadPDF = async () => {
