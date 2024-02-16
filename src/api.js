@@ -421,7 +421,7 @@ export const getDataAIData = async ([
 export const getExcelDownload = async (columnTitles, datasets) => {
   try {
     const response = await fetch(
-      "https://kev2010--generate-excel-generate-excel.modal.run/",
+      "https://kev2010--generate-bar-excel-generate-excel.modal.run/",
       {
         method: "POST",
         headers: {

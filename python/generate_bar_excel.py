@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.INFO)
 
 xlsxwriter_image = modal.Image.debian_slim().pip_install("xlsxwriter")
 
-stub = modal.Stub("generate_excel")
+stub = modal.Stub("generate_bar_excel")
 
 @stub.function(image=xlsxwriter_image)
 @modal.web_endpoint(method="POST")
