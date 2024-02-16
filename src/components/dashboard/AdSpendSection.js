@@ -7,7 +7,7 @@ import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 import { Skeleton } from "@nextui-org/react";
 import AdSpendIcon from "/public/assets/AdSpendIcon.svg";
 
-function AdSpendSection({}) {
+function AdSpendSection({ country }) {
   return (
     <div className="flex flex-col w-full mt-12 pb-8">
       <div

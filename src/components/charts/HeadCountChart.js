@@ -32,6 +32,7 @@ function HeadCountChart({ headCountData, cutOffDate = new Date("2019") }) {
       showModalButtons={false}
       formatChartLabelFunction={formatMoney}
       formatTableDataFunction={roundPeNumbers}
+      location="Worldwide"
     />
   );
 

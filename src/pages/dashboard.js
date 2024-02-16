@@ -541,6 +541,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
               <div className="w-full">
                 <WebsiteTrafficSection
                   company={companyDic?.displayedName || companyDic?.name}
+                  country={country}
                   webTrafficDic={webTrafficData}
                   webTrafficGeoDic={webTrafficGeoData}
                 />
@@ -549,16 +550,17 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
               <div className="w-full mt-12">
                 <AppUsageSection
                   company={companyDic?.displayedName || companyDic?.name}
+                  country={country}
                   multiCompanyAppData={dataAIData}
                 />
               </div>
               {/* Consumer Spend */}
               <div className="w-full mt-16">
-                <ConsumerSpendSection />
+                <ConsumerSpendSection country={country} />
               </div>
               {/* Ad Spend */}
               <div className="w-full">
-                <AdSpendSection />
+                <AdSpendSection country={country} />
               </div>
             </div>
           ) : (

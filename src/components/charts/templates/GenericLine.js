@@ -5,7 +5,7 @@ import GenericTable from "./GenericTable.js";
 import Chart from "chart.js/auto";
 import { CHARTJS_COLOR_PLUGIN } from "../../../constants.js";
 Chart.register(CHARTJS_COLOR_PLUGIN);
-// import { Colors } from "chart.js";
+import Image from "next/image";
 
 function GenericLineChart({
   data, // {chartData, tableData}

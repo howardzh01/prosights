@@ -16,6 +16,7 @@ import Image from "next/image";
 
 function AppVisitsCompetitorLineChart({
   multiCompanyAppData,
+  country,
   selectedChart = null,
   cutOffDate = new Date("2019"),
 }) {
@@ -88,6 +89,7 @@ function AppVisitsCompetitorLineChart({
       showDataLabels={timescale === "quarterYear"}
       timescale={timescale}
       setTimescale={setTimeScale}
+      location={country}
       // selectedChart={CHARTS.trafficByChannel}
       rawChartData={multiCompanyAppData}
       formatTableDataFunction={(x) => (x ? roundPeNumbers(x) + "%" : "--")}

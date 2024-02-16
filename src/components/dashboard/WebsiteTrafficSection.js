@@ -13,7 +13,12 @@ import WebTrafficBreakdownVsPeers from "../charts/WebTrafficBreakdownVsPeers";
 import WebTrafficBreakdownVsPeersGeography from "../charts/WebTrafficBreakdownVsPeersGeography";
 import WebTrafficCompetitorLineCharts from "../charts/WebTrafficCompetitorLineCharts";
 
-function WebsiteTrafficSection({ company, webTrafficDic, webTrafficGeoDic }) {
+function WebsiteTrafficSection({
+  company,
+  country,
+  webTrafficDic,
+  webTrafficGeoDic,
+}) {
   // Expect webTrafficDic = {company1: trafficData, company2: trafficData, ...}
   const webTrafficData = webTrafficDic?.[company];
   const webTrafficGeoData = webTrafficGeoDic?.[company];
@@ -55,7 +60,7 @@ function WebsiteTrafficSection({ company, webTrafficDic, webTrafficGeoDic }) {
               </p>
             </div>
           ) : (
-            <WebTrafficChart trafficData={webTrafficData} />
+            <WebTrafficChart trafficData={webTrafficData} country={country} />
           )}
         </div>
         <div id="Breakdown" className="content-section">
@@ -171,6 +176,7 @@ function WebsiteTrafficSection({ company, webTrafficDic, webTrafficGeoDic }) {
           Object.keys(webTrafficData).length !== 0 ? (
             <WebTrafficByChannelChart
               trafficData={webTrafficData}
+              country={country}
             ></WebTrafficByChannelChart>
           ) : webTrafficData !== undefined &&
             Object.keys(webTrafficData).length === 0 ? (
@@ -187,6 +193,7 @@ function WebsiteTrafficSection({ company, webTrafficDic, webTrafficGeoDic }) {
         <div id="Traffic Growth vs. Peers" className="content-section mt-8">
           <WebTrafficCompetitorLineCharts
             multiCompanyTrafficData={webTrafficDic}
+            country={country}
           />
 
           {/* <div className="flex flex-row w-full justify-between space-x-8">
@@ -326,6 +333,7 @@ function WebsiteTrafficSection({ company, webTrafficDic, webTrafficGeoDic }) {
           ) : (
             <WebTrafficStackedBarPeers
               multiCompanyTrafficData={webTrafficDic}
+              country={country}
             ></WebTrafficStackedBarPeers>
           )}
           {/* {webTrafficExists ? (
@@ -367,18 +375,21 @@ function WebsiteTrafficSection({ company, webTrafficDic, webTrafficGeoDic }) {
               <WebTrafficBreakdownVsPeers
                 trafficData={webTrafficDic}
                 selectedChart={CHARTS.trafficByDevice}
+                country={country}
               />
             </div>
             <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-96">
               <WebTrafficBreakdownVsPeers
                 trafficData={webTrafficDic}
                 selectedChart={CHARTS.trafficByChannel}
+                country={country}
               />
             </div>
             <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-96">
               <WebTrafficBreakdownVsPeers
                 trafficData={webTrafficDic}
                 selectedChart={CHARTS.trafficByOrganicVsPaid}
+                country={country}
               />
             </div>
           </div>

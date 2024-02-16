@@ -7,7 +7,7 @@ import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 import { Skeleton } from "@nextui-org/react";
 import ConsumerSpendIcon from "/public/assets/ConsumerSpendIcon.svg";
 
-function ConsumerSpendSection({}) {
+function ConsumerSpendSection({ country }) {
   return (
     <div className="flex flex-col w-full pb-8">
       <div

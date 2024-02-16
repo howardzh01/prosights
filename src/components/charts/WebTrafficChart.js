@@ -9,6 +9,7 @@ import Image from "next/image";
 
 function WebTrafficChart({
   trafficData,
+  country,
   selectedChart = null,
   cutOffDate = new Date("2019"),
 }) {
@@ -42,6 +43,7 @@ function WebTrafficChart({
       showModalButtons={false}
       formatChartLabelFunction={roundPeNumbers}
       formatTableDataFunction={roundPeNumbers}
+      location={country}
     />
   );
 
@@ -77,6 +79,7 @@ function WebTrafficChart({
       showModalButtons={false}
       formatChartLabelFunction={roundPeNumbers}
       formatTableDataFunction={roundPeNumbers}
+      location={country}
     />
   );
   const yearUserGraph = (

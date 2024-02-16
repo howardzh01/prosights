@@ -16,6 +16,7 @@ import Image from "next/image";
 
 function WebTrafficCompetitorLineCharts({
   multiCompanyTrafficData,
+  country,
   selectedChart = null,
   cutOffDate = new Date("2019"),
 }) {
@@ -76,6 +77,7 @@ function WebTrafficCompetitorLineCharts({
       // selectedChart={CHARTS.trafficByChannel}
       rawChartData={multiCompanyTrafficData}
       formatTableDataFunction={(x) => (x ? roundPeNumbers(x) + "%" : "--")}
+      location={country}
     ></GenericLine>
   );
   const yearTrafficGrowth = (

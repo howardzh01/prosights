@@ -4,7 +4,11 @@ import { CHARTS } from "../../constants";
 import Image from "next/image";
 import { fromUnderscoreCase } from "../../utils/Utils";
 
-function WebTrafficBreakdownVsPeers({ trafficData, selectedChart = null }) {
+function WebTrafficBreakdownVsPeers({
+  trafficData,
+  country,
+  selectedChart = null,
+}) {
   // trafficData is of the form {company1: data, company2: data, ...}
   if (!trafficData) return null;
 
@@ -138,7 +142,7 @@ function WebTrafficBreakdownVsPeers({ trafficData, selectedChart = null }) {
           width={128}
           height={128}
         />
-        <p className="text-xs font-normal text-customGray-200">US</p>
+        <p className="text-xs font-normal text-customGray-200">{country}</p>
       </div>
       <div className="px-2 h-52">
         <GenericStackedBar

@@ -15,6 +15,7 @@ import Image from "next/image";
 
 function AppVisitsStackedBarPeers({
   multiCompanyAppData,
+  country,
   cutOffDate = new Date("2019"),
 }) {
   // TODO: make this more compact later - probably 1 useState with an object containing all timescale states, or useReducer
@@ -85,6 +86,7 @@ function AppVisitsStackedBarPeers({
       selectedChart={CHARTS.appByChannel}
       rawChartData={multiCompanyAppPerformance}
       formatTableDataFunction={(x) => roundPeNumbers(x) + "%"}
+      location={country}
     ></GenericStackedBar>
   );
   const yearAppByChannelGraph = (

@@ -15,6 +15,7 @@ import Image from "next/image";
 
 function WebTrafficStackedBarPeers({
   multiCompanyTrafficData,
+  country,
   selectedChart = null,
   cutOffDate = new Date("2019"),
 }) {
@@ -78,6 +79,7 @@ function WebTrafficStackedBarPeers({
       // selectedChart={CHARTS.trafficByChannel}
       rawChartData={multiCompanyTrafficData}
       formatTableDataFunction={(x) => roundPeNumbers(x) + "%"}
+      location={country}
     ></GenericStackedBar>
   );
   const yearTrafficByChannelGraph = (

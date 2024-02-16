@@ -15,6 +15,7 @@ import Image from "next/image";
 
 function WebTrafficByChannelChart({
   trafficData,
+  country,
   selectedChart = null,
   cutOffDate = new Date("2019"),
 }) {
@@ -144,6 +145,7 @@ function WebTrafficByChannelChart({
       selectedChart={CHARTS.trafficByChannel}
       rawChartData={trafficData}
       formatTableDataFunction={(x) => roundPeNumbers(x) + "%"}
+      location={country}
     />
   );
   const yearTrafficByChannelGraph = (

@@ -5,7 +5,7 @@ import GenericTable from "./GenericTable";
 import Chart from "chart.js/auto";
 import { CHARTJS_COLOR_PLUGIN } from "../../../constants";
 Chart.register(CHARTJS_COLOR_PLUGIN);
-// import { Colors } from "chart.js";
+import Image from "next/image";
 
 function StackedBarChart({
   data, // {chartData, tableData}
@@ -141,7 +141,6 @@ function StackedBarChart({
           showModalButtons={showModalButtons}
         />
       )}
-
       {location && (
         <div className="flex flex-row mt-3">
           <Image
