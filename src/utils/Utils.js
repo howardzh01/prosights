@@ -457,3 +457,15 @@ export function reformatWebsiteUrl(unformattedUrl) {
     .replace(/\/$/, "") // replace trailing slash
     .toLowerCase();
 }
+
+export function calculateMean(array) {
+  // Filter out null and undefined values, then sum the remaining numbers
+  const filteredArray = array.filter(
+    (value) => value !== null && value !== undefined && !isNaN(value)
+  );
+  const sum = filteredArray.reduce((acc, value) => acc + value, 0);
+
+  // Calculate the mean, avoiding division by zero
+  const count = filteredArray.length;
+  return count > 0 ? sum / count : 0;
+}

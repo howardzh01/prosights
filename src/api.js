@@ -142,7 +142,6 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
         ]
       : null,
     (args) => {
-      // console.log("DATAI", companyDisplayedNameList, args);
       return apiMultiCall(companyDisplayedNameList, getDataAIData, args);
     },
     { revalidateOnFocus: false }
@@ -407,15 +406,28 @@ export const getDataAIData = async ([
   var data = await response.json();
   if (!data) return;
   // Convert to {Date: item} and sort by Date
-  const sortedData = data["app_performance"]
+  const sortedAppPerformanceData = data["app_performance"]
     .map((item) => ({ date: new Date(item.start_date), item }))
     .sort((a, b) => a.date - b.date)
     .reduce((acc, { date, item }) => {
       acc[date] = item;
       return acc;
     }, {});
+  const sortedRetentionData = data["retention"]
+    .map((item) => ({ date: new Date(item.start_date), item }))
+    .sort((a, b) => a.date - b.date)
+    .reduce((acc, { date, item }) => {
+      if (!acc[date]) acc[date] = [];
+      acc[date].push(item);
+      return acc;
+    }, {});
+  // console.log(sortedRetentionData);
   // replace app_performance with sortedData
-  return { ...data, app_performance: sortedData };
+  return {
+    ...data,
+    app_performance: sortedAppPerformanceData,
+    retention: sortedRetentionData,
+  };
 };
 
 export const getExcelDownload = async (columnTitles, datasets) => {

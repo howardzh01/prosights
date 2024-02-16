@@ -6,15 +6,17 @@ import GenericTimeScale from "./GenericTimeScale";
 Chart.register(ChartDataLabels);
 import GenericTable from "./GenericTable";
 import Image from "next/image";
+import GenericLocationDisplay from "./GenericLocationDisplay.js";
 
 function GenericBarAndTable({
   data, // {chartData, tableData}
   showDataLabels = true,
   showTimescaleButtons = true,
-  showModalButtons = true,
+  showModalButtons = false,
   showTable = true,
   title = undefined, // Timescale component from here on
   location = "",
+  lastTwelveMonthsView = false,
   timescale,
   setTimescale,
   selectedChart,
@@ -22,10 +24,12 @@ function GenericBarAndTable({
   formatChartLabelFunction: formatChartLabelFunction = (x) => x,
   formatTableDataFunction = (x) => x, //Table Options from here on
   scrollStart = "left",
+  useColorPlugin = true,
 }) {
   const { chartData, tableData } = data;
   const options = {
     plugins: {
+      chartJSColorPlugin: useColorPlugin,
       title: {
         display: true, //adds extra padding
         // text: title,
@@ -82,8 +86,13 @@ function GenericBarAndTable({
           showModalButtons={showModalButtons}
         />
       )}
-
-      {location && (
+      <div className="mt-3">
+        <GenericLocationDisplay
+          location={location}
+          lastTwelveMonthsView={lastTwelveMonthsView}
+        />
+      </div>
+      {/* {location && (
         <div className="flex flex-row mt-3">
           <Image
             src="/assets/globe.svg"
@@ -94,7 +103,7 @@ function GenericBarAndTable({
           />
           <p className="text-xs font-normal text-customGray-200">{location}</p>
         </div>
-      )}
+      )} */}
       <div className="">
         {chartData && <Bar data={chartData} options={options} />}
       </div>

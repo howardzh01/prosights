@@ -44,6 +44,7 @@ function HeadCountSignal({ headCountData, startCutoff = new Date("2019") }) {
       showDataLabels={timescale === "year"}
       timescale={timescale}
       setTimescale={setTimescale}
+      showModalButtons={true}
       selectedChart={CHARTS.employeeCount}
       showTable={false}
       rawChartData={headCountData}

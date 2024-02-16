@@ -121,7 +121,7 @@ function WebTrafficBreakdownVsPeers({
 
   return (
     <div>
-      <h2 id="trafficByGeo" className="text-sm font-semibold mb-3">
+      <h2 id={title} className="text-sm font-semibold mb-3">
         {title}
       </h2>
       <div className="flex flex-row items-center mb-8">
@@ -150,7 +150,6 @@ function WebTrafficBreakdownVsPeers({
             chartData: convertToChannelChartData(trafficData, chartType),
             tableData: null,
           }}
-          title={"Hello"}
           showTable={false}
           showDataLabels={true}
           showTimescaleButtons={false}

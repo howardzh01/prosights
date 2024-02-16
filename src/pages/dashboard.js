@@ -187,6 +187,13 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
       timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     })
     .replaceAll("-", ".");
+  useEffect(() => {
+    // Scroll to the "Loyalty vs. Peers" section on page load
+    const section = document.getElementById("Loyalty vs. Peers");
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, []); // The empty array ensures this effect runs only once after initial render
 
   useEffect(() => {
     if (!dataLoading && companyDic) {

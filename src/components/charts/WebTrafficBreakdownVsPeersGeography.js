@@ -134,7 +134,6 @@ function WebTrafficBreakdownVsPeersGeography({
             chartData: convertToGeoData(geoTrafficData, "traffic"),
             tableData: null,
           }}
-          title={"Hello"}
           showTable={false}
           showDataLabels={true}
           showTimescaleButtons={false}

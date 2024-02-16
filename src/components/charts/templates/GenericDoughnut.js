@@ -8,7 +8,7 @@ Chart.register(ChartDataLabels);
 function GenericDoughnut({ chartData, title = undefined }) {
   const options = {
     plugins: {
-      myColorPlugin: false,
+      chartJSColorPlugin: false,
       title: {
         display: false,
       },
