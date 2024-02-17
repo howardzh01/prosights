@@ -19,12 +19,22 @@ def generate_stacked_excel(req: List[Dict]):
     ```
     [
         {
-            chartData: {...},
-            tableData: {...},
-        },
-        {
-            chartData: {...},
-            tableData: {...},
+            chartData: {
+                datasets: [
+                    {
+                        borderWidth: 1,
+                        data: [61, 62, 61, ...], // Same length as labels
+                        label: "StockX",
+                        rawData: [1000, 1100, 1000, ...]
+                    },
+                    ...
+                ],
+                labels: ["1Q19", "2Q19", "3Q19", "4Q19", ...], // Same length as datasets.data,
+                category: "Date" // Optional
+            },
+            tableData: {
+                ...
+            },
         },
         ...
     ]
@@ -62,11 +72,11 @@ def generate_stacked_excel(req: List[Dict]):
             worksheet = workbook.add_worksheet()
 
         # Column titles: "Date" followed by each dataset's label.
-        columnTitles = ["Date"] + [dataset["label"] for dataset in datasets]
+        columnTitles = [chartData.get("category", "Date")] + [dataset["label"] for dataset in datasets]
 
         # Write column titles with the title format.
         for col, title in enumerate(columnTitles):
-            worksheet.write(1, col + 1, title, title_format)
+            worksheet.write(data_start_row - 1, col + 1, title, title_format)
 
         # Write data for the current dataset
         for row, label in enumerate(labels):
@@ -129,7 +139,7 @@ def generate_stacked_excel(req: List[Dict]):
         worksheet.insert_chart(chart_position, chart)
 
         # Update the starting row for the next dataset's data
-        data_start_row = data_end_row + 2  # Skip two rows for spacing between datasets
+        data_start_row = data_end_row + 3  # Skip two rows for spacing between datasets
 
     # Close the workbook before sending the data.
     workbook.close()

@@ -28,6 +28,7 @@ import {
   convertTrafficByChannelChartDataToExcelFormat,
   convertTrafficGrowthVsPeersChartDataToExcelFormat,
   convertTrafficMarketShareVsPeersDataToExcelFormat,
+  convertTrafficBreakdownVsPeersDataToExcelFormat,
 } from "../utils/ChartUtils";
 
 export const SelectedChartContext = createContext();
@@ -287,7 +288,6 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
     // const result = convertBreakdownChartDataToExcelFormat(
     //   webTrafficGeoData?.[companyDic.displayedName],
     //   webTrafficData?.[companyDic.displayedName],
-    //   dataCutoffDate
     // );
 
     // const result = convertTrafficByChannelChartDataToExcelFormat(
@@ -300,9 +300,14 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
     //   dataCutoffDate
     // );
 
-    const result = convertTrafficMarketShareVsPeersDataToExcelFormat(
-      webTrafficData,
-      dataCutoffDate
+    // const result = convertTrafficMarketShareVsPeersDataToExcelFormat(
+    //   webTrafficData,
+    //   dataCutoffDate
+    // );
+
+    const result = convertTrafficBreakdownVsPeersDataToExcelFormat(
+      webTrafficGeoData,
+      webTrafficData
     );
 
     getExcelDownload(result, "stacked");
