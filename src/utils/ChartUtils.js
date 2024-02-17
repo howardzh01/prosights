@@ -761,3 +761,26 @@ export function convertTrafficBreakdownVsPeersDataToExcelFormat(
 
   return result;
 }
+
+export function convertAppUsageGrowthVsPeersChartDataToExcelFormat(
+  dataAI,
+  dataCutoffDate
+) {
+  const multiCompanyAppPerformance = Object.keys(dataAI).reduce(
+    (acc, companyName) => {
+      if (dataAI[companyName]) {
+        acc[companyName] = dataAI[companyName]["app_performance"];
+      }
+      return acc;
+    },
+    {}
+  );
+  const timeFrames = ["month", "quarterYear", "year"];
+  return timeFrames.map((timeFrame) =>
+    convertToLineChartData(
+      multiCompanyAppPerformance,
+      timeFrame,
+      dataCutoffDate
+    )
+  );
+}
