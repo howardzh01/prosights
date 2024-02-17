@@ -7,7 +7,9 @@ import {
   roundPeNumbers,
   normalizeStackedAggData,
   convertToGrowthData,
+  calculateMean,
 } from "./Utils";
+import { CHARTS, CHARTJS_COLORS } from "../constants";
 
 // Below are API data converters
 export function convertToHeadcountChartData(
@@ -612,9 +614,73 @@ export function convertToAppUsageMarketShareVsPeersData(
     highlightedRows: {},
   };
 
-  console.log("WAT", chartData, tableData);
-
   return { chartData: chartData, tableData: tableData };
+}
+
+export function convertToAppUsageLoyaltyVsPeersData(
+  multiCompanyAppData,
+  type = CHARTS.appLTMTimePerUser
+) {
+  // const relevant_keys = getRelevantKeys(type);
+
+  // Get the date 12 months ago from today
+  const date12MonthsAgo = new Date();
+  date12MonthsAgo.setMonth(date12MonthsAgo.getUTCMonth() - 13);
+
+  const companyAverages = {};
+
+  for (const [company, data] of Object.entries(multiCompanyAppData)) {
+    if (!data) continue;
+    let filteredData;
+    // Handle retentiion data differently
+    if (type === CHARTS.appLTMRetention) {
+      if (!data["retention"]) continue;
+      filteredData = Object.entries(data["retention"])
+        .filter(([time, data]) => new Date(time) >= date12MonthsAgo)
+        // .map(([time, data]) => data.est_percentage_active_days);
+        .reduce((obj, [time, data]) => {
+          let estD30Retention = data.filter(
+            (item) => item?.retention_days === 30
+          )?.[0]?.est_retention_value;
+          obj[time] = estD30Retention * 100;
+          return obj;
+        }, {});
+    } else {
+      if (!data["app_performance"]) continue;
+      filteredData = Object.entries(data["app_performance"])
+        .filter(([time, data]) => new Date(time) >= date12MonthsAgo)
+        // .map(([time, data]) => data.est_percentage_active_days);
+        .reduce((obj, [time, data]) => {
+          if (type === CHARTS.appLTMActiveDays) {
+            obj[time] = data.est_percentage_active_days * 100;
+          } else if (type === CHARTS.appLTMTimePerUser) {
+            obj[time] = data.est_average_time_per_user / 60 / 1000;
+          } else if (type === CHARTS.appLTMTimePerSession) {
+            obj[time] = data.est_average_session_duration / 60 / 1000;
+          }
+          return obj;
+        }, {});
+    }
+
+    // console.log(Object.keys(filteredData).length);
+    companyAverages[company] = roundPeNumbers(
+      calculateMean(Object.values(filteredData))
+    );
+  }
+
+  const datasets = [
+    {
+      label: "",
+      data: Object.values(companyAverages), // [15, 10, 8]
+      backgroundColor: CHARTJS_COLORS,
+      barThickness: 48,
+    },
+  ];
+
+  return {
+    labels: Object.keys(companyAverages), // Single label as we have separate datasets for each company
+    datasets: datasets,
+  };
 }
 
 // Below are Excel data converters
@@ -639,12 +705,16 @@ function convertBarGraphToExcelFormat(
   );
   const { monthChartData, quarterYearChartData, yearChartData } = chartData;
 
-  const columnTitles = [
-    "Date",
-    ...monthChartData.tableData.tableDatasets.map((dataset) => dataset.label),
-  ];
-  const datasets = Object.values(chartData).map((data) => {
-    return columnTitles.reduce((acc, title, index) => {
+  const columnTitles = Array.from(
+    { length: Object.keys(chartData).length },
+    () => [
+      "Date",
+      ...monthChartData.tableData.tableDatasets.map((dataset) => dataset.label),
+    ]
+  );
+
+  const datasets = Object.values(chartData).map((data, dataIndex) => {
+    return columnTitles[dataIndex].reduce((acc, title, index) => {
       if (index === 0) {
         acc[title] = data.chartData.labels;
       } else {
@@ -829,10 +899,7 @@ export function convertAppUsageGrowthVsPeersChartDataToExcelFormat(
   );
 }
 
-export function convertAppUsageMarketShareVsPeersDataToExcelFormat(
-  dataAI,
-  dataCutoffDate
-) {
+export function convertAppUsageMarketShareVsPeersDataToExcelFormat(dataAI) {
   const multiCompanyAppPerformance = Object.keys(dataAI).reduce(
     (acc, companyName) => {
       if (dataAI[companyName]) {
@@ -844,19 +911,37 @@ export function convertAppUsageMarketShareVsPeersDataToExcelFormat(
   );
   const timeFrames = ["month", "quarterYear", "year"];
 
-  console.log(
-    "?D",
-    timeFrames.map((timeFrame) =>
-      convertToAppUsageMarketShareVsPeersData(
-        multiCompanyAppPerformance,
-        timeFrame
-      )
-    )
-  );
   return timeFrames.map((timeFrame) =>
     convertToAppUsageMarketShareVsPeersData(
       multiCompanyAppPerformance,
       timeFrame
     )
   );
+}
+
+export function convertAppUsageLoyalUsersVsPeersDataToExcelFormat(dataAI) {
+  const timeFrames = [
+    CHARTS.appLTMRetention,
+    CHARTS.appLTMActiveDays,
+    CHARTS.appLTMTimePerUser,
+    CHARTS.appLTMTimePerSession,
+  ];
+
+  return {
+    columnTitles: timeFrames.map((timeFrame) => ["Company", timeFrame]),
+    datasets: timeFrames.map((timeFrame) => {
+      let convertedData = convertToAppUsageLoyaltyVsPeersData(
+        dataAI,
+        timeFrame
+      );
+      return {
+        Company: convertedData.labels,
+        [timeFrame]: convertedData.datasets[0].data.map((item) =>
+          isNaN(Number(item)) ? item : Number(item)
+        ),
+      };
+    }),
+    differentColors: true,
+    titles: timeFrames,
+  };
 }
