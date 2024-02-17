@@ -40,9 +40,6 @@ def generate_stacked_excel(req: List[Dict]):
     output = io.BytesIO()
     workbook = xlsxwriter.Workbook(output, {'in_memory': True})
 
-    # Create a default font format for the workbook.
-    default_font_format = workbook.add_format({'font_name': 'Arial', 'font_size': 8})
-
     # Create a format for the column titles with center alignment and a bottom border.
     title_format = workbook.add_format({'bottom': 1, 'align': 'center', 'valign': 'vcenter', 'font_name': 'Arial', 'font_size': 8})
 
@@ -50,7 +47,7 @@ def generate_stacked_excel(req: List[Dict]):
     center_format = workbook.add_format({'align': 'center', 'valign': 'vcenter', 'font_name': 'Arial', 'font_size': 8 })
 
     # Starting row for the first dataset's data
-    data_start_row = 1
+    data_start_row = 2
 
     # Initialize a variable to track the chart position for the first chart
     chart_placement_row = None
@@ -69,11 +66,11 @@ def generate_stacked_excel(req: List[Dict]):
 
         # Write column titles with the title format.
         for col, title in enumerate(columnTitles):
-            worksheet.write(0, col, title, title_format)  # Start from A1
+            worksheet.write(1, col + 1, title, title_format)
 
         # Write data for the current dataset
         for row, label in enumerate(labels):
-            worksheet.write(data_start_row + row, 0, label, center_format)  # Write the date label in the first column
+            worksheet.write(data_start_row + row, 1, label, center_format)  # Write the date label in the first column
             for col, dataset in enumerate(datasets):
                 dataPoint = dataset['rawData'][row]
                 # Convert to number if possible
@@ -81,7 +78,7 @@ def generate_stacked_excel(req: List[Dict]):
                     dataPoint = float(dataPoint)
                 except ValueError:
                     pass
-                worksheet.write(data_start_row + row, col + 1, dataPoint, center_format)  # Write the data point
+                worksheet.write(data_start_row + row, col + 2, dataPoint, center_format)  # Write the data point
 
         # Calculate the ending row for the current dataset's data
         data_end_row = data_start_row + len(labels)
@@ -98,8 +95,8 @@ def generate_stacked_excel(req: List[Dict]):
 
             chart.add_series({
                 'name': dataset['label'],
-                'categories': f'=Sheet1!$A${data_start_row + 1}:$A${data_end_row}',
-                'values': f'=Sheet1!${chr(66 + i)}${data_start_row + 1}:${chr(66 + i)}${data_end_row}',
+                'categories': f'=Sheet1!$B${data_start_row + 1}:$B${data_end_row}',
+                'values': f'=Sheet1!${chr(67 + i)}${data_start_row + 1}:${chr(67 + i)}${data_end_row}',
                 'data_labels': {'value': False, 'position': 'inside_end'},
                 'fill': {'color': background_color}
             })

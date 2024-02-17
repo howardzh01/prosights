@@ -356,6 +356,55 @@ export function convertToLineChartData(
   return { chartData: chartData, tableData: tableData };
 }
 
+export function convertToMarketShareData(
+  trafficData,
+  timescale,
+  cutOffDate,
+  outputKey = "visits"
+) {
+  const companyNames = Object.keys(trafficData);
+  const aggData = companyNames.reduce((acc, key) => {
+    acc[key] = aggregateData(trafficData[key], outputKey, "sum", timescale);
+    return acc;
+  }, {});
+
+  // aggData: {company1: {timekey: visits}, company2: {timekey: visits}, ...}
+  const firstChannelData = aggData[companyNames[0]]; // use to extract timescale\
+  const percentAggData = normalizeStackedAggData(aggData);
+  // console.log("percentAggData", percentAggData);
+  const chartData = {
+    labels: Object.keys(firstChannelData),
+    datasets: Object.keys(aggData).map((key) => ({
+      data: Object.values(percentAggData[key]).map((x) =>
+        Number(roundPeNumbers(x))
+      ),
+      rawData: Object.values(aggData[key]),
+      borderWidth: 1,
+      label: key,
+    })),
+  };
+  // chartData.datasets = convertStackedChartDataToPercent(chartData.datasets); // convert to percent so bars add to 100%
+
+  let { tableHeaders, tableLabels } = getTableInfo(firstChannelData);
+
+  const cutoffIndex = findInsertIndex(
+    Object.keys(firstChannelData).map((x) => convertLabelToDate(x)),
+    cutOffDate,
+    "left"
+  );
+  // console.log("WEBSTAc cutoff", cutoffIndex, Object.keys(firstChannelData));
+
+  const tableData = {
+    tableHeaders: tableHeaders.slice(cutoffIndex),
+    tableLabels: tableLabels.slice(cutoffIndex),
+    tableDatasets: [...chartData["datasets"]],
+    topBorderedRows: [],
+    highlightedRows: {},
+  };
+
+  return { chartData: chartData, tableData: tableData };
+}
+
 // Below are Excel data converters
 function convertBarGraphToExcelFormat(
   data,
@@ -504,5 +553,21 @@ export function convertTrafficGrowthVsPeersChartDataToExcelFormat(
   const timeFrames = ["month", "quarterYear", "year"];
   return timeFrames.map((timeFrame) =>
     convertToLineChartData(trafficData, timeFrame, dataCutoffDate, "visits")
+  );
+}
+
+export function convertTrafficMarketShareVsPeersDataToExcelFormat(
+  trafficData,
+  dataCutoffDate
+) {
+  const timeFrames = ["month", "quarterYear", "year"];
+  console.log(
+    "WHAT",
+    timeFrames.map((timeFrame) =>
+      convertToMarketShareData(trafficData, timeFrame, dataCutoffDate)
+    )
+  );
+  return timeFrames.map((timeFrame) =>
+    convertToMarketShareData(trafficData, timeFrame, dataCutoffDate)
   );
 }

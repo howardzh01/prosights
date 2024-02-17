@@ -1,14 +1,8 @@
 import { useState, useEffect } from "react";
 import GenericBarAndTable from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
-import {
-  aggregateData,
-  findInsertIndex,
-  getTableInfo,
-  convertLabelToDate,
-  roundPeNumbers,
-  normalizeStackedAggData,
-} from "../../utils/Utils";
+import { roundPeNumbers } from "../../utils/Utils";
+import { convertToMarketShareData } from "../../utils/ChartUtils";
 import GenericStackedBar from "./templates/GenericStackedBar";
 import { CHARTS } from "../../constants";
 import Image from "next/image";
@@ -22,55 +16,14 @@ function WebTrafficStackedBarPeers({
   // TODO: make this more compact later - probably 1 useState with an object containing all timescale states, or useReducer
   const [trafficByChannelTimescale, setTrafficByChannelTimescale] =
     useState("quarterYear");
-  const ouputKey = "visits";
   if (!multiCompanyTrafficData) return null;
-  function convertToChannelChartData(trafficData, timescale) {
-    const companyNames = Object.keys(trafficData);
-    const aggData = companyNames.reduce((acc, key) => {
-      acc[key] = aggregateData(trafficData[key], ouputKey, "sum", timescale);
-      return acc;
-    }, {});
-
-    // aggData: {company1: {timekey: visits}, company2: {timekey: visits}, ...}
-    const firstChannelData = aggData[companyNames[0]]; // use to extract timescale\
-    const percentAggData = normalizeStackedAggData(aggData);
-    // console.log("percentAggData", percentAggData);
-    const chartData = {
-      labels: Object.keys(firstChannelData),
-      datasets: Object.keys(aggData).map((key) => ({
-        data: Object.values(percentAggData[key]).map((x) =>
-          Number(roundPeNumbers(x))
-        ),
-        borderWidth: 1,
-        label: key,
-      })),
-    };
-    // chartData.datasets = convertStackedChartDataToPercent(chartData.datasets); // convert to percent so bars add to 100%
-
-    let { tableHeaders, tableLabels } = getTableInfo(firstChannelData);
-
-    const cutoffIndex = findInsertIndex(
-      Object.keys(firstChannelData).map((x) => convertLabelToDate(x)),
-      cutOffDate,
-      "left"
-    );
-    // console.log("WEBSTAc cutoff", cutoffIndex, Object.keys(firstChannelData));
-
-    const tableData = {
-      tableHeaders: tableHeaders.slice(cutoffIndex),
-      tableLabels: tableLabels.slice(cutoffIndex),
-      tableDatasets: [...chartData["datasets"]],
-      topBorderedRows: [],
-      highlightedRows: {},
-    };
-    return { chartData: chartData, tableData: tableData };
-  }
 
   const trafficByChannel = (
     <GenericStackedBar
-      data={convertToChannelChartData(
+      data={convertToMarketShareData(
         multiCompanyTrafficData,
-        trafficByChannelTimescale
+        trafficByChannelTimescale,
+        cutOffDate
       )}
       title={"Total Visits Market Share (%)"}
       showDataLabels={trafficByChannelTimescale === "quarterYear"}
@@ -84,7 +37,11 @@ function WebTrafficStackedBarPeers({
   );
   const yearTrafficByChannelGraph = (
     <GenericStackedBar
-      data={convertToChannelChartData(multiCompanyTrafficData, "year")}
+      data={convertToMarketShareData(
+        multiCompanyTrafficData,
+        "year",
+        cutOffDate
+      )}
       showTimescaleButtons={false}
       showModalButtons={false}
       scrollStart={"right"}
