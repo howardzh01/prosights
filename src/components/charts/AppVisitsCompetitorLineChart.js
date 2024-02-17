@@ -10,6 +10,7 @@ import {
   normalizeStackedAggData,
   convertToGrowthData,
 } from "../../utils/Utils";
+import { convertToLineChartData } from "../../utils/ChartUtils";
 import GenericLine from "./templates/GenericLine";
 import { CHARTS } from "../../constants";
 import Image from "next/image";
@@ -37,54 +38,15 @@ function AppVisitsCompetitorLineChart({
   )
     return null;
   const [timescale, setTimeScale] = useState("quarterYear");
-  const ouputKey = "est_average_active_users";
   if (!multiCompanyAppData) return null;
-
-  function convertToLineChartData(trafficData, timescale) {
-    const companyNames = Object.keys(trafficData);
-    const aggData = companyNames.reduce((acc, key) => {
-      acc[key] = aggregateData(trafficData[key], ouputKey, "mean", timescale);
-      return acc;
-    }, {});
-    // aggData: {company1: {timekey: visits}, company2: {timekey: visits}, ...}
-
-    const firstCompanyData = aggData[companyNames[0]]; // use to extract timescale
-    const cutoffIndex = findInsertIndex(
-      Object.keys(firstCompanyData).map((x) => convertLabelToDate(x)),
-      cutOffDate,
-      "left"
-    );
-
-    const growthAggData = companyNames.reduce((acc, key) => {
-      acc[key] = convertToGrowthData(aggData[key], "number").slice(cutoffIndex);
-      return acc;
-    }, {});
-    const chartData = {
-      labels: Object.keys(firstCompanyData).slice(cutoffIndex),
-      datasets: Object.keys(aggData).map((key) => ({
-        data: Object.values(growthAggData[key]).map(
-          (x) => (x ? Number(roundPeNumbers(x)) : null) // this will convert null to 0
-        ),
-        borderWidth: 2,
-        label: key,
-      })),
-    };
-
-    let { tableHeaders, tableLabels } = getTableInfo(firstCompanyData);
-
-    const tableData = {
-      tableHeaders: tableHeaders.slice(cutoffIndex),
-      tableLabels: tableLabels.slice(cutoffIndex),
-      tableDatasets: [...chartData["datasets"]],
-      topBorderedRows: [],
-      highlightedRows: {},
-    };
-    return { chartData: chartData, tableData: tableData };
-  }
 
   const trafficGrowth = (
     <GenericLine
-      data={convertToLineChartData(multiCompanyAppPerformance, timescale)}
+      data={convertToLineChartData(
+        multiCompanyAppPerformance,
+        timescale,
+        cutOffDate
+      )}
       title={"Visits Growth"}
       showDataLabels={timescale === "quarterYear"}
       timescale={timescale}
@@ -97,7 +59,11 @@ function AppVisitsCompetitorLineChart({
   );
   const yearTrafficGrowth = (
     <GenericLine
-      data={convertToLineChartData(multiCompanyAppPerformance, "year")}
+      data={convertToLineChartData(
+        multiCompanyAppPerformance,
+        "year",
+        cutOffDate
+      )}
       showTimescaleButtons={false}
       showModalButtons={false}
       scrollStart={"right"}

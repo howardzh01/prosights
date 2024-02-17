@@ -6,6 +6,7 @@ import {
   fromUnderscoreCase,
   roundPeNumbers,
   normalizeStackedAggData,
+  convertToGrowthData,
 } from "./Utils";
 
 // Below are API data converters
@@ -306,6 +307,55 @@ export function convertToChannelChartData(
   return { chartData: chartData, tableData: tableData };
 }
 
+export function convertToLineChartData(
+  trafficData,
+  timescale,
+  cutOffDate,
+  outputKey = "est_average_active_users"
+) {
+  const companyNames = Object.keys(trafficData);
+  const aggData = companyNames.reduce((acc, key) => {
+    acc[key] = aggregateData(trafficData[key], outputKey, "mean", timescale);
+    return acc;
+  }, {});
+  // aggData: {company1: {timekey: visits}, company2: {timekey: visits}, ...}
+
+  const firstCompanyData = aggData[companyNames[0]]; // use to extract timescale
+  const cutoffIndex = findInsertIndex(
+    Object.keys(firstCompanyData).map((x) => convertLabelToDate(x)),
+    cutOffDate,
+    "left"
+  );
+
+  const growthAggData = companyNames.reduce((acc, key) => {
+    acc[key] = convertToGrowthData(aggData[key], "number").slice(cutoffIndex);
+    return acc;
+  }, {});
+  const chartData = {
+    labels: Object.keys(firstCompanyData).slice(cutoffIndex),
+    datasets: Object.keys(aggData).map((key) => ({
+      data: Object.values(growthAggData[key]).map(
+        (x) => (x ? Number(roundPeNumbers(x)) : null) // this will convert null to 0
+      ),
+      rawData: Object.values(aggData[key]).slice(cutoffIndex),
+      borderWidth: 2,
+      label: key,
+    })),
+  };
+
+  let { tableHeaders, tableLabels } = getTableInfo(firstCompanyData);
+
+  const tableData = {
+    tableHeaders: tableHeaders.slice(cutoffIndex),
+    tableLabels: tableLabels.slice(cutoffIndex),
+    tableDatasets: [...chartData["datasets"]],
+    topBorderedRows: [],
+    highlightedRows: {},
+  };
+
+  return { chartData: chartData, tableData: tableData };
+}
+
 // Below are Excel data converters
 function convertBarGraphToExcelFormat(
   data,
@@ -368,8 +418,6 @@ function convertDoughnutGraphToExcelFormat(trafficData, titles) {
     datasets: datasets,
   };
 }
-
-function convertStackedBarGraphToExcelFormat() {}
 
 export function convertHeadCountChartDataToExcelFormat(
   headCountData,
@@ -446,5 +494,15 @@ export function convertTrafficByChannelChartDataToExcelFormat(
       timeFrame,
       dataCutoffDate
     )
+  );
+}
+
+export function convertTrafficGrowthVsPeersChartDataToExcelFormat(
+  trafficData,
+  dataCutoffDate
+) {
+  const timeFrames = ["month", "quarterYear", "year"];
+  return timeFrames.map((timeFrame) =>
+    convertToLineChartData(trafficData, timeFrame, dataCutoffDate, "visits")
   );
 }
