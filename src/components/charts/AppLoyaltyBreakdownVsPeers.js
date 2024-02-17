@@ -27,9 +27,11 @@ function AppLoyaltyBreakdownVsPeers({
     const companyAverages = {};
 
     for (const [company, data] of Object.entries(multiCompanyAppData)) {
+      if (!data) continue;
       let filteredData;
       // Handle retentiion data differently
       if (type === CHARTS.appLTMRetention) {
+        if (!data["retention"]) continue;
         filteredData = Object.entries(data["retention"])
           .filter(([time, data]) => new Date(time) >= date12MonthsAgo)
           // .map(([time, data]) => data.est_percentage_active_days);
@@ -41,6 +43,7 @@ function AppLoyaltyBreakdownVsPeers({
             return obj;
           }, {});
       } else {
+        if (!data["app_performance"]) continue;
         filteredData = Object.entries(data["app_performance"])
           .filter(([time, data]) => new Date(time) >= date12MonthsAgo)
           // .map(([time, data]) => data.est_percentage_active_days);
