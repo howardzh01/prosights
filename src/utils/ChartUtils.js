@@ -4,8 +4,11 @@ import {
   getTableInfo,
   aggregateData,
   fromUnderscoreCase,
+  roundPeNumbers,
+  normalizeStackedAggData,
 } from "./Utils";
 
+// Below are API data converters
 export function convertToHeadcountChartData(
   data,
   displayedLabel = "HeadCount",
@@ -130,7 +133,7 @@ export function convertToGeoDoughnutData(
   };
 }
 
-export function convertToChannelChartData(
+export function convertToChannelDoughnutData(
   trafficData,
   type = "traffic_by_channel"
 ) {
@@ -192,6 +195,118 @@ function getRelevantKeys(type) {
   }
 }
 
+export function convertToChannelChartData(
+  trafficData,
+  type = "traffic_by_channel",
+  timescale,
+  dataCutoffDate
+) {
+  const displayedKeyMap = {
+    direct: "Direct",
+    mail: "Mail",
+    referral: "Referral",
+    social: "Social",
+    search_organic: "Organic Search",
+    social_organic: "Organic Social",
+    search_paid: "Paid Search",
+    social_paid: "Paid Social",
+    display_ad: "Display Ad",
+    unknown_channel: "Other",
+  };
+  const hqTrafficKeys = [
+    "direct",
+    "mail",
+    "referral",
+    "search_organic",
+    "social_organic",
+  ];
+  const paidTrafficKeys = ["search_paid", "social_paid", "display_ad"];
+  const paidTrafficRowName = "Paid Visits";
+  let relevant_keys,
+    condensePaidKeys = false;
+  if (type === "traffic_by_channel") {
+    relevant_keys = [
+      "direct",
+      "mail",
+      "referral",
+      "search_organic",
+      "social_organic",
+      "search_paid",
+      "social_paid",
+      "display_ad",
+      "unknown_channel",
+    ];
+    condensePaidKeys = true;
+  } else if (type === "traffic_by_device") {
+    relevant_keys = ["mobile_visits", "desktop_visits"];
+  } else if (type === "users_by_device") {
+    relevant_keys = ["mobile_users", "desktop_users"];
+  } else if (type === "traffic_by_organic_paid") {
+    relevant_keys = [
+      "search_organic",
+      "social_organic",
+      "search_paid",
+      "social_paid",
+    ];
+  } else {
+    relevant_keys = [
+      "search_organic",
+      "social_organic",
+      "search_paid",
+      "social_paid",
+    ];
+  }
+
+  const aggData = relevant_keys.reduce((acc, key) => {
+    const displayedKey =
+      condensePaidKeys && paidTrafficKeys.includes(key)
+        ? paidTrafficRowName
+        : displayedKeyMap[key];
+
+    acc[displayedKey] = aggregateData(trafficData, key, "sum", timescale);
+    return acc;
+  }, {});
+
+  // aggData: {direct: {time_key: output_key}, mail: {time_key: output_key}, ...}
+  const firstChannelData = aggData[displayedKeyMap[relevant_keys[0]]]; // use to extract timescale
+  const cutoffIndex = findInsertIndex(
+    Object.keys(firstChannelData).map((x) => convertLabelToDate(x)),
+    dataCutoffDate,
+    "left"
+  );
+  const percentAggData = normalizeStackedAggData(aggData);
+  // console.log("percentAggData", percentAggData);
+  const chartData = {
+    labels: Object.keys(firstChannelData).slice(cutoffIndex),
+    datasets: Object.keys(aggData).map((key) => ({
+      data: Object.values(percentAggData[key])
+        .slice(cutoffIndex)
+        .map((x) => Number(roundPeNumbers(x))),
+      rawData: Object.values(aggData[key]).slice(cutoffIndex),
+      borderWidth: 1,
+      label: key,
+    })),
+  };
+  // chartData.datasets = convertStackedChartDataToPercent(chartData.datasets); // convert to percent so bars add to 100%
+
+  let { tableHeaders, tableLabels } = getTableInfo(firstChannelData);
+
+  const tableData = {
+    tableHeaders: tableHeaders.slice(cutoffIndex),
+    tableLabels: tableLabels.slice(cutoffIndex),
+    tableDatasets: [...chartData["datasets"]],
+    topBorderedRows: [paidTrafficRowName],
+    highlightedRows: {
+      Direct: "bg-primaryLight",
+      [paidTrafficRowName]: "bg-customGray-75",
+      // [totalTrafficRow.label]: "bg-customGray-75",
+    },
+  };
+
+  return { chartData: chartData, tableData: tableData };
+}
+
+// Below are Excel data converters
 function convertBarGraphToExcelFormat(
   data,
   outputKey,
@@ -238,7 +353,7 @@ function convertBarGraphToExcelFormat(
 }
 
 /* trafficData is an array of objects */
-export function convertDoughnutGraphToExcelFormat(trafficData, titles) {
+function convertDoughnutGraphToExcelFormat(trafficData, titles) {
   const columnTitles = titles;
   const datasets = trafficData.map((data) => {
     return data.labels.reduce((acc, label, index) => {
@@ -253,6 +368,8 @@ export function convertDoughnutGraphToExcelFormat(trafficData, titles) {
     datasets: datasets,
   };
 }
+
+function convertStackedBarGraphToExcelFormat() {}
 
 export function convertHeadCountChartDataToExcelFormat(
   headCountData,
@@ -306,7 +423,7 @@ export function convertBreakdownChartDataToExcelFormat(
     traffic_by_organic_paid: "Search",
   };
   let doughnutTrafficData = Object.keys(types).map((type) =>
-    convertToChannelChartData(trafficData, type)
+    convertToChannelDoughnutData(trafficData, type)
   );
   let doughnutGeoTrafficData = convertToGeoDoughnutData(geoTrafficData);
   let titles = ["Geography", ...Object.values(types)];
@@ -314,5 +431,20 @@ export function convertBreakdownChartDataToExcelFormat(
   return convertDoughnutGraphToExcelFormat(
     [doughnutGeoTrafficData, ...doughnutTrafficData],
     titles
+  );
+}
+
+export function convertTrafficByChannelChartDataToExcelFormat(
+  trafficData,
+  dataCutoffDate
+) {
+  const timeFrames = ["month", "quarterYear", "year"];
+  return timeFrames.map((timeFrame) =>
+    convertToChannelChartData(
+      trafficData,
+      "traffic_by_channel",
+      timeFrame,
+      dataCutoffDate
+    )
   );
 }

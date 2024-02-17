@@ -25,6 +25,7 @@ import {
   convertTotalVisitsChartDataToExcelFormat,
   convertWebUsersChartDataToExcelFormat,
   convertBreakdownChartDataToExcelFormat,
+  convertTrafficByChannelChartDataToExcelFormat,
 } from "../utils/ChartUtils";
 
 export const SelectedChartContext = createContext();
@@ -266,28 +267,33 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
   // }, [country]);
 
   function downloadExcel() {
-    // const { columnTitles, datasets } = convertHeadCountChartDataToExcelFormat(
+    // const result = convertHeadCountChartDataToExcelFormat(
     //   headCountData?.[companyDic.displayedName],
     //   dataCutoffDate
     // );
 
-    // const { columnTitles, datasets } = convertTotalVisitsChartDataToExcelFormat(
+    // const result = convertTotalVisitsChartDataToExcelFormat(
     //   webTrafficData?.[companyDic.displayedName],
     //   dataCutoffDate
     // );
 
-    // const { columnTitles, datasets } = convertWebUsersChartDataToExcelFormat(
+    // const result = convertWebUsersChartDataToExcelFormat(
     //   webTrafficData?.[companyDic.displayedName],
     //   dataCutoffDate
     // );
 
-    const { columnTitles, datasets } = convertBreakdownChartDataToExcelFormat(
-      webTrafficGeoData?.[companyDic.displayedName],
+    // const result = convertBreakdownChartDataToExcelFormat(
+    //   webTrafficGeoData?.[companyDic.displayedName],
+    //   webTrafficData?.[companyDic.displayedName],
+    //   dataCutoffDate
+    // );
+
+    const result = convertTrafficByChannelChartDataToExcelFormat(
       webTrafficData?.[companyDic.displayedName],
       dataCutoffDate
     );
 
-    getExcelDownload(columnTitles, datasets, "doughnut");
+    getExcelDownload(result, "stacked");
   }
 
   const downloadPDF = async () => {

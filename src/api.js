@@ -430,12 +430,7 @@ export const getDataAIData = async ([
   };
 };
 
-export const getExcelDownload = async (
-  columnTitles,
-  datasets,
-  type,
-  dev = false
-) => {
+export const getExcelDownload = async (data, type, dev = false) => {
   try {
     const response = await fetch(
       `https://kev2010--generate-${type}-excel-generate-${type}-excel${
@@ -446,7 +441,7 @@ export const getExcelDownload = async (
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ columnTitles, datasets }),
+        body: JSON.stringify(data),
       }
     );
 
