@@ -30,6 +30,7 @@ import {
   convertTrafficMarketShareVsPeersDataToExcelFormat,
   convertTrafficBreakdownVsPeersDataToExcelFormat,
   convertAppUsageGrowthVsPeersChartDataToExcelFormat,
+  convertAppUsageMarketShareVsPeersDataToExcelFormat,
 } from "../utils/ChartUtils";
 
 export const SelectedChartContext = createContext();
@@ -311,12 +312,17 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
     //   webTrafficData
     // );
 
-    const result = convertAppUsageGrowthVsPeersChartDataToExcelFormat(
+    // const result = convertAppUsageGrowthVsPeersChartDataToExcelFormat(
+    //   dataAIData,
+    //   dataCutoffDate
+    // );
+
+    const result = convertAppUsageMarketShareVsPeersDataToExcelFormat(
       dataAIData,
       dataCutoffDate
     );
 
-    getExcelDownload(result, "line");
+    getExcelDownload(result, "stacked");
   }
 
   const downloadPDF = async () => {

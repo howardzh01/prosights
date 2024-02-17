@@ -573,6 +573,50 @@ export function convertToTrafficBreakdownVsPeersData(
   };
 }
 
+export function convertToAppUsageMarketShareVsPeersData(
+  appData,
+  timescale,
+  outputKey = "est_average_active_users"
+) {
+  const companyNames = Object.keys(appData);
+  const aggData = companyNames.reduce((acc, key) => {
+    acc[key] = aggregateData(appData[key], outputKey, "sum", timescale);
+    return acc;
+  }, {});
+
+  // aggData: {company1: {timekey: visits}, company2: {timekey: visits}, ...}
+  const firstChannelData = aggData[companyNames[0]]; // use to extract timescale
+  const percentAggData = normalizeStackedAggData(aggData);
+  const chartData = {
+    labels: Object.keys(firstChannelData),
+    datasets: Object.keys(aggData).map((key) => ({
+      data: Object.values(percentAggData[key]).map((x) =>
+        Number(roundPeNumbers(x))
+      ),
+      rawData: Object.values(aggData[key]),
+      borderWidth: 1,
+      label: key,
+    })),
+  };
+  // chartData.datasets = convertStackedChartDataToPercent(chartData.datasets); // convert to percent so bars add to 100%
+
+  let { tableHeaders, tableLabels } = getTableInfo(firstChannelData);
+
+  const cutoffIndex = 0;
+
+  const tableData = {
+    tableHeaders: tableHeaders.slice(cutoffIndex),
+    tableLabels: tableLabels.slice(cutoffIndex),
+    tableDatasets: [...chartData["datasets"]],
+    topBorderedRows: [],
+    highlightedRows: {},
+  };
+
+  console.log("WAT", chartData, tableData);
+
+  return { chartData: chartData, tableData: tableData };
+}
+
 // Below are Excel data converters
 function convertBarGraphToExcelFormat(
   data,
@@ -781,6 +825,38 @@ export function convertAppUsageGrowthVsPeersChartDataToExcelFormat(
       multiCompanyAppPerformance,
       timeFrame,
       dataCutoffDate
+    )
+  );
+}
+
+export function convertAppUsageMarketShareVsPeersDataToExcelFormat(
+  dataAI,
+  dataCutoffDate
+) {
+  const multiCompanyAppPerformance = Object.keys(dataAI).reduce(
+    (acc, companyName) => {
+      if (dataAI[companyName]) {
+        acc[companyName] = dataAI[companyName]["app_performance"];
+      }
+      return acc;
+    },
+    {}
+  );
+  const timeFrames = ["month", "quarterYear", "year"];
+
+  console.log(
+    "?D",
+    timeFrames.map((timeFrame) =>
+      convertToAppUsageMarketShareVsPeersData(
+        multiCompanyAppPerformance,
+        timeFrame
+      )
+    )
+  );
+  return timeFrames.map((timeFrame) =>
+    convertToAppUsageMarketShareVsPeersData(
+      multiCompanyAppPerformance,
+      timeFrame
     )
   );
 }
