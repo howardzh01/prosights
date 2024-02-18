@@ -49,15 +49,21 @@ function CompetitorOverviewSection({
         logo: crunchbaseData[companyName].fields.image_url,
         name: companyName,
         companyAbout: companyDescriptions[companyName].company_description,
-        companyHeadquarters: `${
-          crunchbaseData[companyName].fields.location_identifiers[0].value
-        }, ${
-          US_STATE_TO_ABBREV[
-            crunchbaseData[
-              companyName
-            ].fields.location_identifiers[1].value.toLowerCase()
-          ]
-        }`,
+        companyHeadquarters: crunchbaseData[companyName].fields[
+          "location_identifiers"
+        ]
+          ? `${
+              crunchbaseData[companyName].fields["location_identifiers"][0][
+                "value"
+              ]
+            }, ${
+              US_STATE_TO_ABBREV[
+                crunchbaseData[companyName].fields["location_identifiers"][1][
+                  "value"
+                ].toLowerCase()
+              ]
+            }`
+          : "--",
         companyHeadcount: companyHeadcount,
         companyValuation: crunchbaseData[companyName].fields["valuation"]?.[
           "value_usd"
