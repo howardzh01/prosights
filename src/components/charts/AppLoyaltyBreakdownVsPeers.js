@@ -25,7 +25,6 @@ function AppLoyaltyBreakdownVsPeers({
     date12MonthsAgo.setMonth(date12MonthsAgo.getUTCMonth() - 13);
 
     const companyAverages = {};
-
     for (const [company, data] of Object.entries(multiCompanyAppData)) {
       if (!data) continue;
       let filteredData;
@@ -49,16 +48,28 @@ function AppLoyaltyBreakdownVsPeers({
           // .map(([time, data]) => data.est_percentage_active_days);
           .reduce((obj, [time, data]) => {
             if (type === CHARTS.appLTMActiveDays) {
-              obj[time] = data.est_percentage_active_days * 100;
+              obj[time] =
+                data.est_percentage_active_days === null
+                  ? null
+                  : data.est_percentage_active_days * 100;
             } else if (type === CHARTS.appLTMTimePerUser) {
-              obj[time] = data.est_average_time_per_user / 60 / 1000;
+              obj[time] =
+                data.est_average_time_per_user === null
+                  ? null
+                  : data.est_average_time_per_user / 60 / 1000;
             } else if (type === CHARTS.appLTMTimePerSession) {
-              obj[time] = data.est_average_session_duration / 60 / 1000;
+              obj[time] =
+                data.est_average_session_duration === null
+                  ? null
+                  : data.est_average_session_duration / 60 / 1000;
             }
             return obj;
           }, {});
       }
 
+      if (company === "Grailed") {
+        console.log(filteredData, calculateMean(Object.values(filteredData)));
+      }
       // console.log(Object.keys(filteredData).length);
       companyAverages[company] = roundPeNumbers(
         calculateMean(Object.values(filteredData))
@@ -137,18 +148,18 @@ function AppLoyaltyBreakdownVsPeers({
   let title;
   switch (selectedChart) {
     case CHARTS.appLTMRetention:
-      formatChartLabelFunction = (value) => `${value}%`;
+      formatChartLabelFunction = (value) => (value !== null ? `${value}%` : "");
       break;
     case CHARTS.appLTMActiveDays:
-      formatChartLabelFunction = (value) => `${value}%`;
-
+      formatChartLabelFunction = (value) => (value !== null ? `${value}%` : "");
       break;
     case CHARTS.appLTMTimePerUser:
-      formatChartLabelFunction = (value) => `${value} min`;
-
+      formatChartLabelFunction = (value) =>
+        value !== null ? `${value} min` : "";
       break;
     case CHARTS.appLTMTimePerSession:
-      formatChartLabelFunction = (value) => `${value} min`;
+      formatChartLabelFunction = (value) =>
+        value !== null ? `${value} min` : "";
       break;
     // if no selected chart, return by channel
     default:

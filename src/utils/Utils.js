@@ -467,5 +467,5 @@ export function calculateMean(array) {
 
   // Calculate the mean, avoiding division by zero
   const count = filteredArray.length;
-  return count > 0 ? sum / count : 0;
+  return count > 0 ? sum / count : null;
 }

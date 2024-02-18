@@ -1,5 +1,6 @@
 import Image from "next/image";
 import React from "react";
+import { COUNTRY_LIST } from "../../../constants";
 
 function GenericLocationDisplay({ location, lastTwelveMonthsView = false }) {
   if (!location && !lastTwelveMonthsView) return null;
@@ -29,7 +30,9 @@ function GenericLocationDisplay({ location, lastTwelveMonthsView = false }) {
             width={128}
             height={128}
           />
-          <p className="text-xs font-normal text-customGray-200">{location}</p>
+          <p className="text-xs font-normal text-customGray-200">
+            {COUNTRY_LIST?.[location] || location}
+          </p>
         </>
       )}
     </div>

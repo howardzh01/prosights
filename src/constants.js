@@ -150,3 +150,19 @@ export const US_STATE_TO_ABBREV = {
   "united states minor outlying islands": "UM",
   "u.s. virgin islands": "VI",
 };
+
+export const COUNTRY_LIST = {
+  US: "United States",
+  CA: "Canada",
+  MX: "Mexico",
+  CN: "China",
+  KR: "South Korea",
+  JP: "Japan",
+  IN: "India",
+  GB: "United Kingdom",
+  FR: "France",
+  IT: "Italy",
+  DE: "Germany",
+  ES: "Spain",
+  WW: "Worldwide",
+};

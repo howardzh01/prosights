@@ -188,13 +188,13 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
       timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     })
     .replaceAll("-", ".");
-  useEffect(() => {
-    // Scroll to the "Loyalty vs. Peers" section on page load
-    const section = document.getElementById("Loyalty vs. Peers");
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }, []); // The empty array ensures this effect runs only once after initial render
+  // useEffect(() => {
+  //   // Scroll to the "Loyalty vs. Peers" section on page load
+  //   const section = document.getElementById("Loyalty vs. Peers");
+  //   if (section) {
+  //     section.scrollIntoView({ behavior: "smooth", block: "start" });
+  //   }
+  // }, []); // The empty array ensures this effect runs only once after initial render
 
   useEffect(() => {
     if (!dataLoading && companyDic) {
@@ -371,7 +371,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
             // Main Content
             <div
               id="main-content"
-              className="flex flex-col w-screen overflow-x-hidden items-center px-10 bg-white bg-repeat bg-center"
+              className="h-screen flex flex-col w-screen overflow-x-hidden items-center px-10 bg-white bg-repeat bg-center"
               style={{
                 backgroundImage: "url('/assets/backgroundPatternLight.svg')",
               }}
@@ -387,7 +387,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                 />
               </div>
               {/* Company name, country, and comparing section */}
-              <div className="mt-6 flex flex-row justify-between w-full items-center">
+              <div className="mb-2 sticky top-0 z-50 mt-6 flex flex-row justify-between w-full items-center">
                 <div className="flex flex-row items-center">
                   {crunchbaseDataPull?.[companyDic.displayedName]?.["fields"]?.[
                     "image_url"

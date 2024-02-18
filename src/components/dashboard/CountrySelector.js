@@ -1,20 +1,5 @@
 import React from "react";
-
-const countryList = {
-  US: "United States",
-  CA: "Canada",
-  MX: "Mexico",
-  CN: "China",
-  KR: "South Korea",
-  JP: "Japan",
-  IN: "India",
-  GB: "United Kingdom",
-  FR: "France",
-  IT: "Italy",
-  DE: "Germany",
-  ES: "Spain",
-  WW: "Worldwide",
-};
+import { COUNTRY_LIST } from "../../constants";
 
 const CountrySelector = ({ country, setCountry }) => {
   return (
@@ -23,9 +8,9 @@ const CountrySelector = ({ country, setCountry }) => {
       value={country}
       onChange={(e) => setCountry(e.target.value)}
     >
-      {Object.entries(countryList).map(([code, name]) => (
+      {Object.entries(COUNTRY_LIST).map(([code, name]) => (
         <option key={code} value={code}>
-          {code}
+          {name}
         </option>
       ))}
     </select>
