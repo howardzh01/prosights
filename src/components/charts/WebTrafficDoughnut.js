@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import GenericDoughnut from "./templates/GenericDoughnut";
 import { CHARTS } from "../../constants";
 import Image from "next/image";
-import { convertToChannelChartData } from "../../utils/ChartUtils";
+import { convertToChannelDoughnutData } from "../../utils/ChartUtils";
 
 function WebTrafficDoughnut({ trafficData, selectedChart = null }) {
   if (!trafficData) return null;
@@ -54,7 +54,7 @@ function WebTrafficDoughnut({ trafficData, selectedChart = null }) {
       </div>
       <div className="px-2">
         <GenericDoughnut
-          chartData={convertToChannelChartData(trafficData, chartType)}
+          chartData={convertToChannelDoughnutData(trafficData, chartType)}
         />
       </div>
     </div>

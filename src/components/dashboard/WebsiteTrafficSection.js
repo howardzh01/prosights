@@ -18,6 +18,7 @@ function WebsiteTrafficSection({
   country,
   webTrafficDic,
   webTrafficGeoDic,
+  downloadExcel,
 }) {
   // Expect webTrafficDic = {company1: trafficData, company2: trafficData, ...}
   const webTrafficData = webTrafficDic?.[company];
@@ -34,6 +35,23 @@ function WebsiteTrafficSection({
           <p className="text-3xl font-semibold text-gray-800 ">
             Website Traffic
           </p>
+          <a
+            className="group inline-flex items-center hover:cursor-pointer hover:text-primary pl-4"
+            onClick={() => downloadExcel("Web Traffic")}
+          >
+            <Image
+              src="/assets/downloadInactive.svg"
+              className="w-6 h-6 opacity-50 object-contain group-hover:hidden"
+              width={256}
+              height={256}
+            />
+            <Image
+              src="/assets/downloadActive.svg"
+              className="w-6 h-6 object-contain hidden group-hover:block"
+              width={256}
+              height={256}
+            />
+          </a>
         </div>
         <div className="flex flex-row items-center ml-4">
           <span className="mr-2 italic text-sm text-[#C3C3C3]">Powered by</span>
@@ -68,21 +86,6 @@ function WebsiteTrafficSection({
             <p className="text-lg font-semibold text-gray-800 mr-2">
               Breakdown
             </p>
-
-            <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
-              <Image
-                src="/assets/downloadInactive.svg"
-                className="w-5 h-5 opacity-50 object-contain group-hover:hidden"
-                width={256}
-                height={256}
-              />
-              <Image
-                src="/assets/downloadActive.svg"
-                className="w-5 h-5 object-contain hidden group-hover:block"
-                width={256}
-                height={256}
-              />
-            </div>
           </div>
           <div className="flex space-x-8 justify-start">
             {webTrafficGeoData !== undefined &&
@@ -349,20 +352,6 @@ function WebsiteTrafficSection({
             <p className="text-lg font-semibold text-gray-800 mr-2">
               Breakdown vs. Peers
             </p>
-            <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
-              <Image
-                src="/assets/downloadInactive.svg"
-                className="w-5 h-5 opacity-50 object-contain group-hover:hidden"
-                width={256}
-                height={256}
-              />
-              <Image
-                src="/assets/downloadActive.svg"
-                className="w-5 h-5 object-contain hidden group-hover:block"
-                width={256}
-                height={256}
-              />
-            </div>
           </div>
           <div className="space-x-8 flex flex-row items-center justify-start w-full">
             <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">

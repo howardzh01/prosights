@@ -12,13 +12,13 @@ stub = modal.Stub("generate_bar_excel")
 
 @stub.function(image=xlsxwriter_image)
 @modal.web_endpoint(method="POST")
-def generate_bar_excel(req: Dict):
+def generate_bar_excel(req: Dict, workbook, sheetName="Sheet1"):
     """
     'req' follows the structure:
 
     ```
     {
-        columnTitles: [Title1, Title2, ...]
+        columnTitles: [[Title1, Title2, ...], [Title1, Title2, ...], ...]
         datasets: [
             {
                 Title1: [datapoint1, datapoint2, ...],
@@ -31,28 +31,25 @@ def generate_bar_excel(req: Dict):
                 ...
             },
             ...
-        ]
+        ],
+        differentColors: false // Optional
+        titles: ["Title1", "Title2", ...] // Optional
     }
     ```
 
     The very first row are column titles. Then multiple datasets are supported, separated vertically by a blank row.
     The length of the columnTitles array must be equal to the number of keys in each object in the datasets array.
     """
-    import io
-    from fastapi.responses import StreamingResponse
-    import xlsxwriter
-
     # Extract the data from the request.
     columnTitles = req.get("columnTitles", [])
     datasets = req.get("datasets", [])
+    # Extract titles if they exist
+    titles = req.get("titles", None)
 
-    # Create an in-memory output file for the new workbook.
-    output = io.BytesIO()
-    workbook = xlsxwriter.Workbook(output, {'in_memory': True})
-    worksheet = workbook.add_worksheet()
+    worksheet = workbook.add_worksheet(sheetName)
 
     # Initialize a list to keep track of the maximum width of each column.
-    max_widths = [len(title) for title in columnTitles]
+    max_widths = [len(title) for title in columnTitles[0]]
 
     # Create a default font format for the workbook.
     default_font_format = workbook.add_format({'font_name': 'Arial', 'font_size': 8})
@@ -63,17 +60,18 @@ def generate_bar_excel(req: Dict):
     # Create a format for center alignment for other cells.
     center_format = workbook.add_format({'align': 'center', 'valign': 'vcenter', 'font_name': 'Arial', 'font_size': 8 })
 
-    # Write column titles with the title format and calculate column widths.
-    for col, title in enumerate(columnTitles):
-        worksheet.write(1, col + 1, title, title_format)  # Start from B2 instead of A1
-        # Adjust column width if necessary
-        max_widths[col] = max(max_widths[col], len(title))
-
     # Current row after writing column titles.
-    current_row = 2  # Adjust starting row to 2 for data entries
+    current_row = 1  # Adjust starting row to 2 for data entries
     
-    for dataset in datasets:
-        for col, title in enumerate(columnTitles):
+    for dataset_index, dataset in enumerate(datasets):
+        # Write column titles for each dataset section
+        for col, title in enumerate(columnTitles[dataset_index]):
+            worksheet.write(current_row, col + 1, title, title_format)  # Write titles at the beginning of each dataset section
+            # Adjust column width if necessary
+            max_widths[col] = max(max_widths[col], len(title))
+        current_row += 1  # Move to the next row to start writing data
+
+        for col, title in enumerate(columnTitles[dataset_index]):
             data = dataset.get(title, [])
             for row, item in enumerate(data, start=current_row):
                 # Check if the data is equal to "--", leave it blank instead
@@ -89,7 +87,7 @@ def generate_bar_excel(req: Dict):
         worksheet.set_column(col + 1, col + 1, width + 2, center_format)  # Adding 2 for additional spacing
 
     # Apply the default font format to the column titles and data.
-    worksheet.set_row(0, None)  # Apply to the title row
+    worksheet.set_row(0, None, default_font_format)  # Apply to the title row
     for row_num in range(1, current_row):
         worksheet.set_row(row_num, None)  # Apply to each data row
 
@@ -101,28 +99,23 @@ def generate_bar_excel(req: Dict):
     # After writing all the data to the worksheet, add the charts for each dataset.
     current_chart_row = 2  # Initialize the row for the data for the first chart
     current_graph_row = 2  # Initialize the row for the graph for the first chart
-    for dataset in datasets:
-        current_chart_row, current_graph_row = add_chart_for_dataset(worksheet, workbook, dataset, columnTitles, current_chart_row, current_graph_row)
-
-    # Close the workbook before sending the data.
-    workbook.close()
-
-    # Rewind the buffer.
-    output.seek(0)
-
-    return StreamingResponse(io.BytesIO(output.getvalue()), media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    for dataset_index, dataset in enumerate(datasets):
+        current_chart_row, current_graph_row = add_chart_for_dataset(worksheet, workbook, dataset, columnTitles[dataset_index], current_chart_row, current_graph_row, dataset_index, titles, sheetName)
 
 # Function to add a chart for a given dataset
-def add_chart_for_dataset(worksheet, workbook, dataset, columnTitles, data_starting_row, graph_starting_row):
+def add_chart_for_dataset(worksheet, workbook, dataset, columnTitles, data_starting_row, graph_starting_row, dataset_index, titles=None, sheet_name="Sheet1"):
     chart = workbook.add_chart({'type': 'column'})
     dataset_length = len(dataset[columnTitles[0]])
     data_start_row = data_starting_row + 1  # Data starts one row after the data_starting_row
     data_end_row = data_start_row + dataset_length - 1
 
+    # Check if titles are provided and use the corresponding title for the chart series
+    series_name = titles[dataset_index] if titles and len(titles) > dataset_index else 'Dataset'
+    safe_sheet_name = f"'{sheet_name}'"
     chart.add_series({
-        'name': 'Headcount',
-        'categories': f'=Sheet1!$B${data_start_row}:$B${data_end_row}',
-        'values': f'=Sheet1!$C${data_start_row}:$C${data_end_row}',
+        'name': series_name,
+        'categories': f'={safe_sheet_name}!$B${data_start_row}:$B${data_end_row}',
+        'values': f'={safe_sheet_name}!$C${data_start_row}:$C${data_end_row}',
         'data_labels': {
             'value': True,
             'position': 'outside_end',
@@ -139,7 +132,7 @@ def add_chart_for_dataset(worksheet, workbook, dataset, columnTitles, data_start
     })
 
     # Remove the chart title, legend, and y-axis gridlines and labels.
-    chart.set_title({'none': True})
+    chart.set_title({'none': True} if titles is None else {'name': series_name})
     chart.set_legend({'none': True})
     chart.set_y_axis({'visible': False, 'major_gridlines': {'visible': False}})
 
@@ -153,4 +146,4 @@ def add_chart_for_dataset(worksheet, workbook, dataset, columnTitles, data_start
     x_scale = 3 if dataset_length > 30 else 2 if dataset_length >= 10 else 1
     worksheet.insert_chart(f'F${graph_starting_row}', chart, {'x_scale': x_scale, 'y_scale': 1})
 
-    return data_end_row + 2, graph_starting_row + 20
+    return data_end_row + 3, graph_starting_row + 20

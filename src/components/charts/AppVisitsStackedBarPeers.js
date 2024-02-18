@@ -1,14 +1,8 @@
 import { useState, useEffect } from "react";
 import GenericBarAndTable from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
-import {
-  aggregateData,
-  findInsertIndex,
-  getTableInfo,
-  convertLabelToDate,
-  roundPeNumbers,
-  normalizeStackedAggData,
-} from "../../utils/Utils";
+import { roundPeNumbers } from "../../utils/Utils";
+import { convertToAppUsageMarketShareVsPeersData } from "../../utils/ChartUtils";
 import GenericStackedBar from "./templates/GenericStackedBar";
 import { CHARTS } from "../../constants";
 import Image from "next/image";
@@ -36,46 +30,10 @@ function AppVisitsStackedBarPeers({
     return null;
   const [appByChannelTimescale, setAppByChannelTimescale] =
     useState("quarterYear");
-  const ouputKey = "est_average_active_users";
-  function convertToChannelChartData(appData, timescale) {
-    const companyNames = Object.keys(appData);
-    const aggData = companyNames.reduce((acc, key) => {
-      acc[key] = aggregateData(appData[key], ouputKey, "sum", timescale);
-      return acc;
-    }, {});
-
-    // aggData: {company1: {timekey: visits}, company2: {timekey: visits}, ...}
-    const firstChannelData = aggData[companyNames[0]]; // use to extract timescale
-    const percentAggData = normalizeStackedAggData(aggData);
-    const chartData = {
-      labels: Object.keys(firstChannelData),
-      datasets: Object.keys(aggData).map((key) => ({
-        data: Object.values(percentAggData[key]).map((x) =>
-          Number(roundPeNumbers(x))
-        ),
-        borderWidth: 1,
-        label: key,
-      })),
-    };
-    // chartData.datasets = convertStackedChartDataToPercent(chartData.datasets); // convert to percent so bars add to 100%
-
-    let { tableHeaders, tableLabels } = getTableInfo(firstChannelData);
-
-    const cutoffIndex = 0;
-
-    const tableData = {
-      tableHeaders: tableHeaders.slice(cutoffIndex),
-      tableLabels: tableLabels.slice(cutoffIndex),
-      tableDatasets: [...chartData["datasets"]],
-      topBorderedRows: [],
-      highlightedRows: {},
-    };
-    return { chartData: chartData, tableData: tableData };
-  }
 
   const appByChannel = (
     <GenericStackedBar
-      data={convertToChannelChartData(
+      data={convertToAppUsageMarketShareVsPeersData(
         multiCompanyAppPerformance,
         appByChannelTimescale
       )}
@@ -91,7 +49,10 @@ function AppVisitsStackedBarPeers({
   );
   const yearAppByChannelGraph = (
     <GenericStackedBar
-      data={convertToChannelChartData(multiCompanyAppPerformance, "year")}
+      data={convertToAppUsageMarketShareVsPeersData(
+        multiCompanyAppPerformance,
+        "year"
+      )}
       showTimescaleButtons={false}
       showModalButtons={false}
       scrollStart={"right"}
@@ -106,20 +67,6 @@ function AppVisitsStackedBarPeers({
         <p className="text-lg font-semibold text-gray-800 mr-2">
           Market Share vs. Peers
         </p>
-        <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
-          <Image
-            src="/assets/downloadInactive.svg"
-            className="w-5 h-5 object-contain opacity-50 group-hover:hidden"
-            width={256}
-            height={256}
-          />
-          <Image
-            src="/assets/downloadActive.svg"
-            className="w-5 h-5 object-contain hidden group-hover:block"
-            width={256}
-            height={256}
-          />
-        </div>
       </div>
       <div className="h-fit mb-4">
         <TwoColumnView

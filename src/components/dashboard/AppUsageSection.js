@@ -10,7 +10,12 @@ import AppVisitsStackedBarPeers from "../charts/AppVisitsStackedBarPeers";
 import AppVisitsCompetitorLineChart from "../charts/AppVisitsCompetitorLineChart";
 import AppLoyaltyBreakdownVsPeers from "../charts/AppLoyaltyBreakdownVsPeers";
 
-function AppUsageSection({ company, country, multiCompanyAppData }) {
+function AppUsageSection({
+  company,
+  country,
+  multiCompanyAppData,
+  downloadExcel,
+}) {
   return (
     <div className="flex flex-col w-full mt-12 pb-8">
       <div
@@ -20,6 +25,23 @@ function AppUsageSection({ company, country, multiCompanyAppData }) {
         <div className="flex flex-row items-center">
           <AppUsageIcon className="mx-2 filter invert w-6 h-6" />
           <p className="text-3xl font-semibold text-gray-800 ">App Usage</p>
+          <a
+            className="group inline-flex items-center hover:cursor-pointer hover:text-primary pl-4"
+            onClick={() => downloadExcel("App Usage")}
+          >
+            <Image
+              src="/assets/downloadInactive.svg"
+              className="w-6 h-6 opacity-50 object-contain group-hover:hidden"
+              width={256}
+              height={256}
+            />
+            <Image
+              src="/assets/downloadActive.svg"
+              className="w-6 h-6 object-contain hidden group-hover:block"
+              width={256}
+              height={256}
+            />
+          </a>
         </div>
         <div className="flex flex-row items-center ml-4">
           <span className="mr-2 italic text-sm text-[#C3C3C3]">Powered by</span>
@@ -61,20 +83,6 @@ function AppUsageSection({ company, country, multiCompanyAppData }) {
             <p className="text-lg font-semibold text-gray-800 mr-2">
               Loyalty vs. Peers
             </p>
-            <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
-              <Image
-                src="/assets/downloadInactive.svg"
-                className="w-5 h-5 opacity-50 object-contain group-hover:hidden"
-                width={256}
-                height={256}
-              />
-              <Image
-                src="/assets/downloadActive.svg"
-                className="w-5 h-5 object-contain hidden group-hover:block"
-                width={256}
-                height={256}
-              />
-            </div>
           </div>
 
           <div className="space-x-8 flex flex-row items-center w-full">

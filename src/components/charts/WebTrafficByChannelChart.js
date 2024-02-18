@@ -1,14 +1,8 @@
 import { useState, useEffect } from "react";
 import GenericBarAndTable from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
-import {
-  aggregateData,
-  findInsertIndex,
-  getTableInfo,
-  convertLabelToDate,
-  roundPeNumbers,
-  normalizeStackedAggData,
-} from "../../utils/Utils";
+import { roundPeNumbers } from "../../utils/Utils";
+import { convertToChannelChartData } from "../../utils/ChartUtils";
 import GenericStackedBar from "./templates/GenericStackedBar";
 import { CHARTS } from "../../constants";
 import Image from "next/image";
@@ -25,118 +19,14 @@ function WebTrafficByChannelChart({
     useState("quarterYear");
 
   if (!trafficData) return null;
-  function convertToChannelChartData(
-    trafficData,
-    type = "traffic_by_channel",
-    timescale
-  ) {
-    const displayedKeyMap = {
-      direct: "Direct",
-      mail: "Mail",
-      referral: "Referral",
-      social: "Social",
-      search_organic: "Organic Search",
-      social_organic: "Organic Social",
-      search_paid: "Paid Search",
-      social_paid: "Paid Social",
-      display_ad: "Display Ad",
-      unknown_channel: "Other",
-    };
-    const hqTrafficKeys = [
-      "direct",
-      "mail",
-      "referral",
-      "search_organic",
-      "social_organic",
-    ];
-    const paidTrafficKeys = ["search_paid", "social_paid", "display_ad"];
-    const paidTrafficRowName = "Paid Visits";
-    let relevant_keys,
-      condensePaidKeys = false;
-    if (type === "traffic_by_channel") {
-      relevant_keys = [
-        "direct",
-        "mail",
-        "referral",
-        "search_organic",
-        "social_organic",
-        "search_paid",
-        "social_paid",
-        "display_ad",
-        "unknown_channel",
-      ];
-      condensePaidKeys = true;
-    } else if (type === "traffic_by_device") {
-      relevant_keys = ["mobile_visits", "desktop_visits"];
-    } else if (type === "users_by_device") {
-      relevant_keys = ["mobile_users", "desktop_users"];
-    } else if (type === "traffic_by_organic_paid") {
-      relevant_keys = [
-        "search_organic",
-        "social_organic",
-        "search_paid",
-        "social_paid",
-      ];
-    } else {
-      relevant_keys = [
-        "search_organic",
-        "social_organic",
-        "search_paid",
-        "social_paid",
-      ];
-    }
-    const aggData = relevant_keys.reduce((acc, key) => {
-      const displayedKey =
-        condensePaidKeys && paidTrafficKeys.includes(key)
-          ? paidTrafficRowName
-          : displayedKeyMap[key];
-
-      acc[displayedKey] = aggregateData(trafficData, key, "sum", timescale);
-      return acc;
-    }, {});
-    // aggData: {direct: {time_key: output_key}, mail: {time_key: output_key}, ...}
-    const firstChannelData = aggData[displayedKeyMap[relevant_keys[0]]]; // use to extract timescale
-    const cutoffIndex = findInsertIndex(
-      Object.keys(firstChannelData).map((x) => convertLabelToDate(x)),
-      cutOffDate,
-      "left"
-    );
-    const percentAggData = normalizeStackedAggData(aggData);
-    // console.log("percentAggData", percentAggData);
-    const chartData = {
-      labels: Object.keys(firstChannelData).slice(cutoffIndex),
-      datasets: Object.keys(aggData).map((key) => ({
-        data: Object.values(percentAggData[key])
-          .slice(cutoffIndex)
-          .map((x) => Number(roundPeNumbers(x))),
-        borderWidth: 1,
-        label: key,
-      })),
-    };
-    // chartData.datasets = convertStackedChartDataToPercent(chartData.datasets); // convert to percent so bars add to 100%
-
-    let { tableHeaders, tableLabels } = getTableInfo(firstChannelData);
-
-    const tableData = {
-      tableHeaders: tableHeaders.slice(cutoffIndex),
-      tableLabels: tableLabels.slice(cutoffIndex),
-      tableDatasets: [...chartData["datasets"]],
-      topBorderedRows: [paidTrafficRowName],
-      highlightedRows: {
-        Direct: "bg-primaryLight",
-        [paidTrafficRowName]: "bg-customGray-75",
-        // [totalTrafficRow.label]: "bg-customGray-75",
-      },
-    };
-    return { chartData: chartData, tableData: tableData };
-  }
 
   const trafficByChannel = (
     <GenericStackedBar
       data={convertToChannelChartData(
         trafficData,
         "traffic_by_channel",
-        trafficByChannelTimescale
+        trafficByChannelTimescale,
+        cutOffDate
       )}
       title={"Total Visits by Channel (%)"}
       showDataLabels={trafficByChannelTimescale === "quarterYear"}
@@ -153,7 +43,8 @@ function WebTrafficByChannelChart({
       data={convertToChannelChartData(
         trafficData,
         "traffic_by_channel",
-        "year"
+        "year",
+        cutOffDate
       )}
       showTimescaleButtons={false}
       showModalButtons={false}
@@ -175,20 +66,6 @@ function WebTrafficByChannelChart({
             <p className="text-lg font-semibold text-gray-800 mr-2">
               Quality Over Time
             </p>
-            <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
-              <Image
-                src="/assets/downloadInactive.svg"
-                className="w-5 h-5 object-contain opacity-50 group-hover:hidden"
-                width={256}
-                height={256}
-              />
-              <Image
-                src="/assets/downloadActive.svg"
-                className="w-5 h-5 object-contain hidden group-hover:block"
-                width={256}
-                height={256}
-              />
-            </div>
           </div>
           <div className="h-fit mb-4">
             <TwoColumnView
