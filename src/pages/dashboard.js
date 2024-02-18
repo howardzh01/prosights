@@ -20,6 +20,8 @@ import { CompanyDirectory } from "../components/dashboard/CompanyListDirectory";
 import { companyList } from "../components/dashboard/CompanyList";
 import HeadcountIcon from "/public/assets/HeadcountIcon.svg";
 import CountrySelector from "../components/dashboard/CountrySelector";
+import DashboardNavbar from "../components/dashboard/DashboardNavBar"; // Adjust the import path as necessary
+
 import {
   convertHeadCountChartDataToExcelFormat,
   convertTotalVisitsChartDataToExcelFormat,
@@ -55,6 +57,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
   // const companyDic = companyDirectory.findCompanyByName(company);
   // State to track active sections
   const [activeSections, setActiveSections] = useState({});
+
   // Sections for sidebar; MUST have same title as section id, which might be used in child components
   const sections = [
     {
@@ -190,6 +193,34 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
       level: 2,
     },
   ];
+
+  function getActiveLevel1SectionName(sections, activeSections) {
+    if (Object.keys(activeSections).length === 0) return "Company Overview"; // Loading state
+    let activeSectionOrParentName = "No active section";
+
+    const activeSection = sections.find(
+      (section) => activeSections[section.id]
+    );
+
+    if (activeSection) {
+      if (activeSection.level === 1) {
+        activeSectionOrParentName = activeSection.title;
+      } else {
+        const parentSection = sections.find(
+          (parent) => parent.id === activeSection.parentId
+        );
+        activeSectionOrParentName = parentSection
+          ? parentSection.title
+          : "No active parent section";
+      }
+    }
+
+    return activeSectionOrParentName;
+  }
+  const activeLevel1SectionName = getActiveLevel1SectionName(
+    sections,
+    activeSections
+  );
   const todaysDate = new Date()
     .toLocaleDateString("en-CA", {
       timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -475,6 +506,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
           {/* Sidebar */}
           <div className="flex-shrink-0 sticky top-0 w-60 h-screen">
             <SideBar sections={sections} activeSections={activeSections} />
+            {console.log("active sections", activeSections)}
           </div>
           {companyDic && companyDic.name ? (
             // Main Content
@@ -485,104 +517,25 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                 backgroundImage: "url('/assets/backgroundPatternLight.svg')",
               }}
             >
-              {/* Search Bar */}
+              {/* Company name, country, and comparing section */}
+              <DashboardNavbar
+                companyDic={companyDic}
+                country={country}
+                setCountry={setCountry}
+                downloadPDF={downloadPDF}
+                downloadExcel={downloadExcel}
+                companyDirectory={companyDirectory}
+                setCompanyDic={setCompanyDic}
+                companyCompetitors={companyCompetitors}
+                setCompanyCompetitors={setCompanyCompetitors}
+                crunchbaseDataPull={crunchbaseDataPull}
+                activeLevel1SectionName={activeLevel1SectionName}
+              />
+              {/* Overview Section */}
               <div
                 id="Company Overview"
-                className="content-section w-[36rem] pt-4"
+                className="content-section w-full mb-20"
               >
-                <SearchBar
-                  setCompany={setCompanyDic}
-                  setCompanyCompetitors={setCompanyCompetitors}
-                />
-              </div>
-              {/* Company name, country, and comparing section */}
-              <div className="mb-2 sticky top-0 z-50 mt-6 flex flex-row justify-between w-full items-center">
-                <div className="flex flex-row items-center">
-                  {crunchbaseDataPull?.[companyDic.displayedName]?.["fields"]?.[
-                    "image_url"
-                  ] ? (
-                    <Image
-                      src={
-                        crunchbaseDataPull[companyDic.displayedName]["fields"][
-                          "image_url"
-                        ]
-                      }
-                      className="w-10 h-10 mr-2 object-contain rounded-md"
-                      width={256}
-                      height={256}
-                      alt="Company Logo"
-                    />
-                  ) : (
-                    <Skeleton className="w-10 h-10 mr-2 rounded-md bg-customGray-50" />
-                  )}
-                  {/* {console.log(crunchbaseDataPull)} */}
-                  <p className="text-3xl font-bold text-gray-800 pl-1">
-                    {companyDic.displayedName}
-                  </p>
-                  <CountrySelector country={country} setCountry={setCountry} />
-                  <div
-                    className="group flex flex-row items-center ml-8 hover:cursor-pointer hover:text-primary"
-                    onClick={downloadPDF}
-                  >
-                    <div className="group">
-                      <Image
-                        src="/assets/downloadInactive.svg"
-                        className="w-4 h-4 object-contain mr-1 group-hover:hidden"
-                        width={256}
-                        height={256}
-                      />
-                      <Image
-                        src="/assets/downloadActive.svg"
-                        className="w-4 h-4 object-contain mr-1 hidden group-hover:block"
-                        width={256}
-                        height={256}
-                      />
-                    </div>
-                    <p className="text-sm text-customGray-500 group-hover:text-primary">
-                      Download PDF
-                    </p>
-                  </div>
-                  <div
-                    className="group flex flex-row items-center ml-4 hover:cursor-pointer hover:text-primary"
-                    onClick={() => downloadExcel("")}
-                  >
-                    <div className="group">
-                      <Image
-                        src="/assets/downloadInactive.svg"
-                        className="w-4 h-4 object-contain mr-1 group-hover:hidden"
-                        width={256}
-                        height={256}
-                      />
-                      <Image
-                        src="/assets/downloadActive.svg"
-                        className="w-4 h-4 object-contain mr-1 hidden group-hover:block"
-                        width={256}
-                        height={256}
-                      />
-                    </div>
-                    <p className="text-sm text-customGray-500 group-hover:text-primary">
-                      Download XLS
-                    </p>
-                  </div>
-                </div>
-                {/* <div className="flex flex-row items-center">
-                <Image
-                  src="/assets/compare.svg"
-                  alt="Compare"
-                  className="w-4 h-4 mr-1 object-contain"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-base text-customGray-500">Compare</p>
-              </div> */}
-                <CompetitorContainer
-                  companyCompetitors={companyCompetitors}
-                  setCompanyCompetitors={setCompanyCompetitors}
-                ></CompetitorContainer>
-              </div>
-              <hr className="border-none h-px bg-customGray-100 w-full mt-2" />
-              {/* Overview Section */}
-              <div className="content-section w-full mb-20">
                 <OverviewSection
                   companyAbout={
                     companyDescriptionPull?.[companyDic.displayedName]
@@ -729,6 +682,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                   {/* Search Bar */}
                   <div className="content-section w-[36rem] pt-4">
                     <SearchBar
+                      companyDirectory={companyDirectory}
                       setCompany={setCompanyDic}
                       setCompanyCompetitors={setCompanyCompetitors}
                     />

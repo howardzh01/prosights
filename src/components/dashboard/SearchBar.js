@@ -6,9 +6,12 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Image from "next/image";
 import Chip from "@mui/material/Chip";
 import { companyList } from "./CompanyList";
-import { CompanyDirectory } from "./CompanyListDirectory";
 
-export default function SearchBar({ setCompany, setCompanyCompetitors }) {
+export default function SearchBar({
+  companyDirectory,
+  setCompany,
+  setCompanyCompetitors,
+}) {
   const [value, setValue] = React.useState(null);
 
   if (!companyList) {
@@ -19,7 +22,7 @@ export default function SearchBar({ setCompany, setCompanyCompetitors }) {
     if (typeof value === "string") {
       if (value.includes(".")) {
         // check url
-        const company = CompanyDirectory.findCompanyByUrl(value);
+        const company = companyDirectory.findCompanyByUrl(value);
         return (
           company || {
             name: value.split(".")[0],
@@ -28,7 +31,7 @@ export default function SearchBar({ setCompany, setCompanyCompetitors }) {
           }
         );
       } else {
-        const company = CompanyDirectory.findCompanyByName(value);
+        const company = companyDirectory.findCompanyByName(value);
         return (
           company || { name: value, url: `${value}.com`, displayedName: value }
         );
@@ -42,7 +45,7 @@ export default function SearchBar({ setCompany, setCompanyCompetitors }) {
     }
   };
   return (
-    <div className="h-12">
+    <div className="">
       <Autocomplete
         freeSolo={true}
         id="autcomplete-search"
@@ -51,12 +54,12 @@ export default function SearchBar({ setCompany, setCompanyCompetitors }) {
         getOptionLabel={(option) =>
           typeof option === "string" ? option : option.displayedName
         }
+        clearIcon={null} // Removes the clear icon
         onChange={(event, value) => {
           setCompany(createCompanyDic(value));
           setCompanyCompetitors([]);
           setValue(null);
         }}
-        clearIcon={<span></span>}
         clearOnBlur={true}
         value={value}
         renderOption={(props, option, { selected }) => (
@@ -78,12 +81,14 @@ export default function SearchBar({ setCompany, setCompanyCompetitors }) {
         renderInput={(params) => (
           <TextField
             {...params}
-            label="Search with a company URL"
+            placeholder="Search target company URL"
             components={{
               ClearIndicator: () => null,
             }}
             InputProps={{
               ...params.InputProps,
+              // size: "small",
+
               // startAdornment: [
               //   <Image
               //     src="/assets/search.svg"
@@ -96,14 +101,9 @@ export default function SearchBar({ setCompany, setCompanyCompetitors }) {
               // ],
               type: "search",
               style: {
-                fontSize: "0.875rem",
-                fontFamily: "Inter",
-              },
-            }}
-            InputLabelProps={{
-              style: {
-                fontSize: "0.875rem",
-                color: "#A9B1C7",
+                fontSize: "0.9rem",
+                paddingTop: "1px", // Reduced top padding
+                paddingBottom: "1px", // Reduced bottom padding
                 fontFamily: "Inter",
               },
             }}
@@ -123,6 +123,10 @@ export default function SearchBar({ setCompany, setCompanyCompetitors }) {
                 "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                   borderColor: "#EFF1F5", // border-customGray-50 when focused
                 },
+              },
+              "& .MuiInputBase-input::-webkit-search-cancel-button": {
+                "-webkit-appearance": "none",
+                display: "none",
               },
             }}
           />
