@@ -21,7 +21,6 @@ import { companyList } from "../components/dashboard/CompanyList";
 import HeadcountIcon from "/public/assets/HeadcountIcon.svg";
 import CountrySelector from "../components/dashboard/CountrySelector";
 import DashboardNavbar from "../components/dashboard/DashboardNavBar"; // Adjust the import path as necessary
-
 import {
   convertHeadCountChartDataToExcelFormat,
   convertTotalVisitsChartDataToExcelFormat,
@@ -31,6 +30,7 @@ import {
   convertTrafficGrowthVsPeersChartDataToExcelFormat,
   convertTrafficMarketShareVsPeersDataToExcelFormat,
   convertTrafficBreakdownVsPeersDataToExcelFormat,
+  convertAppUsersChartDataToExcelFormat,
   convertAppUsageGrowthVsPeersChartDataToExcelFormat,
   convertAppUsageMarketShareVsPeersDataToExcelFormat,
   convertAppUsageLoyalUsersVsPeersDataToExcelFormat,
@@ -125,6 +125,12 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
       id: "App Usage",
       parentId: "",
       level: 1,
+    },
+    {
+      title: "Growth",
+      id: "App Growth",
+      parentId: "App Usage",
+      level: 2,
     },
     {
       title: "Growth vs. Peers",
@@ -375,6 +381,16 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
     ];
     const appUsageSectionBuilder = [
       {
+        type: "bar",
+        sheetName: "App Users",
+        req: convertAppUsersChartDataToExcelFormat(
+          dataAIData?.[companyDic?.displayedName || companyDic?.name][
+            "app_performance"
+          ],
+          dataCutoffDate
+        ),
+      },
+      {
         type: "line",
         sheetName: "App Growth vs. Peers",
         req: convertAppUsageGrowthVsPeersChartDataToExcelFormat(
@@ -543,6 +559,9 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                     crunchbaseDataPull?.[companyDic.displayedName]
                   } // {companyName: null} if no data
                   headCountData={headCountData?.[companyDic.displayedName]}
+                  webTrafficData={webTrafficData?.[companyDic.displayedName]}
+                  appData={dataAIData?.[companyDic.displayedName]}
+                  country={country}
                 />
               </div>
               {/* Competitor Overview */}
