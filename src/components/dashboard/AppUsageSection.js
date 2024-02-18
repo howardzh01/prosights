@@ -9,6 +9,7 @@ import AppUsageIcon from "/public/assets/AppUsageIcon.svg";
 import AppVisitsStackedBarPeers from "../charts/AppVisitsStackedBarPeers";
 import AppVisitsCompetitorLineChart from "../charts/AppVisitsCompetitorLineChart";
 import AppLoyaltyBreakdownVsPeers from "../charts/AppLoyaltyBreakdownVsPeers";
+import AppUsersChart from "../charts/AppUsersChart";
 
 function AppUsageSection({
   company,
@@ -56,7 +57,18 @@ function AppUsageSection({
       </div>
       <hr className="border-none h-px bg-customGray-100" />
       <div className="flex flex-col section-indent mt-4">
-        <div id="App Growth vs. Peers" className="content-section mt-8">
+        <div id="App Growth" className="content-section">
+          {multiCompanyAppData === undefined ? (
+            <div> </div>
+          ) : (
+            <AppUsersChart
+              appData={multiCompanyAppData[company]}
+              country={country}
+            ></AppUsersChart>
+          )}
+        </div>
+
+        <div id="App Growth vs. Peers" className="content-section">
           {multiCompanyAppData === undefined ? (
             <div> </div>
           ) : (

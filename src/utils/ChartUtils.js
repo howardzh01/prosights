@@ -582,7 +582,7 @@ export function convertToAppUsageMarketShareVsPeersData(
 ) {
   const companyNames = Object.keys(appData);
   const aggData = companyNames.reduce((acc, key) => {
-    acc[key] = aggregateData(appData[key], outputKey, "sum", timescale);
+    acc[key] = aggregateData(appData[key], outputKey, "mean", timescale);
     return acc;
   }, {});
 
@@ -886,6 +886,17 @@ export function convertTrafficBreakdownVsPeersDataToExcelFormat(
   );
 
   return result;
+}
+
+export function convertAppUsersChartDataToExcelFormat(appData, dataCutoffDate) {
+  return convertBarGraphToExcelFormat(
+    appData,
+    "est_average_active_users",
+    "mean",
+    "Active Users",
+    dataCutoffDate,
+    convertToGrowthChartData
+  );
 }
 
 export function convertAppUsageGrowthVsPeersChartDataToExcelFormat(
