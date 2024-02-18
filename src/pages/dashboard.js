@@ -506,7 +506,6 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
           {/* Sidebar */}
           <div className="flex-shrink-0 sticky top-0 w-60 h-screen">
             <SideBar sections={sections} activeSections={activeSections} />
-            {console.log("active sections", activeSections)}
           </div>
           {companyDic && companyDic.name ? (
             // Main Content
@@ -548,7 +547,11 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
               </div>
               {/* Competitor Overview */}
               <div id="Competitor Overview" className="content-section w-full">
-                <CompetitorOverviewSection />
+                <CompetitorOverviewSection
+                  companyDescriptions={companyDescriptionPull}
+                  crunchbaseData={crunchbaseDataPull} // {companyName: null} if no data
+                  headCountData={headCountData}
+                />
               </div>
               {/* Headcount; TODO: MAKE THIS A SEPARATE COMPONENT */}
               <div
