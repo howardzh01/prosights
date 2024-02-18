@@ -12,7 +12,7 @@ stub = modal.Stub("generate_doughnut_excel")
 
 @stub.function(image=xlsxwriter_image)
 @modal.web_endpoint(method="POST")
-def generate_doughnut_excel(req: Dict):
+def generate_doughnut_excel(req: Dict, workbook, sheetName="Sheet1"):
     """
     'req' follows the structure:
 
@@ -39,16 +39,10 @@ def generate_doughnut_excel(req: Dict):
     Each dataset will be labeled and separated by 2 blank rows. The length of the columnTitles
     array must be equal to the number of objects in the datasets array.
     """
-    import io
-    from fastapi.responses import StreamingResponse
-    import xlsxwriter
-
     columnTitles = req.get("columnTitles", [])
     datasets = req.get("datasets", [])
 
-    output = io.BytesIO()
-    workbook = xlsxwriter.Workbook(output, {'in_memory': True})
-    worksheet = workbook.add_worksheet()
+    worksheet = workbook.add_worksheet(sheetName)
 
     max_widths = [len(title) for title in columnTitles] + [len("Visits")]
 
@@ -80,23 +74,18 @@ def generate_doughnut_excel(req: Dict):
     current_chart_row = 2  # Initialize the row for the data for the first chart
     current_graph_row = 2  # Initialize the row for the graph for the first chart
     for dataset in datasets:
-        current_chart_row, current_graph_row = add_doughnut_chart_for_dataset(workbook, worksheet, dataset, current_chart_row, current_graph_row)
+        current_chart_row, current_graph_row = add_doughnut_chart_for_dataset(workbook, worksheet, dataset, current_chart_row, current_graph_row, sheetName)
 
-    workbook.close()
-    output.seek(0)
-
-    return StreamingResponse(io.BytesIO(output.getvalue()), media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-
-def add_doughnut_chart_for_dataset(workbook, worksheet, dataset, data_starting_row, graph_starting_row):
+def add_doughnut_chart_for_dataset(workbook, worksheet, dataset, data_starting_row, graph_starting_row, sheet_name="Sheet1"):
     chart = workbook.add_chart({'type': 'doughnut'})
     dataset_length = len(dataset)
     data_start_row = data_starting_row + 1  # Data starts one row after the data_starting_row
     data_end_row = data_start_row + dataset_length - 1
 
-
+    safe_sheet_name = f"'{sheet_name}'"
     chart.add_series({
-        'categories': f'=Sheet1!$B${data_start_row}:$B${data_end_row}',
-        'values': f'=Sheet1!$C${data_start_row}:$C${data_end_row}',
+        'categories': f'={safe_sheet_name}!$B${data_start_row}:$B${data_end_row}',
+        'values': f'={safe_sheet_name}!$C${data_start_row}:$C${data_end_row}',
         'data_labels': {
             'percentage': True,
             'font': {'name': 'Arial', 'size': 8, 'color': '#404040'}

@@ -12,7 +12,7 @@ stub = modal.Stub("generate_bar_excel")
 
 @stub.function(image=xlsxwriter_image)
 @modal.web_endpoint(method="POST")
-def generate_bar_excel(req: Dict):
+def generate_bar_excel(req: Dict, workbook, sheetName="Sheet1"):
     """
     'req' follows the structure:
 
@@ -40,20 +40,13 @@ def generate_bar_excel(req: Dict):
     The very first row are column titles. Then multiple datasets are supported, separated vertically by a blank row.
     The length of the columnTitles array must be equal to the number of keys in each object in the datasets array.
     """
-    import io
-    from fastapi.responses import StreamingResponse
-    import xlsxwriter
-
     # Extract the data from the request.
     columnTitles = req.get("columnTitles", [])
     datasets = req.get("datasets", [])
     # Extract titles if they exist
     titles = req.get("titles", None)
 
-    # Create an in-memory output file for the new workbook.
-    output = io.BytesIO()
-    workbook = xlsxwriter.Workbook(output, {'in_memory': True})
-    worksheet = workbook.add_worksheet()
+    worksheet = workbook.add_worksheet(sheetName)
 
     # Initialize a list to keep track of the maximum width of each column.
     max_widths = [len(title) for title in columnTitles[0]]
@@ -107,17 +100,10 @@ def generate_bar_excel(req: Dict):
     current_chart_row = 2  # Initialize the row for the data for the first chart
     current_graph_row = 2  # Initialize the row for the graph for the first chart
     for dataset_index, dataset in enumerate(datasets):
-        current_chart_row, current_graph_row = add_chart_for_dataset(worksheet, workbook, dataset, columnTitles[dataset_index], current_chart_row, current_graph_row, dataset_index, titles)
-    # Close the workbook before sending the data.
-    workbook.close()
-
-    # Rewind the buffer.
-    output.seek(0)
-
-    return StreamingResponse(io.BytesIO(output.getvalue()), media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        current_chart_row, current_graph_row = add_chart_for_dataset(worksheet, workbook, dataset, columnTitles[dataset_index], current_chart_row, current_graph_row, dataset_index, titles, sheetName)
 
 # Function to add a chart for a given dataset
-def add_chart_for_dataset(worksheet, workbook, dataset, columnTitles, data_starting_row, graph_starting_row, dataset_index, titles=None):
+def add_chart_for_dataset(worksheet, workbook, dataset, columnTitles, data_starting_row, graph_starting_row, dataset_index, titles=None, sheet_name="Sheet1"):
     chart = workbook.add_chart({'type': 'column'})
     dataset_length = len(dataset[columnTitles[0]])
     data_start_row = data_starting_row + 1  # Data starts one row after the data_starting_row
@@ -125,11 +111,11 @@ def add_chart_for_dataset(worksheet, workbook, dataset, columnTitles, data_start
 
     # Check if titles are provided and use the corresponding title for the chart series
     series_name = titles[dataset_index] if titles and len(titles) > dataset_index else 'Dataset'
-
+    safe_sheet_name = f"'{sheet_name}'"
     chart.add_series({
         'name': series_name,
-        'categories': f'=Sheet1!$B${data_start_row}:$B${data_end_row}',
-        'values': f'=Sheet1!$C${data_start_row}:$C${data_end_row}',
+        'categories': f'={safe_sheet_name}!$B${data_start_row}:$B${data_end_row}',
+        'values': f'={safe_sheet_name}!$C${data_start_row}:$C${data_end_row}',
         'data_labels': {
             'value': True,
             'position': 'outside_end',

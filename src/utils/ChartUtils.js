@@ -754,14 +754,17 @@ export function convertHeadCountChartDataToExcelFormat(
   headCountData,
   dataCutoffDate
 ) {
-  return convertBarGraphToExcelFormat(
-    headCountData,
-    "headcount",
-    "last",
-    "Headcount",
-    dataCutoffDate,
-    convertToHeadcountChartData
-  );
+  return {
+    ...convertBarGraphToExcelFormat(
+      headCountData,
+      "headcount",
+      "last",
+      "Headcount",
+      dataCutoffDate,
+      convertToHeadcountChartData
+    ),
+    sheetName: "Headcount",
+  };
 }
 
 export function convertTotalVisitsChartDataToExcelFormat(
@@ -943,5 +946,6 @@ export function convertAppUsageLoyalUsersVsPeersDataToExcelFormat(dataAI) {
     }),
     differentColors: true,
     titles: timeFrames,
+    sheetName: "Loyalty vs. Peers",
   };
 }

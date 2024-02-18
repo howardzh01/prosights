@@ -80,22 +80,6 @@ function AppVisitsCompetitorLineChart({
             <p className="text-lg font-semibold text-grxay-800 mr-2">
               Growth vs. Peers
             </p>
-            <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
-              <Image
-                src="/assets/downloadInactive.svg"
-                className="w-5 h-5 object-contain opacity-50 group-hover:hidden"
-                width={256}
-                height={256}
-                alt="Download Icon"
-              />
-              <Image
-                src="/assets/downloadActive.svg"
-                className="w-5 h-5 object-contain hidden group-hover:block"
-                width={256}
-                height={256}
-                alt="Download Icon"
-              />
-            </div>
           </div>
           <div className="h-fit mb-4">
             <TwoColumnView

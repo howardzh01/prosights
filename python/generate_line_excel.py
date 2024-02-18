@@ -12,7 +12,7 @@ stub = modal.Stub("generate_line_excel")
 
 @stub.function(image=xlsxwriter_image)
 @modal.web_endpoint(method="POST")
-def generate_line_excel(req: List[Dict]):
+def generate_line_excel(req: List[Dict], workbook, sheetName="Sheet1"):
     """
     'req' follows the structure:
 
@@ -40,13 +40,7 @@ def generate_line_excel(req: List[Dict]):
 
     Each object in the array takes on the same format for ChartJS data.
     """
-    import io
-    from fastapi.responses import StreamingResponse
-    import xlsxwriter
-
-    output = io.BytesIO()
-    workbook = xlsxwriter.Workbook(output, {'in_memory': True})
-    worksheet = workbook.add_worksheet()
+    worksheet = workbook.add_worksheet(sheetName)
 
     # Default font format
     font_format = workbook.add_format({'font_name': 'Arial', 'font_size': 8, 'align': 'center', 'valign': 'vcenter'})
@@ -119,12 +113,13 @@ def generate_line_excel(req: List[Dict]):
         # Add multi-line chart, positioned to the right of the original data columns
         colors = ['#1CAFF2', '#FF6384', '#4BC0C0', '#FB9551', '#9966FF', '#FFCE56', '#92A3A8']
         chart = workbook.add_chart({'type': 'line'})
+        safe_sheet_name = f"'{sheetName}'"
         for i, dataset in enumerate(datasets):
             background_color = colors[i % len(colors)]
             chart.add_series({
                 'name': dataset['label'],
-                'categories': f'=Sheet1!${chr(66 + len(rawDataColumnTitles) + 1)}${row + 1}:${chr(66 + len(rawDataColumnTitles) + 1)}${row + len(labels)}',
-                'values': f'=Sheet1!${chr(67 + len(rawDataColumnTitles) + 1 + i)}${row + 1}:${chr(67 + len(rawDataColumnTitles) + 1 + i)}${row + len(labels)}',
+                'categories': f'={safe_sheet_name}!${chr(66 + len(rawDataColumnTitles) + 1)}${row + 1}:${chr(66 + len(rawDataColumnTitles) + 1)}${row + len(labels)}',
+                'values': f'={safe_sheet_name}!${chr(67 + len(rawDataColumnTitles) + 1 + i)}${row + 1}:${chr(67 + len(rawDataColumnTitles) + 1 + i)}${row + len(labels)}',
                 'smooth': True,
                 'line': {'color': background_color},
             })
@@ -163,8 +158,3 @@ def generate_line_excel(req: List[Dict]):
         graph_row_index += 20
         # Adjust row for next set of data, with 2 rows separation
         row += len(labels) + 2
-
-    workbook.close()
-    output.seek(0)
-
-    return StreamingResponse(output, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')

@@ -12,7 +12,7 @@ stub = modal.Stub("generate_stacked_excel")
 
 @stub.function(image=xlsxwriter_image)
 @modal.web_endpoint(method="POST")
-def generate_stacked_excel(req: List[Dict]):
+def generate_stacked_excel(req: List[Dict], workbook, sheetName="Sheet1"):
     """
     'req' follows the structure:
 
@@ -42,14 +42,6 @@ def generate_stacked_excel(req: List[Dict]):
 
     Each object in the array takes on the same format for ChartJS data.
     """
-    import io
-    from fastapi.responses import StreamingResponse
-    import xlsxwriter
-
-    # Create an in-memory output file for the new workbook.
-    output = io.BytesIO()
-    workbook = xlsxwriter.Workbook(output, {'in_memory': True})
-
     # Create a format for the column titles with center alignment and a bottom border.
     title_format = workbook.add_format({'bottom': 1, 'align': 'center', 'valign': 'vcenter', 'font_name': 'Arial', 'font_size': 8})
 
@@ -69,7 +61,7 @@ def generate_stacked_excel(req: List[Dict]):
 
         # Only create a new worksheet for the first item, otherwise use the existing worksheet
         if index == 0:
-            worksheet = workbook.add_worksheet()
+            worksheet = workbook.add_worksheet(sheetName)
 
         # Column titles: "Date" followed by each dataset's label.
         columnTitles = [chartData.get("category", "Date")] + [dataset["label"] for dataset in datasets]
@@ -99,14 +91,15 @@ def generate_stacked_excel(req: List[Dict]):
 
         # Add the stacked bar chart to the right of the table for the current dataset
         chart = workbook.add_chart({'type': 'column', 'subtype': 'percent_stacked'})
+        safe_sheet_name = f"'{sheetName}'"
         for i, dataset in enumerate(datasets):
             colors = ['#1CAFF2', '#FF6384', '#4BC0C0', '#FB9551', '#9966FF', '#FFCE56', '#92A3A8']
             background_color = colors[i % len(colors)]
 
             chart.add_series({
                 'name': dataset['label'],
-                'categories': f'=Sheet1!$B${data_start_row + 1}:$B${data_end_row}',
-                'values': f'=Sheet1!${chr(67 + i)}${data_start_row + 1}:${chr(67 + i)}${data_end_row}',
+                'categories': f'={safe_sheet_name}!$B${data_start_row + 1}:$B${data_end_row}',
+                'values': f'={safe_sheet_name}!${chr(67 + i)}${data_start_row + 1}:${chr(67 + i)}${data_end_row}',
                 'data_labels': {'value': False, 'position': 'inside_end'},
                 'fill': {'color': background_color}
             })
@@ -140,12 +133,3 @@ def generate_stacked_excel(req: List[Dict]):
 
         # Update the starting row for the next dataset's data
         data_start_row = data_end_row + 3  # Skip two rows for spacing between datasets
-
-    # Close the workbook before sending the data.
-    workbook.close()
-
-    # Rewind the buffer.
-    output.seek(0)
-
-    # Return the Excel file as a streaming response
-    return StreamingResponse(io.BytesIO(output.getvalue()), media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")

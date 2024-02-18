@@ -272,61 +272,130 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
   //   setAppUsageData(null);
   // }, [country]);
 
-  function downloadExcel() {
-    // const result = convertHeadCountChartDataToExcelFormat(
-    //   headCountData?.[companyDic.displayedName],
-    //   dataCutoffDate
-    // );
+  function downloadExcel(name, devMode = false) {
+    // Excel sheet builder
+    const headcountSectionBuilder = [
+      {
+        type: "bar",
+        sheetName: "Headcount",
+        req: convertHeadCountChartDataToExcelFormat(
+          headCountData?.[companyDic.displayedName],
+          dataCutoffDate
+        ),
+      },
+    ];
+    const webTrafficSectionBuilder = [
+      {
+        type: "bar",
+        sheetName: "Traffic Total Visits",
+        req: convertTotalVisitsChartDataToExcelFormat(
+          webTrafficData?.[companyDic.displayedName],
+          dataCutoffDate
+        ),
+      },
+      {
+        type: "bar",
+        sheetName: "Traffic Web Users",
+        req: convertWebUsersChartDataToExcelFormat(
+          webTrafficData?.[companyDic.displayedName],
+          dataCutoffDate
+        ),
+      },
+      {
+        type: "doughnut",
+        sheetName: "Traffic Breakdown",
+        req: convertBreakdownChartDataToExcelFormat(
+          webTrafficGeoData?.[companyDic.displayedName],
+          webTrafficData?.[companyDic.displayedName]
+        ),
+      },
+      {
+        type: "stacked",
+        sheetName: "Traffic Total Visits by Channel",
+        req: convertTrafficByChannelChartDataToExcelFormat(
+          webTrafficData?.[companyDic.displayedName],
+          dataCutoffDate
+        ),
+      },
+      {
+        type: "line",
+        sheetName: "Traffic Growth vs. Peers",
+        req: convertTrafficGrowthVsPeersChartDataToExcelFormat(
+          webTrafficData,
+          dataCutoffDate
+        ),
+      },
+      {
+        type: "stacked",
+        sheetName: "Traffic Market Share vs. Peers",
+        req: convertTrafficMarketShareVsPeersDataToExcelFormat(
+          webTrafficData,
+          dataCutoffDate
+        ),
+      },
+      {
+        type: "stacked",
+        sheetName: "Traffic Breakdown vs. Peers",
+        req: convertTrafficBreakdownVsPeersDataToExcelFormat(
+          webTrafficGeoData,
+          webTrafficData
+        ),
+      },
+    ];
+    const appUsageSectionBuilder = [
+      {
+        type: "line",
+        sheetName: "App Growth vs. Peers",
+        req: convertAppUsageGrowthVsPeersChartDataToExcelFormat(
+          dataAIData,
+          dataCutoffDate
+        ),
+      },
+      {
+        type: "stacked",
+        sheetName: "App Market Share vs. Peers",
+        req: convertAppUsageMarketShareVsPeersDataToExcelFormat(
+          dataAIData,
+          dataCutoffDate
+        ),
+      },
+      {
+        type: "bar",
+        sheetName: "App Loyalty vs. Peers",
+        req: convertAppUsageLoyalUsersVsPeersDataToExcelFormat(dataAIData),
+      },
+    ];
+    const dividerBuilder = (name) => ({
+      type: "divider",
+      sheetName: name,
+      req: {},
+    });
 
-    // const result = convertTotalVisitsChartDataToExcelFormat(
-    //   webTrafficData?.[companyDic.displayedName],
-    //   dataCutoffDate
-    // );
-
-    // const result = convertWebUsersChartDataToExcelFormat(
-    //   webTrafficData?.[companyDic.displayedName],
-    //   dataCutoffDate
-    // );
-
-    // const result = convertBreakdownChartDataToExcelFormat(
-    //   webTrafficGeoData?.[companyDic.displayedName],
-    //   webTrafficData?.[companyDic.displayedName],
-    // );
-
-    // const result = convertTrafficByChannelChartDataToExcelFormat(
-    //   webTrafficData?.[companyDic.displayedName],
-    //   dataCutoffDate
-    // );
-
-    // const result = convertTrafficGrowthVsPeersChartDataToExcelFormat(
-    //   webTrafficData,
-    //   dataCutoffDate
-    // );
-
-    // const result = convertTrafficMarketShareVsPeersDataToExcelFormat(
-    //   webTrafficData,
-    //   dataCutoffDate
-    // );
-
-    // const result = convertTrafficBreakdownVsPeersDataToExcelFormat(
-    //   webTrafficGeoData,
-    //   webTrafficData
-    // );
-
-    // const result = convertAppUsageGrowthVsPeersChartDataToExcelFormat(
-    //   dataAIData,
-    //   dataCutoffDate
-    // );
-
-    // const result = convertAppUsageMarketShareVsPeersDataToExcelFormat(
-    //   dataAIData,
-    //   dataCutoffDate
-    // );
-
-    const result =
-      convertAppUsageLoyalUsersVsPeersDataToExcelFormat(dataAIData);
-
-    getExcelDownload(result, "bar");
+    switch (name) {
+      case "Headcount":
+        getExcelDownload(headcountSectionBuilder, devMode);
+        break;
+      case "Web Traffic":
+        getExcelDownload(webTrafficSectionBuilder, devMode);
+        break;
+      case "App Usage":
+        getExcelDownload(appUsageSectionBuilder, devMode);
+        break;
+      default:
+        // Case of downloading everything
+        getExcelDownload(
+          [
+            dividerBuilder("Headcount >>>"),
+            ...headcountSectionBuilder,
+            dividerBuilder("Web Traffic >>>"),
+            ...webTrafficSectionBuilder,
+            dividerBuilder("App Usage >>>"),
+            ...appUsageSectionBuilder,
+          ],
+          devMode
+        );
+        break;
+    }
   }
 
   const downloadPDF = async () => {
@@ -364,6 +433,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
         console.error("Error exporting PDF:", err);
       });
   };
+
   const {
     headCountData,
     headCountError,
@@ -474,7 +544,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                   </div>
                   <div
                     className="group flex flex-row items-center ml-4 hover:cursor-pointer hover:text-primary"
-                    onClick={downloadExcel}
+                    onClick={() => downloadExcel("")}
                   >
                     <div className="group">
                       <Image
@@ -538,6 +608,23 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                     <p className="text-3xl font-semibold text-gray-800 ">
                       Headcount
                     </p>
+                    <a
+                      className="group inline-flex items-center hover:cursor-pointer hover:text-primary pl-4"
+                      onClick={() => downloadExcel("Headcount")}
+                    >
+                      <Image
+                        src="/assets/downloadInactive.svg"
+                        className="w-6 h-6 opacity-50 object-contain group-hover:hidden"
+                        width={256}
+                        height={256}
+                      />
+                      <Image
+                        src="/assets/downloadActive.svg"
+                        className="w-6 h-6 object-contain hidden group-hover:block"
+                        width={256}
+                        height={256}
+                      />
+                    </a>
                   </div>
                   <div className="flex flex-row items-center ml-4">
                     <span className="mr-2 italic text-sm text-[#C3C3C3]">
@@ -558,24 +645,6 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                     <p className="text-lg font-semibold text-gray-800 mr-2">
                       Employees
                     </p>
-                    <a
-                      className="group inline-flex items-center hover:cursor-pointer hover:text-primary"
-                      href="/assets/excelFiles/StockX_Headcount_2024.02.04.xlsx"
-                      download={`StockX_Headcount_${todaysDate}.xlsx`}
-                    >
-                      <Image
-                        src="/assets/downloadInactive.svg"
-                        className="w-5 h-5 opacity-50 object-contain group-hover:hidden"
-                        width={256}
-                        height={256}
-                      />
-                      <Image
-                        src="/assets/downloadActive.svg"
-                        className="w-5 h-5 object-contain hidden group-hover:block"
-                        width={256}
-                        height={256}
-                      />
-                    </a>
                   </div>
                   {headCountData &&
                   headCountData?.[companyDic.displayedName] ? (
@@ -603,6 +672,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                   country={country}
                   webTrafficDic={webTrafficData}
                   webTrafficGeoDic={webTrafficGeoData}
+                  downloadExcel={downloadExcel}
                 />
               </div>
               {/* App Usage */}
@@ -611,6 +681,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                   company={companyDic?.displayedName || companyDic?.name}
                   country={country}
                   multiCompanyAppData={dataAIData}
+                  downloadExcel={downloadExcel}
                 />
               </div>
               {/* Consumer Spend */}
