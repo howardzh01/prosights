@@ -22,7 +22,7 @@ function GenericLineChart({
   rawChartData,
   formatChartLabelFunction = (x) => x,
   formatTableDataFunction = (x) => x, //Table Options from here on
-  scrollStart = "left",
+  scrollStart = "right",
   height = "h-84",
   legendPosition = "top",
   displayLegend = true,

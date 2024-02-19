@@ -5,7 +5,7 @@ Chart.register(ChartDataLabels);
 
 function GenericTable({
   tableData,
-  scrollStart = "left",
+  scrollStart = "right",
   formatTableDataFunction,
 }) {
   const scrollRef = useRef(null);
