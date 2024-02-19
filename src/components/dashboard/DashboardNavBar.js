@@ -53,8 +53,12 @@ const DashboardNavBar = ({
               height={256}
               alt="Company Logo"
             />
-          ) : (
+          ) : crunchbaseDataPull === undefined ? (
             <Skeleton className="w-10 h-10 mr-2 rounded-md bg-customGray-50" />
+          ) : (
+            <div className="w-10 h-10 mr-2 rounded-md bg-customGray-50 flex items-center justify-center">
+              <p className="text-sm text-customGray-200">N/A</p>
+            </div>
           )}
           <p className="text-3xl font-bold text-gray-800 pl-1">
             {companyDic.displayedName}
