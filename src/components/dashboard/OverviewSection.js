@@ -356,7 +356,7 @@ function OverviewSection({
               </div>
             </div>
           )}
-          {webTrafficData ? (
+          {webTrafficData && Object.keys(webTrafficData).length !== 0 ? (
             <div className="md:w-64 2xl:w-[30rem] px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-white border border-customGray-50 h-60">
               <div className="bg-white">
                 <WebUsersSignal

@@ -58,8 +58,18 @@ function AppUsageSection({
       <hr className="border-none h-px bg-customGray-100" />
       <div className="flex flex-col section-indent mt-4">
         <div id="App Growth" className="content-section">
-          {multiCompanyAppData === undefined ? (
-            <div> </div>
+          <div className="flex flex-row items-center mb-3">
+            <p className="text-lg font-semibold text-gray-800 mr-2">Growth</p>
+          </div>
+          {multiCompanyAppData === undefined ||
+          Object.keys(multiCompanyAppData).length === 0 ? (
+            <Skeleton className="w-full mt-2 mb-6 h-80 rounded-lg bg-customGray-50" />
+          ) : !multiCompanyAppData[company] ? (
+            <div className="w-full h-80 rounded-lg mt-2 mb-6 bg-customGray-50 flex items-center justify-center">
+              <p className="text-sm text-customGray-200">
+                No App Users Data Available
+              </p>
+            </div>
           ) : (
             <AppUsersChart
               appData={multiCompanyAppData[company]}
@@ -69,8 +79,20 @@ function AppUsageSection({
         </div>
 
         <div id="App Growth vs. Peers" className="content-section">
-          {multiCompanyAppData === undefined ? (
-            <div> </div>
+          <div className="flex flex-row items-center mb-3">
+            <p className="text-lg font-semibold text-grxay-800 mr-2">
+              Growth vs. Peers
+            </p>
+          </div>
+          {multiCompanyAppData === undefined ||
+          Object.keys(multiCompanyAppData).length === 0 ? (
+            <Skeleton className="w-full mt-2 mb-6 h-80 rounded-lg bg-customGray-50" />
+          ) : !multiCompanyAppData[company] ? (
+            <div className="w-full h-80 rounded-lg mt-2 mb-6 bg-customGray-50 flex items-center justify-center">
+              <p className="text-sm text-customGray-200">
+                No App Growth vs. Peers Data Available
+              </p>
+            </div>
           ) : (
             <AppVisitsCompetitorLineChart
               multiCompanyAppData={multiCompanyAppData}
@@ -80,8 +102,20 @@ function AppUsageSection({
         </div>
 
         <div id="App Market Share vs. Peers" className="content-section mt-8">
-          {multiCompanyAppData === undefined ? (
-            <div> </div>
+          <div className="flex flex-row items-center mb-3">
+            <p className="text-lg font-semibold text-gray-800 mr-2">
+              Market Share vs. Peers
+            </p>
+          </div>
+          {multiCompanyAppData === undefined ||
+          Object.keys(multiCompanyAppData).length === 0 ? (
+            <Skeleton className="w-full mt-2 mb-6 h-80 rounded-lg bg-customGray-50" />
+          ) : !multiCompanyAppData[company] ? (
+            <div className="w-full h-80 rounded-lg mt-2 mb-6 bg-customGray-50 flex items-center justify-center">
+              <p className="text-sm text-customGray-200">
+                No App Market Share vs. Peers Data Available
+              </p>
+            </div>
           ) : (
             <AppVisitsStackedBarPeers
               multiCompanyAppData={multiCompanyAppData}
@@ -98,152 +132,47 @@ function AppUsageSection({
           </div>
 
           <div className="space-x-8 flex flex-row items-center w-full">
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">
-              <AppLoyaltyBreakdownVsPeers
-                multiCompanyAppData={multiCompanyAppData}
-                country={country}
-                selectedChart={CHARTS.appLTMRetention}
-              ></AppLoyaltyBreakdownVsPeers>
-            </div>
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">
-              <AppLoyaltyBreakdownVsPeers
-                multiCompanyAppData={multiCompanyAppData}
-                country={country}
-                selectedChart={CHARTS.appLTMActiveDays}
-              ></AppLoyaltyBreakdownVsPeers>
-            </div>
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">
-              <AppLoyaltyBreakdownVsPeers
-                multiCompanyAppData={multiCompanyAppData}
-                country={country}
-                selectedChart={CHARTS.appLTMTimePerUser}
-              ></AppLoyaltyBreakdownVsPeers>
-            </div>
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">
-              <AppLoyaltyBreakdownVsPeers
-                multiCompanyAppData={multiCompanyAppData}
-                country={country}
-                selectedChart={CHARTS.appLTMTimePerSession}
-              ></AppLoyaltyBreakdownVsPeers>
-            </div>
-
-            {/* <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-96">
-              <h2 id="trafficByGeo" className="text-sm font-semibold mb-3">
-                Average User Time Per Month
-              </h2>
-              <div className="flex flex-row items-center mb-6">
-                <Image
-                  src="/assets/calendar.svg"
-                  alt="Company Logo"
-                  className="w-4 h-4 object-contain mr-1"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-xs font-normal text-customGray-200">
-                  Last 12 Months
+            {multiCompanyAppData === undefined ||
+            Object.keys(multiCompanyAppData).length === 0 ? (
+              <Skeleton className="w-full mt-2 mb-6 h-80 rounded-lg bg-customGray-50" />
+            ) : !multiCompanyAppData[company] ? (
+              <div className="w-full h-80 rounded-lg mt-2 mb-6 bg-customGray-50 flex items-center justify-center">
+                <p className="text-sm text-customGray-200">
+                  No App Loyalty vs. Peers Data Available
                 </p>
-                <Image
-                  src="/assets/globe.svg"
-                  alt="Company Logo"
-                  className="w-4 h-4 object-contain mr-1 ml-4"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-xs font-normal text-customGray-200">US</p>
               </div>
-              <div className="flex flex-row space-x-4">
-                <Image
-                  src="/assets/graphPictures/AppPeersTimeSpent.svg"
-                  className="w-2/3 object-contain"
-                  width={5120}
-                  height={5120}
-                />
-                <Image
-                  src="/assets/graphPictures/AppLegend.svg"
-                  className="w-16 h-auto object-contain"
-                  width={512}
-                  height={512}
-                />
-              </div>
-            </div> */}
-            {/* <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-96">
-              <h2 id="trafficByGeo" className="text-sm font-semibold mb-3">
-                D30 Usage Retention
-              </h2>
-              <div className="flex flex-row items-center mb-6">
-                <Image
-                  src="/assets/calendar.svg"
-                  alt="Company Logo"
-                  className="w-4 h-4 object-contain mr-1"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-xs font-normal text-customGray-200">
-                  Last 12 Months
-                </p>
-                <Image
-                  src="/assets/globe.svg"
-                  alt="Company Logo"
-                  className="w-4 h-4 object-contain mr-1 ml-4"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-xs font-normal text-customGray-200">US</p>
-              </div>
-              <div className="flex flex-row space-x-4">
-                <Image
-                  src="/assets/graphPictures/AppPeersD30Retention.svg"
-                  className="w-2/3 object-contain"
-                  width={5120}
-                  height={5120}
-                />
-                <Image
-                  src="/assets/graphPictures/AppLegend.svg"
-                  className="w-16 h-auto object-contain"
-                  width={512}
-                  height={512}
-                />
-              </div>
-            </div>
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-96">
-              <h2 id="trafficByGeo" className="text-sm font-semibold mb-3">
-                Monthly Open Rate
-              </h2>
-              <div className="flex flex-row items-center mb-6">
-                <Image
-                  src="/assets/calendar.svg"
-                  alt="Company Logo"
-                  className="w-4 h-4 object-contain mr-1"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-xs font-normal text-customGray-200">
-                  Last 12 Months
-                </p>
-                <Image
-                  src="/assets/globe.svg"
-                  alt="Company Logo"
-                  className="w-4 h-4 object-contain mr-1 ml-4"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-xs font-normal text-customGray-200">US</p>
-              </div>
-              <div className="flex flex-row space-x-4">
-                <Image
-                  src="/assets/graphPictures/AppPeersOpenRate.svg"
-                  className="w-2/3 object-contain"
-                  width={5120}
-                  height={5120}
-                />
-                <Image
-                  src="/assets/graphPictures/AppLegend.svg"
-                  className="w-16 h-auto object-contain"
-                  width={512}
-                  height={512}
-                />
-              </div>
-            </div> */}
+            ) : (
+              <>
+                <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">
+                  <AppLoyaltyBreakdownVsPeers
+                    multiCompanyAppData={multiCompanyAppData}
+                    country={country}
+                    selectedChart={CHARTS.appLTMRetention}
+                  ></AppLoyaltyBreakdownVsPeers>
+                </div>
+                <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">
+                  <AppLoyaltyBreakdownVsPeers
+                    multiCompanyAppData={multiCompanyAppData}
+                    country={country}
+                    selectedChart={CHARTS.appLTMActiveDays}
+                  ></AppLoyaltyBreakdownVsPeers>
+                </div>
+                <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">
+                  <AppLoyaltyBreakdownVsPeers
+                    multiCompanyAppData={multiCompanyAppData}
+                    country={country}
+                    selectedChart={CHARTS.appLTMTimePerUser}
+                  ></AppLoyaltyBreakdownVsPeers>
+                </div>
+                <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">
+                  <AppLoyaltyBreakdownVsPeers
+                    multiCompanyAppData={multiCompanyAppData}
+                    country={country}
+                    selectedChart={CHARTS.appLTMTimePerSession}
+                  ></AppLoyaltyBreakdownVsPeers>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

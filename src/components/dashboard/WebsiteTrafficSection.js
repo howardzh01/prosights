@@ -68,6 +68,9 @@ function WebsiteTrafficSection({
 
       <div className="flex flex-col section-indent mt-4">
         <div id="Growth" className="content-section">
+          <div className="flex flex-row items-center mb-3">
+            <p className="text-lg font-semibold text-gray-800 mr-2">Growth</p>
+          </div>
           {webTrafficDic === undefined ||
           Object.keys(webTrafficDic).length === 0 ? (
             <Skeleton className="w-full mt-2 mb-6 h-80 rounded-lg bg-customGray-50" />
@@ -175,6 +178,11 @@ function WebsiteTrafficSection({
           </div>
         </div>
         <div id="Quality Over Time" className="content-section mt-8">
+          <div className="flex flex-row items-center mb-3">
+            <p className="text-lg font-semibold text-gray-800 mr-2">
+              Quality Over Time
+            </p>
+          </div>
           {webTrafficData !== undefined &&
           Object.keys(webTrafficData).length !== 0 ? (
             <WebTrafficByChannelChart
@@ -194,10 +202,26 @@ function WebsiteTrafficSection({
         </div>
 
         <div id="Traffic Growth vs. Peers" className="content-section mt-8">
-          <WebTrafficCompetitorLineCharts
-            multiCompanyTrafficData={webTrafficDic}
-            country={country}
-          />
+          <div className="flex flex-row items-center mb-3">
+            <p className="text-lg font-semibold text-grxay-800 mr-2">
+              Growth vs. Peers
+            </p>
+          </div>
+          {webTrafficDic === undefined ||
+          Object.keys(webTrafficDic).length === 0 ? (
+            <Skeleton className="w-full mt-2 mb-6 h-80 rounded-lg bg-customGray-50" />
+          ) : Object.keys(webTrafficDic[company]).length === 0 ? (
+            <div className="w-full h-80 rounded-lg mt-2 mb-6 bg-customGray-50 flex items-center justify-center">
+              <p className="text-sm text-customGray-200">
+                No Growth vs. Peers Data Available
+              </p>
+            </div>
+          ) : (
+            <WebTrafficCompetitorLineCharts
+              multiCompanyTrafficData={webTrafficDic}
+              country={country}
+            />
+          )}
 
           {/* <div className="flex flex-row w-full justify-between space-x-8">
             <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-2/3">
@@ -324,13 +348,18 @@ function WebsiteTrafficSection({
           id="Traffic Market Share vs. Peers"
           className="content-section mt-8"
         >
+          <div className="flex flex-row items-center mb-3">
+            <p className="text-lg font-semibold text-gray-800 mr-2">
+              Market Share vs. Peers
+            </p>
+          </div>
           {webTrafficDic === undefined ||
           Object.keys(webTrafficDic).length === 0 ? (
             <Skeleton className="w-full mt-2 mb-6 h-80 rounded-lg bg-customGray-50" />
-          ) : Object.keys(webTrafficDic).length === 0 ? (
+          ) : Object.keys(webTrafficDic[company]).length === 0 ? (
             <div className="w-full h-80 rounded-lg mt-2 mb-6 bg-customGray-50 flex items-center justify-center">
               <p className="text-sm text-customGray-200">
-                No Growth Data Available
+                No Growth vs. Peers Data Available
               </p>
             </div>
           ) : (
@@ -339,13 +368,6 @@ function WebsiteTrafficSection({
               country={country}
             ></WebTrafficStackedBarPeers>
           )}
-          {/* {webTrafficExists ? (
-              <WebTrafficStackedBarPeers
-                multiCompanyTrafficData={webTrafficDic}
-              ></WebTrafficStackedBarPeers>
-            ) : (
-              <Skeleton className="w-full h-80 rounded-lg bg-customGray-50" />
-            )} */}
         </div>
         <div id="Traffic Breakdown vs. Peers" className="content-section mt-8">
           <div className="flex flex-row items-center mb-3">
@@ -354,33 +376,113 @@ function WebsiteTrafficSection({
             </p>
           </div>
           <div className="space-x-8 flex flex-row items-center justify-start w-full">
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">
+            {webTrafficGeoDic === undefined ||
+            Object.keys(webTrafficGeoDic).length === 0 ? (
+              <Skeleton className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
+            ) : Object.keys(webTrafficGeoDic[company]).length === 0 ? (
+              <div className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50">
+                <div className="flex flex-col items-center justify-center h-full">
+                  <p className="text-sm text-customGray-200">
+                    No Geography vs. Peers Data Available
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">
+                <WebTrafficBreakdownVsPeersGeography
+                  geoTrafficData={webTrafficGeoDic}
+                  relevant_continents={RELEVANT_CONTINENTS}
+                />
+              </div>
+            )}
+            {webTrafficDic === undefined ||
+            Object.keys(webTrafficDic).length === 0 ? (
+              <Skeleton className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
+            ) : Object.keys(webTrafficDic[company]).length === 0 ? (
+              <div className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50">
+                <div className="flex flex-col items-center justify-center h-full">
+                  <p className="text-sm text-customGray-200">
+                    No Device vs. Peers Data Available
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">
+                <WebTrafficBreakdownVsPeers
+                  trafficData={webTrafficDic}
+                  selectedChart={CHARTS.trafficByDevice}
+                  country={country}
+                />
+              </div>
+            )}
+            {webTrafficDic === undefined ||
+            Object.keys(webTrafficDic).length === 0 ? (
+              <Skeleton className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
+            ) : Object.keys(webTrafficDic[company]).length === 0 ? (
+              <div className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50">
+                <div className="flex flex-col items-center justify-center h-full">
+                  <p className="text-sm text-customGray-200">
+                    No Channel vs. Peers Data Available
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">
+                <WebTrafficBreakdownVsPeers
+                  trafficData={webTrafficDic}
+                  selectedChart={CHARTS.trafficByChannel}
+                  country={country}
+                />
+              </div>
+            )}
+            {webTrafficDic === undefined ||
+            Object.keys(webTrafficDic).length === 0 ? (
+              <Skeleton className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
+            ) : Object.keys(webTrafficDic[company]).length === 0 ? (
+              <div className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50">
+                <div className="flex flex-col items-center justify-center h-full">
+                  <p className="text-sm text-customGray-200">
+                    No Search vs. Peers Data Available
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">
+                <WebTrafficBreakdownVsPeers
+                  trafficData={webTrafficDic}
+                  selectedChart={CHARTS.trafficByOrganicVsPaid}
+                  country={country}
+                />
+              </div>
+            )}
+
+            {/* <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">
               <WebTrafficBreakdownVsPeersGeography
                 geoTrafficData={webTrafficGeoDic}
                 relevant_continents={RELEVANT_CONTINENTS}
               />
-            </div>
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">
+            </div> */}
+            {/* <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">
               <WebTrafficBreakdownVsPeers
                 trafficData={webTrafficDic}
                 selectedChart={CHARTS.trafficByDevice}
                 country={country}
               />
-            </div>
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">
+            </div> */}
+            {/* <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">
               <WebTrafficBreakdownVsPeers
                 trafficData={webTrafficDic}
                 selectedChart={CHARTS.trafficByChannel}
                 country={country}
               />
-            </div>
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">
+            </div> */}
+            {/* <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">
               <WebTrafficBreakdownVsPeers
                 trafficData={webTrafficDic}
                 selectedChart={CHARTS.trafficByOrganicVsPaid}
                 country={country}
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
