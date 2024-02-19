@@ -4,7 +4,7 @@ import { CHARTS } from "../../constants";
 import Image from "next/image";
 import { convertToChannelDoughnutData } from "../../utils/ChartUtils";
 
-function WebTrafficDoughnut({ trafficData, selectedChart = null }) {
+function WebTrafficDoughnut({ trafficData, country, selectedChart = null }) {
   if (!trafficData) return null;
 
   let chartType;
@@ -50,7 +50,7 @@ function WebTrafficDoughnut({ trafficData, selectedChart = null }) {
           width={128}
           height={128}
         />
-        <p className="text-xs font-normal text-customGray-200">US</p>
+        <p className="text-xs font-normal text-customGray-200">{country}</p>
       </div>
       <div className="px-2">
         <GenericDoughnut

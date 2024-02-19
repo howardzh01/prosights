@@ -70,7 +70,7 @@ export const TIME_IN_MS = {
 export const CHARTS = {
   employeeCount: "Employee Count",
   traffic: "Traffic",
-  mau: "MAU",
+  trafficActiveUsers: "MAU",
   trafficByChannel: "Traffic by Channel",
   trafficByDevice: "Traffic by Device",
   usersByDevice: "Users by Device",
@@ -80,6 +80,7 @@ export const CHARTS = {
   appLTMActiveDays: "Active Days",
   appLTMTimePerUser: "Average User Time Per Month",
   appLTMTimePerSession: "Average Session Time",
+  appActiveUsers: "App Users",
 };
 
 export const RELEVANT_CONTINENTS = [

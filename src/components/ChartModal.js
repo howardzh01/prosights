@@ -5,12 +5,14 @@ import HeadCountChart from "./charts/HeadCountChart";
 import { CHARTS, RELEVANT_CONTINENTS } from "../constants";
 import WebGeoTrafficDoughnut from "./charts/WebGeoTrafficDoughnut";
 import WebTrafficChart from "./charts/WebTrafficChart";
+import AppUsersChart from "./charts/AppUsersChart";
 
 export default function ChartModal({
   open,
   setOpen,
   selectedChart,
   chartData,
+  country,
 }) {
   let chart;
 
@@ -18,56 +20,71 @@ export default function ChartModal({
     case CHARTS.employeeCount:
       chart = <HeadCountChart headCountData={chartData} />;
       break;
-    case CHARTS.trafficByGeo:
-      chart = (
-        <WebGeoTrafficDoughnut
-          geoTrafficData={chartData}
-          relevant_continents={RELEVANT_CONTINENTS}
-        />
-      );
-      break;
-    case CHARTS.traffic:
-      chart = (
-        <WebTrafficChart
-          trafficData={chartData}
-          selectedChart={CHARTS.traffic}
-        />
-      );
-      break;
-    case CHARTS.mau:
-      chart = (
-        <WebTrafficChart trafficData={chartData} selectedChart={CHARTS.mau} />
-      );
-      break;
-    case CHARTS.trafficByChannel:
+    // case CHARTS.trafficByGeo:
+    //   chart = (
+    //     <WebGeoTrafficDoughnut
+    //       geoTrafficData={chartData}
+    //       relevant_continents={RELEVANT_CONTINENTS}
+    //     />
+    //   );
+    //   break;
+    // case CHARTS.traffic:
+    //   chart = (
+    //     <WebTrafficChart
+    //       trafficData={chartData}
+    //       selectedChart={CHARTS.traffic}
+    //       country={country}
+    //     />
+    //   );
+    //   break;
+    case CHARTS.trafficActiveUsers:
       chart = (
         <WebTrafficChart
           trafficData={chartData}
-          selectedChart={CHARTS.trafficByChannel}
+          selectedChart={CHARTS.trafficActiveUsers}
+          country={country}
         />
       );
       break;
-    case CHARTS.trafficByDevice:
+    // case CHARTS.trafficByChannel:
+    //   chart = (
+    //     <WebTrafficChart
+    //       trafficData={chartData}
+    //       selectedChart={CHARTS.trafficByChannel}
+    //     />
+    //   );
+    //   break;
+    // case CHARTS.trafficByDevice:
+    //   chart = (
+    //     <WebTrafficChart
+    //       trafficData={chartData}
+    //       selectedChart={CHARTS.trafficByDevice}
+    //     />
+    //   );
+    //   break;
+    // case CHARTS.usersByDevice:
+    //   chart = (
+    //     <WebTrafficChart
+    //       trafficData={chartData}
+    //       selectedChart={CHARTS.usersByDevice}
+    //     />
+    //   );
+    //   break;
+    // case CHARTS.trafficByOrganicVsPaid:
+    //   chart = (
+    //     <WebTrafficChart
+    //       trafficData={chartData}
+    //       selectedChart={CHARTS.trafficByOrganicVsPaid}
+    //     />
+    //   );
+    //   break;
+
+    case CHARTS.appActiveUsers:
       chart = (
-        <WebTrafficChart
-          trafficData={chartData}
-          selectedChart={CHARTS.trafficByDevice}
-        />
-      );
-      break;
-    case CHARTS.usersByDevice:
-      chart = (
-        <WebTrafficChart
-          trafficData={chartData}
-          selectedChart={CHARTS.usersByDevice}
-        />
-      );
-      break;
-    case CHARTS.trafficByOrganicVsPaid:
-      chart = (
-        <WebTrafficChart
-          trafficData={chartData}
-          selectedChart={CHARTS.trafficByOrganicVsPaid}
+        <AppUsersChart
+          appData={chartData}
+          country={country}
+          selectedChart={CHARTS.appActiveUsers}
         />
       );
       break;

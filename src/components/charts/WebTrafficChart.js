@@ -73,7 +73,7 @@ function WebTrafficChart({
       showDataLabels={mauTimescale !== "month"}
       timescale={mauTimescale}
       setTimescale={setMauTimescale}
-      selectedChart={CHARTS.mau}
+      selectedChart={CHARTS.trafficActiveUsers}
       // showTimescaleButtons={false}
       rawChartData={trafficData}
       showModalButtons={false}
@@ -99,9 +99,14 @@ function WebTrafficChart({
 
   switch (selectedChart) {
     case CHARTS.traffic:
-      return yearTrafficGraph;
-    case CHARTS.mau:
-      return yearUserGraph;
+      return customTrafficGraph;
+    case CHARTS.trafficActiveUsers:
+      return (
+        <TwoColumnView
+          quarterGraph={customUserGraph}
+          yearGraph={yearUserGraph}
+        />
+      );
     // if no selected chart, return all charts
     default:
       return (

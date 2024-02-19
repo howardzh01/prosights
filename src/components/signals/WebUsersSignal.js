@@ -23,6 +23,8 @@ function WebUsersSignal({
       showTable={false}
       showTimescaleButtons={false}
       showModalButtons={true}
+      selectedChart={CHARTS.trafficActiveUsers}
+      rawChartData={webTrafficData}
       scrollStart={"right"}
       location={country}
       formatChartLabelFunction={roundPeNumbers}

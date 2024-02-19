@@ -517,6 +517,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
           }}
           selectedChart={selectedChart}
           chartData={chartData}
+          country={country}
         />
         <div className="flex flex-row">
           {/* Sidebar */}
