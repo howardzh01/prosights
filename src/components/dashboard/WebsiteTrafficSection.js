@@ -71,8 +71,8 @@ function WebsiteTrafficSection({
           <div className="flex flex-row items-center mb-3">
             <p className="text-lg font-semibold text-gray-800 mr-2">Growth</p>
           </div>
-          {webTrafficDic === undefined ||
-          Object.keys(webTrafficDic).length === 0 ? (
+          {webTrafficData === undefined ||
+          Object.keys(webTrafficData).length === 0 ? (
             <Skeleton className="w-full mt-2 mb-6 h-80 rounded-lg bg-customGray-50" />
           ) : Object.keys(webTrafficData).length === 0 ? (
             <div className="w-full h-80 rounded-lg mt-2 mb-6 bg-customGray-50 flex items-center justify-center">

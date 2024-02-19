@@ -309,109 +309,152 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
   //   setAppUsageData(null);
   // }, [country]);
 
-  function downloadExcel(name, devMode = true) {
+  function downloadExcel(name, devMode = false) {
     // Excel sheet builder
-    const headcountSectionBuilder = [
-      {
-        type: "bar",
-        sheetName: "Headcount",
-        req: convertHeadCountChartDataToExcelFormat(
-          headCountData?.[companyDic.displayedName],
-          dataCutoffDate
-        ),
-      },
-    ];
+    const headcountSectionBuilder =
+      headCountData && headCountData?.[companyDic.displayedName]
+        ? [
+            {
+              type: "bar",
+              sheetName: "Headcount",
+              req: convertHeadCountChartDataToExcelFormat(
+                headCountData[companyDic.displayedName],
+                dataCutoffDate
+              ),
+            },
+          ]
+        : [];
     const webTrafficSectionBuilder = [
-      {
-        type: "bar",
-        sheetName: "Traffic Total Visits",
-        req: convertTotalVisitsChartDataToExcelFormat(
-          webTrafficData?.[companyDic.displayedName],
-          dataCutoffDate
-        ),
-      },
-      {
-        type: "bar",
-        sheetName: "Traffic Web Users",
-        req: convertWebUsersChartDataToExcelFormat(
-          webTrafficData?.[companyDic.displayedName],
-          dataCutoffDate
-        ),
-      },
-      {
-        type: "doughnut",
-        sheetName: "Traffic Breakdown",
-        req: convertBreakdownChartDataToExcelFormat(
-          webTrafficGeoData?.[companyDic.displayedName],
-          webTrafficData?.[companyDic.displayedName]
-        ),
-      },
-      {
-        type: "stacked",
-        sheetName: "Traffic Total Visits by Channel",
-        req: convertTrafficByChannelChartDataToExcelFormat(
-          webTrafficData?.[companyDic.displayedName],
-          dataCutoffDate
-        ),
-      },
-      {
-        type: "line",
-        sheetName: "Traffic Growth vs. Peers",
-        req: convertTrafficGrowthVsPeersChartDataToExcelFormat(
-          webTrafficData,
-          dataCutoffDate
-        ),
-      },
-      {
-        type: "stacked",
-        sheetName: "Traffic Market Share vs. Peers",
-        req: convertTrafficMarketShareVsPeersDataToExcelFormat(
-          webTrafficData,
-          dataCutoffDate
-        ),
-      },
-      {
-        type: "stacked",
-        sheetName: "Traffic Breakdown vs. Peers",
-        req: convertTrafficBreakdownVsPeersDataToExcelFormat(
-          webTrafficGeoData,
-          webTrafficData
-        ),
-      },
-    ];
-    const appUsageSectionBuilder = [
-      {
+      webTrafficData?.[companyDic.displayedName] !== undefined &&
+      Object.keys(webTrafficData?.[companyDic.displayedName]).length != 0
+        ? {
+            type: "bar",
+            sheetName: "Traffic Total Visits",
+            req: convertTotalVisitsChartDataToExcelFormat(
+              webTrafficData[companyDic.displayedName],
+              dataCutoffDate
+            ),
+          }
+        : null,
+      webTrafficData?.[companyDic.displayedName] !== undefined &&
+      Object.keys(webTrafficData?.[companyDic.displayedName]).length != 0
+        ? {
+            type: "bar",
+            sheetName: "Traffic Web Users",
+            req: convertWebUsersChartDataToExcelFormat(
+              webTrafficData[companyDic.displayedName],
+              dataCutoffDate
+            ),
+          }
+        : null,
+      // TODO: Need to split cases on geo and non-geo data
+      webTrafficGeoData?.[companyDic.displayedName] !== undefined &&
+      webTrafficGeoData?.[companyDic.displayedName] !== null &&
+      Object.keys(webTrafficGeoData?.[companyDic.displayedName]).length !== 0 &&
+      webTrafficData?.[companyDic.displayedName] !== undefined &&
+      webTrafficData?.[companyDic.displayedName] !== null &&
+      Object.keys(webTrafficData?.[companyDic.displayedName]).length !== 0
+        ? {
+            type: "doughnut",
+            sheetName: "Traffic Breakdown",
+            req: convertBreakdownChartDataToExcelFormat(
+              webTrafficGeoData[companyDic.displayedName],
+              webTrafficData[companyDic.displayedName]
+            ),
+          }
+        : null,
+      webTrafficData?.[companyDic.displayedName] !== undefined &&
+      Object.keys(webTrafficData?.[companyDic.displayedName]).length !== 0
+        ? {
+            type: "stacked",
+            sheetName: "Traffic Total Visits by Channel",
+            req: convertTrafficByChannelChartDataToExcelFormat(
+              webTrafficData[companyDic.displayedName],
+              dataCutoffDate
+            ),
+          }
+        : null,
+      webTrafficData !== undefined &&
+      Object.keys(webTrafficData).length != 0 &&
+      Object.keys(webTrafficData?.[companyDic.displayedName]).length !== 0
+        ? {
+            type: "line",
+            sheetName: "Traffic Growth vs. Peers",
+            req: convertTrafficGrowthVsPeersChartDataToExcelFormat(
+              webTrafficData,
+              dataCutoffDate
+            ),
+          }
+        : null,
+      webTrafficData !== undefined &&
+      Object.keys(webTrafficData).length != 0 &&
+      Object.keys(webTrafficData?.[companyDic.displayedName]).length !== 0
+        ? {
+            type: "stacked",
+            sheetName: "Traffic Market Share vs. Peers",
+            req: convertTrafficMarketShareVsPeersDataToExcelFormat(
+              webTrafficData,
+              dataCutoffDate
+            ),
+          }
+        : null,
+      // TODO: Need to split cases on geo and non-geo data
+      webTrafficData !== undefined &&
+      Object.keys(webTrafficData).length != 0 &&
+      Object.keys(webTrafficData?.[companyDic.displayedName]).length !== 0 &&
+      webTrafficGeoData !== undefined &&
+      Object.keys(webTrafficGeoData).length != 0 &&
+      Object.keys(webTrafficGeoData?.[companyDic.displayedName]).length !== 0
+        ? {
+            type: "stacked",
+            sheetName: "Traffic Breakdown vs. Peers",
+            req: convertTrafficBreakdownVsPeersDataToExcelFormat(
+              webTrafficGeoData,
+              webTrafficData
+            ),
+          }
+        : null,
+    ].filter(Boolean);
+    const appUsageSectionBuilder = [];
+    if (
+      dataAIData &&
+      (dataAIData[companyDic?.displayedName] || dataAIData[companyDic?.name]) &&
+      Object.keys(dataAIData).length !== 0
+    ) {
+      appUsageSectionBuilder.push({
         type: "bar",
         sheetName: "App Users",
         req: convertAppUsersChartDataToExcelFormat(
-          dataAIData?.[companyDic?.displayedName || companyDic?.name][
+          dataAIData[companyDic?.displayedName || companyDic?.name][
             "app_performance"
           ],
           dataCutoffDate
         ),
-      },
-      {
-        type: "line",
-        sheetName: "App Growth vs. Peers",
-        req: convertAppUsageGrowthVsPeersChartDataToExcelFormat(
-          dataAIData,
-          dataCutoffDate
-        ),
-      },
-      {
-        type: "stacked",
-        sheetName: "App Market Share vs. Peers",
-        req: convertAppUsageMarketShareVsPeersDataToExcelFormat(
-          dataAIData,
-          dataCutoffDate
-        ),
-      },
-      {
-        type: "bar",
-        sheetName: "App Loyalty vs. Peers",
-        req: convertAppUsageLoyalUsersVsPeersDataToExcelFormat(dataAIData),
-      },
-    ];
+      });
+      appUsageSectionBuilder.push(
+        {
+          type: "line",
+          sheetName: "App Growth vs. Peers",
+          req: convertAppUsageGrowthVsPeersChartDataToExcelFormat(
+            dataAIData,
+            dataCutoffDate
+          ),
+        },
+        {
+          type: "stacked",
+          sheetName: "App Market Share vs. Peers",
+          req: convertAppUsageMarketShareVsPeersDataToExcelFormat(
+            dataAIData,
+            dataCutoffDate
+          ),
+        },
+        {
+          type: "bar",
+          sheetName: "App Loyalty vs. Peers",
+          req: convertAppUsageLoyalUsersVsPeersDataToExcelFormat(dataAIData),
+        }
+      );
+    }
     const dividerBuilder = (name) => ({
       type: "divider",
       sheetName: name,
