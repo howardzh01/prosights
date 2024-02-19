@@ -62,11 +62,6 @@ function WebTrafficByChannelChart({
     default:
       return (
         <div>
-          <div className="flex flex-row items-center mb-3">
-            <p className="text-lg font-semibold text-gray-800 mr-2">
-              Quality Over Time
-            </p>
-          </div>
           <div className="h-fit mb-4">
             <TwoColumnView
               quarterGraph={trafficByChannel}
