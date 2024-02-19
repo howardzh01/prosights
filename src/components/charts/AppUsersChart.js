@@ -17,7 +17,6 @@ function AppUsersChart({
   if (!appData) return null;
   const relevantAppData = appData["app_performance"];
   const [appTimescale, setAppTrafficTimescale] = useState("quarterYear");
-  console.log(appData);
   const customUserGraph = (
     <GenericBarAndTable
       data={convertToGrowthChartData(

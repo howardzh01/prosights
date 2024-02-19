@@ -375,7 +375,6 @@ export function convertToMarketShareData(
   // aggData: {company1: {timekey: visits}, company2: {timekey: visits}, ...}
   const firstChannelData = aggData[companyNames[0]]; // use to extract timescale\
   const percentAggData = normalizeStackedAggData(aggData);
-  console.log("percentAggData", percentAggData);
   const chartData = {
     labels: Object.keys(firstChannelData),
     datasets: Object.keys(aggData).map((key) => ({
