@@ -657,6 +657,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                   companyDescriptions={companyDescriptionPull}
                   crunchbaseData={crunchbaseDataPull} // {companyName: null} if no data
                   headCountData={headCountData}
+                  companyCompetitors={companyCompetitors}
                 />
               </div>
               {/* Headcount; TODO: MAKE THIS A SEPARATE COMPONENT */}

@@ -13,6 +13,7 @@ function CompetitorOverviewSection({
   companyDescriptions,
   crunchbaseData,
   headCountData,
+  companyCompetitors,
 }) {
   let competitors = [];
 
@@ -116,14 +117,14 @@ function CompetitorOverviewSection({
       </div>
       <hr className="border-none h-px bg-customGray-100" />
       <div className="flex flex-wrap justify-center gap-10 p-5">
-        {!companyDescriptions || !crunchbaseData || !headCountData ? (
-          <Skeleton className="w-full h-80 rounded-lg bg-customGray-50" />
-        ) : competitors.length === 1 ? (
+        {companyCompetitors.length <= 1 ? (
           <div className="w-full h-80 rounded-lg bg-transparent flex items-center justify-center">
             <p className="text-2xl font-medium text-customGray-150">
               Add Competitors to Compare
             </p>
           </div>
+        ) : !companyDescriptions || !crunchbaseData || !headCountData ? (
+          <Skeleton className="w-full h-80 rounded-lg bg-customGray-50" />
         ) : (
           <>
             {competitors.map((competitor, index) => (
@@ -167,7 +168,7 @@ function CompetitorOverviewSection({
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm font-normal text-gray-500">
-                      Last Round Amount
+                      Last Round Size
                     </span>
                     <span className="text-sm font-medium text-gray-900">
                       {competitor.companyLastRoundSize}
@@ -175,7 +176,7 @@ function CompetitorOverviewSection({
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm font-normal text-gray-500">
-                      Post-Money Valuation
+                      Valuation (Post)
                     </span>
                     <span className="text-sm font-medium text-gray-900">
                       {competitor.companyValuation}
