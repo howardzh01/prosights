@@ -32,7 +32,13 @@ function ConsumerSpendSection({ country }) {
         </div>
       </div>
       <hr className="border-none h-px bg-customGray-100" />
-      <div className="flex flex-col mt-4 section-indent">
+      <div className="w-full h-80 rounded-lg mt-8 mb-6 bg-customGray-50 flex items-center justify-center">
+        <p className="text-sm text-customGray-200">
+          This data set is not available within your current subscription.
+          Please consider upgrading to the ProSights premium tier.
+        </p>
+      </div>
+      <div className="flex-col mt-4 section-indent hidden">
         <div id="Customer Loyalty vs. Peers" className="content-section">
           <div className="flex flex-row items-center mb-3">
             <p className="text-lg font-semibold text-gray-800 mr-2">
