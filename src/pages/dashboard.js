@@ -450,18 +450,23 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
 
     const element = document.getElementById("main-content");
     const contentWidth = element.scrollWidth; // Get the full scrollable width of the content
+    // TODO: Manual 1.5x multiplier to add in extra space to the height; this is a temporary fix.
+    // Otherwise, scroll height is too short because of pagebreak avoid all mode
+    const contentHeight = element.scrollHeight * 1.5; // Get the full scrollable height of the content
 
     const opt = {
       margin: [0.5, 0.5],
       filename: "dashboard.pdf",
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: {
+        useCORS: true,
         scale: 2, // Adjust this as needed
         logging: true,
         dpi: 192,
         letterRendering: true,
         scrollX: 0,
         scrollY: 0,
+        windowHeight: contentHeight,
         windowWidth: contentWidth, // Set the canvas width to the full content width
       },
       jsPDF: {
