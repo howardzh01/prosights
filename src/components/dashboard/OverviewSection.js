@@ -285,7 +285,7 @@ function OverviewSection({
         </div>
       </div>
       {/* Funding and M&A Tables */}
-      <div className="flex mt-6 ml-4 justify-between w-full">
+      {/* <div className="flex mt-6 ml-4 justify-between w-full">
         <div className="w-3/5 pr-16">
           <p className="text-lg font-semibold text-gray-800 mb-3">Funding</p>{" "}
           {crunchbaseData?.["raised_funding_rounds"] ? (
@@ -322,7 +322,7 @@ function OverviewSection({
             </div>
           )}
         </div>
-      </div>
+      </div> */}
       {/* Signals */}
       <div className="flex flex-col mt-6 ml-4">
         <div className="text-lg font-semibold text-gray-800">Signals</div>

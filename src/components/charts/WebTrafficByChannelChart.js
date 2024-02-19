@@ -34,7 +34,7 @@ function WebTrafficByChannelChart({
       setTimescale={setTrafficByChannelTimescale}
       selectedChart={CHARTS.trafficByChannel}
       rawChartData={trafficData}
-      formatTableDataFunction={(x) => roundPeNumbers(x) + "%"}
+      formatTableDataFunction={(x) => (x ? roundPeNumbers(x) + "%" : "--")}
       location={country}
     />
   );
@@ -49,7 +49,7 @@ function WebTrafficByChannelChart({
       showTimescaleButtons={false}
       showModalButtons={false}
       scrollStart={"right"}
-      formatTableDataFunction={(x) => roundPeNumbers(x) + "%"}
+      formatTableDataFunction={(x) => (x ? roundPeNumbers(x) + "%" : "--")}
       displayLegend={false}
     />
   );

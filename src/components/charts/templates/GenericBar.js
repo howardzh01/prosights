@@ -23,7 +23,7 @@ function GenericBarAndTable({
   rawChartData,
   formatChartLabelFunction: formatChartLabelFunction = (x) => x,
   formatTableDataFunction = (x) => x, //Table Options from here on
-  scrollStart = "left",
+  scrollStart = "right",
   useColorPlugin = true,
 }) {
   const { chartData, tableData } = data;

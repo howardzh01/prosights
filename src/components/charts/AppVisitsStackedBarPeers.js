@@ -43,7 +43,7 @@ function AppVisitsStackedBarPeers({
       setTimescale={setAppByChannelTimescale}
       selectedChart={CHARTS.appByChannel}
       rawChartData={multiCompanyAppPerformance}
-      formatTableDataFunction={(x) => roundPeNumbers(x) + "%"}
+      formatTableDataFunction={(x) => (x ? roundPeNumbers(x) + "%" : "--")}
       location={country}
     ></GenericStackedBar>
   );
@@ -56,7 +56,7 @@ function AppVisitsStackedBarPeers({
       showTimescaleButtons={false}
       showModalButtons={false}
       scrollStart={"right"}
-      formatTableDataFunction={(x) => roundPeNumbers(x) + "%"}
+      formatTableDataFunction={(x) => (x ? roundPeNumbers(x) + "%" : "--")}
       displayLegend={false}
     ></GenericStackedBar>
   );

@@ -31,7 +31,7 @@ function WebTrafficStackedBarPeers({
       setTimescale={setTrafficByChannelTimescale}
       // selectedChart={CHARTS.trafficByChannel}
       rawChartData={multiCompanyTrafficData}
-      formatTableDataFunction={(x) => roundPeNumbers(x) + "%"}
+      formatTableDataFunction={(x) => (x ? roundPeNumbers(x) + "%" : "--")}
       location={country}
     ></GenericStackedBar>
   );
@@ -45,7 +45,7 @@ function WebTrafficStackedBarPeers({
       showTimescaleButtons={false}
       showModalButtons={false}
       scrollStart={"right"}
-      formatTableDataFunction={(x) => roundPeNumbers(x) + "%"}
+      formatTableDataFunction={(x) => (x ? roundPeNumbers(x) + "%" : "--")}
       displayLegend={false}
     ></GenericStackedBar>
   );

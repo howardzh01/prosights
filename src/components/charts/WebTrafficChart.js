@@ -3,9 +3,7 @@ import GenericBarAndTable from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
 import { aggregateData, roundPeNumbers } from "../../utils/Utils";
 import { convertToGrowthChartData } from "../../utils/ChartUtils";
-import GenericStackedBar from "./templates/GenericStackedBar";
 import { CHARTS } from "../../constants";
-import Image from "next/image";
 
 function WebTrafficChart({
   trafficData,

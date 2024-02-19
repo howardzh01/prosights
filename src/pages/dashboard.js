@@ -309,7 +309,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
   //   setAppUsageData(null);
   // }, [country]);
 
-  function downloadExcel(name, devMode = false) {
+  function downloadExcel(name, devMode = true) {
     // Excel sheet builder
     const headcountSectionBuilder = [
       {

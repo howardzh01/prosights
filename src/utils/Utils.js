@@ -89,7 +89,8 @@ export const aggregateData = (
   data,
   outputKey,
   agg = "sum",
-  timescale = "quarterYear"
+  timescale = "quarterYear",
+  startYear = 2019
 ) => {
   // inputs: expected data in monthly format {Date(): {'visits': x, 'users': x}}
   // outputs: {time_key: output_key}
@@ -152,8 +153,19 @@ export const aggregateData = (
     }, {});
   }
 
+  // Generate timekeys that will be returned
+  let allTimeKeys;
+  if (timescale === "month") {
+    allTimeKeys = generateMonthsFromStartYear(startYear, dateToMonths);
+  } else if (timescale === "quarterYear") {
+    allTimeKeys = generateQuarters(startYear);
+  } else if (timescale === "year") {
+    allTimeKeys = generateYears(startYear);
+  }
+
   // Final output based on aggregation method
-  return Object.entries(aggData).reduce((acc, [timeInput, data]) => {
+  return allTimeKeys.reduce((acc, timeInput) => {
+    data = aggData[timeInput];
     if (!data) {
       acc[timeInput] = null;
     } else {
@@ -233,16 +245,19 @@ const generateMonthsBetweenDates = (startDate, endDate) => {
   return allMonths;
 };
 
-export const generateMonthsFromStartYear = (startYear) => {
+export const generateMonthsFromStartYear = (
+  startYear,
+  formatter = (x) => x
+) => {
   const dates = [];
   const today = CONSTANTS.cutoffDate;
   const currentYear = today.getUTCFullYear();
   for (let year = startYear; year <= currentYear; year++) {
-    let endMonth = year === currentYear ? today.getUTCMonth() : 12;
+    let endMonth = year === currentYear ? today.getUTCMonth() + 1 : 12;
     for (let month = 1; month <= endMonth; month++) {
       // Pad the month with a leading zero if necessary
       const monthString = String(month).padStart(2, "0");
-      dates.push(`${year}-${monthString}-01`);
+      dates.push(formatter(`${year}-${monthString}-01`));
     }
   }
   return dates;
@@ -252,7 +267,6 @@ export const generateQuarters = (startYear) => {
   let quarters = [];
   const today = CONSTANTS.cutoffDate;
   const currentYear = today.getUTCFullYear();
-  m;
   const currentQuarter = Math.floor((today.getUTCMonth() - 1) / 3) + 1; // -1 month to ensure quarter outputs after month ends
   for (let year = startYear; year <= currentYear; year++) {
     let endQuarter = year === currentYear ? currentQuarter : 4;
@@ -268,7 +282,7 @@ export const generateYears = (startYear) => {
   const today = CONSTANTS.cutoffDate;
   const currentYear = today.getUTCFullYear();
   for (let year = startYear; year <= currentYear; year++) {
-    years.push(year);
+    years.push(`${year}`);
   }
   return years;
 };
@@ -406,7 +420,7 @@ export function convertLabelToDate(label) {
     const year = parseInt(label);
     return new Date(year, 0, 1); // January 1st of the given year
   } else {
-    throw new Error("Unknown date format");
+    throw new Error(`Unknown date format: ${label}`);
   }
 }
 
@@ -443,6 +457,9 @@ export function normalizeStackedAggData(aggData) {
       const value = aggData[key][timeKey];
       const total = totalsByTimeKey[timeKey];
       acc[key][timeKey] = (value / total) * 100; // Convert to percentage
+      if (isNaN(acc[key][timeKey])) {
+        acc[key][timeKey] = null;
+      }
     });
     return acc;
   }, {});

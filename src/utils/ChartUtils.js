@@ -284,7 +284,9 @@ export function convertToChannelChartData(
     datasets: Object.keys(aggData).map((key) => ({
       data: Object.values(percentAggData[key])
         .slice(cutoffIndex)
-        .map((x) => Number(roundPeNumbers(x))),
+        .map(
+          (x) => (x ? Number(roundPeNumbers(x)) : null) // this will convert null to 0
+        ),
       rawData: Object.values(aggData[key]).slice(cutoffIndex),
       borderWidth: 1,
       label: key,
@@ -373,12 +375,12 @@ export function convertToMarketShareData(
   // aggData: {company1: {timekey: visits}, company2: {timekey: visits}, ...}
   const firstChannelData = aggData[companyNames[0]]; // use to extract timescale\
   const percentAggData = normalizeStackedAggData(aggData);
-  // console.log("percentAggData", percentAggData);
+  console.log("percentAggData", percentAggData);
   const chartData = {
     labels: Object.keys(firstChannelData),
     datasets: Object.keys(aggData).map((key) => ({
-      data: Object.values(percentAggData[key]).map((x) =>
-        Number(roundPeNumbers(x))
+      data: Object.values(percentAggData[key]).map(
+        (x) => (x ? Number(roundPeNumbers(x)) : null) // this will convert null to 0
       ),
       rawData: Object.values(aggData[key]),
       borderWidth: 1,
@@ -592,8 +594,8 @@ export function convertToAppUsageMarketShareVsPeersData(
   const chartData = {
     labels: Object.keys(firstChannelData),
     datasets: Object.keys(aggData).map((key) => ({
-      data: Object.values(percentAggData[key]).map((x) =>
-        Number(roundPeNumbers(x))
+      data: Object.values(percentAggData[key]).map(
+        (x) => (x ? Number(roundPeNumbers(x)) : null) // this will convert null to 0
       ),
       rawData: Object.values(aggData[key]),
       borderWidth: 1,
