@@ -21,7 +21,7 @@ function InvestorTable({ fundingData }) {
           <tr className="bg-customGray-50 font-medium sticky top-0">
             <TableHeader text="Round" />
             <TableHeader text="Date" />
-            <TableHeader text="Valuation" />
+            <TableHeader text="Valuation (Post)" />
             <TableHeader text="Raised" />
             <TableHeader text="Lead Investors" />
           </tr>
