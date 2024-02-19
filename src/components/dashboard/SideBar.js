@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Image from "next/image";
 import UserProfileButton from "../UserProfileButton";
 
-function SideBar({ sections, activeSections }) {
+function SideBar({ sections, activeSections, apiUsage }) {
   // Determine if we should extend the bar to cover multiple consecutive active sections
   const isSectionActive = (section) => activeSections[section.id];
 
@@ -35,9 +35,9 @@ function SideBar({ sections, activeSections }) {
           className="w-28"
         />
       </button>
-      {/* <p className="pt-3 text-white text-base font-semibold">
-        Queries Left: 50
-      </p> */}
+      <p className="pt-3 text-white text-base font-semibold">
+        Queries Left: {apiUsage == null ? "--" : 200 - apiUsage}
+      </p>
       <div className="mt-8 flex-grow relative overflow-y-auto overflow-x-hidden">
         {sections.map((section, index) => {
           if (

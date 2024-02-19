@@ -57,6 +57,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
   // const companyDic = companyDirectory.findCompanyByName(company);
   // State to track active sections
   const [activeSections, setActiveSections] = useState({});
+  const [apiCalls, setApiCalls] = useState(null); // Initialize apiCalls state
 
   // Sections for sidebar; MUST have same title as section id, which might be used in child components
   const sections = [
@@ -303,6 +304,39 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
       setCompanyCompetitors([]);
     }
   }, [companyDic]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const combinedCompanies = [companyDic, ...companyCompetitors];
+
+        const response = await fetch("/api/private/postApiUsage", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: user.id, // Include the userId in the request body
+            companyNameList: combinedCompanies.map((company) =>
+              company.name.toLowerCase()
+            ), // Include the companyNameList
+            country: country, // Include the country
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+        setApiCalls(data.apiUsage); // Update the apiCalls state with the response data
+      } catch (error) {
+        console.error("Failed to fetch:", error);
+      }
+    };
+
+    fetchData();
+  }, [companyDic, companyCompetitors, country, user]);
 
   // useEffect(() => {
   //   setWebsiteTrafficData(null);
@@ -570,7 +604,11 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
         <div className="flex flex-row">
           {/* Sidebar */}
           <div className="flex-shrink-0 sticky top-0 w-60 h-screen">
-            <SideBar sections={sections} activeSections={activeSections} />
+            <SideBar
+              sections={sections}
+              activeSections={activeSections}
+              apiUsage={apiCalls}
+            />
           </div>
           {companyDic && companyDic.name ? (
             // Main Content

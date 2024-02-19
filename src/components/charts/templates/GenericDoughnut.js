@@ -3,9 +3,11 @@ import { Doughnut } from "react-chartjs-2";
 import Chart from "chart.js/auto";
 import { isColorLight, rgbToComponents } from "../../../utils/Utils.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import GenericLocationDisplay from "./GenericLocationDisplay.js";
+import GenericTimeScale from "./GenericTimeScale.js";
 Chart.register(ChartDataLabels);
 
-function GenericDoughnut({ chartData, title = undefined }) {
+function GenericDoughnut({ chartData, title = undefined, country }) {
   const options = {
     plugins: {
       chartJSColorPlugin: false,
@@ -69,8 +71,19 @@ function GenericDoughnut({ chartData, title = undefined }) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-full w-full">
-      <Doughnut data={chartData} options={options} />
+    <div>
+      {<GenericTimeScale title={title} />}
+      {
+        <div className="mt-3 mb-8">
+          <GenericLocationDisplay
+            location={country}
+            lastTwelveMonthsView={true}
+          />
+        </div>
+      }
+      <div className="flex flex-col items-center justify-center h-full w-full">
+        <Doughnut data={chartData} options={options} />
+      </div>
     </div>
   );
 }

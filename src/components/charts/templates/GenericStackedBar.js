@@ -6,6 +6,7 @@ import Chart from "chart.js/auto";
 import { CHARTJS_COLOR_PLUGIN } from "../../../constants";
 Chart.register(CHARTJS_COLOR_PLUGIN);
 import Image from "next/image";
+import GenericLocationDisplay from "./GenericLocationDisplay.js";
 
 function StackedBarChart({
   data, // {chartData, tableData}
@@ -15,6 +16,7 @@ function StackedBarChart({
   showTable = true,
   title = undefined, // Timescale component from here on
   location = "",
+  lastTwelveMonthsView = false,
   timescale,
   setTimescale,
   selectedChart,
@@ -109,57 +111,27 @@ function StackedBarChart({
     // other options...
   };
 
-  const legendSpacingPlugin = {
-    id: "increase-legend-spacing",
-    beforeInit(chart) {
-      // Get reference to the original fit function
-      const originalFit = chart.legend.fit;
-
-      // Override the fit function
-      chart.legend.fit = function fit() {
-        // Call original function and bind scope in order to use `this` correctly inside it
-        originalFit.bind(chart.legend)();
-        // Change the height as suggested in another answers
-        this.height += 10;
-      };
-    },
-    colors: {
-      enabled: false,
-    },
-  };
-
   return (
     <div className="flex flex-col h-full w-full justify-end">
-      {(showTimescaleButtons || showModalButtons) && (
-        <GenericTimeScale
-          timescale={timescale}
-          setTimescale={setTimescale}
-          selectedChart={selectedChart}
-          rawChartData={rawChartData}
-          title={title}
-          showTimescaleButtons={showTimescaleButtons}
-          showModalButtons={showModalButtons}
+      <GenericTimeScale
+        timescale={timescale}
+        setTimescale={setTimescale}
+        selectedChart={selectedChart}
+        rawChartData={rawChartData}
+        title={title}
+        showTimescaleButtons={showTimescaleButtons}
+        showModalButtons={showModalButtons}
+      />
+
+      <div className={`mt-3 ${legendPosition !== "top" ? "mb-6" : ""}`}>
+        <GenericLocationDisplay
+          location={location}
+          lastTwelveMonthsView={lastTwelveMonthsView}
         />
-      )}
-      {location && (
-        <div className="flex flex-row mt-3">
-          <Image
-            src="/assets/globe.svg"
-            alt="Company Logo"
-            className="w-4 h-4 object-contain mr-1"
-            width={128}
-            height={128}
-          />
-          <p className="text-xs font-normal text-customGray-200">{location}</p>
-        </div>
-      )}
+      </div>
 
       <div className={`${height}`}>
-        <Bar
-          data={chartData}
-          options={options}
-          plugins={[legendSpacingPlugin]}
-        />
+        <Bar data={chartData} options={options} />
       </div>
       {showTable && (
         <div>

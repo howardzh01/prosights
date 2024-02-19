@@ -75,17 +75,16 @@ function GenericBarAndTable({
 
   return (
     <div className="flex flex-col h-full w-full justify-end">
-      {(showTimescaleButtons || showModalButtons) && (
-        <GenericTimeScale
-          timescale={timescale}
-          setTimescale={setTimescale}
-          selectedChart={selectedChart}
-          rawChartData={rawChartData}
-          title={title}
-          showTimescaleButtons={showTimescaleButtons}
-          showModalButtons={showModalButtons}
-        />
-      )}
+      <GenericTimeScale
+        timescale={timescale}
+        setTimescale={setTimescale}
+        selectedChart={selectedChart}
+        rawChartData={rawChartData}
+        title={title}
+        showTimescaleButtons={showTimescaleButtons}
+        showModalButtons={showModalButtons}
+      />
+
       <div className="mt-3">
         <GenericLocationDisplay
           location={location}

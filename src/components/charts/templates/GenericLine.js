@@ -6,6 +6,7 @@ import Chart from "chart.js/auto";
 import { CHARTJS_COLOR_PLUGIN } from "../../../constants.js";
 Chart.register(CHARTJS_COLOR_PLUGIN);
 import Image from "next/image";
+import GenericLocationDisplay from "./GenericLocationDisplay.js";
 
 function GenericLineChart({
   data, // {chartData, tableData}
@@ -120,30 +121,19 @@ function GenericLineChart({
 
   return (
     <div className="flex flex-col h-full w-full justify-end">
-      {(showTimescaleButtons || showModalButtons) && (
-        <GenericTimeScale
-          timescale={timescale}
-          setTimescale={setTimescale}
-          selectedChart={selectedChart}
-          rawChartData={rawChartData}
-          title={title}
-          showTimescaleButtons={showTimescaleButtons}
-          showModalButtons={showModalButtons}
-        />
-      )}
+      <GenericTimeScale
+        timescale={timescale}
+        setTimescale={setTimescale}
+        selectedChart={selectedChart}
+        rawChartData={rawChartData}
+        title={title}
+        showTimescaleButtons={showTimescaleButtons}
+        showModalButtons={showModalButtons}
+      />
 
-      {location && (
-        <div className="flex flex-row mt-3">
-          <Image
-            src="/assets/globe.svg"
-            alt="Company Logo"
-            className="w-4 h-4 object-contain mr-1"
-            width={128}
-            height={128}
-          />
-          <p className="text-xs font-normal text-customGray-200">{location}</p>
-        </div>
-      )}
+      <div className="mt-3">
+        <GenericLocationDisplay location={location} />
+      </div>
 
       <div className={`${height}`}>
         <Line

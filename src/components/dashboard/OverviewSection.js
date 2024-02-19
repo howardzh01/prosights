@@ -241,7 +241,7 @@ function OverviewSection({
               )}
             </div>
             <div className="text-sm text-customGray-500 font-light mt-1">
-              Valuation
+              Post-Money Valuation
             </div>
           </div>
           <div
@@ -260,7 +260,7 @@ function OverviewSection({
               )}
             </div>
             <div className="text-sm text-customGray-500 font-light mt-1">
-              Last Round
+              Last Round Amount
             </div>
           </div>
           <div

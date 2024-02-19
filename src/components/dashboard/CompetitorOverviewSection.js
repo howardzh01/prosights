@@ -167,7 +167,7 @@ function CompetitorOverviewSection({
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm font-normal text-gray-500">
-                      Last Round
+                      Last Round Amount
                     </span>
                     <span className="text-sm font-medium text-gray-900">
                       {competitor.companyLastRoundSize}
@@ -175,7 +175,7 @@ function CompetitorOverviewSection({
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm font-normal text-gray-500">
-                      Valuation
+                      Post-Money Valuation
                     </span>
                     <span className="text-sm font-medium text-gray-900">
                       {competitor.companyValuation}

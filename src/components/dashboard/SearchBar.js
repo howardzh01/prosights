@@ -47,7 +47,7 @@ export default function SearchBar({
   return (
     <div className="">
       <Autocomplete
-        freeSolo={true}
+        freeSolo={false}
         id="autcomplete-search"
         autoComplete={true}
         options={companyList}
