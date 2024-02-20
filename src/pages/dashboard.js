@@ -611,6 +611,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
               sections={sections}
               activeSections={activeSections}
               apiUsage={apiCalls}
+              navbarCalculatedHeight={navbarCalculatedHeight}
             />
           </div>
           {companyDic && companyDic.name ? (
