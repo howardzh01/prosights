@@ -638,7 +638,6 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                 activeLevel1SectionName={activeLevel1SectionName}
                 setNavbarCalculatedHeight={setNavbarCalculatedHeight}
               />
-
               <div className="h-full flex flex-col w-full items-center">
                 {/* Overview Section */}
                 <div

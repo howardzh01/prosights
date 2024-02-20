@@ -20,14 +20,14 @@ export default function ChartModal({
     case CHARTS.employeeCount:
       chart = <HeadCountChart headCountData={chartData} />;
       break;
-    // case CHARTS.trafficByGeo:
-    //   chart = (
-    //     <WebGeoTrafficDoughnut
-    //       geoTrafficData={chartData}
-    //       relevant_continents={RELEVANT_CONTINENTS}
-    //     />
-    //   );
-    //   break;
+    case CHARTS.trafficByGeo:
+      chart = (
+        <WebGeoTrafficDoughnut
+          geoTrafficData={chartData}
+          relevant_continents={RELEVANT_CONTINENTS}
+        />
+      );
+      break;
     // case CHARTS.traffic:
     //   chart = (
     //     <WebTrafficChart

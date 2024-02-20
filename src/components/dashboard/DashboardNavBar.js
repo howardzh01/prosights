@@ -80,8 +80,8 @@ const DashboardNavBar = ({
             {companyDic.displayedName}
           </p>
           {/* Section title */}
-          <div className="w-[15rem]">
-            <div className="flex flex-row bg-customGray-700 text-white rounded-lg ml-4 px-4 py-1 ">
+          <div className="sm:w-[5rem] xl:w-[15rem]">
+            <div className="flex flex-row bg-customGray-700 text-white rounded-lg ml-3 2xl:ml-4 px-3 2xl:px-4 py-1 ">
               <Image
                 src={`/assets/${activeLevel1SectionName.replace(
                   /\s/g,
@@ -92,20 +92,22 @@ const DashboardNavBar = ({
                 height={32}
                 className={`w-4 mr-2`}
               />
-              <p className="font-semibold">{activeLevel1SectionName}</p>
+              <p className="font-semibold truncate text-sm xl:text-base my-1 xl:my-0">
+                {activeLevel1SectionName}
+              </p>
             </div>
           </div>
-
-          <CountrySelector country={country} setCountry={setCountry} />
-
+          <div className="ml-2 2xl:ml-6">
+            <CountrySelector country={country} setCountry={setCountry} />
+          </div>
           {/* Dropdown for download options */}
           <div className="relative">
             <div
-              className="group flex flex-row items-center ml-4 hover:cursor-pointer hover:text-primary"
+              className="group flex flex-row items-center ml-2 2xl:ml-4 hover:cursor-pointer hover:text-primary"
               id="menu-button"
               onClick={() => setShowDownloadDropdown(!showDownloadDropdown)}
             >
-              <p className="text-sm text-customGray-500 group-hover:text-primary ml-4">
+              <p className="text-sm text-customGray-500 group-hover:text-primary xl:ml-2 2xl:ml-4">
                 Download
               </p>
               <div className="group">
@@ -156,7 +158,7 @@ const DashboardNavBar = ({
             </div>
           </div>
 
-          <div className="ml-16 w-[28rem] items-center">
+          <div className="ml-6 w-[24rem] 2xl:ml-16 2xl:w-[28rem] items-center">
             <SearchBar
               companyDirectory={companyDirectory}
               setCompany={setCompanyDic}
