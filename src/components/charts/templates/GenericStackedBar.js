@@ -138,6 +138,7 @@ function StackedBarChart({
           {/* Default to use data if tableChartData is undefined */}
           <GenericTable
             tableData={tableData}
+            timescale={timescale}
             scrollStart={scrollStart}
             formatTableDataFunction={formatTableDataFunction}
           />
