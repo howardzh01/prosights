@@ -756,6 +756,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                     webTrafficDic={webTrafficData}
                     webTrafficGeoDic={webTrafficGeoData}
                     downloadExcel={downloadExcel}
+                    companyCompetitors={companyCompetitors}
                   />
                 </div>
                 {/* App Usage */}
@@ -765,6 +766,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                     country={country}
                     multiCompanyAppData={dataAIData}
                     downloadExcel={downloadExcel}
+                    companyCompetitors={companyCompetitors}
                   />
                 </div>
                 {/* Consumer Spend */}

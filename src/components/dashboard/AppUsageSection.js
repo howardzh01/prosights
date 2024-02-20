@@ -16,6 +16,7 @@ function AppUsageSection({
   country,
   multiCompanyAppData,
   downloadExcel,
+  companyCompetitors,
 }) {
   return (
     <div className="flex flex-col w-full mt-12 pb-8">
@@ -107,8 +108,14 @@ function AppUsageSection({
               Market Share vs. Peers
             </p>
           </div>
-          {multiCompanyAppData === undefined ||
-          Object.keys(multiCompanyAppData).length === 0 ? (
+          {companyCompetitors.length === 0 ? (
+            <div className="w-full h-80 rounded-lg bg-transparent flex items-center justify-center">
+              <p className="text-2xl font-medium text-customGray-150">
+                Add Competitors to Compare
+              </p>
+            </div>
+          ) : multiCompanyAppData === undefined ||
+            Object.keys(multiCompanyAppData).length === 0 ? (
             <Skeleton className="w-full mt-2 mb-6 h-80 rounded-lg bg-customGray-50" />
           ) : !multiCompanyAppData[company] ? (
             <div className="w-full h-80 rounded-lg mt-2 mb-6 bg-customGray-50 flex items-center justify-center">
