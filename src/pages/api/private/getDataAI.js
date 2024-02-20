@@ -3,7 +3,7 @@
 import { serviceSup, cachedBucketFetch } from "../../../utils/Supabase.js";
 import { sleep } from "../../../utils/BackendUtils.js";
 
-const disableDataAI = true;
+const disableDataAI = false;
 export const config = {
   runtime: "edge",
 };
@@ -34,7 +34,7 @@ const customDataAIFetch = async (url, options) => {
 
   let report;
   for (let i = 0; i < 10; i++) {
-    await sleep(2000); // sleep 1 second
+    await sleep(2000); // sleep 2 second
     const response = await fetch(
       `https://api.data.ai/v2.0/portfolio/fetch-data?report_id=${outputReport["report_id"]}`,
       options
@@ -44,7 +44,7 @@ const customDataAIFetch = async (url, options) => {
     }
     report = await response.json();
     if (report["report_status"] === "done") {
-      console.log(`Report Done after ${i + 1} seconds`);
+      console.log(`Report Done after ${2 * (i + 1)} seconds`);
       return report;
     }
   }

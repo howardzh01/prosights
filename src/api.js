@@ -390,7 +390,6 @@ export const getDataAIData = async ([
   country,
 ]) => {
   // `/api/private/getDataAIData`;
-  console.log;
   if (!unifiedProductId) {
     console.log("NO UNIFIED PRODUCT ID");
     return null;
@@ -411,7 +410,7 @@ export const getDataAIData = async ([
     return null;
   }
   var data = await response.json();
-  if (!data) return;
+  if (!data) return null;
   // Convert to {Date: item} and sort by Date
   const sortedAppPerformanceData = data["app_performance"]
     .map((item) => ({ date: new Date(item.start_date), item }))

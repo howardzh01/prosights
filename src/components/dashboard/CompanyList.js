@@ -29,6 +29,7 @@ export const companyList = [
     cbSlug: "flight-club-new-york-ltd",
     displayedName: "Flight Club",
     logo: "https://images.crunchbase.com/image/upload/c_pad,h_170,w_170,f_auto,b_white,q_auto:eco,dpr_1/v1423006341/cmctwzqw4fhxhuhv7zwh.png",
+    appId: null,
   },
   {
     name: "zillow",
@@ -51,6 +52,7 @@ export const companyList = [
     cbSlug: "tinder",
     displayedName: "Tinder",
     logo: "https://images.crunchbase.com/image/upload/t_cb-default-original/v1493769757/m6qsmngji1qacb480jeg.png",
+    appId: "1000600000001791",
   },
   {
     name: "bumble",
@@ -58,5 +60,6 @@ export const companyList = [
     cbSlug: "bumble",
     displayedName: "Bumble",
     logo: "https://images.crunchbase.com/image/upload/t_cb-default-original/g9hbkpvy3xxyo3dzryst",
+    appId: "1000600000525199",
   },
 ];
