@@ -168,6 +168,7 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
 
 export const getHeadCount = async ([companyName, api_url, userId]) => {
   // expect `/api/private/getHeadCount`
+  // TODO: REMOVE IN FUTURE
   if (companyName.toLowerCase() === "goat") {
     return null;
   }

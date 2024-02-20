@@ -2,8 +2,8 @@ import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import HeadCountChart from "./charts/HeadCountChart";
-import { CHARTS, RELEVANT_CONTINENTS } from "../constants";
-import WebGeoTrafficDoughnut from "./charts/WebGeoTrafficDoughnut";
+import { CHARTS } from "../constants";
+import WebGeoTrafficChart from "./charts/WebGeoTrafficChart";
 import WebTrafficChart from "./charts/WebTrafficChart";
 import AppUsersChart from "./charts/AppUsersChart";
 import WebTrafficByChannelChart from "./charts/WebTrafficByChannelChart";
@@ -22,12 +22,7 @@ export default function ChartModal({
       chart = <HeadCountChart headCountData={chartData} />;
       break;
     case CHARTS.trafficByGeo:
-      chart = (
-        <WebGeoTrafficDoughnut
-          geoTrafficData={chartData}
-          relevant_continents={RELEVANT_CONTINENTS}
-        />
-      );
+      chart = <WebGeoTrafficChart geoTrafficData={chartData} />;
       break;
     // case CHARTS.traffic:
     //   chart = (

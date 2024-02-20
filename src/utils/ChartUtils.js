@@ -315,6 +315,56 @@ export function convertToChannelChartData(
   return { chartData: chartData, tableData: tableData };
 }
 
+export function convertToGeoMarketShareData(
+  geoTrafficData,
+  timescale,
+  cutOffDate
+) {
+  const relevantContinents = Object.keys(geoTrafficData);
+  const aggData = relevantContinents.reduce((acc, key) => {
+    acc[key] = aggregateData(
+      geoTrafficData[key],
+      "traffic", // outpkey for geo
+      "sum",
+      timescale
+    );
+    return acc;
+  }, {});
+
+  // aggData: {company1: {timekey: visits}, company2: {timekey: visits}, ...}
+  const firstChannelData = aggData[relevantContinents[0]]; // use to extract timescale\
+  const percentAggData = normalizeStackedAggData(aggData);
+  const chartData = {
+    labels: Object.keys(firstChannelData),
+    datasets: Object.keys(aggData).map((key) => ({
+      data: Object.values(percentAggData[key]).map(
+        (x) => (x ? Number(roundPeNumbers(x)) : null) // this will convert null to 0
+      ),
+      rawData: Object.values(aggData[key]),
+      borderWidth: 1,
+      label: key,
+    })),
+  };
+
+  let { tableHeaders, tableLabels } = getTableInfo(firstChannelData);
+
+  const cutoffIndex = findInsertIndex(
+    Object.keys(firstChannelData).map((x) => convertLabelToDate(x)),
+    cutOffDate,
+    "left"
+  );
+
+  const tableData = {
+    tableHeaders: tableHeaders.slice(cutoffIndex),
+    tableLabels: tableLabels.slice(cutoffIndex),
+    tableDatasets: [...chartData["datasets"]],
+    topBorderedRows: [],
+    highlightedRows: {},
+  };
+
+  return { chartData: chartData, tableData: tableData };
+}
+
 export function convertToLineChartData(
   trafficData,
   timescale,
