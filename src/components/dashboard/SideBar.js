@@ -24,9 +24,9 @@ function SideBar({
 
       // Reset the scroll-margin-top after scrolling
       // This delay ensures the scroll action completes before resetting the style
-      setTimeout(() => {
-        sectionElement.style.scrollMarginTop = originalScrollMarginTop;
-      }, 0);
+      // setTimeout(() => {
+      //   sectionElement.style.scrollMarginTop = originalScrollMarginTop;
+      // }, 0);
     }
   };
 
