@@ -508,13 +508,25 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
 
     switch (name) {
       case "Headcount":
-        getExcelDownload(headcountSectionBuilder, devMode);
+        getExcelDownload(
+          headcountSectionBuilder,
+          `${companyDic.displayedName} - ${country} (Headcount)`,
+          devMode
+        );
         break;
       case "Web Traffic":
-        getExcelDownload(webTrafficSectionBuilder, devMode);
+        getExcelDownload(
+          webTrafficSectionBuilder,
+          `${companyDic.displayedName} - ${country} (Web Traffic)`,
+          devMode
+        );
         break;
       case "App Usage":
-        getExcelDownload(appUsageSectionBuilder, devMode);
+        getExcelDownload(
+          appUsageSectionBuilder,
+          `${companyDic.displayedName} - ${country} (App Usage)`,
+          devMode
+        );
         break;
       default:
         // Case of downloading everything
@@ -527,6 +539,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
             dividerBuilder("App Usage >>>"),
             ...appUsageSectionBuilder,
           ],
+          `${companyDic.displayedName} - ${country} (Full Report)`,
           devMode
         );
         break;
