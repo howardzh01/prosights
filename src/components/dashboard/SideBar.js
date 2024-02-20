@@ -2,7 +2,12 @@ import React, { useEffect } from "react";
 import Image from "next/image";
 import UserProfileButton from "../UserProfileButton";
 
-function SideBar({ sections, activeSections, apiUsage }) {
+function SideBar({
+  sections,
+  activeSections,
+  apiUsage,
+  navbarCalculatedHeight,
+}) {
   // Determine if we should extend the bar to cover multiple consecutive active sections
   const isSectionActive = (section) => activeSections[section.id];
 
@@ -11,7 +16,17 @@ function SideBar({ sections, activeSections, apiUsage }) {
   const scrollToSection = (sectionTitle) => {
     const sectionElement = document.getElementById(sectionTitle);
     if (sectionElement) {
+      // Temporarily set the scroll-margin-top to accommodate the navbar height
+      const originalScrollMarginTop = sectionElement.style.scrollMarginTop;
+      sectionElement.style.scrollMarginTop = `${navbarCalculatedHeight}px`;
+
       sectionElement.scrollIntoView();
+
+      // Reset the scroll-margin-top after scrolling
+      // This delay ensures the scroll action completes before resetting the style
+      setTimeout(() => {
+        sectionElement.style.scrollMarginTop = originalScrollMarginTop;
+      }, 0);
     }
   };
 
