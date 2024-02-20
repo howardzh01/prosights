@@ -7,7 +7,15 @@ import GenericLocationDisplay from "./GenericLocationDisplay.js";
 import GenericTimeScale from "./GenericTimeScale.js";
 Chart.register(ChartDataLabels);
 
-function GenericDoughnut({ chartData, title = undefined, country }) {
+function GenericDoughnut({
+  chartData,
+  title = undefined,
+  country,
+  lastTwelveMonthsView = true,
+  showModalButtons = false,
+  selectedChart,
+  rawChartData,
+}) {
   const options = {
     plugins: {
       chartJSColorPlugin: false,
@@ -71,13 +79,20 @@ function GenericDoughnut({ chartData, title = undefined, country }) {
   };
 
   return (
-    <div>
-      {<GenericTimeScale title={title} />}
+    <div className="mt-1">
+      {
+        <GenericTimeScale
+          title={title}
+          showModalButtons={showModalButtons}
+          rawChartData={rawChartData}
+          selectedChart={selectedChart}
+        />
+      }
       {
         <div className="mt-3 mb-8">
           <GenericLocationDisplay
             location={country}
-            lastTwelveMonthsView={true}
+            lastTwelveMonthsView={lastTwelveMonthsView}
           />
         </div>
       }

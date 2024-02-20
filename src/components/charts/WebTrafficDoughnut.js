@@ -20,7 +20,7 @@ function WebTrafficDoughnut({ trafficData, country, selectedChart = null }) {
       break;
     case CHARTS.trafficByOrganicVsPaid:
       chartType = "traffic_by_organic_paid";
-      title = "Search";
+      title = "Organic vs Paid";
       break;
     // if no selected chart, return by channel
     default:

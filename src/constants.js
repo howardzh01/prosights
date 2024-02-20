@@ -73,7 +73,6 @@ export const CHARTS = {
   trafficActiveUsers: "MAU",
   trafficByChannel: "Traffic by Channel",
   trafficByDevice: "Traffic by Device",
-  usersByDevice: "Users by Device",
   trafficByOrganicVsPaid: "Traffic by Organic vs Paid",
   trafficByGeo: "Traffic by Geo",
   appLTMRetention: "D30 Usage Retention",

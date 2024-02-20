@@ -17,26 +17,42 @@ const DashboardNavBar = ({
   setCompanyCompetitors,
   crunchbaseDataPull,
   activeLevel1SectionName,
+  setNavbarCalculatedHeight,
 }) => {
-  const [showDropdown, setShowDropdown] = useState(false);
-  const dropdownRef = useRef(null);
-  // Inside your component
+  const [showDownloadDropdown, setShowDownloadDropdown] = useState(false);
+  const downloadDropdownRef = useRef(null);
+  const navbarRef = useRef(null);
+  // Compute NavBar Height
+  useEffect(() => {
+    if (navbarRef.current) {
+      const height = navbarRef.current.getBoundingClientRect().height;
+      setNavbarCalculatedHeight(height);
+    }
+  }, []); // Empty dependency array means this effect runs once after the initial render
+
+  // Download dropdown
   useEffect(() => {
     function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setShowDropdown(false);
+      if (
+        downloadDropdownRef.current &&
+        !downloadDropdownRef.current.contains(event.target)
+      ) {
+        setShowDownloadDropdown(false);
       }
     }
-
     // Bind the event listener
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       // Unbind the event listener on clean up
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [dropdownRef]);
+  }, [downloadDropdownRef]);
   return (
-    <div className="z-50 pt-4 pb-2 sticky top-0 bg-white w-full">
+    <div
+      ref={navbarRef}
+      // className="z-50 pt-4 pb-2 sticky top-0 bg-white w-full"
+      className="z-50 pt-4 pb-2 sticky top-0 bg-white w-full"
+    >
       <div className="flex flex-row justify-between w-full items-center">
         <div className="flex flex-row items-center">
           {crunchbaseDataPull?.[companyDic.displayedName]?.["fields"]?.[
@@ -87,7 +103,7 @@ const DashboardNavBar = ({
             <div
               className="group flex flex-row items-center ml-4 hover:cursor-pointer hover:text-primary"
               id="menu-button"
-              onClick={() => setShowDropdown(!showDropdown)}
+              onClick={() => setShowDownloadDropdown(!showDownloadDropdown)}
             >
               <p className="text-sm text-customGray-500 group-hover:text-primary ml-4">
                 Download
@@ -111,13 +127,13 @@ const DashboardNavBar = ({
             {/* Dropdown panel, show/hide based on dropdown state. */}
             <div
               className={`${
-                showDropdown ? "block" : "hidden"
+                showDownloadDropdown ? "block" : "hidden"
               } origin-top-left absolute left-0 mt-2 w-36 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none`}
               role="menu"
               aria-orientation="vertical"
               aria-labelledby="menu-button"
               tabIndex="-1"
-              ref={dropdownRef} // Set the ref here
+              ref={downloadDropdownRef} // Set the ref here
             >
               <div className="py-1" role="none">
                 <button

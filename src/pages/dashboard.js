@@ -228,6 +228,9 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
     sections,
     activeSections
   );
+
+  const [navbarCalculatedHeight, setNavbarCalculatedHeight] = useState(0);
+
   const todaysDate = new Date()
     .toLocaleDateString("en-CA", {
       timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -613,12 +616,13 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
           {companyDic && companyDic.name ? (
             // Main Content
             <div
+              className="h-screen flex flex-col w-screen overflow-x-hidden px-10 bg-white bg-repeat bg-center"
               id="main-content"
-              className="h-screen flex flex-col w-screen overflow-x-hidden items-center px-10 bg-white bg-repeat bg-center"
               style={{
                 backgroundImage: "url('/assets/backgroundPatternLight.svg')",
               }}
             >
+              {/* <div className="w-full items-center"> */}
               {/* Company name, country, and comparing section */}
               <DashboardNavbar
                 companyDic={companyDic}
@@ -632,128 +636,137 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                 setCompanyCompetitors={setCompanyCompetitors}
                 crunchbaseDataPull={crunchbaseDataPull}
                 activeLevel1SectionName={activeLevel1SectionName}
+                setNavbarCalculatedHeight={setNavbarCalculatedHeight}
               />
-              {/* Overview Section */}
-              <div
-                id="Company Overview"
-                className="content-section w-full mb-20"
-              >
-                <OverviewSection
-                  companyAbout={
-                    companyDescriptionPull?.[companyDic.displayedName]
-                  }
-                  crunchbaseData={
-                    crunchbaseDataPull?.[companyDic.displayedName]
-                  } // {companyName: null} if no data
-                  headCountData={headCountData?.[companyDic.displayedName]}
-                  webTrafficData={webTrafficData?.[companyDic.displayedName]}
-                  appData={dataAIData?.[companyDic.displayedName]}
-                  country={country}
-                />
-              </div>
-              {/* Competitor Overview */}
-              <div id="Competitor Overview" className="content-section w-full">
-                <CompetitorOverviewSection
-                  companyDescriptions={companyDescriptionPull}
-                  crunchbaseData={crunchbaseDataPull} // {companyName: null} if no data
-                  headCountData={headCountData}
-                  companyCompetitors={companyCompetitors}
-                />
-              </div>
-              {/* Headcount; TODO: MAKE THIS A SEPARATE COMPONENT */}
-              <div
-                id="Headcount"
-                className="flex flex-col w-full mt-12 content-section mb-12"
-              >
-                <div className="flex items-end justify-between mt-2 mb-3 rounded-md">
-                  <div className="flex flex-row items-center">
-                    <HeadcountIcon className="mx-2 filter invert w-6 h-6" />
-                    <p className="text-3xl font-semibold text-gray-800 ">
-                      Headcount
-                    </p>
-                    <a
-                      className="group inline-flex items-center hover:cursor-pointer hover:text-primary pl-4"
-                      onClick={() => downloadExcel("Headcount")}
-                    >
-                      <Image
-                        src="/assets/downloadInactive.svg"
-                        className="w-6 h-6 opacity-50 object-contain group-hover:hidden"
-                        width={256}
-                        height={256}
-                      />
-                      <Image
-                        src="/assets/downloadActive.svg"
-                        className="w-6 h-6 object-contain hidden group-hover:block"
-                        width={256}
-                        height={256}
-                      />
-                    </a>
-                  </div>
-                  <div className="flex flex-row items-center ml-4">
-                    <span className="mr-2 italic text-sm text-[#C3C3C3]">
-                      Powered by
-                    </span>
-                    <Image
-                      src="/assets/poweredByLogos/coresignal_logo.svg"
-                      alt="coresignal"
-                      width="120"
-                      height="120"
-                      className="h-4 w-auto"
-                    />
-                  </div>
+
+              <div className="h-full flex flex-col w-full items-center">
+                {/* Overview Section */}
+                <div
+                  id="Company Overview"
+                  className="content-section w-full mb-20"
+                >
+                  <OverviewSection
+                    companyAbout={
+                      companyDescriptionPull?.[companyDic.displayedName]
+                    }
+                    crunchbaseData={
+                      crunchbaseDataPull?.[companyDic.displayedName]
+                    } // {companyName: null} if no data
+                    headCountData={headCountData?.[companyDic.displayedName]}
+                    webTrafficData={webTrafficData?.[companyDic.displayedName]}
+                    appData={dataAIData?.[companyDic.displayedName]}
+                    country={country}
+                  />
                 </div>
-                <hr className="border-none h-px bg-customGray-100" />
-                <div className="mt-6 section-indent">
-                  <div className="flex flex-row items-center mb-3">
-                    <p className="text-lg font-semibold text-gray-800 mr-2">
-                      Employees
-                    </p>
-                  </div>
-                  {headCountData &&
-                  headCountData?.[companyDic.displayedName] ? (
-                    <HeadCountChart
-                      headCountData={headCountData?.[companyDic.displayedName]}
-                    />
-                  ) : headCountData?.[companyDic.displayedName] ===
-                    undefined ? (
-                    <Skeleton className="w-full h-80 rounded-lg bg-customGray-50" />
-                  ) : (
-                    <div className="w-full h-80 rounded-lg bg-customGray-50">
-                      <div className="flex flex-col items-center justify-center h-full">
-                        <p className="text-sm text-customGray-200">
-                          No Headcount Data Available
-                        </p>
-                      </div>
+                {/* Competitor Overview */}
+                <div
+                  id="Competitor Overview"
+                  className="content-section w-full"
+                >
+                  <CompetitorOverviewSection
+                    companyDescriptions={companyDescriptionPull}
+                    crunchbaseData={crunchbaseDataPull} // {companyName: null} if no data
+                    headCountData={headCountData}
+                    companyCompetitors={companyCompetitors}
+                  />
+                </div>
+                {/* Headcount; TODO: MAKE THIS A SEPARATE COMPONENT */}
+                <div
+                  id="Headcount"
+                  className="flex flex-col w-full mt-12 content-section mb-12"
+                >
+                  <div className="flex items-end justify-between mt-2 mb-3 rounded-md">
+                    <div className="flex flex-row items-center">
+                      <HeadcountIcon className="mx-2 filter invert w-6 h-6" />
+                      <p className="text-3xl font-semibold text-gray-800 ">
+                        Headcount
+                      </p>
+                      <a
+                        className="group inline-flex items-center hover:cursor-pointer hover:text-primary pl-4"
+                        onClick={() => downloadExcel("Headcount")}
+                      >
+                        <Image
+                          src="/assets/downloadInactive.svg"
+                          className="w-6 h-6 opacity-50 object-contain group-hover:hidden"
+                          width={256}
+                          height={256}
+                        />
+                        <Image
+                          src="/assets/downloadActive.svg"
+                          className="w-6 h-6 object-contain hidden group-hover:block"
+                          width={256}
+                          height={256}
+                        />
+                      </a>
                     </div>
-                  )}
+                    <div className="flex flex-row items-center ml-4">
+                      <span className="mr-2 italic text-sm text-[#C3C3C3]">
+                        Powered by
+                      </span>
+                      <Image
+                        src="/assets/poweredByLogos/coresignal_logo.svg"
+                        alt="coresignal"
+                        width="120"
+                        height="120"
+                        className="h-4 w-auto"
+                      />
+                    </div>
+                  </div>
+                  <hr className="border-none h-px bg-customGray-100" />
+                  <div className="mt-6 section-indent">
+                    <div className="flex flex-row items-center mb-3">
+                      <p className="text-lg font-semibold text-gray-800 mr-2">
+                        Employees
+                      </p>
+                    </div>
+                    {headCountData &&
+                    headCountData?.[companyDic.displayedName] ? (
+                      <HeadCountChart
+                        headCountData={
+                          headCountData?.[companyDic.displayedName]
+                        }
+                      />
+                    ) : headCountData?.[companyDic.displayedName] ===
+                      undefined ? (
+                      <Skeleton className="w-full h-80 rounded-lg bg-customGray-50" />
+                    ) : (
+                      <div className="w-full h-80 rounded-lg bg-customGray-50">
+                        <div className="flex flex-col items-center justify-center h-full">
+                          <p className="text-sm text-customGray-200">
+                            No Headcount Data Available
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-              {/* Website Traffic */}
-              <div className="w-full">
-                <WebsiteTrafficSection
-                  company={companyDic?.displayedName || companyDic?.name}
-                  country={country}
-                  webTrafficDic={webTrafficData}
-                  webTrafficGeoDic={webTrafficGeoData}
-                  downloadExcel={downloadExcel}
-                />
-              </div>
-              {/* App Usage */}
-              <div className="w-full mt-12">
-                <AppUsageSection
-                  company={companyDic?.displayedName || companyDic?.name}
-                  country={country}
-                  multiCompanyAppData={dataAIData}
-                  downloadExcel={downloadExcel}
-                />
-              </div>
-              {/* Consumer Spend */}
-              <div className="w-full mt-16">
-                <ConsumerSpendSection country={country} />
-              </div>
-              {/* Ad Spend */}
-              <div className="w-full">
-                <AdSpendSection country={country} />
+                {/* Website Traffic */}
+                <div className="w-full">
+                  <WebsiteTrafficSection
+                    company={companyDic?.displayedName || companyDic?.name}
+                    country={country}
+                    webTrafficDic={webTrafficData}
+                    webTrafficGeoDic={webTrafficGeoData}
+                    downloadExcel={downloadExcel}
+                  />
+                </div>
+                {/* App Usage */}
+                <div className="w-full mt-12">
+                  <AppUsageSection
+                    company={companyDic?.displayedName || companyDic?.name}
+                    country={country}
+                    multiCompanyAppData={dataAIData}
+                    downloadExcel={downloadExcel}
+                  />
+                </div>
+                {/* Consumer Spend */}
+                <div className="w-full mt-16">
+                  <ConsumerSpendSection country={country} />
+                </div>
+                {/* Ad Spend */}
+                <div className="w-full">
+                  <AdSpendSection country={country} />
+                </div>
               </div>
             </div>
           ) : (

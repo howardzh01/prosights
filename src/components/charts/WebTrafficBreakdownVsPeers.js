@@ -26,7 +26,7 @@ function WebTrafficBreakdownVsPeers({
       break;
     case CHARTS.trafficByOrganicVsPaid:
       chartType = "traffic_by_organic_paid";
-      title = "Search";
+      title = "Organic vs Paid";
       break;
     // if no selected chart, return by channel
     default:
