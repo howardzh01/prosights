@@ -28,14 +28,12 @@ function WebTrafficDoughnut({ trafficData, country, selectedChart = null }) {
   }
 
   return (
-    <div>
-      <div className="px-2">
-        <GenericDoughnut
-          chartData={convertToChannelDoughnutData(trafficData, chartType)}
-          title={title}
-          country={country}
-        />
-      </div>
+    <div className="px-2 w-full">
+      <GenericDoughnut
+        chartData={convertToChannelDoughnutData(trafficData, chartType)}
+        title={title}
+        country={country}
+      />
     </div>
   );
 }

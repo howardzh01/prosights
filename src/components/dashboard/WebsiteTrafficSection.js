@@ -84,12 +84,12 @@ function WebsiteTrafficSection({
           )}
         </div>
         <div id="Breakdown" className="content-section">
-          <div className="flex flex-row items-center mb-3">
+          <div className="flex mb-3">
             <p className="text-lg font-semibold text-gray-800 mr-2">
               Breakdown
             </p>
           </div>
-          <div className="flex space-x-8 justify-start">
+          <div className="flex flex-row items-center w-full space-x-8">
             {webTrafficGeoData !== undefined &&
             webTrafficGeoData !== null &&
             Object.keys(webTrafficGeoData).length !== 0 ? (
