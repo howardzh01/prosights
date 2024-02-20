@@ -44,6 +44,9 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
   const companyUrlList = companyDicList.map(
     (company) => company.url || company.name + ".com"
   );
+  const companyCrunchbaseNameList = companyDicList.map(
+    (company) => company.cbSlug || company.name
+  );
 
   const { data: headCountData, error: headCountError } = useSWR(
     user && companyNameList
@@ -87,8 +90,8 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
     companyDescriptionErrorPull;
   if (enableCrunchbase) {
     const { data: crunchbaseData, error: crunchbaseError } = useSWR(
-      user && companyNameList
-        ? [companyNameList, `/api/private/getCrunchbaseData`, user.id]
+      user && companyCrunchbaseNameList
+        ? [companyCrunchbaseNameList, `/api/private/getCrunchbaseData`, user.id]
         : null,
       (args) => {
         return apiMultiCall(companyDisplayedNameList, getCrunchbaseData, args);
@@ -165,6 +168,9 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
 
 export const getHeadCount = async ([companyName, api_url, userId]) => {
   // expect `/api/private/getHeadCount`
+  if (companyName.toLowerCase() === "goat") {
+    return null;
+  }
   const response = await fetch(api_url, {
     method: "POST",
     headers: {

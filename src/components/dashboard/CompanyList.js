@@ -38,13 +38,13 @@ export const companyList = [
     logo: "https://images.crunchbase.com/image/upload/t_cb-default-original/v1500275099/j2jcc1e5txlw573hwrd2.png",
     appId: "1000600000438182",
   },
-  {
-    name: "hinge",
-    url: "hinge.com",
-    cbSlug: "hinge",
-    displayedName: "Hinge",
-    logo: "https://images.crunchbase.com/image/upload/t_cb-default-original/v1476208888/ioqpyzju0fzjm4hinlsk.jpg",
-  },
+  // {
+  //   name: "hinge",
+  //   url: "hinge.co",
+  //   cbSlug: "hinge",
+  //   displayedName: "Hinge",
+  //   logo: "https://images.crunchbase.com/image/upload/t_cb-default-original/v1476208888/ioqpyzju0fzjm4hinlsk.jpg",
+  // },
   {
     name: "tinder",
     url: "tinder.com",

@@ -20,19 +20,39 @@ function WebTrafficByChannelChart({
 
   if (!trafficData) return null;
 
+  let title, chartType;
+  switch (selectedChart) {
+    case CHARTS.trafficByChannel:
+      chartType = "traffic_by_channel";
+      title = "Total Visits by Channel (%)";
+      break;
+    case CHARTS.trafficByDevice:
+      chartType = "traffic_by_device";
+      title = "Device";
+      break;
+    case CHARTS.trafficByOrganicVsPaid:
+      chartType = "traffic_by_organic_paid";
+      title = "Organic vs Paid";
+      break;
+    // if no selected chart, return by channel
+    default:
+      chartType = "traffic_by_channel";
+      title = "Total Visits by Channel (%)";
+  }
+
   const trafficByChannel = (
     <GenericStackedBar
       data={convertToChannelChartData(
         trafficData,
-        "traffic_by_channel",
+        chartType,
         trafficByChannelTimescale,
         cutOffDate
       )}
-      title={"Total Visits by Channel (%)"}
+      title={title}
       showDataLabels={trafficByChannelTimescale === "quarterYear"}
       timescale={trafficByChannelTimescale}
       setTimescale={setTrafficByChannelTimescale}
-      selectedChart={CHARTS.trafficByChannel}
+      selectedChart={selectedChart || CHARTS.trafficByChannel} // default to traffic by channel if NULL
       rawChartData={trafficData}
       formatTableDataFunction={(x) => (x ? roundPeNumbers(x) + "%" : "--")}
       location={country}
@@ -42,7 +62,7 @@ function WebTrafficByChannelChart({
     <GenericStackedBar
       data={convertToChannelChartData(
         trafficData,
-        "traffic_by_channel",
+        chartType,
         "year",
         cutOffDate
       )}
@@ -54,22 +74,24 @@ function WebTrafficByChannelChart({
     />
   );
 
-  switch (selectedChart) {
-    case CHARTS.trafficByChannel:
-      return trafficByChannel;
-
-    // if no selected chart, return all charts
-    default:
-      return (
-        <div>
-          <div className="h-fit mb-4">
-            <TwoColumnView
-              quarterGraph={trafficByChannel}
-              yearGraph={yearTrafficByChannelGraph}
-            />
-          </div>
+  if (selectedChart) {
+    return (
+      <TwoColumnView
+        quarterGraph={trafficByChannel}
+        yearGraph={yearTrafficByChannelGraph}
+      />
+    );
+  } else {
+    return (
+      <div>
+        <div className="h-fit mb-4">
+          <TwoColumnView
+            quarterGraph={trafficByChannel}
+            yearGraph={yearTrafficByChannelGraph}
+          />
         </div>
-      );
+      </div>
+    );
   }
 }
 

@@ -33,6 +33,9 @@ function WebTrafficDoughnut({ trafficData, country, selectedChart = null }) {
         chartData={convertToChannelDoughnutData(trafficData, chartType)}
         title={title}
         country={country}
+        showModalButtons={true}
+        rawChartData={trafficData}
+        selectedChart={selectedChart}
       />
     </div>
   );

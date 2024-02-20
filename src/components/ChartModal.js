@@ -6,6 +6,7 @@ import { CHARTS, RELEVANT_CONTINENTS } from "../constants";
 import WebGeoTrafficDoughnut from "./charts/WebGeoTrafficDoughnut";
 import WebTrafficChart from "./charts/WebTrafficChart";
 import AppUsersChart from "./charts/AppUsersChart";
+import WebTrafficByChannelChart from "./charts/WebTrafficByChannelChart";
 
 export default function ChartModal({
   open,
@@ -46,22 +47,24 @@ export default function ChartModal({
         />
       );
       break;
-    // case CHARTS.trafficByChannel:
-    //   chart = (
-    //     <WebTrafficChart
-    //       trafficData={chartData}
-    //       selectedChart={CHARTS.trafficByChannel}
-    //     />
-    //   );
-    //   break;
-    // case CHARTS.trafficByDevice:
-    //   chart = (
-    //     <WebTrafficChart
-    //       trafficData={chartData}
-    //       selectedChart={CHARTS.trafficByDevice}
-    //     />
-    //   );
-    //   break;
+    case CHARTS.trafficByChannel:
+      chart = (
+        <WebTrafficByChannelChart
+          trafficData={chartData}
+          country={country}
+          selectedChart={CHARTS.trafficByChannel}
+        />
+      );
+      break;
+    case CHARTS.trafficByDevice:
+      chart = (
+        <WebTrafficByChannelChart
+          trafficData={chartData}
+          country={country}
+          selectedChart={CHARTS.trafficByDevice}
+        />
+      );
+      break;
     // case CHARTS.usersByDevice:
     //   chart = (
     //     <WebTrafficChart
@@ -70,14 +73,15 @@ export default function ChartModal({
     //     />
     //   );
     //   break;
-    // case CHARTS.trafficByOrganicVsPaid:
-    //   chart = (
-    //     <WebTrafficChart
-    //       trafficData={chartData}
-    //       selectedChart={CHARTS.trafficByOrganicVsPaid}
-    //     />
-    //   );
-    //   break;
+    case CHARTS.trafficByOrganicVsPaid:
+      chart = (
+        <WebTrafficByChannelChart
+          trafficData={chartData}
+          country={country}
+          selectedChart={CHARTS.trafficByOrganicVsPaid}
+        />
+      );
+      break;
 
     case CHARTS.appActiveUsers:
       chart = (

@@ -140,7 +140,7 @@ export function convertToChannelDoughnutData(
   trafficData,
   type = "traffic_by_channel"
 ) {
-  const relevant_keys = getRelevantKeys(type);
+  const relevant_keys = getRelevantTrafficKeys(type);
 
   // Get the date 12 months ago from today
   const date12MonthsAgo = new Date();
@@ -171,7 +171,7 @@ export function convertToChannelDoughnutData(
   const percentages = relevant_keys.map((key) => (sums[key] / total) * 100);
 
   return {
-    labels: relevant_keys.map(fromUnderscoreCase),
+    labels: relevant_keys.map(formatRelevantTrafficKeys),
     datasets: [
       {
         data: percentages,
@@ -183,7 +183,7 @@ export function convertToChannelDoughnutData(
   };
 }
 
-function getRelevantKeys(type) {
+function getRelevantTrafficKeys(type) {
   switch (type) {
     case "traffic_by_channel":
       return ["direct", "mail", "social", "search", "referral", "display_ad"];
@@ -198,12 +198,7 @@ function getRelevantKeys(type) {
   }
 }
 
-export function convertToChannelChartData(
-  trafficData,
-  type = "traffic_by_channel",
-  timescale,
-  dataCutoffDate
-) {
+function formatRelevantTrafficKeys(key) {
   const displayedKeyMap = {
     direct: "Direct",
     mail: "Mail",
@@ -216,13 +211,19 @@ export function convertToChannelChartData(
     display_ad: "Display Ad",
     unknown_channel: "Other",
   };
-  const hqTrafficKeys = [
-    "direct",
-    "mail",
-    "referral",
-    "search_organic",
-    "social_organic",
-  ];
+  if (key in displayedKeyMap) {
+    return displayedKeyMap[key];
+  } else {
+    return fromUnderscoreCase(key);
+  }
+}
+
+export function convertToChannelChartData(
+  trafficData,
+  type = "traffic_by_channel",
+  timescale,
+  dataCutoffDate
+) {
   const paidTrafficKeys = ["search_paid", "social_paid", "display_ad"];
   const paidTrafficRowName = "Paid Visits";
   let relevant_keys,
@@ -240,38 +241,41 @@ export function convertToChannelChartData(
       "unknown_channel",
     ];
     condensePaidKeys = true;
-  } else if (type === "traffic_by_device") {
-    relevant_keys = ["mobile_visits", "desktop_visits"];
-  } else if (type === "users_by_device") {
-    relevant_keys = ["mobile_users", "desktop_users"];
-  } else if (type === "traffic_by_organic_paid") {
-    relevant_keys = [
-      "search_organic",
-      "social_organic",
-      "search_paid",
-      "social_paid",
-    ];
   } else {
-    relevant_keys = [
-      "search_organic",
-      "social_organic",
-      "search_paid",
-      "social_paid",
-    ];
+    relevant_keys = getRelevantTrafficKeys(type);
   }
+  // } else if (type === "traffic_by_device") {
+  //   relevant_keys = ["mobile_visits", "desktop_visits"];
+  // } else if (type === "users_by_device") {
+  //   relevant_keys = ["mobile_users", "desktop_users"];
+  // } else if (type === "traffic_by_organic_paid") {
+  //   relevant_keys = [
+  //     "search_organic",
+  //     "social_organic",
+  //     "search_paid",
+  //     "social_paid",
+  //   ];
+  // } else {
+  //   relevant_keys = [
+  //     "search_organic",
+  //     "social_organic",
+  //     "search_paid",
+  //     "social_paid",
+  //   ];
+  // }
 
   const aggData = relevant_keys.reduce((acc, key) => {
     const displayedKey =
       condensePaidKeys && paidTrafficKeys.includes(key)
         ? paidTrafficRowName
-        : displayedKeyMap[key];
+        : formatRelevantTrafficKeys(key);
 
     acc[displayedKey] = aggregateData(trafficData, key, "sum", timescale);
     return acc;
   }, {});
 
   // aggData: {direct: {time_key: output_key}, mail: {time_key: output_key}, ...}
-  const firstChannelData = aggData[displayedKeyMap[relevant_keys[0]]]; // use to extract timescale
+  const firstChannelData = aggData[formatRelevantTrafficKeys(relevant_keys[0])]; // use to extract timescale
   const cutoffIndex = findInsertIndex(
     Object.keys(firstChannelData).map((x) => convertLabelToDate(x)),
     dataCutoffDate,
@@ -506,7 +510,7 @@ export function convertToTrafficBreakdownVsPeersData(
   trafficData,
   type = "traffic_by_channel"
 ) {
-  const relevant_keys = getRelevantKeys(type);
+  const relevant_keys = getRelevantTrafficKeys(type);
 
   // Get the date 12 months ago from today
   const date12MonthsAgo = new Date();
@@ -570,7 +574,7 @@ export function convertToTrafficBreakdownVsPeersData(
         ),
         rawData: Object.values(companyRawData).map((company) => company[key]),
         borderWidth: 1,
-        label: fromUnderscoreCase(key),
+        label: formatRelevantTrafficKeys(key),
       })),
     ],
   };
@@ -812,7 +816,7 @@ export function convertBreakdownChartDataToExcelFormat(
   const types = {
     traffic_by_channel: "Channel",
     traffic_by_device: "Device",
-    traffic_by_organic_paid: "Search",
+    traffic_by_organic_paid: "Organic vs Paid",
   };
   let doughnutTrafficData = Object.keys(types).map((type) =>
     convertToChannelDoughnutData(trafficData, type)
@@ -868,7 +872,7 @@ export function convertTrafficBreakdownVsPeersDataToExcelFormat(
   const types = {
     traffic_by_channel: "Channel",
     traffic_by_device: "Device",
-    traffic_by_organic_paid: "Search",
+    traffic_by_organic_paid: "Organic vs Paid",
   };
   let stackedTrafficData = Object.keys(types).map((type) =>
     convertToTrafficBreakdownVsPeersData(trafficData, type)
