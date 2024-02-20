@@ -5,7 +5,8 @@ import GenericTable from "./GenericTable";
 import Chart from "chart.js/auto";
 import { CHARTJS_COLOR_PLUGIN } from "../../../constants";
 Chart.register(CHARTJS_COLOR_PLUGIN);
-// import { Colors } from "chart.js";
+import Image from "next/image";
+import GenericLocationDisplay from "./GenericLocationDisplay.js";
 
 function StackedBarChart({
   data, // {chartData, tableData}
@@ -15,13 +16,14 @@ function StackedBarChart({
   showTable = true,
   title = undefined, // Timescale component from here on
   location = "",
+  lastTwelveMonthsView = false,
   timescale,
   setTimescale,
   selectedChart,
   rawChartData,
   formatChartLabelFunction = (x) => x,
   formatTableDataFunction = (x) => x, //Table Options from here on
-  scrollStart = "left",
+  scrollStart = "right",
   height = "h-84",
   legendPosition = "top",
   displayLegend = true,
@@ -103,67 +105,40 @@ function StackedBarChart({
         },
       },
     },
-
     maintainAspectRatio: false,
     responsive: true,
 
     // other options...
   };
 
-  const plugin = {
-    id: "increase-legend-spacing",
-    beforeInit(chart) {
-      // Get reference to the original fit function
-      const originalFit = chart.legend.fit;
-
-      // Override the fit function
-      chart.legend.fit = function fit() {
-        // Call original function and bind scope in order to use `this` correctly inside it
-        originalFit.bind(chart.legend)();
-        // Change the height as suggested in another answers
-        this.height += 10;
-      };
-    },
-    colors: {
-      enabled: false,
-    },
-  };
-
   return (
     <div className="flex flex-col h-full w-full justify-end">
-      {(showTimescaleButtons || showModalButtons) && (
-        <GenericTimeScale
-          timescale={timescale}
-          setTimescale={setTimescale}
-          selectedChart={selectedChart}
-          rawChartData={rawChartData}
-          title={title}
-          showTimescaleButtons={showTimescaleButtons}
-          showModalButtons={showModalButtons}
-        />
-      )}
+      <GenericTimeScale
+        timescale={timescale}
+        setTimescale={setTimescale}
+        selectedChart={selectedChart}
+        rawChartData={rawChartData}
+        title={title}
+        showTimescaleButtons={showTimescaleButtons}
+        showModalButtons={showModalButtons}
+      />
 
-      {location && (
-        <div className="flex flex-row mt-3">
-          <Image
-            src="/assets/globe.svg"
-            alt="Company Logo"
-            className="w-4 h-4 object-contain mr-1"
-            width={128}
-            height={128}
-          />
-          <p className="text-xs font-normal text-customGray-200">{location}</p>
-        </div>
-      )}
+      <div className={`mt-3 ${legendPosition !== "top" ? "mb-6" : ""}`}>
+        <GenericLocationDisplay
+          location={location}
+          lastTwelveMonthsView={lastTwelveMonthsView}
+        />
+      </div>
 
       <div className={`${height}`}>
-        <Bar data={chartData} options={options} plugins={[plugin]} />
+        <Bar data={chartData} options={options} />
       </div>
       {showTable && (
         <div>
           {/* Default to use data if tableChartData is undefined */}
           <GenericTable
             tableData={tableData}
+            timescale={timescale}
             scrollStart={scrollStart}
             formatTableDataFunction={formatTableDataFunction}
           />

@@ -4,13 +4,13 @@ import { assert } from "./utils/Utils";
 import useSWR from "swr";
 import { data } from "autoprefixer";
 
-async function apiMultiCall(companyList, func, args) {
+async function apiMultiCall(companyDisplayedNameList, func, args) {
   // Make sure first element of args is the company names or urls
-  const promises = companyList.map(
+  const promises = companyDisplayedNameList.map(
     (company, ind) => func([args[0][ind], ...args.slice(1)]) // replace args companyList with specific company
   );
   const results = await Promise.all(promises);
-  return companyList.reduce((acc, company, index) => {
+  return companyDisplayedNameList.reduce((acc, company, index) => {
     acc[company] = results[index];
     return acc;
   }, {});
@@ -19,6 +19,7 @@ async function apiMultiCall(companyList, func, args) {
 export function getApiData(user, companyDicList, country, enableCrunchbase) {
   // Fill API Data calls here. So far, headcount, web traffic, crunchbase, company description
   // Make sure last argument of each function is the company names
+  // console.log(companyDicList);
   if (!companyDicList) {
     return {
       headCountData: undefined,
@@ -31,12 +32,20 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
       crunchbaseErrorPull: undefined,
       companyDescriptionPull: undefined,
       companyDescriptionErrorPull: undefined,
+      dataAIData: undefined,
+      dataAIError: undefined,
     };
   }
 
   const companyNameList = companyDicList.map((company) => company.name);
+  const companyDisplayedNameList = companyDicList.map(
+    (company) => company.displayedName
+  );
   const companyUrlList = companyDicList.map(
     (company) => company.url || company.name + ".com"
+  );
+  const companyCrunchbaseNameList = companyDicList.map(
+    (company) => company.cbSlug || company.name
   );
 
   const { data: headCountData, error: headCountError } = useSWR(
@@ -44,7 +53,7 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
       ? [companyNameList, `/api/private/getHeadCount`, user.id]
       : null,
     (args) => {
-      return apiMultiCall(companyNameList, getHeadCount, args);
+      return apiMultiCall(companyDisplayedNameList, getHeadCount, args);
     },
     { revalidateOnFocus: false }
   );
@@ -55,7 +64,7 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
       : null,
 
     (args) => {
-      return apiMultiCall(companyNameList, getTrafficData, args);
+      return apiMultiCall(companyDisplayedNameList, getTrafficData, args);
     },
     { revalidateOnFocus: false }
   );
@@ -70,7 +79,7 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
         ]
       : null,
     (args) => {
-      return apiMultiCall(companyNameList, getGeoTrafficData, args);
+      return apiMultiCall(companyDisplayedNameList, getGeoTrafficData, args);
     },
     { revalidateOnFocus: false }
   );
@@ -81,11 +90,11 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
     companyDescriptionErrorPull;
   if (enableCrunchbase) {
     const { data: crunchbaseData, error: crunchbaseError } = useSWR(
-      user && companyNameList
-        ? [companyNameList, `/api/private/getCrunchbaseData`, user.id]
+      user && companyCrunchbaseNameList
+        ? [companyCrunchbaseNameList, `/api/private/getCrunchbaseData`, user.id]
         : null,
       (args) => {
-        return apiMultiCall(companyNameList, getCrunchbaseData, args);
+        return apiMultiCall(companyDisplayedNameList, getCrunchbaseData, args);
       },
       { revalidateOnFocus: false }
     );
@@ -101,16 +110,18 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
         : null,
 
       async ([companyList, url, crunchbaseData]) => {
-        const promises = companyList.map((company) =>
-          getCrunchbaseData([
+        const promises = companyList.map((company, ind) =>
+          getCompanyDescription([
             company,
             url,
             user.id,
-            crunchbaseData[company]["fields"]["description"],
+            crunchbaseData[companyDisplayedNameList[ind]]["fields"][
+              "description"
+            ],
           ])
         );
         const results = await Promise.all(promises);
-        return companyList.reduce((acc, company, index) => {
+        return companyDisplayedNameList.reduce((acc, company, index) => {
           acc[company] = results[index];
           return acc;
         }, {});
@@ -124,22 +135,20 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
     companyDescriptionErrorPull = companyDescriptionError;
   }
 
-  let dataAiDataPull, dataAIErrorPull;
-  // const { data: dataAIData, error: dataAIError } = useSWR(
-  //   user && companyNameList
-  //     ? [
-  //         companyDicList.map((company) => company.appId),
-  //         `/api/private/getDataAI`,
-  //         user.id,
-  //       ]
-  //     : null,
-  //   (args) => {
-  //     return apiMultiCall(companyNameList, getDataAIData, args);
-  //   },
-  //   { revalidateOnFocus: false }
-  // );
-  // dataAiDataPull = dataAIData;
-  // dataAIErrorPull = dataAIError;
+  const { data: dataAIData, error: dataAIError } = useSWR(
+    user && companyDicList && country
+      ? [
+          companyDicList.map((company) => company.appId),
+          `/api/private/getDataAI`,
+          user.id,
+          country,
+        ]
+      : null,
+    (args) => {
+      return apiMultiCall(companyDisplayedNameList, getDataAIData, args);
+    },
+    { revalidateOnFocus: false }
+  );
 
   return {
     headCountData,
@@ -152,13 +161,17 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
     crunchbaseErrorPull,
     companyDescriptionPull,
     companyDescriptionErrorPull,
-    dataAiDataPull,
-    dataAIErrorPull,
+    dataAIData,
+    dataAIError,
   };
 }
 
 export const getHeadCount = async ([companyName, api_url, userId]) => {
   // expect `/api/private/getHeadCount`
+  // TODO: REMOVE IN FUTURE
+  if (companyName.toLowerCase() === "goat") {
+    return null;
+  }
   const response = await fetch(api_url, {
     method: "POST",
     headers: {
@@ -369,9 +382,17 @@ export const getCompanyDescription = async ([
   );
   return json_content;
 };
-export const getDataAIData = async ([unifiedProductId, api_url, userId]) => {
+
+export const getDataAIData = async ([
+  unifiedProductId,
+  api_url,
+  userId,
+  country,
+]) => {
   // `/api/private/getDataAIData`;
+  console.log;
   if (!unifiedProductId) {
+    console.log("NO UNIFIED PRODUCT ID");
     return null;
   }
   const response = await fetch(api_url, {
@@ -382,6 +403,7 @@ export const getDataAIData = async ([unifiedProductId, api_url, userId]) => {
     body: JSON.stringify({
       userId: userId,
       unifiedProductId: unifiedProductId,
+      country: country,
     }),
   });
   if (!response.ok) {
@@ -389,7 +411,58 @@ export const getDataAIData = async ([unifiedProductId, api_url, userId]) => {
     return null;
   }
   var data = await response.json();
+  if (!data) return;
+  // Convert to {Date: item} and sort by Date
+  const sortedAppPerformanceData = data["app_performance"]
+    .map((item) => ({ date: new Date(item.start_date), item }))
+    .sort((a, b) => a.date - b.date)
+    .reduce((acc, { date, item }) => {
+      acc[date] = item;
+      return acc;
+    }, {});
+  const sortedRetentionData = data["retention"]
+    .map((item) => ({ date: new Date(item.start_date), item }))
+    .sort((a, b) => a.date - b.date)
+    .reduce((acc, { date, item }) => {
+      if (!acc[date]) acc[date] = [];
+      acc[date].push(item);
+      return acc;
+    }, {});
+  // console.log(sortedRetentionData);
+  // replace app_performance with sortedData
+  return {
+    ...data,
+    app_performance: sortedAppPerformanceData,
+    retention: sortedRetentionData,
+  };
+};
 
-  // Make request to refine the company description
-  return data;
+export const getExcelDownload = async (data, dev = false) => {
+  try {
+    const response = await fetch(
+      `https://kev2010--generate-master-excel-generate-master-excel${
+        dev ? "-dev" : ""
+      }.modal.run`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response.ok) throw new Error("Network response was not ok");
+    const blob = await response.blob();
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = downloadUrl;
+    a.download = "excel-file.xlsx";
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(downloadUrl);
+    a.remove();
+  } catch (error) {
+    console.error("Error downloading the file:", error);
+  }
 };

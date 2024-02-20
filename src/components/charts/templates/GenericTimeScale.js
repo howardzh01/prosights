@@ -23,7 +23,6 @@ function GenericTimeScale({
   const { selectedChart: chart, setSelectedChart } =
     useContext(SelectedChartContext);
   const { setChartData } = useContext(ChartDataContext);
-  // console.log("TIMESCALE", selectedChart, timescale);
   return (
     <div className="flex justify-between">
       <div className="items-center gap-1 text-sm font-medium">{title}</div>
@@ -33,16 +32,16 @@ function GenericTimeScale({
             <button
               type="button"
               disabled={timescale === "quarterYear"}
-              onClick={() =>
-                setTimescale(TIMESCALE_TRANSITION_DIC[timescale][1])
-              }
+              onClick={() => {
+                setTimescale(TIMESCALE_TRANSITION_DIC[timescale][1]);
+              }}
               className="mr-1"
             >
               <MinusCircleIcon
                 className={`w-6 h-6 ${
                   timescale === "quarterYear"
                     ? "text-customGray-100"
-                    : "text-customGray-400"
+                    : "text-customGray-400 hover:text-primaryHover active:text-primary"
                 }`}
               />
             </button>
@@ -50,11 +49,6 @@ function GenericTimeScale({
               type="button"
               disabled={timescale === "month"}
               onClick={() => {
-                // console.log(
-                //   "CLICK",
-                //   timescale,
-                //   TIMESCALE_TRANSITION_DIC[timescale][0]
-                // );
                 setTimescale(TIMESCALE_TRANSITION_DIC[timescale][0]);
               }}
             >
@@ -62,7 +56,7 @@ function GenericTimeScale({
                 className={`w-6 h-6 ${
                   timescale === "month"
                     ? "text-customGray-100"
-                    : "text-customGray-400"
+                    : "text-customGray-400 hover:text-primaryHover active:text-primary"
                 }`}
               />
             </button>

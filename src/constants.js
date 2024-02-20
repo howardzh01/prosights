@@ -1,22 +1,30 @@
 export const CONSTANTS = {
   MODEL_VERSION: "gpt-4-0125-preview",
   // MODEL_VERSION: "gpt-3.5-turbo",
-  cutoffDate: new Date("2024-01-01"),
+  cutoffDate: new Date("2023-12-31"),
 };
 
+export const CHARTJS_COLORS = [
+  "rgba(0, 165, 241, 1)", //  Blue
+  "rgba(255, 84, 130, 1)", // Red/Hot Pink
+  "rgba(0, 195, 193, 1)", // Teal
+  "rgba(255, 153, 24, 1)", // Orange
+  "rgba(166, 99, 255, 1)", // Lavender
+  "rgba(255, 203, 52, 1)", // Yellow
+  "rgba(201, 203, 207, 1)", // Light Gray
+  // ...add as many colors as you need, with labels as comments
+];
+
 export const CHARTJS_COLOR_PLUGIN = {
-  id: "myColorPlugin",
+  id: "chartJSColorPlugin",
   beforeUpdate: (chart) => {
-    const backgroundColors = [
-      "rgba(0, 165, 241, 1)",
-      "rgba(255, 84, 130, 1)",
-      "rgba(0, 195, 193, 1)",
-      "rgba(255, 153, 24, 1)",
-      "rgba(166, 99, 255, 1)",
-      "rgba(255, 203, 52, 1)",
-      "rgba(201, 203, 207, 1)",
-      // ...add as many colors as you need
-    ];
+    if (
+      chart.options.plugins &&
+      chart.options.plugins.chartJSColorPlugin === false
+    ) {
+      return;
+    }
+    const backgroundColors = CHARTJS_COLORS;
     chart.data.datasets.forEach((dataset, index) => {
       dataset.backgroundColor =
         backgroundColors[index % backgroundColors.length];
@@ -33,6 +41,21 @@ export const UN_M49_CONTINENTS = {
   2: "Africa",
 };
 
+export const MONTH_NAMES = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
 export const TIMESCALE_TRANSITION_DIC = {
   month: [undefined, "quarterYear"],
   quarterYear: ["month", "year"],
@@ -47,12 +70,16 @@ export const TIME_IN_MS = {
 export const CHARTS = {
   employeeCount: "Employee Count",
   traffic: "Traffic",
-  mau: "MAU",
+  trafficActiveUsers: "MAU",
   trafficByChannel: "Traffic by Channel",
   trafficByDevice: "Traffic by Device",
-  usersByDevice: "Users by Device",
   trafficByOrganicVsPaid: "Traffic by Organic vs Paid",
   trafficByGeo: "Traffic by Geo",
+  appLTMRetention: "D30 Usage Retention",
+  appLTMActiveDays: "Active Days",
+  appLTMTimePerUser: "Average User Time Per Month",
+  appLTMTimePerSession: "Average Session Time",
+  appActiveUsers: "App Users",
 };
 
 export const RELEVANT_CONTINENTS = [
@@ -122,4 +149,20 @@ export const US_STATE_TO_ABBREV = {
   "puerto rico": "PR",
   "united states minor outlying islands": "UM",
   "u.s. virgin islands": "VI",
+};
+
+export const COUNTRY_LIST = {
+  US: "United States",
+  // CA: "Canada",
+  // MX: "Mexico",
+  // CN: "China",
+  // KR: "South Korea",
+  // JP: "Japan",
+  // IN: "India",
+  // GB: "United Kingdom",
+  // FR: "France",
+  // IT: "Italy",
+  // DE: "Germany",
+  // ES: "Spain",
+  WW: "Worldwide",
 };

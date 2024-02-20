@@ -1,13 +1,26 @@
-import { CONSTANTS } from "../constants";
+import { CONSTANTS, MONTH_NAMES } from "../constants";
 // convert date to months
+export function isEmpty(value) {
+  if (!value) {
+    // Checks for null or undefined
+    return true;
+  }
+  if (Array.isArray(value) && value.length === 0) {
+    return true;
+  }
+  if (value.constructor === Object && Object.keys(value).length === 0) {
+    return true;
+  }
+  return false;
+}
+
 export const dateToMonths = (date, shortenYear = true) => {
   // Convert Date object 2023-01-01 or String to
   // 1. shortenYear=true Jan 23
   // 2. shortenYear=false Jan 2023
-  if (date.constructor === String) {
-    date = new Date(date);
-  }
-  const month = date.toLocaleString("default", { month: "short" });
+  date = new Date(date);
+
+  const month = MONTH_NAMES[date.getUTCMonth()];
   const year = shortenYear
     ? String(date.getUTCFullYear()).slice(-2)
     : String(date.getUTCFullYear());
@@ -17,9 +30,7 @@ export const dateToMonths = (date, shortenYear = true) => {
 
 export const dateToQuarters = (date) => {
   // Convert Date object 2023-01-01 to 1Q23)
-  if (date.constructor === String) {
-    date = new Date(date);
-  }
+  date = new Date(date);
   const quarter = Math.floor(date.getUTCMonth() / 3) + 1;
   const quarterString = `${quarter}Q${date
     .getUTCFullYear()
@@ -29,26 +40,57 @@ export const dateToQuarters = (date) => {
   return quarterString;
 };
 
-export function convertToGrowthData(data) {
+export function convertToGrowthData(data, returnType = "string") {
   // input: {time_key: output_key}
   // output: [-, %, % ...]
-  if (!data) {
-    return;
+  let growthPercentages = [];
+  const labels = Object.keys(data);
+  let values = Object.values(data);
+  // Regular expressions to identify label formats
+  const monthlyRegex = /^[A-Za-z]+/;
+  const quarterlyRegex = /^[1-4]Q/;
+  const yearlyRegex = /^\d{4}$/;
+
+  // Determine timescale based on the format of labels
+  const isMonthly = labels.some((label) => monthlyRegex.test(label));
+  const isQuarterly = labels.some((label) => quarterlyRegex.test(label));
+  const isYearly = labels.some((label) => yearlyRegex.test(label));
+
+  // Determine offset for growth calculation
+  const offset = isYearly ? 1 : isMonthly ? 12 : isQuarterly ? 4 : 1; // Default to 1 if none match
+
+  // Calculate the growth percentages
+  for (let i = 0; i < values.length; i++) {
+    if (
+      i < offset ||
+      values[i - offset] === 0 ||
+      values[i - offset] == null ||
+      values[i] == null
+    ) {
+      if (returnType == "string") {
+        growthPercentages.push("--");
+      } else {
+        growthPercentages.push(null);
+      }
+    } else {
+      const growth =
+        ((values[i] - values[i - offset]) / values[i - offset]) * 100;
+      if (returnType == "string") {
+        growthPercentages.push(`${Math.round(growth)}%`);
+      } else {
+        growthPercentages.push(growth);
+      }
+    }
   }
-  const values = Object.values(data);
-  const percentGrowth = values.slice(1).map((value, index) => {
-    const previousValue = values[index];
-    const growth = ((value - previousValue) / previousValue) * 100;
-    return growth.toFixed(0); // to keep 2 decimal places
-  });
-  return ["-", ...percentGrowth];
+  return growthPercentages;
 }
 
 export const aggregateData = (
   data,
   outputKey,
   agg = "sum",
-  timescale = "quarterYear"
+  timescale = "quarterYear",
+  startYear = 2019
 ) => {
   // inputs: expected data in monthly format {Date(): {'visits': x, 'users': x}}
   // outputs: {time_key: output_key}
@@ -58,6 +100,7 @@ export const aggregateData = (
   }
 
   // Sort the keys (dates) of the data object
+  // console.log("AGG KEYS", JSON.stringify(Object.keys(data)));
   const sortedKeys = Object.keys(data).sort(
     (dateA, dateB) => new Date(dateA) - new Date(dateB)
   );
@@ -78,7 +121,7 @@ export const aggregateData = (
       acc[month] = { sum: 0, count: 0, last: 0 };
 
       Object.entries(data).forEach(([date, dic]) => {
-        var timeInput = convertMonthFormat(date);
+        var timeInput = dateToMonths(date);
         if (timeInput === month) {
           acc[month].sum += dic[outputKey];
           acc[month].count += 1;
@@ -110,8 +153,19 @@ export const aggregateData = (
     }, {});
   }
 
+  // Generate timekeys that will be returned
+  let allTimeKeys;
+  if (timescale === "month") {
+    allTimeKeys = generateMonthsFromStartYear(startYear, dateToMonths);
+  } else if (timescale === "quarterYear") {
+    allTimeKeys = generateQuarters(startYear);
+  } else if (timescale === "year") {
+    allTimeKeys = generateYears(startYear);
+  }
+
   // Final output based on aggregation method
-  return Object.entries(aggData).reduce((acc, [timeInput, data]) => {
+  return allTimeKeys.reduce((acc, timeInput) => {
+    data = aggData[timeInput];
     if (!data) {
       acc[timeInput] = null;
     } else {
@@ -129,6 +183,7 @@ export const aggregateData = (
 
 export function getTableInfo(data) {
   /*   
+  data is output from aggregateData()
   Each value is a list all of same length
     labels: data.keys(),
     values: data.values(),
@@ -137,40 +192,11 @@ export function getTableInfo(data) {
     growthPercentages: growthPercentages,
   };
   */
-  let tableHeaders = [];
-  let tableLabels = [];
-  let growthPercentages = [];
   const labels = Object.keys(data);
   let values = Object.values(data);
-  // Regular expressions to identify label formats
-  const monthlyRegex = /^[A-Za-z]+/;
-  const quarterlyRegex = /^[1-4]Q/;
-  const yearlyRegex = /^\d{4}$/;
-
-  // Determine timescale based on the format of labels
-  const isMonthly = labels.some((label) => monthlyRegex.test(label));
-  const isQuarterly = labels.some((label) => quarterlyRegex.test(label));
-  const isYearly = labels.some((label) => yearlyRegex.test(label));
-
-  // Determine offset for growth calculation
-  const offset = isYearly ? 1 : isMonthly ? 12 : isQuarterly ? 4 : 1; // Default to 1 if none match
-
-  // Calculate the growth percentages
-  for (let i = 0; i < values.length; i++) {
-    if (
-      i < offset ||
-      values[i - offset] === 0 ||
-      values[i - offset] == null ||
-      values[i] == null
-    ) {
-      growthPercentages.push("--");
-    } else {
-      const growth =
-        ((values[i] - values[i - offset]) / values[i - offset]) * 100;
-      growthPercentages.push(`${Math.round(growth)}%`);
-    }
-  }
-
+  let tableHeaders = [];
+  let tableLabels = [];
+  let growthPercentages = convertToGrowthData(data);
   // Process labels and headers
   const isAllAnnual = labels.every((label) => /^\d{4}$/.test(label));
 
@@ -213,23 +239,25 @@ const generateMonthsBetweenDates = (startDate, endDate) => {
   let allMonths = [];
 
   while (start <= end) {
-    allMonths.push(convertMonthFormat(start));
-    start.setMonth(start.getMonth() + 1);
+    allMonths.push(dateToMonths(start));
+    start.setUTCMonth(start.getUTCMonth() + 1);
   }
-
   return allMonths;
 };
 
-export const generateMonthsFromStartYear = (startYear) => {
+export const generateMonthsFromStartYear = (
+  startYear,
+  formatter = (x) => x
+) => {
   const dates = [];
   const today = CONSTANTS.cutoffDate;
   const currentYear = today.getUTCFullYear();
   for (let year = startYear; year <= currentYear; year++) {
-    let endMonth = year === currentYear ? today.getUTCMonth() : 12;
+    let endMonth = year === currentYear ? today.getUTCMonth() + 1 : 12;
     for (let month = 1; month <= endMonth; month++) {
       // Pad the month with a leading zero if necessary
       const monthString = String(month).padStart(2, "0");
-      dates.push(`${year}-${monthString}-01`);
+      dates.push(formatter(`${year}-${monthString}-01`));
     }
   }
   return dates;
@@ -254,16 +282,9 @@ export const generateYears = (startYear) => {
   const today = CONSTANTS.cutoffDate;
   const currentYear = today.getUTCFullYear();
   for (let year = startYear; year <= currentYear; year++) {
-    years.push(year);
+    years.push(`${year}`);
   }
   return years;
-};
-
-export const convertMonthFormat = (date) => {
-  const newDate = new Date(date);
-  const month = newDate.toLocaleString("default", { month: "short" });
-  const year = newDate.getUTCFullYear().toString().slice(2);
-  return `${month} ${year}`;
 };
 
 export function assert(condition, message) {
@@ -329,21 +350,22 @@ export function roundPeNumbers(amount, decimalZero = true) {
   if (isNaN(amount)) return amount;
 
   let result;
-  if (amount < 1e1) {
-    result = Number(amount).toFixed(1);
+  const absAmount = Math.abs(amount);
+  if (absAmount < 1e1) {
+    result = Number(absAmount).toFixed(1);
   } else {
-    result = Number(amount).toFixed(0);
+    result = Number(absAmount).toFixed(0);
   }
   // Add commas as thousand separators
   if (Number(result) >= 1000) {
     result = Number(result).toLocaleString();
   }
-  // if (result === NaN) {
-  //   return "--";
-  // }
+  // Prepend a minus sign if the original amount was negative
+  if (amount < 0) {
+    result = "-" + result;
+  }
   return result;
 }
-
 // CRUNCHBASE API UTILS
 export function formatDealRound(dealRound) {
   // secondary_market -> Secondary
@@ -391,20 +413,28 @@ export function convertLabelToDate(label) {
     // Extract the month and year
     const monthName = label.split(" ")[0];
     const year = parseInt(label.split(" ")[1]) + 2000;
-    const month = new Date(`${monthName} 1, 2000`).getMonth(); // Use a dummy year to get the month index
+    const month = new Date(`${monthName} 1, 2000`).getUTCMonth(); // Use a dummy year to get the month index
     return new Date(year, month, 1);
   } else if (yearlyRegex.test(label)) {
     // Just the year is provided
     const year = parseInt(label);
     return new Date(year, 0, 1); // January 1st of the given year
   } else {
-    throw new Error("Unknown date format");
+    throw new Error(`Unknown date format: ${label}`);
   }
 }
 
 export function normalizeStackedAggData(aggData) {
   // Calculate the total for each time_key across all channels
-  const relevantKeys = Object.keys(aggData);
+  // Two cases: {channel: {timekey: value}} or {company: {timekey: value}}
+  // Missing values are treated as as {company: {}}
+  const relevantKeys = Object.entries(aggData)
+    .filter(([key, value]) => !isEmpty(value)) // Filter out entries where dic is null
+    .map(([key, value]) => key); // Extract the names
+
+  if (relevantKeys.length === 0) {
+    return aggData; //means aggData values all empty dic
+  }
   const totalsByTimeKey = Object.keys(aggData[relevantKeys[0]]).reduce(
     (acc, timeKey) => {
       acc[timeKey] = relevantKeys.reduce(
@@ -417,12 +447,19 @@ export function normalizeStackedAggData(aggData) {
   );
 
   // Normalize each channel's value to sum to 100% for each time_key
-  const normalizedData = relevantKeys.reduce((acc, key) => {
+  const normalizedData = Object.keys(aggData).reduce((acc, key) => {
     acc[key] = {};
+    if (!aggData[key]) {
+      return;
+    }
+    // Note: Use Object.keys instead of relevant keys so emptyValues stay empty {}
     Object.keys(aggData[key]).forEach((timeKey) => {
       const value = aggData[key][timeKey];
       const total = totalsByTimeKey[timeKey];
       acc[key][timeKey] = (value / total) * 100; // Convert to percentage
+      if (isNaN(acc[key][timeKey])) {
+        acc[key][timeKey] = null;
+      }
     });
     return acc;
   }, {});
@@ -436,4 +473,16 @@ export function reformatWebsiteUrl(unformattedUrl) {
     .replace("https://", "")
     .replace(/\/$/, "") // replace trailing slash
     .toLowerCase();
+}
+
+export function calculateMean(array) {
+  // Filter out null and undefined values, then sum the remaining numbers
+  const filteredArray = array.filter(
+    (value) => value !== null && value !== undefined && !isNaN(value)
+  );
+  const sum = filteredArray.reduce((acc, value) => acc + value, 0);
+
+  // Calculate the mean, avoiding division by zero
+  const count = filteredArray.length;
+  return count > 0 ? sum / count : null;
 }

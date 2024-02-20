@@ -139,7 +139,6 @@ const handler = async (req) => {
     );
     return new Response(content);
   }
-  console.log("HI");
   return new Response(parsedGPTContent["content"]);
 };
 

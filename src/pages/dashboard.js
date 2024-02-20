@@ -9,7 +9,7 @@ import AdSpendSection from "../components/dashboard/AdSpendSection";
 import CompetitorOverviewSection from "../components/dashboard/CompetitorOverviewSection";
 import Image from "next/image";
 import { useUser } from "@clerk/clerk-react";
-import { getApiData } from "../api";
+import { getApiData, getExcelDownload } from "../api";
 import { createContext } from "react";
 import ChartModal from "../components/ChartModal";
 import HeadCountChart from "../components/charts/HeadCountChart";
@@ -19,6 +19,22 @@ import { Skeleton } from "@nextui-org/react";
 import { CompanyDirectory } from "../components/dashboard/CompanyListDirectory";
 import { companyList } from "../components/dashboard/CompanyList";
 import HeadcountIcon from "/public/assets/HeadcountIcon.svg";
+import CountrySelector from "../components/dashboard/CountrySelector";
+import DashboardNavbar from "../components/dashboard/DashboardNavBar"; // Adjust the import path as necessary
+import {
+  convertHeadCountChartDataToExcelFormat,
+  convertTotalVisitsChartDataToExcelFormat,
+  convertWebUsersChartDataToExcelFormat,
+  convertBreakdownChartDataToExcelFormat,
+  convertTrafficByChannelChartDataToExcelFormat,
+  convertTrafficGrowthVsPeersChartDataToExcelFormat,
+  convertTrafficMarketShareVsPeersDataToExcelFormat,
+  convertTrafficBreakdownVsPeersDataToExcelFormat,
+  convertAppUsersChartDataToExcelFormat,
+  convertAppUsageGrowthVsPeersChartDataToExcelFormat,
+  convertAppUsageMarketShareVsPeersDataToExcelFormat,
+  convertAppUsageLoyalUsersVsPeersDataToExcelFormat,
+} from "../utils/ChartUtils";
 
 export const SelectedChartContext = createContext();
 export const ChartDataContext = createContext();
@@ -27,19 +43,22 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
   const { isSignedIn, user, isLoaded } = useUser();
   const companyDirectory = new CompanyDirectory(companyList);
   const [companyDic, setCompanyDic] = useState(
-    companyDirectory.findCompanyByName("")
+    companyDirectory.findCompanyByName("stockx")
   );
   const [country, setCountry] = useState("US");
   const [companyCompetitors, setCompanyCompetitors] = useState([]); // Array of company names
 
   const [dataLoading, setDataLoading] = useState(true);
 
+  const dataCutoffDate = new Date("2019");
+
   const [selectedChart, setSelectedChart] = useState("");
   const [chartData, setChartData] = useState();
-  console.log(companyDic);
   // const companyDic = companyDirectory.findCompanyByName(company);
   // State to track active sections
   const [activeSections, setActiveSections] = useState({});
+  const [apiCalls, setApiCalls] = useState(null); // Initialize apiCalls state
+
   // Sections for sidebar; MUST have same title as section id, which might be used in child components
   const sections = [
     {
@@ -109,6 +128,12 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
       level: 1,
     },
     {
+      title: "Growth",
+      id: "App Growth",
+      parentId: "App Usage",
+      level: 2,
+    },
+    {
       title: "Growth vs. Peers",
       id: "App Growth vs. Peers",
       parentId: "App Usage",
@@ -175,11 +200,49 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
       level: 2,
     },
   ];
+
+  function getActiveLevel1SectionName(sections, activeSections) {
+    if (Object.keys(activeSections).length === 0) return "Company Overview"; // Loading state
+    let activeSectionOrParentName = "No active section";
+
+    const activeSection = sections.find(
+      (section) => activeSections[section.id]
+    );
+
+    if (activeSection) {
+      if (activeSection.level === 1) {
+        activeSectionOrParentName = activeSection.title;
+      } else {
+        const parentSection = sections.find(
+          (parent) => parent.id === activeSection.parentId
+        );
+        activeSectionOrParentName = parentSection
+          ? parentSection.title
+          : "No active parent section";
+      }
+    }
+
+    return activeSectionOrParentName;
+  }
+  const activeLevel1SectionName = getActiveLevel1SectionName(
+    sections,
+    activeSections
+  );
+
+  const [navbarCalculatedHeight, setNavbarCalculatedHeight] = useState(0);
+
   const todaysDate = new Date()
     .toLocaleDateString("en-CA", {
       timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     })
     .replaceAll("-", ".");
+  // useEffect(() => {
+  //   // Scroll to the "Loyalty vs. Peers" section on page load
+  //   const section = document.getElementById("Loyalty vs. Peers");
+  //   if (section) {
+  //     section.scrollIntoView({ behavior: "smooth", block: "start" });
+  //   }
+  // }, []); // The empty array ensures this effect runs only once after initial render
 
   useEffect(() => {
     if (!dataLoading && companyDic) {
@@ -245,23 +308,245 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
     }
   }, [companyDic]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const combinedCompanies = [companyDic, ...companyCompetitors];
+
+        const response = await fetch("/api/private/postApiUsage", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: user.id, // Include the userId in the request body
+            companyNameList: combinedCompanies.map((company) =>
+              company.name.toLowerCase()
+            ), // Include the companyNameList
+            country: country, // Include the country
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+        setApiCalls(data.apiUsage); // Update the apiCalls state with the response data
+      } catch (error) {
+        console.error("Failed to fetch:", error);
+      }
+    };
+
+    fetchData();
+  }, [companyDic, companyCompetitors, country, user]);
+
+  // useEffect(() => {
+  //   setWebsiteTrafficData(null);
+  //   setAppUsageData(null);
+  // }, [country]);
+
+  function downloadExcel(name, devMode = false) {
+    // Excel sheet builder
+    const headcountSectionBuilder =
+      headCountData && headCountData?.[companyDic.displayedName]
+        ? [
+            {
+              type: "bar",
+              sheetName: "Headcount",
+              req: convertHeadCountChartDataToExcelFormat(
+                headCountData[companyDic.displayedName],
+                dataCutoffDate
+              ),
+            },
+          ]
+        : [];
+    const webTrafficSectionBuilder = [
+      webTrafficData?.[companyDic.displayedName] !== undefined &&
+      Object.keys(webTrafficData?.[companyDic.displayedName]).length != 0
+        ? {
+            type: "bar",
+            sheetName: "Traffic Total Visits",
+            req: convertTotalVisitsChartDataToExcelFormat(
+              webTrafficData[companyDic.displayedName],
+              dataCutoffDate
+            ),
+          }
+        : null,
+      webTrafficData?.[companyDic.displayedName] !== undefined &&
+      Object.keys(webTrafficData?.[companyDic.displayedName]).length != 0
+        ? {
+            type: "bar",
+            sheetName: "Traffic Web Users",
+            req: convertWebUsersChartDataToExcelFormat(
+              webTrafficData[companyDic.displayedName],
+              dataCutoffDate
+            ),
+          }
+        : null,
+      // TODO: Need to split cases on geo and non-geo data
+      webTrafficGeoData?.[companyDic.displayedName] !== undefined &&
+      webTrafficGeoData?.[companyDic.displayedName] !== null &&
+      Object.keys(webTrafficGeoData?.[companyDic.displayedName]).length !== 0 &&
+      webTrafficData?.[companyDic.displayedName] !== undefined &&
+      webTrafficData?.[companyDic.displayedName] !== null &&
+      Object.keys(webTrafficData?.[companyDic.displayedName]).length !== 0
+        ? {
+            type: "doughnut",
+            sheetName: "Traffic Breakdown",
+            req: convertBreakdownChartDataToExcelFormat(
+              webTrafficGeoData[companyDic.displayedName],
+              webTrafficData[companyDic.displayedName]
+            ),
+          }
+        : null,
+      webTrafficData?.[companyDic.displayedName] !== undefined &&
+      Object.keys(webTrafficData?.[companyDic.displayedName]).length !== 0
+        ? {
+            type: "stacked",
+            sheetName: "Traffic Total Visits by Channel",
+            req: convertTrafficByChannelChartDataToExcelFormat(
+              webTrafficData[companyDic.displayedName],
+              dataCutoffDate
+            ),
+          }
+        : null,
+      webTrafficData !== undefined &&
+      Object.keys(webTrafficData).length != 0 &&
+      Object.keys(webTrafficData?.[companyDic.displayedName]).length !== 0
+        ? {
+            type: "line",
+            sheetName: "Traffic Growth vs. Peers",
+            req: convertTrafficGrowthVsPeersChartDataToExcelFormat(
+              webTrafficData,
+              dataCutoffDate
+            ),
+          }
+        : null,
+      webTrafficData !== undefined &&
+      Object.keys(webTrafficData).length != 0 &&
+      Object.keys(webTrafficData?.[companyDic.displayedName]).length !== 0
+        ? {
+            type: "stacked",
+            sheetName: "Traffic Market Share vs. Peers",
+            req: convertTrafficMarketShareVsPeersDataToExcelFormat(
+              webTrafficData,
+              dataCutoffDate
+            ),
+          }
+        : null,
+      // TODO: Need to split cases on geo and non-geo data
+      webTrafficData !== undefined &&
+      Object.keys(webTrafficData).length != 0 &&
+      Object.keys(webTrafficData?.[companyDic.displayedName]).length !== 0 &&
+      webTrafficGeoData !== undefined &&
+      Object.keys(webTrafficGeoData).length != 0 &&
+      Object.keys(webTrafficGeoData?.[companyDic.displayedName]).length !== 0
+        ? {
+            type: "stacked",
+            sheetName: "Traffic Breakdown vs. Peers",
+            req: convertTrafficBreakdownVsPeersDataToExcelFormat(
+              webTrafficGeoData,
+              webTrafficData
+            ),
+          }
+        : null,
+    ].filter(Boolean);
+    const appUsageSectionBuilder = [];
+    if (
+      dataAIData &&
+      (dataAIData[companyDic?.displayedName] || dataAIData[companyDic?.name]) &&
+      Object.keys(dataAIData).length !== 0
+    ) {
+      appUsageSectionBuilder.push({
+        type: "bar",
+        sheetName: "App Users",
+        req: convertAppUsersChartDataToExcelFormat(
+          dataAIData[companyDic?.displayedName || companyDic?.name][
+            "app_performance"
+          ],
+          dataCutoffDate
+        ),
+      });
+      appUsageSectionBuilder.push(
+        {
+          type: "line",
+          sheetName: "App Growth vs. Peers",
+          req: convertAppUsageGrowthVsPeersChartDataToExcelFormat(
+            dataAIData,
+            dataCutoffDate
+          ),
+        },
+        {
+          type: "stacked",
+          sheetName: "App Market Share vs. Peers",
+          req: convertAppUsageMarketShareVsPeersDataToExcelFormat(
+            dataAIData,
+            dataCutoffDate
+          ),
+        },
+        {
+          type: "bar",
+          sheetName: "App Loyalty vs. Peers",
+          req: convertAppUsageLoyalUsersVsPeersDataToExcelFormat(dataAIData),
+        }
+      );
+    }
+    const dividerBuilder = (name) => ({
+      type: "divider",
+      sheetName: name,
+      req: {},
+    });
+
+    switch (name) {
+      case "Headcount":
+        getExcelDownload(headcountSectionBuilder, devMode);
+        break;
+      case "Web Traffic":
+        getExcelDownload(webTrafficSectionBuilder, devMode);
+        break;
+      case "App Usage":
+        getExcelDownload(appUsageSectionBuilder, devMode);
+        break;
+      default:
+        // Case of downloading everything
+        getExcelDownload(
+          [
+            dividerBuilder("Headcount >>>"),
+            ...headcountSectionBuilder,
+            dividerBuilder("Web Traffic >>>"),
+            ...webTrafficSectionBuilder,
+            dividerBuilder("App Usage >>>"),
+            ...appUsageSectionBuilder,
+          ],
+          devMode
+        );
+        break;
+    }
+  }
+
   const downloadPDF = async () => {
     const { default: html2pdf } = await import("html2pdf.js");
 
     const element = document.getElementById("main-content");
     const contentWidth = element.scrollWidth; // Get the full scrollable width of the content
+    // TODO: Manual 1.5x multiplier to add in extra space to the height; this is a temporary fix.
+    // Otherwise, scroll height is too short because of pagebreak avoid all mode
+    const contentHeight = element.scrollHeight * 1.5; // Get the full scrollable height of the content
 
     const opt = {
       margin: [0.5, 0.5],
       filename: "dashboard.pdf",
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: {
+        useCORS: true,
         scale: 2, // Adjust this as needed
         logging: true,
         dpi: 192,
         letterRendering: true,
         scrollX: 0,
         scrollY: 0,
+        windowHeight: contentHeight,
         windowWidth: contentWidth, // Set the canvas width to the full content width
       },
       jsPDF: {
@@ -280,7 +565,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
         console.error("Error exporting PDF:", err);
       });
   };
-  console.log([companyDic, ...companyCompetitors]);
+
   const {
     headCountData,
     headCountError,
@@ -292,14 +577,16 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
     crunchbaseErrorPull,
     companyDescriptionPull,
     companyDescriptionErrorPull,
-    // dataAiDataPull,
-    // dataAiDataPull
+    dataAIData,
+    dataAIError,
   } = getApiData(
     user,
     companyDic ? [companyDic, ...companyCompetitors] : [],
     country,
     enableCrunchbase
   );
+  // console.log("Web Traffic", webTrafficData);
+  // console.log("DAATA AI", dataAIData);
 
   // const competitorData = getApiData(user, competitor.name, country);
 
@@ -315,222 +602,175 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
           }}
           selectedChart={selectedChart}
           chartData={chartData}
+          country={country}
         />
         <div className="flex flex-row">
           {/* Sidebar */}
           <div className="flex-shrink-0 sticky top-0 w-60 h-screen">
-            <SideBar sections={sections} activeSections={activeSections} />
+            <SideBar
+              sections={sections}
+              activeSections={activeSections}
+              apiUsage={apiCalls}
+              navbarCalculatedHeight={navbarCalculatedHeight}
+            />
           </div>
           {companyDic && companyDic.name ? (
             // Main Content
             <div
+              className="h-screen flex flex-col w-screen overflow-x-hidden px-10 bg-white bg-repeat bg-center"
               id="main-content"
-              className="flex flex-col w-screen overflow-x-hidden items-center px-10 bg-white bg-repeat bg-center"
               style={{
                 backgroundImage: "url('/assets/backgroundPatternLight.svg')",
               }}
             >
-              {/* Search Bar */}
-              <div
-                id="Company Overview"
-                className="content-section w-[36rem] pt-4"
-              >
-                <SearchBar setCompany={setCompanyDic} />
-              </div>
+              {/* <div className="w-full items-center"> */}
               {/* Company name, country, and comparing section */}
-              <div className="mt-6 flex flex-row justify-between w-full items-center">
-                <div className="flex flex-row items-center">
-                  {crunchbaseDataPull?.[companyDic.name]?.["fields"]?.[
-                    "image_url"
-                  ] ? (
-                    <Image
-                      src={
-                        crunchbaseDataPull[companyDic.name]["fields"][
-                          "image_url"
-                        ]
-                      }
-                      className="w-10 h-10 mr-2 object-contain rounded-md"
-                      width={256}
-                      height={256}
-                    />
-                  ) : (
-                    <Skeleton className="w-10 h-10 mr-2 rounded-md bg-customGray-50" />
-                  )}
-                  <p className="text-3xl font-bold text-gray-800 pl-1">
-                    {companyDirectory.findCompanyByName(companyDic.name)
-                      ?.displayedName || companyDic.name}
-                  </p>
-                  <select
-                    className="h-10 text-customGray-500 rounded-md font-nunitoSans text-sm font-normal text-left focus:outline-none focus:ring-0 ml-6"
-                    onChange={(e) => {
-                      const newCompanyLocation = e.target.value;
-                      setCountry(newCompanyLocation);
-                    }}
-                  >
-                    <option value="us">US</option>
-                    <option value="asia">Asia</option>
-                  </select>
-                  <div
-                    className="group flex flex-row items-center ml-8 hover:cursor-pointer hover:text-primary"
-                    onClick={downloadPDF}
-                  >
-                    <div className="group">
+              <DashboardNavbar
+                companyDic={companyDic}
+                country={country}
+                setCountry={setCountry}
+                downloadPDF={downloadPDF}
+                downloadExcel={downloadExcel}
+                companyDirectory={companyDirectory}
+                setCompanyDic={setCompanyDic}
+                companyCompetitors={companyCompetitors}
+                setCompanyCompetitors={setCompanyCompetitors}
+                crunchbaseDataPull={crunchbaseDataPull}
+                activeLevel1SectionName={activeLevel1SectionName}
+                setNavbarCalculatedHeight={setNavbarCalculatedHeight}
+              />
+              <div className="h-full flex flex-col w-full items-center">
+                {/* Overview Section */}
+                <div
+                  id="Company Overview"
+                  className="content-section w-full mb-20"
+                >
+                  <OverviewSection
+                    companyAbout={
+                      companyDescriptionPull?.[companyDic.displayedName]
+                    }
+                    crunchbaseData={
+                      crunchbaseDataPull?.[companyDic.displayedName]
+                    } // {companyName: null} if no data
+                    headCountData={headCountData?.[companyDic.displayedName]}
+                    webTrafficData={webTrafficData?.[companyDic.displayedName]}
+                    appData={dataAIData?.[companyDic.displayedName]}
+                    country={country}
+                  />
+                </div>
+                {/* Competitor Overview */}
+                <div
+                  id="Competitor Overview"
+                  className="content-section w-full"
+                >
+                  <CompetitorOverviewSection
+                    companyDescriptions={companyDescriptionPull}
+                    crunchbaseData={crunchbaseDataPull} // {companyName: null} if no data
+                    headCountData={headCountData}
+                    companyCompetitors={companyCompetitors}
+                  />
+                </div>
+                {/* Headcount; TODO: MAKE THIS A SEPARATE COMPONENT */}
+                <div
+                  id="Headcount"
+                  className="flex flex-col w-full mt-12 content-section mb-12"
+                >
+                  <div className="flex items-end justify-between mt-2 mb-3 rounded-md">
+                    <div className="flex flex-row items-center">
+                      <HeadcountIcon className="mx-2 filter invert w-6 h-6" />
+                      <p className="text-3xl font-semibold text-gray-800 ">
+                        Headcount
+                      </p>
+                      <a
+                        className="group inline-flex items-center hover:cursor-pointer hover:text-primary pl-4"
+                        onClick={() => downloadExcel("Headcount")}
+                      >
+                        <Image
+                          src="/assets/downloadInactive.svg"
+                          className="w-6 h-6 opacity-50 object-contain group-hover:hidden"
+                          width={256}
+                          height={256}
+                        />
+                        <Image
+                          src="/assets/downloadActive.svg"
+                          className="w-6 h-6 object-contain hidden group-hover:block"
+                          width={256}
+                          height={256}
+                        />
+                      </a>
+                    </div>
+                    <div className="flex flex-row items-center ml-4">
+                      <span className="mr-2 italic text-sm text-[#C3C3C3]">
+                        Powered by
+                      </span>
                       <Image
-                        src="/assets/downloadInactive.svg"
-                        className="w-4 h-4 object-contain mr-1 group-hover:hidden"
-                        width={256}
-                        height={256}
-                      />
-                      <Image
-                        src="/assets/downloadActive.svg"
-                        className="w-4 h-4 object-contain mr-1 hidden group-hover:block"
-                        width={256}
-                        height={256}
+                        src="/assets/poweredByLogos/coresignal_logo.svg"
+                        alt="coresignal"
+                        width="120"
+                        height="120"
+                        className="h-4 w-auto"
                       />
                     </div>
-                    <p className="text-sm text-customGray-500 group-hover:text-primary">
-                      Download PDF
-                    </p>
                   </div>
-                  <div className="group flex flex-row items-center ml-4 hover:cursor-pointer hover:text-primary">
-                    <div className="group">
-                      <Image
-                        src="/assets/downloadInactive.svg"
-                        className="w-4 h-4 object-contain mr-1 group-hover:hidden"
-                        width={256}
-                        height={256}
-                      />
-                      <Image
-                        src="/assets/downloadActive.svg"
-                        className="w-4 h-4 object-contain mr-1 hidden group-hover:block"
-                        width={256}
-                        height={256}
-                      />
+                  <hr className="border-none h-px bg-customGray-100" />
+                  <div className="mt-6 section-indent">
+                    <div className="flex flex-row items-center mb-3">
+                      <p className="text-lg font-semibold text-gray-800 mr-2">
+                        Employees
+                      </p>
                     </div>
-                    <p className="text-sm text-customGray-500 group-hover:text-primary">
-                      Download XLS
-                    </p>
-                  </div>
-                </div>
-                {/* <div className="flex flex-row items-center">
-                <Image
-                  src="/assets/compare.svg"
-                  alt="Compare"
-                  className="w-4 h-4 mr-1 object-contain"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-base text-customGray-500">Compare</p>
-              </div> */}
-                <CompetitorContainer
-                  companyCompetitors={companyCompetitors}
-                  setCompanyCompetitors={setCompanyCompetitors}
-                ></CompetitorContainer>
-              </div>
-              <hr className="border-none h-px bg-customGray-100 w-full mt-2" />
-              {/* Overview Section */}
-              <div className="content-section w-full mb-20">
-                <OverviewSection
-                  companyAbout={companyDescriptionPull?.[companyDic.name]}
-                  crunchbaseData={crunchbaseDataPull?.[companyDic.name]} // {companyName: null} if no data
-                  headCountData={headCountData?.[companyDic.name]}
-                />
-              </div>
-              {/* Competitor Overview */}
-              <div id="Competitor Overview" className="content-section w-full">
-                <CompetitorOverviewSection />
-              </div>
-              {/* Headcount; TODO: MAKE THIS A SEPARATE COMPONENT */}
-              <div
-                id="Headcount"
-                className="flex flex-col w-full mt-12 content-section mb-12"
-              >
-                <div className="flex items-end justify-between mt-2 mb-3 rounded-md">
-                  <div className="flex flex-row items-center">
-                    <HeadcountIcon className="mx-2 filter invert w-6 h-6" />
-                    <p className="text-3xl font-semibold text-gray-800 ">
-                      Headcount
-                    </p>
-                  </div>
-                  <div className="flex flex-row items-center ml-4">
-                    <span className="mr-2 italic text-sm text-[#C3C3C3]">
-                      Powered by
-                    </span>
-                    <Image
-                      src="/assets/poweredByLogos/coresignal_logo.svg"
-                      alt="coresignal"
-                      width="120"
-                      height="120"
-                      className="h-4 w-auto"
-                    />
-                  </div>
-                </div>
-                <hr className="border-none h-px bg-customGray-100" />
-                <div className="mt-6 section-indent">
-                  <div className="flex flex-row items-center mb-3">
-                    <p className="text-lg font-semibold text-gray-800 mr-2">
-                      Employees
-                    </p>
-                    <a
-                      className="group inline-flex items-center hover:cursor-pointer hover:text-primary"
-                      href="/assets/excelFiles/StockX_Headcount_2024.02.04.xlsx"
-                      download={`StockX_Headcount_${todaysDate}.xlsx`}
-                    >
-                      <Image
-                        src="/assets/downloadInactive.svg"
-                        className="w-5 h-5 opacity-50 object-contain group-hover:hidden"
-                        width={256}
-                        height={256}
+                    {headCountData &&
+                    headCountData?.[companyDic.displayedName] ? (
+                      <HeadCountChart
+                        headCountData={
+                          headCountData?.[companyDic.displayedName]
+                        }
                       />
-                      <Image
-                        src="/assets/downloadActive.svg"
-                        className="w-5 h-5 object-contain hidden group-hover:block"
-                        width={256}
-                        height={256}
-                      />
-                    </a>
-                  </div>
-                  {headCountData && headCountData?.[companyDic.name] ? (
-                    <HeadCountChart
-                      headCountData={headCountData?.[companyDic.name]}
-                    />
-                  ) : headCountData?.[companyDic.name] === undefined ? (
-                    <Skeleton className="w-full h-80 rounded-lg bg-customGray-50" />
-                  ) : (
-                    <div className="w-full h-80 rounded-lg bg-customGray-50">
-                      <div className="flex flex-col items-center justify-center h-full">
-                        <p className="text-sm text-customGray-200">
-                          No Headcount Data Available
-                        </p>
+                    ) : headCountData?.[companyDic.displayedName] ===
+                      undefined ? (
+                      <Skeleton className="w-full h-80 rounded-lg bg-customGray-50" />
+                    ) : (
+                      <div className="w-full h-80 rounded-lg bg-customGray-50">
+                        <div className="flex flex-col items-center justify-center h-full">
+                          <p className="text-sm text-customGray-200">
+                            No Headcount Data Available
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
-              </div>
-              {/* Website Traffic */}
-              <div className="w-full">
-                <WebsiteTrafficSection
-                  company={companyDic?.name}
-                  webTrafficDic={webTrafficData}
-                  webTrafficGeoDic={webTrafficGeoData}
-                />
-              </div>
-              {/* App Usage */}
-              <div className="w-full mt-12">
-                <AppUsageSection />
-              </div>
-              {/* Consumer Spend */}
-              <div className="w-full mt-16">
-                <ConsumerSpendSection />
-              </div>
-              {/* Ad Spend */}
-              <div className="w-full">
-                <AdSpendSection />
+                {/* Website Traffic */}
+                <div className="w-full">
+                  <WebsiteTrafficSection
+                    company={companyDic?.displayedName || companyDic?.name}
+                    country={country}
+                    webTrafficDic={webTrafficData}
+                    webTrafficGeoDic={webTrafficGeoData}
+                    downloadExcel={downloadExcel}
+                  />
+                </div>
+                {/* App Usage */}
+                <div className="w-full mt-12">
+                  <AppUsageSection
+                    company={companyDic?.displayedName || companyDic?.name}
+                    country={country}
+                    multiCompanyAppData={dataAIData}
+                    downloadExcel={downloadExcel}
+                  />
+                </div>
+                {/* Consumer Spend */}
+                <div className="w-full mt-16">
+                  <ConsumerSpendSection country={country} />
+                </div>
+                {/* Ad Spend */}
+                <div className="w-full">
+                  <AdSpendSection country={country} />
+                </div>
               </div>
             </div>
           ) : (
             <div
-              id="main-content"
               className="flex flex-col w-screen overflow-x-hidden items-center px-10 bg-white bg-repeat bg-center"
               style={{
                 backgroundImage: "url('/assets/backgroundPatternLight.svg')",
@@ -563,7 +803,11 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
                   </div>
                   {/* Search Bar */}
                   <div className="content-section w-[36rem] pt-4">
-                    <SearchBar setCompany={setCompanyDic} />
+                    <SearchBar
+                      companyDirectory={companyDirectory}
+                      setCompany={setCompanyDic}
+                      setCompanyCompetitors={setCompanyCompetitors}
+                    />
                   </div>
                 </div>
               </div>

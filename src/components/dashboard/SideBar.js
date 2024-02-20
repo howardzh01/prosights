@@ -2,7 +2,12 @@ import React, { useEffect } from "react";
 import Image from "next/image";
 import UserProfileButton from "../UserProfileButton";
 
-function SideBar({ sections, activeSections }) {
+function SideBar({
+  sections,
+  activeSections,
+  apiUsage,
+  navbarCalculatedHeight,
+}) {
   // Determine if we should extend the bar to cover multiple consecutive active sections
   const isSectionActive = (section) => activeSections[section.id];
 
@@ -11,7 +16,17 @@ function SideBar({ sections, activeSections }) {
   const scrollToSection = (sectionTitle) => {
     const sectionElement = document.getElementById(sectionTitle);
     if (sectionElement) {
+      // Temporarily set the scroll-margin-top to accommodate the navbar height
+      const originalScrollMarginTop = sectionElement.style.scrollMarginTop;
+      sectionElement.style.scrollMarginTop = `${navbarCalculatedHeight}px`;
+
       sectionElement.scrollIntoView();
+
+      // Reset the scroll-margin-top after scrolling
+      // This delay ensures the scroll action completes before resetting the style
+      // setTimeout(() => {
+      //   sectionElement.style.scrollMarginTop = originalScrollMarginTop;
+      // }, 0);
     }
   };
 
@@ -22,17 +37,22 @@ function SideBar({ sections, activeSections }) {
 
   return (
     <div className="bg-customGray-900 h-full w-full px-6 py-4 flex flex-col">
-      <Image
-        src="/assets/fullLogoWhite.png"
-        alt="ProSights logo"
-        width={128}
-        height={128}
-        priority
-        className="w-28"
-      />
-      {/* <p className="pt-3 text-white text-base font-semibold">
-        Queries Left: 50
-      </p> */}
+      <button
+        onClick={() => scrollToSection(sections[0].id)}
+        className="focus:outline-none"
+      >
+        <Image
+          src="/assets/fullLogoWhite.png"
+          alt="ProSights logo"
+          width={128}
+          height={128}
+          priority
+          className="w-28"
+        />
+      </button>
+      <p className="pt-3 text-white text-base font-semibold">
+        Queries Left: {apiUsage == null ? "--" : 200 - apiUsage}
+      </p>
       <div className="mt-8 flex-grow relative overflow-y-auto overflow-x-hidden">
         {sections.map((section, index) => {
           if (
@@ -42,7 +62,7 @@ function SideBar({ sections, activeSections }) {
             return;
           }
           return (
-            <div className="flex flex-row">
+            <div key={section.id} className="flex flex-row">
               <div
                 className={`py-2 pr-2 text-sm flex items-center ${
                   section.level === 1 ? "" : "ml-8"

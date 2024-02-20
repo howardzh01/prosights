@@ -7,36 +7,59 @@ import Image from "next/image";
 import Chip from "@mui/material/Chip";
 import { companyList } from "./CompanyList";
 
-export default function SearchBar({ setCompany }) {
+export default function SearchBar({
+  companyDirectory,
+  setCompany,
+  setCompanyCompetitors,
+}) {
   const [value, setValue] = React.useState(null);
 
   if (!companyList) {
     return;
   }
-
+  const createCompanyDic = (value) => {
+    // Assuming value can be a string or an object with properties like name, url, and displayedName
+    if (typeof value === "string") {
+      if (value.includes(".")) {
+        // check url
+        const company = companyDirectory.findCompanyByUrl(value);
+        return (
+          company || {
+            name: value.split(".")[0],
+            url: value,
+            displayedName: value.split(".")[0],
+          }
+        );
+      } else {
+        const company = companyDirectory.findCompanyByName(value);
+        return (
+          company || { name: value, url: `${value}.com`, displayedName: value }
+        );
+      }
+    } else {
+      // Ensure displayedName is always set, defaulting to name if not provided
+      if (!value.displayedName) {
+        value.displayedName = value.name;
+      }
+      return value;
+    }
+  };
   return (
-    <div className="h-12">
+    <div className="">
       <Autocomplete
-        freeSolo={true}
+        freeSolo={false}
         id="autcomplete-search"
         autoComplete={true}
         options={companyList}
         getOptionLabel={(option) =>
           typeof option === "string" ? option : option.displayedName
         }
+        clearIcon={null} // Removes the clear icon
         onChange={(event, value) => {
-          if (typeof value === "string") {
-            if (value.includes(".")) {
-              setCompany({ name: value.split(".")[0], url: value });
-            } else {
-              setCompany({ name: value.name, url: value.name + ".com" });
-            }
-          } else {
-            setCompany({ name: value.name, url: value.url });
-          }
+          setCompany(createCompanyDic(value));
+          setCompanyCompetitors([]);
           setValue(null);
         }}
-        clearIcon={<span></span>}
         clearOnBlur={true}
         value={value}
         renderOption={(props, option, { selected }) => (
@@ -58,12 +81,14 @@ export default function SearchBar({ setCompany }) {
         renderInput={(params) => (
           <TextField
             {...params}
-            label="Search with a company URL"
+            placeholder="Search target company URL"
             components={{
               ClearIndicator: () => null,
             }}
             InputProps={{
               ...params.InputProps,
+              // size: "small",
+
               // startAdornment: [
               //   <Image
               //     src="/assets/search.svg"
@@ -75,18 +100,10 @@ export default function SearchBar({ setCompany }) {
               //   params.InputProps.startAdornment,
               // ],
               type: "search",
-              // classes: {
-              //   input: {}
-              // }
               style: {
-                fontSize: "0.875rem",
-                fontFamily: "Inter",
-              },
-            }}
-            InputLabelProps={{
-              style: {
-                fontSize: "0.875rem",
-                color: "#A9B1C7",
+                fontSize: "0.9rem",
+                paddingTop: "1px", // Reduced top padding
+                paddingBottom: "1px", // Reduced bottom padding
                 fontFamily: "Inter",
               },
             }}
@@ -106,6 +123,10 @@ export default function SearchBar({ setCompany }) {
                 "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                   borderColor: "#EFF1F5", // border-customGray-50 when focused
                 },
+              },
+              "& .MuiInputBase-input::-webkit-search-cancel-button": {
+                "-webkit-appearance": "none",
+                display: "none",
               },
             }}
           />

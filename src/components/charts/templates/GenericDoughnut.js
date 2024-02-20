@@ -3,12 +3,22 @@ import { Doughnut } from "react-chartjs-2";
 import Chart from "chart.js/auto";
 import { isColorLight, rgbToComponents } from "../../../utils/Utils.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import GenericLocationDisplay from "./GenericLocationDisplay.js";
+import GenericTimeScale from "./GenericTimeScale.js";
 Chart.register(ChartDataLabels);
 
-function GenericDoughnut({ chartData, title = undefined }) {
+function GenericDoughnut({
+  chartData,
+  title = undefined,
+  country,
+  lastTwelveMonthsView = true,
+  showModalButtons = false,
+  selectedChart,
+  rawChartData,
+}) {
   const options = {
     plugins: {
-      myColorPlugin: false,
+      chartJSColorPlugin: false,
       title: {
         display: false,
       },
@@ -69,8 +79,26 @@ function GenericDoughnut({ chartData, title = undefined }) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-full w-full">
-      <Doughnut data={chartData} options={options} />
+    <div className="mt-1">
+      {
+        <GenericTimeScale
+          title={title}
+          showModalButtons={showModalButtons}
+          rawChartData={rawChartData}
+          selectedChart={selectedChart}
+        />
+      }
+      {
+        <div className="mt-3 mb-8">
+          <GenericLocationDisplay
+            location={country}
+            lastTwelveMonthsView={lastTwelveMonthsView}
+          />
+        </div>
+      }
+      <div className="flex flex-col items-center justify-center h-full w-full">
+        <Doughnut data={chartData} options={options} />
+      </div>
     </div>
   );
 }

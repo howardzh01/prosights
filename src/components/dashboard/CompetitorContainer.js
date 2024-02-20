@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 // import CompetitorTags from "./CompetitorTags";
 import CompetitorSearchButton from "./CompetitorSearchButton";
-import SearchBar from "../../legacy/components/SearchBar";
+import SearchBar from "../../../legacy/components/SearchBar";
 import Image from "next/image";
 
 function CompetitorContainer({ companyCompetitors, setCompanyCompetitors }) {

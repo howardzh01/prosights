@@ -6,8 +6,17 @@ import Image from "next/image";
 import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 import { Skeleton } from "@nextui-org/react";
 import AppUsageIcon from "/public/assets/AppUsageIcon.svg";
+import AppVisitsStackedBarPeers from "../charts/AppVisitsStackedBarPeers";
+import AppVisitsCompetitorLineChart from "../charts/AppVisitsCompetitorLineChart";
+import AppLoyaltyBreakdownVsPeers from "../charts/AppLoyaltyBreakdownVsPeers";
+import AppUsersChart from "../charts/AppUsersChart";
 
-function AppUsageSection({}) {
+function AppUsageSection({
+  company,
+  country,
+  multiCompanyAppData,
+  downloadExcel,
+}) {
   return (
     <div className="flex flex-col w-full mt-12 pb-8">
       <div
@@ -17,6 +26,23 @@ function AppUsageSection({}) {
         <div className="flex flex-row items-center">
           <AppUsageIcon className="mx-2 filter invert w-6 h-6" />
           <p className="text-3xl font-semibold text-gray-800 ">App Usage</p>
+          <a
+            className="group inline-flex items-center hover:cursor-pointer hover:text-primary pl-4"
+            onClick={() => downloadExcel("App Usage")}
+          >
+            <Image
+              src="/assets/downloadInactive.svg"
+              className="w-6 h-6 opacity-50 object-contain group-hover:hidden"
+              width={256}
+              height={256}
+            />
+            <Image
+              src="/assets/downloadActive.svg"
+              className="w-6 h-6 object-contain hidden group-hover:block"
+              width={256}
+              height={256}
+            />
+          </a>
         </div>
         <div className="flex flex-row items-center ml-4">
           <span className="mr-2 italic text-sm text-[#C3C3C3]">Powered by</span>
@@ -31,457 +57,122 @@ function AppUsageSection({}) {
       </div>
       <hr className="border-none h-px bg-customGray-100" />
       <div className="flex flex-col section-indent mt-4">
+        <div id="App Growth" className="content-section">
+          <div className="flex flex-row items-center mb-3">
+            <p className="text-lg font-semibold text-gray-800 mr-2">Growth</p>
+          </div>
+          {multiCompanyAppData === undefined ||
+          Object.keys(multiCompanyAppData).length === 0 ? (
+            <Skeleton className="w-full mt-2 mb-6 h-80 rounded-lg bg-customGray-50" />
+          ) : !multiCompanyAppData[company] ? (
+            <div className="w-full h-80 rounded-lg mt-2 mb-6 bg-customGray-50 flex items-center justify-center">
+              <p className="text-sm text-customGray-200">
+                No App Users Data Available
+              </p>
+            </div>
+          ) : (
+            <AppUsersChart
+              appData={multiCompanyAppData[company]}
+              country={country}
+            ></AppUsersChart>
+          )}
+        </div>
+
         <div id="App Growth vs. Peers" className="content-section">
           <div className="flex flex-row items-center mb-3">
-            <p className="text-lg font-semibold text-gray-800 mr-2">
+            <p className="text-lg font-semibold text-grxay-800 mr-2">
               Growth vs. Peers
             </p>
-            <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
-              <Image
-                src="/assets/downloadInactive.svg"
-                className="w-5 h-5 opacity-50 object-contain group-hover:hidden"
-                width={256}
-                height={256}
-              />
-              <Image
-                src="/assets/downloadActive.svg"
-                className="w-5 h-5 object-contain hidden group-hover:block"
-                width={256}
-                height={256}
-              />
-            </div>
           </div>
-          <div className="flex flex-row w-full space-x-8">
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-2/3">
-              <div className="flex flex-row justify-between w-full items-center mb-4">
-                <h2 id="trafficByGeo" className="text-sm font-semibold">
-                  Average MAU Growth
-                </h2>
-                <div className="flex items-center gap-1">
-                  <div className="mr-2 flex items-center">
-                    <button type="button" disabled={true} className="mr-1">
-                      <MinusCircleIcon
-                        className={`w-6 h-6 text-customGray-100
-                }`}
-                      />
-                    </button>
-                    <button type="button" disabled={false}>
-                      <PlusCircleIcon
-                        className={`w-6 h-6 text-customGray-400`}
-                      />
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-row items-center mb-2">
-                <Image
-                  src="/assets/globe.svg"
-                  alt="Company Logo"
-                  className="w-4 h-4 object-contain mr-1"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-xs font-normal text-customGray-200 mr-12">
-                  US
-                </p>
-                <Image
-                  src="/assets/graphPictures/visitsGrowthLegend.svg"
-                  alt="Company Logo"
-                  className="w-48 object-contain"
-                  width={4096}
-                  height={4096}
-                />
-              </div>
-              <div className="flex flex-col">
-                <Image
-                  src="/assets/graphPictures/AppMAUGrowthPeersChart.svg"
-                  className="h-72 object-contain"
-                  width={5120}
-                  height={5120}
-                />
-                <div className="overflow-x-auto">
-                  <div className="inline-block w-[72rem] h-auto pb-2">
-                    <Image
-                      src="/assets/graphPictures/AppMAUGrowthPeersTable.svg"
-                      className="h-auto object-contain"
-                      width={5120}
-                      height={5120}
-                    />
-                  </div>
-                </div>
-              </div>
+          {multiCompanyAppData === undefined ||
+          Object.keys(multiCompanyAppData).length === 0 ? (
+            <Skeleton className="w-full mt-2 mb-6 h-80 rounded-lg bg-customGray-50" />
+          ) : !multiCompanyAppData[company] ? (
+            <div className="w-full h-80 rounded-lg mt-2 mb-6 bg-customGray-50 flex items-center justify-center">
+              <p className="text-sm text-customGray-200">
+                No App Growth vs. Peers Data Available
+              </p>
             </div>
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 pt-3 pb-6 w-1/3">
-              <div className="flex flex-row justify-between w-full items-center mb-4 opacity-0">
-                <h2 id="trafficByGeo" className="text-sm font-semibold">
-                  Total Visits by Channel (%)
-                </h2>
-                <div className="flex items-center gap-1">
-                  <div className="mr-2 flex items-center">
-                    <button type="button" disabled={true} className="mr-1">
-                      <MinusCircleIcon
-                        className={`w-6 h-6 text-customGray-100
-                }`}
-                      />
-                    </button>
-                    <button type="button" disabled={false}>
-                      <PlusCircleIcon
-                        className={`w-6 h-6 text-customGray-400`}
-                      />
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-row items-center mb-2 opacity-0">
-                <Image
-                  src="/assets/globe.svg"
-                  alt="Company Logo"
-                  className="w-4 h-4 object-contain mr-1"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-xs font-normal text-customGray-200 mr-12">
-                  US
-                </p>
-                <Image
-                  src="/assets/graphPictures/totalVisitsByChannelLegend.svg"
-                  alt="Company Logo"
-                  className="w-10/12 object-contain"
-                  width={4096}
-                  height={4096}
-                />
-              </div>
-              <div className="flex flex-col">
-                <Image
-                  src="/assets/graphPictures/AppMAUGrowthPeersChartAnnual.svg"
-                  className="h-72 object-contain"
-                  width={5120}
-                  height={5120}
-                />
-                <div className="overflow-x-auto pt-2 px-8">
-                  <div className="inline-block w-[24rem] pb-2">
-                    <Image
-                      src="/assets/graphPictures/AppMAUGrowthPeersTableAnnual.svg"
-                      className="h-30 object-contain"
-                      width={5120}
-                      height={5120}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          ) : (
+            <AppVisitsCompetitorLineChart
+              multiCompanyAppData={multiCompanyAppData}
+              country={country}
+            ></AppVisitsCompetitorLineChart>
+          )}
         </div>
+
         <div id="App Market Share vs. Peers" className="content-section mt-8">
           <div className="flex flex-row items-center mb-3">
             <p className="text-lg font-semibold text-gray-800 mr-2">
               Market Share vs. Peers
             </p>
-            <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
-              <Image
-                src="/assets/downloadInactive.svg"
-                className="w-5 h-5 opacity-50 object-contain group-hover:hidden"
-                width={256}
-                height={256}
-              />
-              <Image
-                src="/assets/downloadActive.svg"
-                className="w-5 h-5 object-contain hidden group-hover:block"
-                width={256}
-                height={256}
-              />
-            </div>
           </div>
-          <div className="flex flex-row w-full space-x-8">
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-2/3">
-              <div className="flex flex-row justify-between w-full items-center mb-4">
-                <h2 id="trafficByGeo" className="text-sm font-semibold">
-                  Average App MAU Market Share (%)
-                </h2>
-                <div className="flex items-center gap-1">
-                  <div className="mr-2 flex items-center">
-                    <button type="button" disabled={true} className="mr-1">
-                      <MinusCircleIcon
-                        className={`w-6 h-6 text-customGray-100
-                }`}
-                      />
-                    </button>
-                    <button type="button" disabled={false}>
-                      <PlusCircleIcon
-                        className={`w-6 h-6 text-customGray-400`}
-                      />
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-row items-center mb-2">
-                <Image
-                  src="/assets/globe.svg"
-                  alt="Company Logo"
-                  className="w-4 h-4 object-contain mr-1"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-xs font-normal text-customGray-200 mr-12">
-                  US
-                </p>
-                <Image
-                  src="/assets/graphPictures/visitsGrowthLegend.svg"
-                  alt="Company Logo"
-                  className="w-48 object-contain"
-                  width={4096}
-                  height={4096}
-                />
-              </div>
-              <div className="flex flex-col">
-                <Image
-                  src="/assets/graphPictures/AppMAUMarketShareChart.svg"
-                  className="h-72 object-contain"
-                  width={5120}
-                  height={5120}
-                />
-                <div className="overflow-x-auto">
-                  <div className="inline-block w-[77rem] pb-2">
-                    <Image
-                      src="/assets/graphPictures/AppMAUMarketShareTable.svg"
-                      className="h-40"
-                      width={5120}
-                      height={5120}
-                    />
-                  </div>
-                </div>
-              </div>
+          {multiCompanyAppData === undefined ||
+          Object.keys(multiCompanyAppData).length === 0 ? (
+            <Skeleton className="w-full mt-2 mb-6 h-80 rounded-lg bg-customGray-50" />
+          ) : !multiCompanyAppData[company] ? (
+            <div className="w-full h-80 rounded-lg mt-2 mb-6 bg-customGray-50 flex items-center justify-center">
+              <p className="text-sm text-customGray-200">
+                No App Market Share vs. Peers Data Available
+              </p>
             </div>
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 pt-3 pb-6 w-1/3">
-              <div className="flex flex-row justify-between w-full items-center mb-4 opacity-0">
-                <h2 id="trafficByGeo" className="text-sm font-semibold">
-                  Total Visits by Channel (%)
-                </h2>
-                <div className="flex items-center gap-1">
-                  <div className="mr-2 flex items-center">
-                    <button type="button" disabled={true} className="mr-1">
-                      <MinusCircleIcon
-                        className={`w-6 h-6 text-customGray-100
-                }`}
-                      />
-                    </button>
-                    <button type="button" disabled={false}>
-                      <PlusCircleIcon
-                        className={`w-6 h-6 text-customGray-400`}
-                      />
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-row items-center mb-2 opacity-0">
-                <Image
-                  src="/assets/globe.svg"
-                  alt="Company Logo"
-                  className="w-4 h-4 object-contain mr-1"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-xs font-normal text-customGray-200 mr-12">
-                  US
-                </p>
-                <Image
-                  src="/assets/graphPictures/totalVisitsByChannelLegend.svg"
-                  alt="Company Logo"
-                  className="w-10/12 object-contain"
-                  width={4096}
-                  height={4096}
-                />
-              </div>
-              <div className="flex flex-col">
-                <Image
-                  src="/assets/graphPictures/AppMAUMarketShareChartAnnual.svg"
-                  className="h-72 object-contain"
-                  width={5120}
-                  height={5120}
-                />
-                <div className="overflow-x-auto pt-2">
-                  <div className="inline-block w-[28rem] pb-2 px-8">
-                    <Image
-                      src="/assets/graphPictures/AppMAUMarketShareTableAnnual.svg"
-                      className="h-35 object-contain"
-                      width={4096}
-                      height={4096}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          ) : (
+            <AppVisitsStackedBarPeers
+              multiCompanyAppData={multiCompanyAppData}
+              country={country}
+            ></AppVisitsStackedBarPeers>
+          )}
         </div>
+
         <div id="Loyalty vs. Peers" className="content-section mt-8">
           <div className="flex flex-row items-center mb-3">
             <p className="text-lg font-semibold text-gray-800 mr-2">
               Loyalty vs. Peers
             </p>
-            <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
-              <Image
-                src="/assets/downloadInactive.svg"
-                className="w-5 h-5 opacity-50 object-contain group-hover:hidden"
-                width={256}
-                height={256}
-              />
-              <Image
-                src="/assets/downloadActive.svg"
-                className="w-5 h-5 object-contain hidden group-hover:block"
-                width={256}
-                height={256}
-              />
-            </div>
           </div>
-          <div className="space-x-6 flex flex-row items-center">
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-96">
-              <h2 id="trafficByGeo" className="text-sm font-semibold mb-3">
-                DAU:MAU
-              </h2>
-              <div className="flex flex-row items-center mb-6">
-                <Image
-                  src="/assets/calendar.svg"
-                  alt="Company Logo"
-                  className="w-4 h-4 object-contain mr-1"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-xs font-normal text-customGray-200">
-                  Last 12 Months
+
+          <div className="space-x-8 flex flex-row items-center w-full">
+            {multiCompanyAppData === undefined ||
+            Object.keys(multiCompanyAppData).length === 0 ? (
+              <Skeleton className="w-full mt-2 mb-6 h-80 rounded-lg bg-customGray-50" />
+            ) : !multiCompanyAppData[company] ? (
+              <div className="w-full h-80 rounded-lg mt-2 mb-6 bg-customGray-50 flex items-center justify-center">
+                <p className="text-sm text-customGray-200">
+                  No App Loyalty vs. Peers Data Available
                 </p>
               </div>
-              <div className="flex flex-row space-x-4">
-                <Image
-                  src="/assets/graphPictures/AppPeersDAUMAU.svg"
-                  className="w-2/3 object-contain"
-                  width={5120}
-                  height={5120}
-                />
-                <Image
-                  src="/assets/graphPictures/AppLegend.svg"
-                  className="w-16 h-auto object-contain"
-                  width={512}
-                  height={512}
-                />
-              </div>
-            </div>
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-96">
-              <h2 id="trafficByGeo" className="text-sm font-semibold mb-3">
-                Average User Time Per Month
-              </h2>
-              <div className="flex flex-row items-center mb-6">
-                <Image
-                  src="/assets/calendar.svg"
-                  alt="Company Logo"
-                  className="w-4 h-4 object-contain mr-1"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-xs font-normal text-customGray-200">
-                  Last 12 Months
-                </p>
-                <Image
-                  src="/assets/globe.svg"
-                  alt="Company Logo"
-                  className="w-4 h-4 object-contain mr-1 ml-4"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-xs font-normal text-customGray-200">US</p>
-              </div>
-              <div className="flex flex-row space-x-4">
-                <Image
-                  src="/assets/graphPictures/AppPeersTimeSpent.svg"
-                  className="w-2/3 object-contain"
-                  width={5120}
-                  height={5120}
-                />
-                <Image
-                  src="/assets/graphPictures/AppLegend.svg"
-                  className="w-16 h-auto object-contain"
-                  width={512}
-                  height={512}
-                />
-              </div>
-            </div>
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-96">
-              <h2 id="trafficByGeo" className="text-sm font-semibold mb-3">
-                D30 Usage Retention
-              </h2>
-              <div className="flex flex-row items-center mb-6">
-                <Image
-                  src="/assets/calendar.svg"
-                  alt="Company Logo"
-                  className="w-4 h-4 object-contain mr-1"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-xs font-normal text-customGray-200">
-                  Last 12 Months
-                </p>
-                <Image
-                  src="/assets/globe.svg"
-                  alt="Company Logo"
-                  className="w-4 h-4 object-contain mr-1 ml-4"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-xs font-normal text-customGray-200">US</p>
-              </div>
-              <div className="flex flex-row space-x-4">
-                <Image
-                  src="/assets/graphPictures/AppPeersD30Retention.svg"
-                  className="w-2/3 object-contain"
-                  width={5120}
-                  height={5120}
-                />
-                <Image
-                  src="/assets/graphPictures/AppLegend.svg"
-                  className="w-16 h-auto object-contain"
-                  width={512}
-                  height={512}
-                />
-              </div>
-            </div>
-            <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-96">
-              <h2 id="trafficByGeo" className="text-sm font-semibold mb-3">
-                Monthly Open Rate
-              </h2>
-              <div className="flex flex-row items-center mb-6">
-                <Image
-                  src="/assets/calendar.svg"
-                  alt="Company Logo"
-                  className="w-4 h-4 object-contain mr-1"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-xs font-normal text-customGray-200">
-                  Last 12 Months
-                </p>
-                <Image
-                  src="/assets/globe.svg"
-                  alt="Company Logo"
-                  className="w-4 h-4 object-contain mr-1 ml-4"
-                  width={128}
-                  height={128}
-                />
-                <p className="text-xs font-normal text-customGray-200">US</p>
-              </div>
-              <div className="flex flex-row space-x-4">
-                <Image
-                  src="/assets/graphPictures/AppPeersOpenRate.svg"
-                  className="w-2/3 object-contain"
-                  width={5120}
-                  height={5120}
-                />
-                <Image
-                  src="/assets/graphPictures/AppLegend.svg"
-                  className="w-16 h-auto object-contain"
-                  width={512}
-                  height={512}
-                />
-              </div>
-            </div>
+            ) : (
+              <>
+                <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">
+                  <AppLoyaltyBreakdownVsPeers
+                    multiCompanyAppData={multiCompanyAppData}
+                    country={country}
+                    selectedChart={CHARTS.appLTMRetention}
+                  ></AppLoyaltyBreakdownVsPeers>
+                </div>
+                <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">
+                  <AppLoyaltyBreakdownVsPeers
+                    multiCompanyAppData={multiCompanyAppData}
+                    country={country}
+                    selectedChart={CHARTS.appLTMActiveDays}
+                  ></AppLoyaltyBreakdownVsPeers>
+                </div>
+                <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">
+                  <AppLoyaltyBreakdownVsPeers
+                    multiCompanyAppData={multiCompanyAppData}
+                    country={country}
+                    selectedChart={CHARTS.appLTMTimePerUser}
+                  ></AppLoyaltyBreakdownVsPeers>
+                </div>
+                <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">
+                  <AppLoyaltyBreakdownVsPeers
+                    multiCompanyAppData={multiCompanyAppData}
+                    country={country}
+                    selectedChart={CHARTS.appLTMTimePerSession}
+                  ></AppLoyaltyBreakdownVsPeers>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

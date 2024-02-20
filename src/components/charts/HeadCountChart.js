@@ -1,62 +1,25 @@
 import { useState } from "react";
-import {
-  aggregateData,
-  findInsertIndex,
-  convertLabelToDate,
-  getTableInfo,
-  formatMoney,
-  roundPeNumbers,
-} from "../../utils/Utils";
+import { aggregateData, formatMoney, roundPeNumbers } from "../../utils/Utils";
 import GenericBarAndTable from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
 import { CHARTS } from "../../constants";
+import { convertToHeadcountChartData } from "../../utils/ChartUtils";
 
 function HeadCountChart({ headCountData, cutOffDate = new Date("2019") }) {
   const [timescale, setTimescale] = useState("quarterYear");
 
   if (!headCountData) return null;
 
-  function convertToChartData(data) {
-    let { labels, values, tableHeaders, tableLabels, growthPercentages } =
-      getTableInfo(data);
-    const cutoffIndex = findInsertIndex(
-      labels.map((x) => convertLabelToDate(x)),
-      cutOffDate,
-      "left"
-    );
-
-    const chartData = {
-      labels: labels.slice(cutoffIndex),
-      datasets: [
-        {
-          label: "HeadCount",
-          data: values
-            .map((item) => (item == null ? "--" : item))
-            .slice(cutoffIndex),
-        },
-      ],
-    };
-
-    const tableData = {
-      tableHeaders: tableHeaders.slice(cutoffIndex),
-      tableLabels: tableLabels.slice(cutoffIndex),
-      tableDatasets: [
-        ...chartData["datasets"],
-        {
-          label: "% YoY Growth",
-          data: growthPercentages.slice(cutoffIndex),
-        },
-      ],
-    };
-    return { chartData: chartData, tableData: tableData };
-  }
-
-  const customChartData = convertToChartData(
-    aggregateData(headCountData, "headcount", "last", timescale)
+  const customChartData = convertToHeadcountChartData(
+    aggregateData(headCountData, "headcount", "last", timescale),
+    "Headcount",
+    cutOffDate
   );
 
-  const yearChartData = convertToChartData(
-    aggregateData(headCountData, "headcount", "last", "year")
+  const yearChartData = convertToHeadcountChartData(
+    aggregateData(headCountData, "headcount", "last", "year"),
+    "Headcount",
+    cutOffDate
   );
 
   const quarterHeadCountGraph = (
@@ -71,6 +34,7 @@ function HeadCountChart({ headCountData, cutOffDate = new Date("2019") }) {
       showModalButtons={false}
       formatChartLabelFunction={formatMoney}
       formatTableDataFunction={roundPeNumbers}
+      location="Worldwide"
     />
   );
 

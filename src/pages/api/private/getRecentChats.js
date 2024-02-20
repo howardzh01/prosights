@@ -20,7 +20,7 @@ const handler = async (req) => {
 
   const { data: profileData, error: profileError } = await serviceSup
     .from("profiles")
-    .upsert({ id: userId }, { ignooreDuplicates: true })
+    .upsert({ id: userId }, { ignoreDuplicates: true })
     .select();
 
   if (profileError) {

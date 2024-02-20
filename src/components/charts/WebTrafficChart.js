@@ -1,19 +1,13 @@
 import { useState, useEffect } from "react";
 import GenericBarAndTable from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
-import {
-  aggregateData,
-  findInsertIndex,
-  getTableInfo,
-  convertLabelToDate,
-  roundPeNumbers,
-} from "../../utils/Utils";
-import GenericStackedBar from "./templates/GenericStackedBar";
+import { aggregateData, roundPeNumbers } from "../../utils/Utils";
+import { convertToGrowthChartData } from "../../utils/ChartUtils";
 import { CHARTS } from "../../constants";
-import Image from "next/image";
 
 function WebTrafficChart({
   trafficData,
+  country,
   selectedChart = null,
   cutOffDate = new Date("2019"),
 }) {
@@ -30,45 +24,13 @@ function WebTrafficChart({
   //     return [`${month}-${year}`, trafficData[key]];
   //   })
   // );
-  function convertToChartData(data, displayedLabel) {
-    // input: {time_key: output_key}
-    let { labels, values, tableHeaders, tableLabels, growthPercentages } =
-      getTableInfo(data);
-    const cutoffIndex = findInsertIndex(
-      labels.map((x) => convertLabelToDate(x)),
-      cutOffDate,
-      "left"
-    );
-    const chartData = {
-      labels: labels.slice(cutoffIndex),
-      datasets: [
-        {
-          label: displayedLabel + " (M)",
-          data: values
-            .map((item) => (item == null ? "--" : (item / 1e6).toFixed(1)))
-            .slice(cutoffIndex),
-        },
-      ],
-    };
 
-    const tableData = {
-      tableHeaders: tableHeaders.slice(cutoffIndex),
-      tableLabels: tableLabels.slice(cutoffIndex),
-      tableDatasets: [
-        ...chartData["datasets"],
-        {
-          label: "% YoY Growth",
-          data: growthPercentages.slice(cutoffIndex),
-        },
-      ],
-    };
-    return { chartData: chartData, tableData: tableData };
-  }
   const customTrafficGraph = (
     <GenericBarAndTable
-      data={convertToChartData(
+      data={convertToGrowthChartData(
         aggregateData(trafficData, "visits", "sum", trafficTimescale),
-        "Visits"
+        "Visits",
+        cutOffDate
       )}
       title={"Total Visits (M)"}
       showDataLabels={trafficTimescale !== "month"}
@@ -79,13 +41,16 @@ function WebTrafficChart({
       showModalButtons={false}
       formatChartLabelFunction={roundPeNumbers}
       formatTableDataFunction={roundPeNumbers}
+      location={country}
     />
   );
+
   const yearTrafficGraph = (
     <GenericBarAndTable
-      data={convertToChartData(
+      data={convertToGrowthChartData(
         aggregateData(trafficData, "visits", "sum", "year"),
-        "Visits"
+        "Visits",
+        cutOffDate
       )}
       showTimescaleButtons={false}
       showModalButtons={false}
@@ -97,27 +62,30 @@ function WebTrafficChart({
 
   const customUserGraph = (
     <GenericBarAndTable
-      data={convertToChartData(
+      data={convertToGrowthChartData(
         aggregateData(trafficData, "users", "mean", mauTimescale),
-        "Users"
+        "Users",
+        cutOffDate
       )}
       title={"Web Users (M)"}
       showDataLabels={mauTimescale !== "month"}
       timescale={mauTimescale}
       setTimescale={setMauTimescale}
-      selectedChart={CHARTS.mau}
+      selectedChart={CHARTS.trafficActiveUsers}
       // showTimescaleButtons={false}
       rawChartData={trafficData}
       showModalButtons={false}
       formatChartLabelFunction={roundPeNumbers}
       formatTableDataFunction={roundPeNumbers}
+      location={country}
     />
   );
   const yearUserGraph = (
     <GenericBarAndTable
-      data={convertToChartData(
+      data={convertToGrowthChartData(
         aggregateData(trafficData, "users", "mean", "year"),
-        "Users"
+        "Users",
+        cutOffDate
       )}
       showTimescaleButtons={false}
       showModalButtons={false}
@@ -129,30 +97,18 @@ function WebTrafficChart({
 
   switch (selectedChart) {
     case CHARTS.traffic:
-      return yearTrafficGraph;
-    case CHARTS.mau:
-      return yearUserGraph;
+      return customTrafficGraph;
+    case CHARTS.trafficActiveUsers:
+      return (
+        <TwoColumnView
+          quarterGraph={customUserGraph}
+          yearGraph={yearUserGraph}
+        />
+      );
     // if no selected chart, return all charts
     default:
       return (
         <div>
-          <div className="flex flex-row items-center mb-3">
-            <p className="text-lg font-semibold text-gray-800 mr-2">Growth</p>
-            <div className="group inline-flex items-center hover:cursor-pointer hover:text-primary">
-              <Image
-                src="/assets/downloadInactive.svg"
-                className="w-5 h-5 object-contain opacity-50 group-hover:hidden"
-                width={256}
-                height={256}
-              />
-              <Image
-                src="/assets/downloadActive.svg"
-                className="w-5 h-5 object-contain hidden group-hover:block"
-                width={256}
-                height={256}
-              />
-            </div>
-          </div>
           <div className="h-fit mb-4">
             <TwoColumnView
               quarterGraph={customTrafficGraph}

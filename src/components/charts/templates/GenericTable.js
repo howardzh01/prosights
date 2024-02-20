@@ -5,7 +5,8 @@ Chart.register(ChartDataLabels);
 
 function GenericTable({
   tableData,
-  scrollStart = "left",
+  timescale,
+  scrollStart = "right",
   formatTableDataFunction,
 }) {
   const scrollRef = useRef(null);
@@ -49,7 +50,11 @@ function GenericTable({
                 colSpan={headerSpans[header]}
                 className={`text-xs font-medium tracking-wider text-center`}
               >
-                <div className="inline-block bg-customGray-50 text-customGray-500 rounded-md w-11/12 py-1 ">
+                <div
+                  className={`inline-block bg-customGray-50 text-customGray-500 rounded-md ${
+                    timescale === "month" ? "w-[96%]" : "w-[90%]"
+                  } py-1 `} // logic to make year header background wider
+                >
                   {header}
                 </div>
               </th>

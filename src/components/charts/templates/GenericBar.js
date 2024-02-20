@@ -6,26 +6,30 @@ import GenericTimeScale from "./GenericTimeScale";
 Chart.register(ChartDataLabels);
 import GenericTable from "./GenericTable";
 import Image from "next/image";
+import GenericLocationDisplay from "./GenericLocationDisplay.js";
 
 function GenericBarAndTable({
   data, // {chartData, tableData}
   showDataLabels = true,
   showTimescaleButtons = true,
-  showModalButtons = true,
+  showModalButtons = false,
   showTable = true,
   title = undefined, // Timescale component from here on
   location = "",
+  lastTwelveMonthsView = false,
   timescale,
   setTimescale,
   selectedChart,
   rawChartData,
   formatChartLabelFunction: formatChartLabelFunction = (x) => x,
   formatTableDataFunction = (x) => x, //Table Options from here on
-  scrollStart = "left",
+  scrollStart = "right",
+  useColorPlugin = true,
 }) {
   const { chartData, tableData } = data;
   const options = {
     plugins: {
+      chartJSColorPlugin: useColorPlugin,
       title: {
         display: true, //adds extra padding
         // text: title,
@@ -71,19 +75,23 @@ function GenericBarAndTable({
 
   return (
     <div className="flex flex-col h-full w-full justify-end">
-      {(showTimescaleButtons || showModalButtons) && (
-        <GenericTimeScale
-          timescale={timescale}
-          setTimescale={setTimescale}
-          selectedChart={selectedChart}
-          rawChartData={rawChartData}
-          title={title}
-          showTimescaleButtons={showTimescaleButtons}
-          showModalButtons={showModalButtons}
-        />
-      )}
+      <GenericTimeScale
+        timescale={timescale}
+        setTimescale={setTimescale}
+        selectedChart={selectedChart}
+        rawChartData={rawChartData}
+        title={title}
+        showTimescaleButtons={showTimescaleButtons}
+        showModalButtons={showModalButtons}
+      />
 
-      {location && (
+      <div className="mt-3">
+        <GenericLocationDisplay
+          location={location}
+          lastTwelveMonthsView={lastTwelveMonthsView}
+        />
+      </div>
+      {/* {location && (
         <div className="flex flex-row mt-3">
           <Image
             src="/assets/globe.svg"
@@ -94,8 +102,7 @@ function GenericBarAndTable({
           />
           <p className="text-xs font-normal text-customGray-200">{location}</p>
         </div>
-      )}
-
+      )} */}
       <div className="">
         {chartData && <Bar data={chartData} options={options} />}
       </div>
@@ -105,6 +112,7 @@ function GenericBarAndTable({
           {/* Default to use data if tableChartData is undefined */}
           <GenericTable
             tableData={tableData}
+            timescale={timescale}
             scrollStart={scrollStart}
             formatTableDataFunction={formatTableDataFunction}
           />
