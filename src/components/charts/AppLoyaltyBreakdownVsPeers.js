@@ -105,7 +105,7 @@ function AppLoyaltyBreakdownVsPeers({
           showTable={false}
           showDataLabels={true}
           showTimescaleButtons={false}
-          showModalButtons={true}
+          showModalButtons={false}
           location={country}
           lastTwelveMonthsView={true}
           timescale={"quarterYear"}
