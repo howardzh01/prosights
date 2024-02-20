@@ -436,7 +436,11 @@ export const getDataAIData = async ([
   };
 };
 
-export const getExcelDownload = async (data, dev = false) => {
+export const getExcelDownload = async (
+  data,
+  fileName = "excel",
+  dev = false
+) => {
   try {
     const response = await fetch(
       `https://kev2010--generate-master-excel-generate-master-excel${
@@ -456,7 +460,7 @@ export const getExcelDownload = async (data, dev = false) => {
     const downloadUrl = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = downloadUrl;
-    a.download = "excel-file.xlsx";
+    a.download = `${fileName}.xlsx`;
     document.body.appendChild(a);
     a.click();
     window.URL.revokeObjectURL(downloadUrl);

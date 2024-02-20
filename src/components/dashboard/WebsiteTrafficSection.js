@@ -19,6 +19,7 @@ function WebsiteTrafficSection({
   webTrafficDic,
   webTrafficGeoDic,
   downloadExcel,
+  companyCompetitors,
 }) {
   // Expect webTrafficDic = {company1: trafficData, company2: trafficData, ...}
   const webTrafficData = webTrafficDic?.[company];
@@ -234,8 +235,14 @@ function WebsiteTrafficSection({
               Market Share vs. Peers
             </p>
           </div>
-          {webTrafficDic === undefined ||
-          Object.keys(webTrafficDic).length === 0 ? (
+          {companyCompetitors.length === 0 ? (
+            <div className="w-full h-80 rounded-lg bg-transparent flex items-center justify-center">
+              <p className="text-2xl font-medium text-customGray-150">
+                Add Competitors to Compare
+              </p>
+            </div>
+          ) : webTrafficDic === undefined ||
+            Object.keys(webTrafficDic).length === 0 ? (
             <Skeleton className="w-full mt-2 mb-6 h-80 rounded-lg bg-customGray-50" />
           ) : Object.keys(webTrafficDic[company]).length === 0 ? (
             <div className="w-full h-80 rounded-lg mt-2 mb-6 bg-customGray-50 flex items-center justify-center">

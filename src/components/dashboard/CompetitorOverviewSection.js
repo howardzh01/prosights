@@ -117,7 +117,7 @@ function CompetitorOverviewSection({
       </div>
       <hr className="border-none h-px bg-customGray-100" />
       <div className="flex flex-wrap justify-center gap-10 p-5">
-        {companyCompetitors.length <= 1 ? (
+        {companyCompetitors.length === 0 ? (
           <div className="w-full h-80 rounded-lg bg-transparent flex items-center justify-center">
             <p className="text-2xl font-medium text-customGray-150">
               Add Competitors to Compare
