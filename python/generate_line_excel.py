@@ -88,7 +88,7 @@ def generate_line_excel(req: List[Dict], workbook, sheetName="Sheet1"):
                 rawDataPoint = '' if rawDataPoint is None else rawDataPoint  # Convert null to empty cell
                 try:
                     rawDataPoint = float(rawDataPoint)
-                except ValueError:
+                except:
                     pass
                 worksheet.write(row + label_index, col + dataset_index + 1, rawDataPoint, font_format)
 
@@ -97,7 +97,7 @@ def generate_line_excel(req: List[Dict], workbook, sheetName="Sheet1"):
                 dataPoint = '' if dataPoint is None else dataPoint / 100  # Convert null to empty cell
                 try:
                     dataPoint = float(dataPoint)
-                except ValueError:
+                except:
                     pass
                 worksheet.write(row + label_index, col + len(rawDataColumnTitles) + 1 + dataset_index + 1, dataPoint, percentage_format)  # Adjusted index here
 

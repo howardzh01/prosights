@@ -78,7 +78,7 @@ def generate_stacked_excel(req: List[Dict], workbook, sheetName="Sheet1"):
                 # Convert to number if possible
                 try:
                     dataPoint = float(dataPoint)
-                except ValueError:
+                except:
                     pass
                 worksheet.write(data_start_row + row, col + 2, dataPoint, center_format)  # Write the data point
 
