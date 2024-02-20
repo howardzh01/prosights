@@ -161,7 +161,7 @@ export async function cachedBucketFetch({
 
     if (insertError) {
       console.error("Error inserting data into cache:", insertError);
-      return; //TODO: make it return data. Left it like this so more apparent of cache errors for testing
+      return data; //TODO: make it return data. Left it like this so more apparent of cache errors for testing
     }
 
     const { data: bucketData, error: bucketError } = await serviceSup.storage

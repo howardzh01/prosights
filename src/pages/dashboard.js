@@ -43,7 +43,7 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
   const { isSignedIn, user, isLoaded } = useUser();
   const companyDirectory = new CompanyDirectory(companyList);
   const [companyDic, setCompanyDic] = useState(
-    companyDirectory.findCompanyByName("stockx")
+    companyDirectory.findCompanyByName("")
   );
   const [country, setCountry] = useState("US");
   const [companyCompetitors, setCompanyCompetitors] = useState([]); // Array of company names
@@ -297,11 +297,17 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
   }, []);
 
   useEffect(() => {
-    if (companyDic && companyDic.name === "stockx") {
+    const competitorsMap = {
+      stockx: ["goat", "grailed"],
+      goat: ["stockx", "grailed"],
+      grailed: ["stockx", "goat"],
+      tinder: ["bumble"],
+      bumble: ["tinder"],
+    };
+    const competitors = competitorsMap?.[companyDic?.name];
+    if (competitors) {
       setCompanyCompetitors(
-        ["goat", "grailed"].map((name) =>
-          companyDirectory.findCompanyByName(name)
-        )
+        competitors.map((name) => companyDirectory.findCompanyByName(name))
       );
     } else {
       setCompanyCompetitors([]);
@@ -309,10 +315,12 @@ function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
   }, [companyDic]);
 
   useEffect(() => {
+    if (!user) return;
     const fetchData = async () => {
       try {
-        const combinedCompanies = [companyDic, ...companyCompetitors];
-
+        const combinedCompanies = [companyDic, ...companyCompetitors].filter(
+          (company) => company != null
+        );
         const response = await fetch("/api/private/postApiUsage", {
           method: "POST",
           headers: {
