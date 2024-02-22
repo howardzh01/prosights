@@ -145,7 +145,7 @@ export default function SearchBar({
                 },
               },
               "& .MuiInputBase-input::-webkit-search-cancel-button": {
-                "-webkit-appearance": "none",
+                // WebkitAppearance: "none",
                 display: "none",
               },
             }}

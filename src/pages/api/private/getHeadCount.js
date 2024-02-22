@@ -36,7 +36,7 @@ const handler = async (req) => {
   const reqJSON = await req.json();
   const { userId, companyName } = reqJSON;
   // console.log("before", companyName);
-  const headcountData = await getCSignalHeadCount(companyName);
+  const headcountData = await getCSignalHeadCount(companyName.toLowerCase());
   if (!headcountData) {
     return new Response(JSON.stringify([]), {
       status: 404,
