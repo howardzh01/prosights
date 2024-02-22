@@ -53,6 +53,7 @@ export default function SearchBar({
     <div className="">
       <Autocomplete
         freeSolo={false}
+        autoHighlight={true} // only use if freesolo=false
         id="autcomplete-search"
         filterOptions={filterOptions}
         autoComplete={true}

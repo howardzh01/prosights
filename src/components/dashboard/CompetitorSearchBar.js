@@ -22,6 +22,7 @@ export default function CompetitorSearchBar({
     <Autocomplete
       multiple
       limitTags={4}
+      autoHighlight={true} // only use if freesolo=false
       id="multiple-limit-tags"
       filterOptions={filterOptions}
       options={companyDirectory.companyList.filter(
