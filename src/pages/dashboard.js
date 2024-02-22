@@ -368,7 +368,7 @@ function Dashboard({
   //   setAppUsageData(null);
   // }, [country]);
 
-  function downloadExcel(name, devMode = true) {
+  function downloadExcel(name, devMode = false) {
     // Excel sheet builder
     const headcountSectionBuilder =
       headCountData && headCountData?.[companyDic.displayedName]
@@ -376,6 +376,7 @@ function Dashboard({
             {
               type: "bar",
               sheetName: "Headcount",
+              sheetTabColor: "#D7ECFB",
               req: convertHeadCountChartDataToExcelFormat(
                 headCountData[companyDic.displayedName],
                 dataCutoffDate
@@ -390,6 +391,7 @@ function Dashboard({
         ? {
             type: "bar",
             sheetName: "Traffic Total Visits",
+            sheetTabColor: "#808080",
             req: convertTotalVisitsChartDataToExcelFormat(
               webTrafficData[companyDic.displayedName],
               dataCutoffDate
@@ -402,6 +404,7 @@ function Dashboard({
         ? {
             type: "bar",
             sheetName: "Traffic Web Users",
+            sheetTabColor: "#808080",
             req: convertWebUsersChartDataToExcelFormat(
               webTrafficData[companyDic.displayedName],
               dataCutoffDate
@@ -419,6 +422,7 @@ function Dashboard({
         ? {
             type: "doughnut",
             sheetName: "Traffic Breakdown",
+            sheetTabColor: "#808080",
             req: convertBreakdownChartDataToExcelFormat(
               webTrafficGeoData[companyDic.displayedName],
               webTrafficData[companyDic.displayedName]
@@ -431,6 +435,7 @@ function Dashboard({
         ? {
             type: "stacked",
             sheetName: "Traffic Total Visits by Channel",
+            sheetTabColor: "#808080",
             req: convertTrafficByChannelChartDataToExcelFormat(
               webTrafficData[companyDic.displayedName],
               dataCutoffDate
@@ -444,6 +449,7 @@ function Dashboard({
         ? {
             type: "line",
             sheetName: "Traffic Growth vs. Peers",
+            sheetTabColor: "#808080",
             req: convertTrafficGrowthVsPeersChartDataToExcelFormat(
               webTrafficData,
               dataCutoffDate
@@ -457,6 +463,7 @@ function Dashboard({
         ? {
             type: "stacked",
             sheetName: "Traffic Market Share vs. Peers",
+            sheetTabColor: "#808080",
             req: convertTrafficMarketShareVsPeersDataToExcelFormat(
               webTrafficData,
               dataCutoffDate
@@ -474,6 +481,7 @@ function Dashboard({
         ? {
             type: "stacked",
             sheetName: "Traffic Breakdown vs. Peers",
+            sheetTabColor: "#808080",
             req: convertTrafficBreakdownVsPeersDataToExcelFormat(
               webTrafficGeoData,
               webTrafficData
@@ -491,6 +499,7 @@ function Dashboard({
       appUsageSectionBuilder.push({
         type: "bar",
         sheetName: "App Users",
+        sheetTabColor: "#FFFFCC",
         req: convertAppUsersChartDataToExcelFormat(
           dataAIData[companyDic?.displayedName || companyDic?.name][
             "app_performance"
@@ -503,6 +512,7 @@ function Dashboard({
         {
           type: "line",
           sheetName: "App Growth vs. Peers",
+          sheetTabColor: "#FFFFCC",
           req: convertAppUsageGrowthVsPeersChartDataToExcelFormat(
             dataAIData,
             dataCutoffDate
@@ -512,6 +522,7 @@ function Dashboard({
         {
           type: "stacked",
           sheetName: "App Market Share vs. Peers",
+          sheetTabColor: "#FFFFCC",
           req: convertAppUsageMarketShareVsPeersDataToExcelFormat(
             dataAIData,
             dataCutoffDate
@@ -521,14 +532,16 @@ function Dashboard({
         {
           type: "bar",
           sheetName: "App Loyalty vs. Peers",
+          sheetTabColor: "#FFFFCC",
           req: convertAppUsageLoyalUsersVsPeersDataToExcelFormat(dataAIData),
           poweredBy: "Data AI",
         }
       );
     }
-    const dividerBuilder = (name) => ({
+    const dividerBuilder = (name, tabColor) => ({
       type: "divider",
       sheetName: name,
+      sheetTabColor: tabColor,
       req: {},
       poweredBy: "",
     });
@@ -559,11 +572,11 @@ function Dashboard({
         // Case of downloading everything
         getExcelDownload(
           [
-            dividerBuilder("Headcount >>>"),
+            dividerBuilder("Headcount >>>", "#36A2EB"),
             ...headcountSectionBuilder,
-            dividerBuilder("Web Traffic >>>"),
+            dividerBuilder("Web Traffic >>>", "#000000"),
             ...webTrafficSectionBuilder,
-            dividerBuilder("App Usage >>>"),
+            dividerBuilder("App Usage >>>", "#FF9F40"),
             ...appUsageSectionBuilder,
           ],
           `${companyDic.displayedName} - ${country} (Full Report)`,
