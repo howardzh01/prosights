@@ -1,4 +1,7 @@
 const assert = require("assert");
+import fs from "fs";
+import path from "path";
+import { parse } from "csv-parse/sync"; // Correct import for synchronous parsing
 
 export function parseSemrushOutput(output) {
   if (!output) {
@@ -24,4 +27,19 @@ export function parseSemrushOutput(output) {
 
 export async function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export async function fetchCompanyList(pathToFile) {
+  const filePath = path.join(process.cwd(), pathToFile);
+  const fileContent = fs.readFileSync(filePath, "utf8");
+  try {
+    const data = parse(fileContent, {
+      columns: true, // Assumes the first row contains column names
+      skip_empty_lines: true,
+    });
+    return data;
+  } catch (error) {
+    console.error("Failed to load company list:", error);
+    return []; // Return an empty array in case of error
+  }
 }

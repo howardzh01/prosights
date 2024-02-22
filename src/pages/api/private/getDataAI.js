@@ -3,7 +3,7 @@
 import { serviceSup, cachedBucketFetch } from "../../../utils/Supabase.js";
 import { sleep } from "../../../utils/BackendUtils.js";
 
-const disableDataAI = false;
+const disableDataAI = true;
 export const config = {
   runtime: "edge",
 };

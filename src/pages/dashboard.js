@@ -17,10 +17,10 @@ import { CHARTS } from "../constants";
 import CompetitorContainer from "../components/dashboard/CompetitorContainer";
 import { Skeleton } from "@nextui-org/react";
 import { CompanyDirectory } from "../components/dashboard/CompanyListDirectory";
-import { companyList } from "../components/dashboard/CompanyList";
+import { companyListFixed } from "../components/dashboard/CompanyList";
 import HeadcountIcon from "/public/assets/HeadcountIcon.svg";
 import CountrySelector from "../components/dashboard/CountrySelector";
-import DashboardNavbar from "../components/dashboard/DashboardNavBar"; // Adjust the import path as necessary
+import DashboardNavbar from "../components/dashboard/DashboardNavBar";
 import {
   convertHeadCountChartDataToExcelFormat,
   convertTotalVisitsChartDataToExcelFormat,
@@ -35,11 +35,25 @@ import {
   convertAppUsageMarketShareVsPeersDataToExcelFormat,
   convertAppUsageLoyalUsersVsPeersDataToExcelFormat,
 } from "../utils/ChartUtils";
+import { fetchCompanyList } from "../utils/BackendUtils";
 
 export const SelectedChartContext = createContext();
 export const ChartDataContext = createContext();
 
-function Dashboard({ enableCrunchbase = true, enableOnlyWebTraffic }) {
+export async function getStaticProps(context) {
+  const companyList = await fetchCompanyList(
+    "/public/assets/mappings/prosights_mappings_v1_prod_search.csv"
+  );
+  return {
+    props: { companyList }, // will be passed to the page component as props
+  };
+}
+
+function Dashboard({
+  enableCrunchbase = true,
+  enableOnlyWebTraffic,
+  companyList,
+}) {
   const { isSignedIn, user, isLoaded } = useUser();
   const companyDirectory = new CompanyDirectory(companyList);
   const [companyDic, setCompanyDic] = useState(

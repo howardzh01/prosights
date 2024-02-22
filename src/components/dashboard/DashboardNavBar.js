@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { Skeleton } from "@nextui-org/react";
-import CountrySelector from "./CountrySelector"; // Adjust the import path as necessary
-import SearchBar from "./SearchBar"; // Adjust the import path as necessary
-import CompetitorContainer from "./CompetitorContainer"; // Adjust the import path as necessary
+import CountrySelector from "./CountrySelector";
+import SearchBar from "./SearchBar";
+import CompetitorContainer from "./CompetitorContainer";
+import CompanyLogoSkeleton from "./CompanyLogoSkeleton";
 
 const DashboardNavBar = ({
   companyDic,
@@ -64,16 +65,16 @@ const DashboardNavBar = ({
                   "image_url"
                 ]
               }
-              className="w-10 h-10 mr-2 object-contain rounded-md"
+              className="w-9 h-9 mr-2 object-contain rounded-md"
               width={256}
               height={256}
               alt="Company Logo"
             />
           ) : crunchbaseDataPull === undefined ? (
-            <Skeleton className="w-10 h-10 mr-2 rounded-md bg-customGray-50" />
+            <Skeleton className="w-9 h-9 mr-2 rounded-md bg-customGray-50" />
           ) : (
-            <div className="w-10 h-10 mr-2 rounded-md bg-customGray-50 flex items-center justify-center">
-              <p className="text-sm text-customGray-200">--</p>
+            <div className="w-9 h-9 mr-2 text-2xl">
+              <CompanyLogoSkeleton companyDic={companyDic} />
             </div>
           )}
           <p className="text-3xl font-bold text-gray-800 pl-1">
@@ -167,6 +168,8 @@ const DashboardNavBar = ({
           </div>
         </div>
         <CompetitorContainer
+          targetCompany={companyDic}
+          companyDirectory={companyDirectory}
           companyCompetitors={companyCompetitors}
           setCompanyCompetitors={setCompanyCompetitors}
         />

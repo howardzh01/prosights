@@ -1,11 +1,11 @@
 import * as React from "react";
-import Autocomplete from "@mui/material/Autocomplete";
+import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { Box, Typography } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import Image from "next/image";
 import Chip from "@mui/material/Chip";
-import { companyList } from "./CompanyList";
+import CompanyLogoSkeleton from "./CompanyLogoSkeleton";
 
 export default function SearchBar({
   companyDirectory,
@@ -14,7 +14,7 @@ export default function SearchBar({
 }) {
   const [value, setValue] = React.useState(null);
 
-  if (!companyList) {
+  if (!companyDirectory.companyList) {
     return;
   }
   const createCompanyDic = (value) => {
@@ -44,15 +44,24 @@ export default function SearchBar({
       return value;
     }
   };
+
+  const filterOptions = createFilterOptions({
+    matchFrom: "any",
+    limit: 100,
+  });
   return (
     <div className="">
       <Autocomplete
         freeSolo={false}
         id="autcomplete-search"
+        filterOptions={filterOptions}
         autoComplete={true}
-        options={companyList}
+        disableListWrap
+        options={companyDirectory.companyList} // Limit the options to the first 10 items
         getOptionLabel={(option) =>
-          typeof option === "string" ? option : option.displayedName
+          typeof option === "string"
+            ? option
+            : `${option.displayedName} - ${option.url}`
         }
         clearIcon={null} // Removes the clear icon
         onChange={(event, value) => {
@@ -64,19 +73,41 @@ export default function SearchBar({
         value={value}
         renderOption={(props, option, { selected }) => (
           <Box component="li" {...props}>
-            <img
-              src={option.logo}
-              alt={option.name}
-              style={{
-                marginRight: 8,
-                height: "12px",
-                width: "auto",
-                display: "inline-block",
-                borderRadius: "20%",
-              }}
-            />
-            <span className="text-sm text-customGray-800">{option.url}</span>
+            <div className="w-5 h-5 mr-2 text-xs">
+              <CompanyLogoSkeleton companyDic={option} />
+            </div>
+            <span className="text-sm text-customGray-800">
+              <strong>{option.displayedName}</strong> - {option.url}
+            </span>
           </Box>
+          // <Box component="li" {...props}>
+
+          //   {option.logo ? (
+          //     <img
+          //       src={option.logo}
+          //       alt={option.name}
+          //       style={{
+          //         marginRight: 8,
+          //         height: "12px",
+          //         width: "auto",
+          //         display: "inline-block",
+          //         borderRadius: "20%",
+          //       }}
+          //     />
+          //   ) : (
+          //     <div
+          //       style={{
+          //         marginRight: 8,
+          //         height: "12px",
+          //         width: "12px",
+          //         display: "inline-block",
+          //         borderRadius: "20%",
+          //         backgroundColor: "#ccc", // Placeholder color, adjust as needed
+          //       }}
+          //     ></div>
+          //   )}
+          //   <span className="text-sm text-customGray-800">{option.url}</span>
+          // </Box>
         )}
         renderInput={(params) => (
           <TextField
@@ -87,18 +118,6 @@ export default function SearchBar({
             }}
             InputProps={{
               ...params.InputProps,
-              // size: "small",
-
-              // startAdornment: [
-              //   <Image
-              //     src="/assets/search.svg"
-              //     alt="Play"
-              //     width={16} // Adjusted to match the w-4 class in TailwindCSS (1rem = 16px)
-              //     height={16} // Adjusted to match the h-4 class in TailwindCSS (1rem = 16px)
-              //     className="mx-1"
-              //   />,
-              //   params.InputProps.startAdornment,
-              // ],
               type: "search",
               style: {
                 fontSize: "0.9rem",

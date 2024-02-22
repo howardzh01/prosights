@@ -1,4 +1,4 @@
-export const companyList = [
+export const companyListFixed = [
   {
     name: "stockx",
     url: "stockx.com",

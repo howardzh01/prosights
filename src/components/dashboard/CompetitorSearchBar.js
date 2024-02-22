@@ -1,37 +1,49 @@
 import * as React from "react";
-import Autocomplete from "@mui/material/Autocomplete";
+import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { Box, Typography } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import Image from "next/image";
 import Chip from "@mui/material/Chip";
-import { companyList } from "./CompanyList";
+import CompanyLogoSkeleton from "./CompanyLogoSkeleton";
 
-export default function SearchBar({
+export default function CompetitorSearchBar({
+  targetCompany,
+  companyDirectory,
   companyCompetitors,
   setCompanyCompetitors,
 }) {
-  if (!companyList) return;
+  if (!companyDirectory.companyList) return;
+  const filterOptions = createFilterOptions({
+    matchFrom: "any",
+    limit: 100,
+  });
   return (
     <Autocomplete
       multiple
       limitTags={4}
       id="multiple-limit-tags"
-      options={companyList}
-      getOptionLabel={(option) => option.displayedName}
+      filterOptions={filterOptions}
+      options={companyDirectory.companyList.filter(
+        (company) => company.url !== targetCompany.url
+      )}
+      getOptionLabel={(option) => `${option.displayedName} - ${option.url}`}
       onChange={(event, value) => setCompanyCompetitors(value)}
       value={companyCompetitors}
       renderTags={(value, getTagProps) => {
         return value.map((option, index) => (
           <Chip
             icon={
-              <Image
-                src={option.logo} // Assuming 'option' has a 'logo' property with the image URL
-                alt={option.name} // Assuming 'option' has a 'name' property
-                width={16} // Set the image size as needed
-                height={16}
-                className="object-contain rounded"
-              />
+              <div className="w-5 h-5 mr-2 text-xs">
+                <CompanyLogoSkeleton companyDic={option} />
+              </div>
+              // <Image
+              //   src={option.logo} // Assuming 'option' has a 'logo' property with the image URL
+              //   alt={option.name} // Assuming 'option' has a 'name' property
+              //   width={16} // Set the image size as needed
+              //   height={16}
+              //   className="object-contain rounded"
+              // />
             }
             label={option.displayedName} // Assuming 'option' has a 'displayedName' property
             {...getTagProps({ index })}
@@ -82,19 +94,30 @@ export default function SearchBar({
       }}
       renderOption={(props, option, { selected }) => (
         <Box component="li" {...props}>
-          <img
-            src={option.logo}
-            alt={option.name}
-            style={{
-              marginRight: 8,
-              height: "20px",
-              width: "auto",
-              display: "inline-block",
-              borderRadius: "20%",
-            }}
-          />
-          <span className="text-sm">{option.url}</span>
+          <div
+            className="w-5 h-5 mr-2 flex-shrink-0 flex-grow-0 text-xs"
+            style={{ minWidth: "1.25rem", minHeight: "1.25rem" }}
+          >
+            <CompanyLogoSkeleton companyDic={option} />
+          </div>
+          <span className="text-sm text-customGray-800">
+            <strong>{option.displayedName}</strong> - {option.url}
+          </span>
         </Box>
+        // <Box component="li" {...props}>
+        //   <img
+        //     src={option.logo}
+        //     alt={option.name}
+        //     style={{
+        //       marginRight: 8,
+        //       height: "20px",
+        //       width: "auto",
+        //       display: "inline-block",
+        //       borderRadius: "20%",
+        //     }}
+        //   />
+        //   <span className="text-sm">{option.url}</span>
+        // </Box>
       )}
       sx={{
         height: "50px",
