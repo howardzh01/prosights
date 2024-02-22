@@ -12,7 +12,7 @@ stub = modal.Stub("generate_line_excel")
 
 @stub.function(image=xlsxwriter_image)
 @modal.web_endpoint(method="POST")
-def generate_line_excel(req: List[Dict], workbook, sheetName="Sheet1"):
+def generate_line_excel(req: List[Dict], workbook, sheetName="Sheet1", poweredBy=None):
     """
     'req' follows the structure:
 
@@ -53,6 +53,13 @@ def generate_line_excel(req: List[Dict], workbook, sheetName="Sheet1"):
     # Starting cell
     row = 1
     col = 1
+
+    if poweredBy:
+        # Merge three cells for the "POWERED BY" text
+        powered_by_format = workbook.add_format({'bold': True, 'align': 'center', 'valign': 'vcenter', 'font_name': 'Arial', 'font_size': 8})
+        worksheet.merge_range('B2:D2', f"Powered by {poweredBy}", powered_by_format)
+        # Adjust the starting row for data entries if "POWERED BY" text is added
+        row += 2
 
     # Initialize the graph_row_index at the beginning of the function
     graph_row_index = 1

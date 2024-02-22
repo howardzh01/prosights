@@ -12,7 +12,7 @@ stub = modal.Stub("generate_bar_excel")
 
 @stub.function(image=xlsxwriter_image)
 @modal.web_endpoint(method="POST")
-def generate_bar_excel(req: Dict, workbook, sheetName="Sheet1"):
+def generate_bar_excel(req: Dict, workbook, sheetName="Sheet1", poweredBy=None):
     """
     'req' follows the structure:
 
@@ -62,6 +62,13 @@ def generate_bar_excel(req: Dict, workbook, sheetName="Sheet1"):
 
     # Current row after writing column titles.
     current_row = 1  # Adjust starting row to 2 for data entries
+
+    if poweredBy:
+        # Merge three cells for the "POWERED BY" text
+        powered_by_format = workbook.add_format({'bold': True, 'align': 'center', 'valign': 'vcenter', 'font_name': 'Arial', 'font_size': 8})
+        worksheet.merge_range('B2:D2', f"Powered by {poweredBy}", powered_by_format)
+        # Adjust the starting row for data entries if "POWERED BY" text is added
+        current_row += 2
     
     for dataset_index, dataset in enumerate(datasets):
         # Write column titles for each dataset section
@@ -97,7 +104,7 @@ def generate_bar_excel(req: Dict, workbook, sheetName="Sheet1"):
         worksheet.set_row(row_num, None, default_font_format)  # Apply to each data row
 
     # After writing all the data to the worksheet, add the charts for each dataset.
-    current_chart_row = 2  # Initialize the row for the data for the first chart
+    current_chart_row = 4 if poweredBy else 2  # Initialize the row for the data for the first chart
     current_graph_row = 2  # Initialize the row for the graph for the first chart
     for dataset_index, dataset in enumerate(datasets):
         current_chart_row, current_graph_row = add_chart_for_dataset(worksheet, workbook, dataset, columnTitles[dataset_index], current_chart_row, current_graph_row, dataset_index, titles, sheetName)

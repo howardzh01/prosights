@@ -368,7 +368,7 @@ function Dashboard({
   //   setAppUsageData(null);
   // }, [country]);
 
-  function downloadExcel(name, devMode = false) {
+  function downloadExcel(name, devMode = true) {
     // Excel sheet builder
     const headcountSectionBuilder =
       headCountData && headCountData?.[companyDic.displayedName]
@@ -380,6 +380,7 @@ function Dashboard({
                 headCountData[companyDic.displayedName],
                 dataCutoffDate
               ),
+              poweredBy: "Coresignal",
             },
           ]
         : [];
@@ -393,6 +394,7 @@ function Dashboard({
               webTrafficData[companyDic.displayedName],
               dataCutoffDate
             ),
+            poweredBy: "Semrush",
           }
         : null,
       webTrafficData?.[companyDic.displayedName] !== undefined &&
@@ -404,6 +406,7 @@ function Dashboard({
               webTrafficData[companyDic.displayedName],
               dataCutoffDate
             ),
+            poweredBy: "Semrush",
           }
         : null,
       // TODO: Need to split cases on geo and non-geo data
@@ -420,6 +423,7 @@ function Dashboard({
               webTrafficGeoData[companyDic.displayedName],
               webTrafficData[companyDic.displayedName]
             ),
+            poweredBy: "Semrush",
           }
         : null,
       webTrafficData?.[companyDic.displayedName] !== undefined &&
@@ -431,6 +435,7 @@ function Dashboard({
               webTrafficData[companyDic.displayedName],
               dataCutoffDate
             ),
+            poweredBy: "Semrush",
           }
         : null,
       webTrafficData !== undefined &&
@@ -443,6 +448,7 @@ function Dashboard({
               webTrafficData,
               dataCutoffDate
             ),
+            poweredBy: "Semrush",
           }
         : null,
       webTrafficData !== undefined &&
@@ -455,6 +461,7 @@ function Dashboard({
               webTrafficData,
               dataCutoffDate
             ),
+            poweredBy: "Semrush",
           }
         : null,
       // TODO: Need to split cases on geo and non-geo data
@@ -471,6 +478,7 @@ function Dashboard({
               webTrafficGeoData,
               webTrafficData
             ),
+            poweredBy: "Semrush",
           }
         : null,
     ].filter(Boolean);
@@ -489,6 +497,7 @@ function Dashboard({
           ],
           dataCutoffDate
         ),
+        poweredBy: "Data AI",
       });
       appUsageSectionBuilder.push(
         {
@@ -498,6 +507,7 @@ function Dashboard({
             dataAIData,
             dataCutoffDate
           ),
+          poweredBy: "Data AI",
         },
         {
           type: "stacked",
@@ -506,11 +516,13 @@ function Dashboard({
             dataAIData,
             dataCutoffDate
           ),
+          poweredBy: "Data AI",
         },
         {
           type: "bar",
           sheetName: "App Loyalty vs. Peers",
           req: convertAppUsageLoyalUsersVsPeersDataToExcelFormat(dataAIData),
+          poweredBy: "Data AI",
         }
       );
     }
@@ -518,6 +530,7 @@ function Dashboard({
       type: "divider",
       sheetName: name,
       req: {},
+      poweredBy: "",
     });
 
     switch (name) {

@@ -122,8 +122,8 @@ export default function SearchBar({
               type: "search",
               style: {
                 fontSize: "0.9rem",
-                paddingTop: "1px", // Reduced top padding
-                paddingBottom: "1px", // Reduced bottom padding
+                paddingTop: "4px", // Reduced top padding
+                paddingBottom: "4px", // Reduced bottom padding
                 fontFamily: "Inter",
               },
             }}

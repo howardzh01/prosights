@@ -35,6 +35,7 @@ def generate_master_excel(req: List):
             type: "bar", // types: bar, line, doughnut, stacked, divider
             sheetName: "Sheet1",
             req: {...} // Follows the structure of the corresponding function
+            poweredBy: "Semrush",
         },
         ...
     ]
@@ -53,7 +54,7 @@ def generate_master_excel(req: List):
         chart_type = request['type']
         if chart_type in chart_type_to_function:
             chart_function = chart_type_to_function[chart_type]
-            chart_function.local(request['req'], workbook, request['sheetName'])
+            chart_function.local(request['req'], workbook, request['sheetName'], request['poweredBy'])
 
     workbook.close()
     output.seek(0)
