@@ -595,45 +595,100 @@ function Dashboard({
   }
 
   const downloadPDF = async () => {
-    const { default: html2pdf } = await import("html2pdf.js");
+    const { jsPDF } = await import("jspdf");
+    const html2canvas = (await import("html2canvas")).default;
+
+    // Scroll to the top of the page to ensure the content starts from the very beginning
+    window.scrollTo(0, 0);
 
     const element = document.getElementById("main-content");
-    const contentWidth = element.scrollWidth; // Get the full scrollable width of the content
-    // TODO: Manual 1.5x multiplier to add in extra space to the height; this is a temporary fix.
-    // Otherwise, scroll height is too short because of pagebreak avoid all mode
-    const contentHeight = element.scrollHeight * 1.5; // Get the full scrollable height of the content
+    const contentWidth = element.scrollWidth * 1.3; // Full scrollable content width, hardcoded 1.3x
+    const contentHeight = element.scrollHeight; // Full scrollable content height
 
-    const opt = {
-      margin: [0.5, 0.5],
-      filename: "dashboard.pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: {
-        useCORS: true,
-        scale: 2, // Adjust this as needed
-        logging: true,
-        dpi: 192,
-        letterRendering: true,
-        scrollX: 0,
-        scrollY: 0,
-        windowHeight: contentHeight,
-        windowWidth: contentWidth, // Set the canvas width to the full content width
-      },
-      jsPDF: {
-        unit: "pt", // Points can allow for more fine-grained control over the size
-        format: [contentWidth, 792], // Custom format size [width, height] in points (72 points per inch)
-        orientation: "landscape",
-      },
-      pagebreak: { mode: "avoid-all" },
-    };
+    // Create a canvas with the full content
+    const canvas = await html2canvas(element, {
+      useCORS: true,
+      scale: window.devicePixelRatio, // Use the device pixel ratio for better resolution
+      logging: true,
+      dpi: 192,
+      letterRendering: true,
+      scrollX: 0,
+      scrollY: 0,
+      width: contentWidth,
+      height: contentHeight,
+      windowHeight: contentHeight,
+      windowWidth: contentWidth,
+    });
 
-    html2pdf()
-      .set(opt)
-      .from(element)
-      .save() // Save the PDF directly, without opening it in a new window
-      .catch((err) => {
-        console.error("Error exporting PDF:", err);
-      });
+    const imgData = canvas.toDataURL("image/jpeg", 1.0);
+
+    // Calculate the PDF width and height in points (1 point = 1/72 inch)
+    const pdfWidth = 595.28; // A4 width in points at 72 DPI
+    const pdfHeight = (pdfWidth * contentHeight) / contentWidth; // Calculate the height based on the content aspect ratio
+
+    // Calculate the ratio to fit the content within the A4 dimensions
+    const ratio = Math.min(pdfWidth / contentWidth, pdfHeight / contentHeight);
+
+    // Calculate the dimensions of the image on the PDF
+    const imgWidth = contentWidth * ratio;
+    const imgHeight = contentHeight * ratio;
+
+    // Calculate the position to center the content
+    const xPosition = (pdfWidth - imgWidth) / 2;
+    const yPosition = (pdfHeight - imgHeight) / 2;
+
+    // Create a PDF with a custom page size that matches the content's aspect ratio
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "pt",
+      format: [pdfWidth, pdfHeight],
+    });
+
+    // Add the image to the PDF centered
+    pdf.addImage(imgData, "JPEG", xPosition, yPosition, pdfWidth, pdfHeight);
+    pdf.save("dashboard.pdf");
   };
+
+  //   const downloadPDF = async () => {
+  //     const { default: html2pdf } = await import("html2pdf.js");
+  //
+  //     const element = document.getElementById("main-content");
+  //     const contentWidth = element.scrollWidth; // Get the full scrollable width of the content
+  //     // TODO: Manual 1.5x multiplier to add in extra space to the height; this is a temporary fix.
+  //     // Otherwise, scroll height is too short because of pagebreak avoid all mode
+  //     const contentHeight = element.scrollHeight * 1.5; // Get the full scrollable height of the content
+  //
+  //     const opt = {
+  //       margin: [0.5, 0.5],
+  //       filename: "dashboard.pdf",
+  //       image: { type: "jpeg", quality: 0.98 },
+  //       html2canvas: {
+  //         useCORS: true,
+  //         scale: 2, // Adjust this as needed
+  //         logging: true,
+  //         dpi: 192,
+  //         letterRendering: true,
+  //         scrollX: 0,
+  //         scrollY: 0,
+  //         windowHeight: contentHeight,
+  //         windowWidth: contentWidth, // Set the canvas width to the full content width
+  //       },
+  //       jsPDF: {
+  //         unit: "pt", // Points can allow for more fine-grained control over the size
+  //         format: [contentWidth, 792], // Custom format size [width, height] in points (72 points per inch)
+  //         orientation: "landscape",
+  //       },
+  //       pagebreak: { mode: "avoid-all" },
+  //     };
+  //
+  //     html2pdf()
+  //       .set(opt)
+  //       .from(element)
+  //       .save() // Save the PDF directly, without opening it in a new window
+  //       .catch((err) => {
+  //         console.error("Error exporting PDF:", err);
+  //       });
+  //   };
 
   const {
     headCountData,
