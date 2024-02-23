@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 
 export default authMiddleware({
   afterAuth({ userId, isPublicRoute }, req) {
-    console.log("what", userId, isPublicRoute, req.url);
     // Redirect non-signed-in users trying to access non-public URLs to the Clerk sign-in/up page
     if (!userId && !isPublicRoute) {
       return NextResponse.redirect(new URL("/sign-in", req.url));
