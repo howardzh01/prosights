@@ -13,6 +13,7 @@ function App() {
   const { isSignedIn, user, isLoaded } = useUser();
   console.log("testing purposes", isSignedIn, user, isLoaded);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
   const credentialImagesMobile = [
     "/assets/credentialsLogos/permira.png",
     "/assets/credentialsLogos/goldman.png",
@@ -37,6 +38,11 @@ function App() {
     setIsModalOpen(!isModalOpen);
   };
 
+  useEffect(() => {
+    if (isSignedIn) {
+      router.push("/dashboard");
+    }
+  }, [isLoaded, router]);
   // Add this useEffect hook to handle the Escape key press
   useEffect(() => {
     const closeOnEscapeKey = (e) => {
