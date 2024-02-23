@@ -14,62 +14,7 @@ function AppLoyaltyBreakdownVsPeers({
   // trafficData is of the form {company1: data, company2: data, ...}
   if (!multiCompanyAppData) return null;
 
-  // const chartOptions = {
-  //   plugins: {
-  //     chartJSColorPlugin: false,
-  //     legend: {
-  //       display: false,
-  //     },
-  //     datalabels: {
-  //       display: true,
-  //       anchor: "end",
-  //       align: "top",
-  //       // formatter: Math.round,
-  //     },
-  //   },
-  //   layout: {
-  //     padding: {
-  //       top: 15, // Adjust this value to increase or decrease the space
-  //     },
-  //   },
-  //   scales: {
-  //     x: {
-  //       grid: {
-  //         display: false, // Hides x-axis gridlines
-  //       },
-  //     },
-  //     // TODO: maybe display y-axis if timeline === "month" as data labels are turned off on monthly
-  //     y: {
-  //       display: false, // Hides the y-axis
-  //       grid: {
-  //         display: false, // Hides y-axis gridlines
-  //       },
-  //     },
-  //   },
-  // };
-
-  // function getRelevantKeys(type) {
-  //   switch (type) {
-  //     case "app_d30_retention":
-  //       return ["direct", "mail", "social", "search", "referral", "display_ad"];
-  //     case "app_percentage_active_days":
-  //       return "est_percentage_active_days";
-  //     case "app_average_user_time":
-  //       return ["mobile_users", "desktop_users"];
-  //     case "app_average_session_time":
-  //       return [
-  //         "search_organic",
-  //         "social_organic",
-  //         "search_paid",
-  //         "social_paid",
-  //       ];
-  //     default:
-  //       return [];
-  //   }
-  // }
-
-  let chartType, formatChartLabelFunction;
-  let title;
+  let formatChartLabelFunction;
   switch (selectedChart) {
     case CHARTS.appLTMRetention:
       formatChartLabelFunction = (value) => (value !== null ? `${value}%` : "");

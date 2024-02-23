@@ -64,7 +64,7 @@ function Dashboard({
   const { isSignedIn, user, isLoaded } = useUser();
   const companyDirectory = new CompanyDirectory(companyList);
   const [companyDic, setCompanyDic] = useState(
-    companyDirectory.findCompanyByName("")
+    companyDirectory.findCompanyByName("stockx")
   );
   const [country, setCountry] = useState("US");
   const [companyCompetitors, setCompanyCompetitors] = useState([]); // Array of company names
@@ -319,16 +319,17 @@ function Dashboard({
 
   useEffect(() => {
     const competitorsMap = {
+      "stockx.com": ["grailed.com"],
       stockx: ["goat", "grailed"],
       goat: ["stockx", "grailed"],
       grailed: ["stockx", "goat"],
       tinder: ["bumble"],
       bumble: ["tinder"],
     };
-    const competitors = competitorsMap?.[companyDic?.name];
+    const competitors = competitorsMap?.[companyDic?.url];
     if (competitors) {
       setCompanyCompetitors(
-        competitors.map((name) => companyDirectory.findCompanyByName(name))
+        competitors.map((name) => companyDirectory.findCompanyByUrl(name))
       );
     } else {
       setCompanyCompetitors([]);
