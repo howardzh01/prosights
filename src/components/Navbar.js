@@ -30,12 +30,12 @@ function Navbar() {
                 About Us
               </Link>
             </div> */}
-            {/* <Link
+            <Link
               href="/sign-in"
               className="py-2 px-6 text-sm md:text-base font-medium bg-primary hover:bg-blue-600 text-white rounded-lg transition duration-300"
             >
               Login
-            </Link> */}
+            </Link>
           </div>
 
           {/* mobile button goes here */}
