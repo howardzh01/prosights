@@ -43,7 +43,14 @@ export const SelectedChartContext = createContext();
 export const ChartDataContext = createContext();
 
 export async function getStaticProps(context) {
-  const companyList = await fetchCompanyList(CONSTANTS.MAPPINGS_CSV_URL);
+  const companyListRaw = await fetchCompanyList(CONSTANTS.MAPPINGS_CSV_URL);
+  const companyList = companyListRaw.map((company) =>
+    Object.fromEntries(
+      Object.entries(company).filter(([key]) =>
+        ["name", "displayedName", "appId", "url"].includes(key)
+      )
+    )
+  );
   return {
     props: { companyList }, // will be passed to the page component as props
   };
@@ -677,7 +684,7 @@ function Dashboard({
               navbarCalculatedHeight={navbarCalculatedHeight}
             />
           </div>
-          {apiCalls >= 1 ? (
+          {apiCalls >= CONSTANTS.API_LIMIT ? (
             <APILimitReached />
           ) : companyDic && companyDic.name ? (
             // Main Content

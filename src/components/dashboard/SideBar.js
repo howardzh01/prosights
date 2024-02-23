@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import UserProfileButton from "../UserProfileButton";
+import { API_LIMIT } from "../../constants";
 
 function SideBar({
   sections,

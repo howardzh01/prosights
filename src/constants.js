@@ -4,6 +4,7 @@ export const CONSTANTS = {
   cutoffDate: new Date("2023-12-31"),
   MAPPINGS_CSV_URL:
     "/public/assets/mappings/prosights_mappings_v1_prod_search.csv",
+  API_LIMIT: 200,
 };
 
 export const CHARTJS_COLORS = [
