@@ -70,6 +70,7 @@ export const TIME_IN_MS = {
   "1_day": 24 * 60 * 60 * 1000,
 };
 
+// Ids of charts to uniquely define a graph. No values can be the same
 export const CHARTS = {
   employeeCount: "Employee Count",
   traffic: "Traffic",

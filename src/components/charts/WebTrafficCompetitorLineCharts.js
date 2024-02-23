@@ -48,7 +48,6 @@ function WebTrafficCompetitorLineCharts({
       formatTableDataFunction={(x) => (x ? roundPeNumbers(x) + "%" : "--")}
     ></GenericLine>
   );
-
   switch (selectedChart) {
     // if no selected chart, return all charts
     default:

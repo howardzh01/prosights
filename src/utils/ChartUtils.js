@@ -3,6 +3,7 @@ import {
   convertLabelToDate,
   getTableInfo,
   aggregateData,
+  preprocessAppDataTypes,
   fromUnderscoreCase,
   roundPeNumbers,
   normalizeStackedAggData,
@@ -366,14 +367,15 @@ export function convertToGeoMarketShareData(
 }
 
 export function convertToLineChartData(
-  trafficData,
+  dataByCompany,
   timescale,
   cutOffDate,
-  outputKey = "est_average_active_users"
+  outputKey = "est_average_active_users",
+  useGrowth = true
 ) {
-  const companyNames = Object.keys(trafficData);
+  const companyNames = Object.keys(dataByCompany);
   const aggData = companyNames.reduce((acc, key) => {
-    acc[key] = aggregateData(trafficData[key], outputKey, "mean", timescale);
+    acc[key] = aggregateData(dataByCompany[key], outputKey, "mean", timescale);
     return acc;
   }, {});
   // aggData: {company1: {timekey: visits}, company2: {timekey: visits}, ...}
@@ -385,14 +387,19 @@ export function convertToLineChartData(
     "left"
   );
 
-  const growthAggData = companyNames.reduce((acc, key) => {
-    acc[key] = convertToGrowthData(aggData[key], "number").slice(cutoffIndex);
+  const transformedAggData = companyNames.reduce((acc, key) => {
+    if (useGrowth) {
+      acc[key] = convertToGrowthData(aggData[key], "number").slice(cutoffIndex);
+    } else {
+      acc[key] = Object.values(aggData[key]).slice(cutoffIndex);
+    }
     return acc;
   }, {});
+
   const chartData = {
     labels: Object.keys(firstCompanyData).slice(cutoffIndex),
     datasets: Object.keys(aggData).map((key) => ({
-      data: Object.values(growthAggData[key]).map(
+      data: Object.values(transformedAggData[key]).map(
         (x) => (x ? Number(roundPeNumbers(x)) : null) // this will convert null to 0
       ),
       rawData: Object.values(aggData[key]).slice(cutoffIndex),
@@ -677,61 +684,26 @@ export function convertToAppUsageLoyaltyVsPeersData(
   type = CHARTS.appLTMTimePerUser
 ) {
   // const relevant_keys = getRelevantKeys(type);
-
+  const processedMultiCompanyData = preprocessAppDataTypes(
+    multiCompanyAppData,
+    type
+  );
   // Get the date 12 months ago from today
   const date12MonthsAgo = new Date();
   date12MonthsAgo.setMonth(date12MonthsAgo.getUTCMonth() - 13);
-
-  const companyAverages = {};
-
-  for (const [company, data] of Object.entries(multiCompanyAppData)) {
-    if (!data) continue;
-    let filteredData;
-    // Handle retentiion data differently
-    if (type === CHARTS.appLTMRetention) {
-      if (!data["retention"]) continue;
-      filteredData = Object.entries(data["retention"])
-        .filter(([time, data]) => new Date(time) >= date12MonthsAgo)
-        // .map(([time, data]) => data.est_percentage_active_days);
-        .reduce((obj, [time, data]) => {
-          let estD30Retention = data.filter(
-            (item) => item?.retention_days === 30
-          )?.[0]?.est_retention_value;
-          obj[time] = estD30Retention * 100;
-          return obj;
-        }, {});
-    } else {
-      if (!data["app_performance"]) continue;
-      filteredData = Object.entries(data["app_performance"])
-        .filter(([time, data]) => new Date(time) >= date12MonthsAgo)
-        // .map(([time, data]) => data.est_percentage_active_days);
-        .reduce((obj, [time, data]) => {
-          if (type === CHARTS.appLTMActiveDays) {
-            obj[time] =
-              data.est_percentage_active_days != null
-                ? data.est_percentage_active_days * 100
-                : null;
-          } else if (type === CHARTS.appLTMTimePerUser) {
-            obj[time] =
-              data.est_average_time_per_user != null
-                ? data.est_average_time_per_user / 60 / 1000
-                : null;
-          } else if (type === CHARTS.appLTMTimePerSession) {
-            obj[time] =
-              data.est_average_session_duration != null
-                ? data.est_average_session_duration / 60 / 1000
-                : null;
-          }
-          return obj;
-        }, {});
-    }
-
-    // console.log(Object.keys(filteredData).length);
-    companyAverages[company] = roundPeNumbers(
-      calculateMean(Object.values(filteredData))
-    );
-  }
-
+  const companyAverages = Object.keys(processedMultiCompanyData).reduce(
+    (acc, company) => {
+      acc[company] = roundPeNumbers(
+        calculateMean(
+          Object.entries(processedMultiCompanyData[company])
+            .filter(([time, data]) => new Date(time) >= date12MonthsAgo)
+            .map(([time, data]) => data)
+        )
+      );
+      return acc;
+    },
+    {}
+  );
   const datasets = [
     {
       label: "",
@@ -745,6 +717,41 @@ export function convertToAppUsageLoyaltyVsPeersData(
     labels: Object.keys(companyAverages), // Single label as we have separate datasets for each company
     datasets: datasets,
   };
+}
+
+export function convertToAppLoyaltyPeersLineData(
+  multiCompanyAppData,
+  timescale,
+  cutoffDate,
+  type = CHARTS.appLTMTimePerUser
+) {
+  const processedMultiCompanyData = preprocessAppDataTypes(
+    multiCompanyAppData,
+    type
+  );
+  // Convert from {company: {time: data}} -> {company: {time: {type: data}}} to use aggregateData() function
+  const convertedDict = Object.entries(processedMultiCompanyData).reduce(
+    (acc, [company, timeData]) => {
+      const convertedTimeData = Object.entries(timeData).reduce(
+        (timeAcc, [time, data]) => {
+          timeAcc[time] = { [type]: data };
+          return timeAcc;
+        },
+        {}
+      );
+
+      acc[company] = convertedTimeData;
+      return acc;
+    },
+    {}
+  );
+  return convertToLineChartData(
+    convertedDict,
+    timescale,
+    cutoffDate,
+    type,
+    false // useGrowth
+  );
 }
 
 // Below are Excel data converters

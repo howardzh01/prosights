@@ -1,4 +1,4 @@
-import { CONSTANTS, MONTH_NAMES } from "../constants";
+import { CONSTANTS, MONTH_NAMES, CHARTS } from "../constants";
 // convert date to months
 export function isEmpty(value) {
   if (!value) {
@@ -232,6 +232,56 @@ export function getTableInfo(data) {
   };
 }
 
+export function preprocessAppDataTypes(
+  multiCompanyAppData,
+  type = CHARTS.appLTMTimePerUser
+) {
+  const processedMultiCompanyData = {};
+
+  for (const [company, data] of Object.entries(multiCompanyAppData)) {
+    if (!data) continue;
+    let filteredData;
+    // Handle retentiion data differently
+    if (type === CHARTS.appLTMRetention) {
+      if (!data["retention"]) continue;
+      filteredData = Object.entries(data["retention"]).reduce(
+        (obj, [time, data]) => {
+          let estD30Retention = data.filter(
+            (item) => item?.retention_days === 30
+          )?.[0]?.est_retention_value;
+          obj[time] = estD30Retention * 100;
+          return obj;
+        },
+        {}
+      );
+    } else {
+      if (!data["app_performance"]) continue;
+      filteredData = Object.entries(data["app_performance"])
+        // .map(([time, data]) => data.est_percentage_active_days);
+        .reduce((obj, [time, data]) => {
+          if (type === CHARTS.appLTMActiveDays) {
+            obj[time] =
+              data.est_percentage_active_days != null
+                ? data.est_percentage_active_days * 100
+                : null;
+          } else if (type === CHARTS.appLTMTimePerUser) {
+            obj[time] =
+              data.est_average_time_per_user != null
+                ? data.est_average_time_per_user / 60 / 1000
+                : null;
+          } else if (type === CHARTS.appLTMTimePerSession) {
+            obj[time] =
+              data.est_average_session_duration != null
+                ? data.est_average_session_duration / 60 / 1000
+                : null;
+          }
+          return obj;
+        }, {});
+    }
+    processedMultiCompanyData[company] = filteredData;
+  }
+  return processedMultiCompanyData;
+}
 // Generate all months between two dates
 const generateMonthsBetweenDates = (startDate, endDate) => {
   let start = new Date(startDate);

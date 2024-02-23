@@ -7,6 +7,7 @@ import WebGeoTrafficChart from "./charts/WebGeoTrafficChart";
 import WebTrafficChart from "./charts/WebTrafficChart";
 import AppUsersChart from "./charts/AppUsersChart";
 import WebTrafficByChannelChart from "./charts/WebTrafficByChannelChart";
+import AppLoyaltyPeersModalCharts from "./charts/AppLoyaltyPeersModalCharts";
 
 export default function ChartModal({
   open,
@@ -21,18 +22,11 @@ export default function ChartModal({
     case CHARTS.employeeCount:
       chart = <HeadCountChart headCountData={chartData} />;
       break;
+
     case CHARTS.trafficByGeo:
       chart = <WebGeoTrafficChart geoTrafficData={chartData} />;
       break;
-    // case CHARTS.traffic:
-    //   chart = (
-    //     <WebTrafficChart
-    //       trafficData={chartData}
-    //       selectedChart={CHARTS.traffic}
-    //       country={country}
-    //     />
-    //   );
-    //   break;
+
     case CHARTS.trafficActiveUsers:
       chart = (
         <WebTrafficChart
@@ -42,38 +36,15 @@ export default function ChartModal({
         />
       );
       break;
+
     case CHARTS.trafficByChannel:
-      chart = (
-        <WebTrafficByChannelChart
-          trafficData={chartData}
-          country={country}
-          selectedChart={CHARTS.trafficByChannel}
-        />
-      );
-      break;
     case CHARTS.trafficByDevice:
-      chart = (
-        <WebTrafficByChannelChart
-          trafficData={chartData}
-          country={country}
-          selectedChart={CHARTS.trafficByDevice}
-        />
-      );
-      break;
-    // case CHARTS.usersByDevice:
-    //   chart = (
-    //     <WebTrafficChart
-    //       trafficData={chartData}
-    //       selectedChart={CHARTS.usersByDevice}
-    //     />
-    //   );
-    //   break;
     case CHARTS.trafficByOrganicVsPaid:
       chart = (
         <WebTrafficByChannelChart
           trafficData={chartData}
           country={country}
-          selectedChart={CHARTS.trafficByOrganicVsPaid}
+          selectedChart={selectedChart}
         />
       );
       break;
@@ -84,6 +55,19 @@ export default function ChartModal({
           appData={chartData}
           country={country}
           selectedChart={CHARTS.appActiveUsers}
+        />
+      );
+      break;
+
+    case CHARTS.appLTMRetention:
+    case CHARTS.appLTMActiveDays:
+    case CHARTS.appLTMTimePerUser:
+    case CHARTS.appLTMTimePerSession:
+      chart = (
+        <AppLoyaltyPeersModalCharts
+          multiCompanyAppData={chartData}
+          selectedChart={selectedChart}
+          country={country}
         />
       );
       break;

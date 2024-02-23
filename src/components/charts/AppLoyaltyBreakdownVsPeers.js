@@ -50,12 +50,12 @@ function AppLoyaltyBreakdownVsPeers({
           showTable={false}
           showDataLabels={true}
           showTimescaleButtons={false}
-          showModalButtons={false}
+          showModalButtons={true}
           location={country}
           lastTwelveMonthsView={true}
           timescale={"quarterYear"}
           setTimescale={null}
-          selectedChart={null}
+          selectedChart={selectedChart}
           rawChartData={multiCompanyAppData}
           height={"h-full"}
           useColorPlugin={false}

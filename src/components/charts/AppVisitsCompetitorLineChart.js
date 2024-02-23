@@ -48,7 +48,6 @@ function AppVisitsCompetitorLineChart({
         cutOffDate
       )}
       title={"Visits Growth"}
-      showDataLabels={timescale === "quarterYear"}
       timescale={timescale}
       setTimescale={setTimeScale}
       location={country}
@@ -71,20 +70,16 @@ function AppVisitsCompetitorLineChart({
     ></GenericLine>
   );
 
-  switch (selectedChart) {
-    // if no selected chart, return all charts
-    default:
-      return (
-        <div>
-          <div className="h-fit mb-4">
-            <TwoColumnView
-              quarterGraph={trafficGrowth}
-              yearGraph={yearTrafficGrowth}
-            />
-          </div>
-        </div>
-      );
-  }
+  return (
+    <div>
+      <div className="h-fit mb-4">
+        <TwoColumnView
+          quarterGraph={trafficGrowth}
+          yearGraph={yearTrafficGrowth}
+        />
+      </div>
+    </div>
+  );
 }
 
 export default AppVisitsCompetitorLineChart;

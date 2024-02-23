@@ -10,6 +10,7 @@ import AppVisitsStackedBarPeers from "../charts/AppVisitsStackedBarPeers";
 import AppVisitsCompetitorLineChart from "../charts/AppVisitsCompetitorLineChart";
 import AppLoyaltyBreakdownVsPeers from "../charts/AppLoyaltyBreakdownVsPeers";
 import AppUsersChart from "../charts/AppUsersChart";
+import AppLoyaltyPeersModalCharts from "../charts/AppLoyaltyPeersModalCharts";
 
 function AppUsageSection({
   company,
@@ -58,6 +59,28 @@ function AppUsageSection({
       </div>
       <hr className="border-none h-px bg-customGray-100" />
       <div className="flex flex-col section-indent mt-4">
+        <div id="App Growth" className="content-section">
+          <div className="flex flex-row items-center mb-3">
+            <p className="text-lg font-semibold text-gray-800 mr-2">Growth</p>
+          </div>
+          {multiCompanyAppData === undefined ||
+          Object.keys(multiCompanyAppData).length === 0 ? (
+            <Skeleton className="w-full mt-2 mb-6 h-80 rounded-lg bg-customGray-50" />
+          ) : !multiCompanyAppData[company] ? (
+            <div className="w-full h-80 rounded-lg mt-2 mb-6 bg-customGray-50 flex items-center justify-center">
+              <p className="text-sm text-customGray-200">
+                No App Users Data Available
+              </p>
+            </div>
+          ) : (
+            <AppLoyaltyPeersModalCharts
+              multiCompanyAppData={multiCompanyAppData}
+              country={country}
+              selectedChart={CHARTS.appLTMRetention}
+            ></AppLoyaltyPeersModalCharts>
+          )}
+        </div>
+
         <div id="App Growth" className="content-section">
           <div className="flex flex-row items-center mb-3">
             <p className="text-lg font-semibold text-gray-800 mr-2">Growth</p>
