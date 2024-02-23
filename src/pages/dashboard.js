@@ -21,6 +21,8 @@ import { companyListFixed } from "../components/dashboard/CompanyList";
 import HeadcountIcon from "/public/assets/HeadcountIcon.svg";
 import CountrySelector from "../components/dashboard/CountrySelector";
 import DashboardNavbar from "../components/dashboard/DashboardNavBar";
+import EmptyState from "../components/dashboard/EmptyState";
+import APILimitReached from "../components/dashboard/APILimitReached";
 import {
   convertHeadCountChartDataToExcelFormat,
   convertTotalVisitsChartDataToExcelFormat,
@@ -675,7 +677,9 @@ function Dashboard({
               navbarCalculatedHeight={navbarCalculatedHeight}
             />
           </div>
-          {companyDic && companyDic.name ? (
+          {apiCalls >= 1 ? (
+            <APILimitReached />
+          ) : companyDic && companyDic.name ? (
             // Main Content
             <div
               className="h-screen flex flex-col w-screen overflow-x-hidden px-10 bg-white bg-repeat bg-center"
@@ -833,48 +837,11 @@ function Dashboard({
               </div>
             </div>
           ) : (
-            <div
-              className="flex flex-col w-screen overflow-x-hidden items-center px-10 bg-white bg-repeat bg-center"
-              style={{
-                backgroundImage: "url('/assets/backgroundPatternLight.svg')",
-              }}
-            >
-              <div className="relative flex flex-col items-center justify-center h-2/3">
-                <div className="absolute top-0 left-0 flex justify-center items-center w-full h-full">
-                  <div className="w-full h-full bg-gradient-to-br from-primary to-secondary opacity-[0.12] rounded-full filter blur-[100px]" />
-                </div>
-                <div className="">
-                  <div className="flex flex-col-reverse md:flex-row justify-between">
-                    <div className="">
-                      <h1 className="text-xl md:text-2xl font-bold text-gray-800 mb-1">
-                        Welcome!
-                      </h1>
-                      <p className="text-sm md:text-base text-gray-600 mb-6">
-                        Which company are you interested in?
-                      </p>
-                    </div>
-
-                    <div className="">
-                      <Image
-                        src="/logo.png"
-                        alt="ProSights Logo"
-                        width={4096}
-                        height={4096}
-                        className="w-12 md:w-16 pb-4 md:pb-0"
-                      />
-                    </div>
-                  </div>
-                  {/* Search Bar */}
-                  <div className="content-section w-[36rem] pt-4">
-                    <SearchBar
-                      companyDirectory={companyDirectory}
-                      setCompany={setCompanyDic}
-                      setCompanyCompetitors={setCompanyCompetitors}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <EmptyState
+              companyDirectory={companyDirectory}
+              setCompanyDic={setCompanyDic}
+              setCompanyCompetitors={setCompanyCompetitors}
+            />
           )}
         </div>
       </ChartDataContext.Provider>
