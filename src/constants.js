@@ -2,6 +2,8 @@ export const CONSTANTS = {
   MODEL_VERSION: "gpt-4-0125-preview",
   // MODEL_VERSION: "gpt-3.5-turbo",
   cutoffDate: new Date("2023-12-31"),
+  MAPPINGS_CSV_URL:
+    "/public/assets/mappings/prosights_mappings_v1_prod_search.csv",
 };
 
 export const CHARTJS_COLORS = [

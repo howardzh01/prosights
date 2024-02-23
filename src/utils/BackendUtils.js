@@ -31,6 +31,7 @@ export async function sleep(ms) {
 
 export async function fetchCompanyList(pathToFile) {
   const filePath = path.join(process.cwd(), pathToFile);
+  // const filePath = "/assets/mappings/prosights_mappings_v1_prod_search.csv";
   const fileContent = fs.readFileSync(filePath, "utf8");
   try {
     const data = parse(fileContent, {

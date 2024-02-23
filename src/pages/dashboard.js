@@ -13,7 +13,7 @@ import { getApiData, getExcelDownload } from "../api";
 import { createContext } from "react";
 import ChartModal from "../components/ChartModal";
 import HeadCountChart from "../components/charts/HeadCountChart";
-import { CHARTS } from "../constants";
+import { CHARTS, CONSTANTS } from "../constants";
 import CompetitorContainer from "../components/dashboard/CompetitorContainer";
 import { Skeleton } from "@nextui-org/react";
 import { CompanyDirectory } from "../components/dashboard/CompanyListDirectory";
@@ -41,9 +41,7 @@ export const SelectedChartContext = createContext();
 export const ChartDataContext = createContext();
 
 export async function getStaticProps(context) {
-  const companyList = await fetchCompanyList(
-    "/public/assets/mappings/prosights_mappings_v1_prod_search.csv"
-  );
+  const companyList = await fetchCompanyList(CONSTANTS.MAPPINGS_CSV_URL);
   return {
     props: { companyList }, // will be passed to the page component as props
   };
@@ -52,7 +50,7 @@ export async function getStaticProps(context) {
 function Dashboard({
   enableCrunchbase = true,
   enableOnlyWebTraffic,
-  companyList,
+  companyList = [],
 }) {
   const { isSignedIn, user, isLoaded } = useUser();
   const companyDirectory = new CompanyDirectory(companyList);
@@ -640,6 +638,8 @@ function Dashboard({
     companyDescriptionErrorPull,
     dataAIData,
     dataAIError,
+    fullCompanyInfo,
+    fullCompanyInfoError,
   } = getApiData(
     user,
     companyDic ? [companyDic, ...companyCompetitors] : [],

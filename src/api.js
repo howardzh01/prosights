@@ -1,5 +1,5 @@
 import api from "gpt-tokenizer/esm/encoding/cl100k_base";
-import { UN_M49_CONTINENTS, RELEVANT_CONTINENTS } from "./constants";
+import { UN_M49_CONTINENTS, RELEVANT_CONTINENTS, CONSTANTS } from "./constants";
 import { assert } from "./utils/Utils";
 import useSWR from "swr";
 import { data } from "autoprefixer";
@@ -34,6 +34,8 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
       companyDescriptionErrorPull: undefined,
       dataAIData: undefined,
       dataAIError: undefined,
+      fullCompanyInfo: undefined,
+      fullCompanyInfoError: undefined,
     };
   }
 
@@ -84,6 +86,15 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
     { revalidateOnFocus: false }
   );
 
+  const { data: fullCompanyInfo, error: fullCompanyInfoError } = useSWR(
+    user && companyNameList
+      ? [companyUrlList, `/api/private/getMappingData`, user.id]
+      : null,
+    (args) => {
+      return apiMultiCall(companyDisplayedNameList, getFullCompanyInfo, args);
+    },
+    { revalidateOnFocus: false }
+  );
   let crunchbaseDataPull,
     crunchbaseErrorPull,
     companyDescriptionPull,
@@ -163,6 +174,8 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
     companyDescriptionErrorPull,
     dataAIData,
     dataAIError,
+    fullCompanyInfo,
+    fullCompanyInfoError,
   };
 }
 
@@ -434,6 +447,31 @@ export const getDataAIData = async ([
     app_performance: sortedAppPerformanceData,
     retention: sortedRetentionData,
   };
+};
+
+export const getFullCompanyInfo = async ([companyUrl, api_url, userId]) => {
+  const response = await fetch(api_url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      companyUrl: companyUrl,
+      csvUrl: CONSTANTS.MAPPINGS_CSV_URL,
+    }),
+  });
+  if (!response.ok) {
+    console.log(
+      "GET FULL COMPANY INFO ERROR",
+      response.status,
+      response.statusText
+    );
+    return null;
+  }
+  var data = await response.json();
+
+  // Make request to refine the company description
+  return data;
 };
 
 export const getExcelDownload = async (
