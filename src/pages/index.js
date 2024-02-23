@@ -11,6 +11,7 @@ function App() {
     triggerOnce: false, // Change this to false if you want the animation to trigger again whenever it comes in view
   });
   const { isSignedIn, user, isLoaded } = useUser();
+  console.log("testing purposes", isSignedIn, user, isLoaded);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const credentialImagesMobile = [
     "/assets/credentialsLogos/permira.png",
