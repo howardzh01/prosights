@@ -646,7 +646,7 @@ function Dashboard({
 
     // Add the image to the PDF centered
     pdf.addImage(imgData, "JPEG", xPosition, yPosition, pdfWidth, pdfHeight);
-    pdf.save("dashboard.pdf");
+    pdf.save(`${companyDic.displayedName} - ${country} (Full Report)`);
   };
 
   //   const downloadPDF = async () => {
