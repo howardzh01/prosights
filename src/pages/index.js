@@ -130,7 +130,9 @@ function App() {
                   rel="noopener noreferrer"
                   className="flex flex-row items-center bg-primary text-customGray-50 py-2 px-4 md:px-6 rounded-md hover:bg-blue-600 drop-shadow-lg mr-8 md:mr-12 transition duration-300"
                 >
-                  <p className="mr-2 md:mr-4 text-sm md:text-lg">Book a Demo</p>
+                  <p className="mr-2 md:mr-4 text-sm md:text-lg text-white font-normal">
+                    Book a Demo
+                  </p>
                   <Image
                     src="/assets/topRightArrow.png"
                     alt="Go"
