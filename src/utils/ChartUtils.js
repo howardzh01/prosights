@@ -26,14 +26,13 @@ export function convertToHeadcountChartData(
     "left"
   );
 
+  const processedValues = values.slice(cutoffIndex).map((item) => item ?? "--");
   const chartData = {
     labels: labels.slice(cutoffIndex),
     datasets: [
       {
         label: displayedLabel,
-        data: values
-          .map((item) => (item == null ? "--" : item))
-          .slice(cutoffIndex),
+        data: processedValues,
       },
     ],
   };
@@ -71,7 +70,7 @@ export function convertToGrowthChartData(
   data,
   displayedLabel,
   dataCutoffDate,
-  units = "M" // Make sure either "M" or "K"z
+  units = null // Make sure either "M", "K", or null
 ) {
   // input: {time_key: output_key}
   let { labels, values, tableHeaders, tableLabels, growthPercentages } =
@@ -86,12 +85,16 @@ export function convertToGrowthChartData(
     labels: labels.slice(cutoffIndex),
     datasets: [
       {
-        label: displayedLabel + `${units === "M" ? " (M)" : " (K)"}`,
+        label:
+          displayedLabel +
+          `${units === "M" ? " (M)" : units === "K" ? " (K)" : ""}`,
         data: values
           .map((item) =>
             item == null
               ? "--"
-              : (item / (units === "M" ? 1e6 : 1e3)).toFixed(1)
+              : (
+                  item / (units === "M" ? 1e6 : units === "K" ? 1e3 : 1)
+                ).toFixed(1)
           )
           .slice(cutoffIndex),
       },
