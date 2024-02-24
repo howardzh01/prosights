@@ -41,6 +41,23 @@ function HeadCountSignal({ headCountData, startCutoff = new Date("2019") }) {
         ),
       }}
       title={"Headcount"}
+      info={
+        <span>
+          <strong>Metric:</strong> Refers to the estimated number of a company’s
+          full-time employees at the end of the period (e.g., 4Q23 = December
+          2023). A visitor counts as any individual who visited the site at
+          least once during the month.
+          <br />
+          <br />
+          <strong>Data Methodology:</strong> CoreSignal sources its data solely
+          from public sources such as LinkedIn, providing estimates on companies
+          based on the assumption that LinkedIn accurately reflects full-time
+          employee numbers. However, discrepancies occur when individuals list
+          themselves employed by a company on LinkedIn, despite not being
+          full-time, such as in cases of freelance contractors or unpaid
+          contributors.
+        </span>
+      }
       showDataLabels={timescale === "year"}
       timescale={timescale}
       setTimescale={setTimescale}

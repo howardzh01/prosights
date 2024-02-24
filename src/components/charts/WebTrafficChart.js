@@ -47,6 +47,19 @@ function WebTrafficChart({
         visitsUnits
       )}
       title={`Total Visits (${visitsUnits})`}
+      info={
+        <span>
+          <strong>Metric:</strong> Refers to the number of times visitors access
+          one or more pages during a website session. Subsequent pageviews are
+          included in the same visit until the user is inactive for more than 30
+          minutes. If a user becomes active again after 30 minutes, that counts
+          as a new visit. Total visits represents both desktop and mobile web
+          but excludes app.
+          <br />
+          <br />
+          <strong>Data Methodology:</strong> Repeat from signals
+        </span>
+      }
       showDataLabels={trafficTimescale !== "month"}
       timescale={trafficTimescale}
       setTimescale={setTrafficTimescale}
@@ -84,6 +97,16 @@ function WebTrafficChart({
         usersUnits
       )}
       title={`Web Users (${usersUnits})`}
+      info={
+        <span>
+          <strong>Metric:</strong> Refers to unique website visitors. Each
+          visitor visiting your site or page within the specified period is
+          counted only once.
+          <br />
+          <br />
+          <strong>Data Methodology:</strong> Repeat
+        </span>
+      }
       showDataLabels={mauTimescale !== "month"}
       timescale={mauTimescale}
       setTimescale={setMauTimescale}
