@@ -3,10 +3,23 @@ import GenericBarAndTable from "../charts/templates/GenericBar";
 // import TwoColumnView from "../charts/templates/TwoColumnView";
 import { CHARTS } from "../../constants";
 import { aggregateData, roundPeNumbers } from "../../utils/Utils";
-import { convertToGrowthChartData } from "../../utils/ChartUtils";
+import {
+  convertToGrowthChartData,
+  checkIfGrowthDataHasValuesGreaterThanOneMillion,
+} from "../../utils/ChartUtils";
 
 function AppUsersSignal({ appData, country, cutOffDate = new Date("2019") }) {
   if (!appData) return null;
+  const usersUnits = checkIfGrowthDataHasValuesGreaterThanOneMillion(
+    aggregateData(
+      appData["app_performance"],
+      "est_average_active_users",
+      "mean",
+      "quarterYear"
+    )
+  )
+    ? "M"
+    : "K";
 
   const yearUserGraph = (
     <GenericBarAndTable
@@ -18,9 +31,10 @@ function AppUsersSignal({ appData, country, cutOffDate = new Date("2019") }) {
           "year"
         ),
         "App Users",
-        cutOffDate
+        cutOffDate,
+        usersUnits
       )}
-      title={"App Users (M)"}
+      title={`App Users (${usersUnits})`}
       showTable={false}
       showTimescaleButtons={false}
       showModalButtons={true}

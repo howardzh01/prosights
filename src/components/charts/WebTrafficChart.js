@@ -2,7 +2,10 @@ import { useState, useEffect } from "react";
 import GenericBarAndTable from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
 import { aggregateData, roundPeNumbers } from "../../utils/Utils";
-import { convertToGrowthChartData } from "../../utils/ChartUtils";
+import {
+  convertToGrowthChartData,
+  checkIfGrowthDataHasValuesGreaterThanOneMillion,
+} from "../../utils/ChartUtils";
 import { CHARTS } from "../../constants";
 
 function WebTrafficChart({
@@ -14,6 +17,16 @@ function WebTrafficChart({
   // TODO: make this more compact later - probably 1 useState with an object containing all timescale states, or useReducer
   const [trafficTimescale, setTrafficTimescale] = useState("quarterYear");
   const [mauTimescale, setMauTimescale] = useState("quarterYear");
+  const visitsUnits = checkIfGrowthDataHasValuesGreaterThanOneMillion(
+    aggregateData(trafficData, "visits", "sum", "quarterYear")
+  )
+    ? "M"
+    : "K";
+  const usersUnits = checkIfGrowthDataHasValuesGreaterThanOneMillion(
+    aggregateData(trafficData, "users", "mean", "quarterYear")
+  )
+    ? "M"
+    : "K";
 
   if (!trafficData) return null;
   // console.log(
@@ -30,9 +43,10 @@ function WebTrafficChart({
       data={convertToGrowthChartData(
         aggregateData(trafficData, "visits", "sum", trafficTimescale),
         "Visits",
-        cutOffDate
+        cutOffDate,
+        visitsUnits
       )}
-      title={"Total Visits (M)"}
+      title={`Total Visits (${visitsUnits})`}
       showDataLabels={trafficTimescale !== "month"}
       timescale={trafficTimescale}
       setTimescale={setTrafficTimescale}
@@ -50,7 +64,8 @@ function WebTrafficChart({
       data={convertToGrowthChartData(
         aggregateData(trafficData, "visits", "sum", "year"),
         "Visits",
-        cutOffDate
+        cutOffDate,
+        visitsUnits
       )}
       showTimescaleButtons={false}
       showModalButtons={false}
@@ -65,9 +80,10 @@ function WebTrafficChart({
       data={convertToGrowthChartData(
         aggregateData(trafficData, "users", "mean", mauTimescale),
         "Users",
-        cutOffDate
+        cutOffDate,
+        usersUnits
       )}
-      title={"Web Users (M)"}
+      title={`Web Users (${usersUnits})`}
       showDataLabels={mauTimescale !== "month"}
       timescale={mauTimescale}
       setTimescale={setMauTimescale}
@@ -85,7 +101,8 @@ function WebTrafficChart({
       data={convertToGrowthChartData(
         aggregateData(trafficData, "users", "mean", "year"),
         "Users",
-        cutOffDate
+        cutOffDate,
+        usersUnits
       )}
       showTimescaleButtons={false}
       showModalButtons={false}

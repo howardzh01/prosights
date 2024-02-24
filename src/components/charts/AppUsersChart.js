@@ -2,7 +2,10 @@ import { useState, useEffect } from "react";
 import GenericBarAndTable from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
 import { aggregateData, roundPeNumbers } from "../../utils/Utils";
-import { convertToGrowthChartData } from "../../utils/ChartUtils";
+import {
+  convertToGrowthChartData,
+  checkIfGrowthDataHasValuesGreaterThanOneMillion,
+} from "../../utils/ChartUtils";
 import GenericStackedBar from "./templates/GenericStackedBar";
 import { CHARTS } from "../../constants";
 import Image from "next/image";
@@ -17,6 +20,16 @@ function AppUsersChart({
   if (!appData) return null;
   const relevantAppData = appData["app_performance"];
   const [appTimescale, setAppTrafficTimescale] = useState("quarterYear");
+  const usersUnits = checkIfGrowthDataHasValuesGreaterThanOneMillion(
+    aggregateData(
+      relevantAppData,
+      "est_average_active_users",
+      "mean",
+      "quarterYear"
+    )
+  )
+    ? "M"
+    : "K";
   const customUserGraph = (
     <GenericBarAndTable
       data={convertToGrowthChartData(
@@ -27,9 +40,10 @@ function AppUsersChart({
           appTimescale
         ),
         "App Users",
-        cutOffDate
+        cutOffDate,
+        usersUnits
       )}
-      title={"App Users (M)"}
+      title={`App Users (${usersUnits})`}
       showDataLabels={appTimescale !== "month"}
       timescale={appTimescale}
       setTimescale={setAppTrafficTimescale}
@@ -51,7 +65,8 @@ function AppUsersChart({
           "year"
         ),
         "App Users",
-        cutOffDate
+        cutOffDate,
+        usersUnits
       )}
       showTimescaleButtons={false}
       showModalButtons={false}
