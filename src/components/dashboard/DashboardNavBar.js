@@ -70,7 +70,7 @@ const DashboardNavBar = ({
             <Skeleton className="w-9 h-9 mr-2 rounded-md bg-customGray-50" />
           ) : (
             <div className="w-9 h-9 mr-2 text-2xl">
-              <CompanyLogoSkeleton companyDic={companyDic} />
+              <CompanyLogoSkeleton name={companyDic.displayedName} />
             </div>
           )}
           <p className="text-3xl font-bold text-gray-800 pl-1">

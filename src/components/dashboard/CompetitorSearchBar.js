@@ -36,7 +36,7 @@ export default function CompetitorSearchBar({
           <Chip
             icon={
               <div className="w-5 h-5 mr-2 text-xs">
-                <CompanyLogoSkeleton companyDic={option} />
+                <CompanyLogoSkeleton name={option.displayedName} />
               </div>
               // <Image
               //   src={option.logo} // Assuming 'option' has a 'logo' property with the image URL
@@ -109,7 +109,7 @@ export default function CompetitorSearchBar({
             className="w-5 h-5 mr-2 flex-shrink-0 flex-grow-0 text-xs"
             style={{ minWidth: "1.25rem", minHeight: "1.25rem" }}
           >
-            <CompanyLogoSkeleton companyDic={option} />
+            <CompanyLogoSkeleton name={option.displayedName} />
           </div>
           <span className="text-sm text-customGray-800">
             <strong>{option.displayedName}</strong> - {option.url}

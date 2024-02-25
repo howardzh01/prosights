@@ -575,3 +575,39 @@ export const mergeAndOperate = (
 
   return result;
 };
+
+export function formatNumberToAbbreviation(number) {
+  if (isNaN(number) || number === null) {
+    return "--";
+  }
+
+  let absNumber = Math.abs(number);
+  let abbreviation = "";
+  let divisor = 1;
+
+  if (absNumber >= 1.0e9) {
+    abbreviation = "B";
+    divisor = 1.0e9;
+  } else if (absNumber >= 1.0e6) {
+    abbreviation = "M";
+    divisor = 1.0e6;
+  } else if (absNumber >= 1.0e3) {
+    abbreviation = "K";
+    divisor = 1.0e3;
+  }
+
+  if (divisor > 1) {
+    let formattedNumber = (number / divisor).toFixed(1);
+    // Ensure we don't end up with .0 after rounding
+    if (formattedNumber.endsWith(".0")) {
+      formattedNumber = formattedNumber.substring(
+        0,
+        formattedNumber.length - 2
+      );
+    }
+    return `${formattedNumber}${abbreviation}`;
+  }
+
+  // If the number is less than 1000, just round it to 1 decimal point without any abbreviation
+  return number.toFixed(1);
+}

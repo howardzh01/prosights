@@ -4,13 +4,17 @@ import {
   fromUnderscoreCase,
   formatMoney,
   formatDealRound,
+  formatNumberToAbbreviation,
 } from "../../utils/Utils";
 import Image from "next/image";
 import CompetitorOverviewIcon from "/public/assets/CompetitorOverviewIcon.svg";
 import { Skeleton } from "@nextui-org/react";
+import CompanyLogoSkeleton from "./CompanyLogoSkeleton";
 
 function CompetitorOverviewSection({
   companyDescriptions,
+  companyInfo,
+  companyDic,
   crunchbaseData,
   headCountData,
   companyCompetitors,
@@ -29,7 +33,7 @@ function CompetitorOverviewSection({
       .join("-");
   }
 
-  if (companyDescriptions && crunchbaseData && headCountData) {
+  if (companyDescriptions && companyInfo) {
     competitors = Object.keys(companyDescriptions).map((companyName) => {
       let companyHeadcount = headCountData[companyName]
         ? Object.values(headCountData[companyName])
@@ -37,63 +41,109 @@ function CompetitorOverviewSection({
             ["headcount"].toLocaleString()
         : undefined;
       if (!headCountData[companyName]) {
-        companyHeadcount = crunchbaseData[companyName].fields[
-          "num_employees_enum"
-        ]
-          ? formatCrunchbaseHeadcount(
-              crunchbaseData[companyName].fields["num_employees_enum"]
-            )
+        companyHeadcount = companyInfo[companyName]["Employee Count (Jan 24)"]
+          ? Math.round(companyInfo[companyName]["Employee Count (Jan 24)"])
           : "--";
       }
 
       return {
-        logo: crunchbaseData[companyName].fields.image_url,
+        logo: "--",
         name: companyName,
-        companyAbout: companyDescriptions[companyName].company_description,
-        companyHeadquarters: crunchbaseData[companyName].fields[
-          "location_identifiers"
-        ]
-          ? `${
-              crunchbaseData[companyName].fields["location_identifiers"][0][
-                "value"
-              ]
-            }, ${
-              US_STATE_TO_ABBREV[
-                crunchbaseData[companyName].fields["location_identifiers"][1][
-                  "value"
-                ].toLowerCase()
-              ]
-            }`
+        companyAbout: companyDescriptions[companyName]
+          ? companyDescriptions[companyName].company_description
           : "--",
-        companyHeadcount: companyHeadcount,
-        companyValuation: crunchbaseData[companyName].fields["valuation"]?.[
-          "value_usd"
-        ]
-          ? "$" +
-            formatMoney(
-              crunchbaseData[companyName].fields["valuation"]["value_usd"]
-            )
+        companyHeadquarters: companyInfo[companyName]
+          ? companyInfo[companyName][0]["headquarter_country"]
           : "--",
-        companyLastRoundSize: crunchbaseData[companyName].fields[
-          "last_equity_funding_total"
-        ]?.["value_usd"]
-          ? "$" +
-            formatMoney(
-              crunchbaseData[companyName].fields["last_equity_funding_total"]?.[
-                "value_usd"
-              ]
-            )
+        companyHeadcount: companyHeadcount ? companyHeadcount : "--",
+        companyTotalRaised: companyInfo[companyName]
+          ? `$${formatNumberToAbbreviation(
+              Math.round(
+                companyInfo[companyName][0]["Total Funding Amount (Amount)"]
+              )
+            )}`
           : "--",
-        companyLastDealType: crunchbaseData[companyName].fields[
-          "last_funding_type"
-        ]
-          ? formatDealRound(
-              crunchbaseData[companyName].fields["last_funding_type"]
-            )
+        companyLastFundedDate: companyInfo[companyName]
+          ? companyInfo[companyName][0]["Last Funded In (Date)"]
+          : "--",
+        companyLastDealType: companyInfo[companyName]
+          ? companyInfo[companyName][0]["Funding Stage (Type)"]
           : "--",
       };
     });
   }
+
+  //   if (companyDescriptions && crunchbaseData && headCountData) {
+  //     competitors = Object.keys(companyDescriptions).map((companyName) => {
+  //       let companyHeadcount = headCountData[companyName]
+  //         ? Object.values(headCountData[companyName])
+  //             .slice(-1)[0]
+  //             ["headcount"].toLocaleString()
+  //         : undefined;
+  //       if (!headCountData[companyName]) {
+  //         companyHeadcount = crunchbaseData[companyName].fields[
+  //           "num_employees_enum"
+  //         ]
+  //           ? formatCrunchbaseHeadcount(
+  //               crunchbaseData[companyName].fields["num_employees_enum"]
+  //             )
+  //           : "--";
+  //       }
+  //
+  //       return {
+  //         logo: crunchbaseData[companyName]
+  //           ? crunchbaseData[companyName].fields.image_url
+  //           : "--",
+  //         name: companyName,
+  //         companyAbout: companyDescriptions[companyName]
+  //           ? companyDescriptions[companyName].company_description
+  //           : "--",
+  //         companyHeadquarters: crunchbaseData[companyName]
+  //           ? crunchbaseData[companyName].fields["location_identifiers"]
+  //             ? `${
+  //                 crunchbaseData[companyName].fields["location_identifiers"][0][
+  //                   "value"
+  //                 ]
+  //               }, ${
+  //                 US_STATE_TO_ABBREV[
+  //                   crunchbaseData[companyName].fields["location_identifiers"][1][
+  //                     "value"
+  //                   ].toLowerCase()
+  //                 ]
+  //               }`
+  //             : "--"
+  //           : "--",
+  //         companyHeadcount: companyHeadcount ? companyHeadcount : "--",
+  //         companyValuation: crunchbaseData[companyName]
+  //           ? crunchbaseData[companyName].fields["valuation"]?.["value_usd"]
+  //             ? "$" +
+  //               formatMoney(
+  //                 crunchbaseData[companyName].fields["valuation"]["value_usd"]
+  //               )
+  //             : "--"
+  //           : "--",
+  //         companyLastRoundSize: crunchbaseData[companyName]
+  //           ? crunchbaseData[companyName].fields["last_equity_funding_total"]?.[
+  //               "value_usd"
+  //             ]
+  //             ? "$" +
+  //               formatMoney(
+  //                 crunchbaseData[companyName].fields[
+  //                   "last_equity_funding_total"
+  //                 ]?.["value_usd"]
+  //               )
+  //             : "--"
+  //           : "--",
+  //         companyLastDealType: crunchbaseData[companyName]
+  //           ? crunchbaseData[companyName].fields["last_funding_type"]
+  //             ? formatDealRound(
+  //                 crunchbaseData[companyName].fields["last_funding_type"]
+  //               )
+  //             : "--"
+  //           : "--",
+  //       };
+  //     });
+  //   }
 
   return (
     <div className="flex flex-col w-full">
@@ -134,13 +184,19 @@ function CompetitorOverviewSection({
               >
                 <div className="flex flex-col mb-4">
                   <div className="flex flex-row items-center">
-                    <Image
-                      src={competitor.logo}
-                      className="w-8 h-8 mr-2 object-contain rounded-md"
-                      width={256}
-                      height={256}
-                      alt="Company Logo"
-                    />
+                    {competitor.logo === "--" ? (
+                      <div className="w-8 h-8 mr-2 text-2xl">
+                        <CompanyLogoSkeleton name={competitor.name} />
+                      </div>
+                    ) : (
+                      <Image
+                        src={competitor.logo}
+                        className="w-8 h-8 mr-2 object-contain rounded-md"
+                        width={256}
+                        height={256}
+                        alt="Company Logo"
+                      />
+                    )}
                     <h5 className="text-xl font-semibold tracking-tight text-gray-900">
                       {competitor.name}
                     </h5>
@@ -168,18 +224,18 @@ function CompetitorOverviewSection({
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm font-normal text-gray-500">
-                      Last Round Size
+                      Total Raised
                     </span>
                     <span className="text-sm font-medium text-gray-900">
-                      {competitor.companyLastRoundSize}
+                      {competitor.companyTotalRaised}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm font-normal text-gray-500">
-                      Valuation (Post)
+                      Last Funded Date
                     </span>
                     <span className="text-sm font-medium text-gray-900">
-                      {competitor.companyValuation}
+                      {competitor.companyLastFundedDate}
                     </span>
                   </div>
                   <div className="flex justify-between">

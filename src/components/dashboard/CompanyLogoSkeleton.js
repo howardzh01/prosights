@@ -1,6 +1,6 @@
 import React from "react";
 
-const CompanyLogoSkeleton = ({ companyDic, customTailwind = "" }) => {
+const CompanyLogoSkeleton = ({ name, customTailwind = "" }) => {
   const colors = [
     "#FFD580", // Pastel Orange
     "#FFABAB", // Pastel Red
@@ -20,7 +20,6 @@ const CompanyLogoSkeleton = ({ companyDic, customTailwind = "" }) => {
     return colors[index];
   };
 
-  const name = companyDic.displayedName;
   const getFirstLetter = (name) => {
     return name ? name.charAt(0) : "";
   };

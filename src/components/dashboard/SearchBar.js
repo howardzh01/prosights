@@ -76,7 +76,7 @@ export default function SearchBar({
         renderOption={(props, option, { selected }) => (
           <Box component="li" {...props}>
             <div className="w-5 h-5 mr-2 text-xs">
-              <CompanyLogoSkeleton companyDic={option} />
+              <CompanyLogoSkeleton name={option.displayedName} />
             </div>
             <span className="text-sm text-customGray-800">
               <strong>{option.displayedName}</strong> - {option.url}

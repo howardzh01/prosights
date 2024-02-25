@@ -95,10 +95,38 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
     },
     { revalidateOnFocus: false }
   );
-  let crunchbaseDataPull,
-    crunchbaseErrorPull,
-    companyDescriptionPull,
-    companyDescriptionErrorPull;
+
+  const { data: companyDescriptionPull, error: companyDescriptionErrorPull } =
+    useSWR(
+      user && companyNameList && fullCompanyInfo
+        ? [
+            companyNameList,
+            `/api/private/getCompanyDescription`,
+            fullCompanyInfo,
+          ]
+        : null,
+
+      async ([companyList, url, fullCompanyInfo]) => {
+        const promises = companyList.map((company, ind) =>
+          getCompanyDescription([
+            company,
+            url,
+            user.id,
+            fullCompanyInfo[companyDisplayedNameList[ind]]["description"],
+          ])
+        );
+        const results = await Promise.all(promises);
+        return companyDisplayedNameList.reduce((acc, company, index) => {
+          acc[company] = results[index];
+          return acc;
+        }, {});
+      },
+      { revalidateOnFocus: false }
+    );
+
+  let crunchbaseDataPull, crunchbaseErrorPull;
+  // companyDescriptionPull,
+  // companyDescriptionErrorPull;
   if (enableCrunchbase) {
     const { data: crunchbaseData, error: crunchbaseError } = useSWR(
       user && companyCrunchbaseNameList
@@ -111,39 +139,39 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
     );
 
     // NOTE: companyDescription depends on crunchbase data
-    const { data: companyDescription, error: companyDescriptionError } = useSWR(
-      user && companyNameList && crunchbaseData
-        ? [
-            companyNameList,
-            `/api/private/getCompanyDescription`,
-            crunchbaseData,
-          ]
-        : null,
-
-      async ([companyList, url, crunchbaseData]) => {
-        const promises = companyList.map((company, ind) =>
-          getCompanyDescription([
-            company,
-            url,
-            user.id,
-            crunchbaseData[companyDisplayedNameList[ind]]["fields"][
-              "description"
-            ],
-          ])
-        );
-        const results = await Promise.all(promises);
-        return companyDisplayedNameList.reduce((acc, company, index) => {
-          acc[company] = results[index];
-          return acc;
-        }, {});
-      },
-      { revalidateOnFocus: false }
-    );
+    //     const { data: companyDescription, error: companyDescriptionError } = useSWR(
+    //       user && companyNameList && crunchbaseData
+    //         ? [
+    //             companyNameList,
+    //             `/api/private/getCompanyDescription`,
+    //             crunchbaseData,
+    //           ]
+    //         : null,
+    //
+    //       async ([companyList, url, crunchbaseData]) => {
+    //         const promises = companyList.map((company, ind) =>
+    //           getCompanyDescription([
+    //             company,
+    //             url,
+    //             user.id,
+    //             crunchbaseData[companyDisplayedNameList[ind]]["fields"][
+    //               "description"
+    //             ],
+    //           ])
+    //         );
+    //         const results = await Promise.all(promises);
+    //         return companyDisplayedNameList.reduce((acc, company, index) => {
+    //           acc[company] = results[index];
+    //           return acc;
+    //         }, {});
+    //       },
+    //       { revalidateOnFocus: false }
+    //     );
 
     crunchbaseDataPull = crunchbaseData;
     crunchbaseErrorPull = crunchbaseError;
-    companyDescriptionPull = companyDescription;
-    companyDescriptionErrorPull = companyDescriptionError;
+    // companyDescriptionPull = companyDescription;
+    // companyDescriptionErrorPull = companyDescriptionError;
   }
 
   const { data: dataAIData, error: dataAIError } = useSWR(

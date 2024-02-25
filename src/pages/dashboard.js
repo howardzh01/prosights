@@ -832,6 +832,7 @@ function Dashboard({
                     className="content-section w-full mb-20 mt-2"
                   >
                     <OverviewSection
+                      companyInfo={fullCompanyInfo?.[companyDic.displayedName]}
                       companyAbout={
                         companyDescriptionPull?.[companyDic.displayedName]
                       }
@@ -852,6 +853,8 @@ function Dashboard({
                     className="content-section w-full"
                   >
                     <CompetitorOverviewSection
+                      companyInfo={fullCompanyInfo}
+                      companyDic={companyDic}
                       companyDescriptions={companyDescriptionPull}
                       crunchbaseData={crunchbaseDataPull} // {companyName: null} if no data
                       headCountData={headCountData}
