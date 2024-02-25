@@ -10,6 +10,7 @@ Chart.register(ChartDataLabels);
 function GenericDoughnut({
   chartData,
   title = undefined,
+  info = "",
   country,
   lastTwelveMonthsView = true,
   showModalButtons = false,
@@ -83,6 +84,7 @@ function GenericDoughnut({
       {
         <GenericTimeScale
           title={title}
+          info={info}
           showModalButtons={showModalButtons}
           rawChartData={rawChartData}
           selectedChart={selectedChart}

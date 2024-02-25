@@ -2,7 +2,10 @@ import { useState, useEffect } from "react";
 import GenericBarAndTable from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
 import { aggregateData, roundPeNumbers } from "../../utils/Utils";
-import { convertToGrowthChartData } from "../../utils/ChartUtils";
+import {
+  convertToGrowthChartData,
+  checkIfGrowthDataHasValuesGreaterThanOneMillion,
+} from "../../utils/ChartUtils";
 import { CHARTS } from "../../constants";
 
 function WebTrafficChart({
@@ -14,6 +17,16 @@ function WebTrafficChart({
   // TODO: make this more compact later - probably 1 useState with an object containing all timescale states, or useReducer
   const [trafficTimescale, setTrafficTimescale] = useState("quarterYear");
   const [mauTimescale, setMauTimescale] = useState("quarterYear");
+  const visitsUnits = checkIfGrowthDataHasValuesGreaterThanOneMillion(
+    aggregateData(trafficData, "visits", "sum", "quarterYear")
+  )
+    ? "M"
+    : "K";
+  const usersUnits = checkIfGrowthDataHasValuesGreaterThanOneMillion(
+    aggregateData(trafficData, "users", "mean", "quarterYear")
+  )
+    ? "M"
+    : "K";
 
   if (!trafficData) return null;
   // console.log(
@@ -30,9 +43,23 @@ function WebTrafficChart({
       data={convertToGrowthChartData(
         aggregateData(trafficData, "visits", "sum", trafficTimescale),
         "Visits",
-        cutOffDate
+        cutOffDate,
+        visitsUnits
       )}
-      title={"Total Visits (M)"}
+      title={`Total Visits (${visitsUnits})`}
+      info={
+        <span>
+          <strong>Metric:</strong> Refers to the number of times visitors access
+          one or more pages during a website session. Subsequent pageviews are
+          included in the same visit until the user is inactive for more than 30
+          minutes. If a user becomes active again after 30 minutes, that counts
+          as a new visit. Total visits represents both desktop and mobile web
+          but excludes app.
+          <br />
+          <br />
+          <strong>Data Methodology:</strong> Repeat from signals
+        </span>
+      }
       showDataLabels={trafficTimescale !== "month"}
       timescale={trafficTimescale}
       setTimescale={setTrafficTimescale}
@@ -50,7 +77,8 @@ function WebTrafficChart({
       data={convertToGrowthChartData(
         aggregateData(trafficData, "visits", "sum", "year"),
         "Visits",
-        cutOffDate
+        cutOffDate,
+        visitsUnits
       )}
       showTimescaleButtons={false}
       showModalButtons={false}
@@ -65,9 +93,20 @@ function WebTrafficChart({
       data={convertToGrowthChartData(
         aggregateData(trafficData, "users", "mean", mauTimescale),
         "Users",
-        cutOffDate
+        cutOffDate,
+        usersUnits
       )}
-      title={"Web Users (M)"}
+      title={`Web Users (${usersUnits})`}
+      info={
+        <span>
+          <strong>Metric:</strong> Refers to unique website visitors. Each
+          visitor visiting your site or page within the specified period is
+          counted only once.
+          <br />
+          <br />
+          <strong>Data Methodology:</strong> Repeat
+        </span>
+      }
       showDataLabels={mauTimescale !== "month"}
       timescale={mauTimescale}
       setTimescale={setMauTimescale}
@@ -85,7 +124,8 @@ function WebTrafficChart({
       data={convertToGrowthChartData(
         aggregateData(trafficData, "users", "mean", "year"),
         "Users",
-        cutOffDate
+        cutOffDate,
+        usersUnits
       )}
       showTimescaleButtons={false}
       showModalButtons={false}

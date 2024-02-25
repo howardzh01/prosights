@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Image from "next/image";
 import {
   ArrowsPointingOutIcon,
@@ -17,15 +17,45 @@ function GenericTimeScale({
   selectedChart,
   rawChartData,
   title,
+  info = "",
   showModalButtons = false,
   showTimescaleButtons = false,
 }) {
   const { selectedChart: chart, setSelectedChart } =
     useContext(SelectedChartContext);
   const { setChartData } = useContext(ChartDataContext);
+  const [showPopup, setShowPopup] = useState(false);
   return (
     <div className="flex justify-between">
-      <div className="items-center gap-1 text-sm font-medium">{title}</div>
+      <div className="relative flex flex-row items-center">
+        <div className="items-center gap-1 text-sm font-medium mr-2">
+          {title}
+        </div>
+        {!!info && (
+          <div
+            className="group cursor-pointer"
+            onMouseOver={() => setShowPopup(true)}
+            onMouseOut={() => setShowPopup(false)}
+          >
+            <Image
+              src="/assets/info.svg"
+              alt="info"
+              width={128}
+              height={128}
+              className="w-4"
+            />
+          </div>
+        )}
+        <div
+          id="infoPopup"
+          className="absolute bg-customGray-700 text-white rounded-lg px-4 py-2 w-96 bottom-24 md:bottom-8 text-sm z-50"
+          style={{
+            display: showPopup ? "block" : "none",
+          }}
+        >
+          {info}
+        </div>
+      </div>
       <div className="flex items-center gap-1">
         {showTimescaleButtons && (
           <div className="mr-2 flex items-center">

@@ -16,6 +16,7 @@ function GenericLine({
   showTable = true,
   title = undefined, // Timescale component from here on
   location = "",
+  info = "",
   timescale,
   setTimescale,
   selectedChart,
@@ -131,6 +132,7 @@ function GenericLine({
         selectedChart={selectedChart}
         rawChartData={rawChartData}
         title={title}
+        info={info}
         showTimescaleButtons={showTimescaleButtons}
         showModalButtons={showModalButtons}
       />

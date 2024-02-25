@@ -26,6 +26,8 @@ function OverviewSection({
   appData,
   country,
 }) {
+  const [showAboutPopup, setShowAboutPopup] = useState(false);
+  const [showBusinessModelPopup, setShowBusinessModelPopup] = useState(false);
   // headcountData comes sorted by date
   function formatCrunchbaseHeadcount(headcountRange) {
     // c_01001_05000 => 1001-5000
@@ -119,7 +121,37 @@ function OverviewSection({
       <div className="flex flex-row mt-4 section-indent w-full">
         {/* About & Business Model */}
         <div className="flex flex-col w-3/5 pr-16">
-          <div className="text-lg font-semibold text-gray-800">About</div>
+          <div className="relative flex flex-row items-center">
+            <div className="text-lg font-semibold text-gray-800 mr-2">
+              About
+            </div>
+            <div
+              className="group cursor-pointer"
+              onMouseOver={() => setShowAboutPopup(true)}
+              onMouseOut={() => setShowAboutPopup(false)}
+            >
+              <Image
+                src="/assets/info.svg"
+                alt="info"
+                width={128}
+                height={128}
+                className="w-4"
+              />
+            </div>
+            <div
+              id="infoPopup"
+              className="absolute block bg-customGray-700 text-white rounded-lg px-4 py-2 w-96 bottom-24 md:bottom-8 text-sm z-50"
+              style={{
+                display: showAboutPopup ? "block" : "none",
+              }}
+            >
+              <span>
+                <strong>Field:</strong> Explains what a company does, using
+                proprietary LLM model that is trained with real-time web data
+                and tailored to investor preferences.
+              </span>
+            </div>
+          </div>
           {/* NOTE: companyAbout depends on crunchbase data */}
           {companyAbout ? (
             <p className="text-sm text-customGray-800 leading-relaxed mt-1">
@@ -136,8 +168,36 @@ function OverviewSection({
               renting, and financing homes.
             </Skeleton>
           )}
-          <div className="text-lg font-semibold text-gray-800 mt-6">
-            Business Model
+          <div className="relative flex flex-row items-center mt-6">
+            <div className="text-lg font-semibold text-gray-800 mr-2">
+              Business Model
+            </div>
+            <div
+              className="group cursor-pointer"
+              onMouseOver={() => setShowBusinessModelPopup(true)}
+              onMouseOut={() => setShowBusinessModelPopup(false)}
+            >
+              <Image
+                src="/assets/info.svg"
+                alt="info"
+                width={128}
+                height={128}
+                className="w-4"
+              />
+            </div>
+            <div
+              id="infoPopup"
+              className="absolute block bg-customGray-700 text-white rounded-lg px-4 py-2 w-96 bottom-24 md:bottom-8 text-sm z-50"
+              style={{
+                display: showBusinessModelPopup ? "block" : "none",
+              }}
+            >
+              <span>
+                <strong>Field:</strong> Explains how the company makes money,
+                using proprietary LLM model that is trained with real-time web
+                data and tailored to investor preferences.
+              </span>
+            </div>
           </div>
           {companyBusinessModel ? (
             <div className="text-sm text-customGray-800 whitespace-pre-line leading-relaxed mt-1">

@@ -405,6 +405,7 @@ function Dashboard({
               dataCutoffDate
             ),
             poweredBy: "Semrush",
+            showDataLabels: false,
           }
         : null,
       webTrafficData?.[companyDic.displayedName] !== undefined &&
@@ -418,6 +419,7 @@ function Dashboard({
               dataCutoffDate
             ),
             poweredBy: "Semrush",
+            showDataLabels: false,
           }
         : null,
       // TODO: Need to split cases on geo and non-geo data
@@ -515,6 +517,7 @@ function Dashboard({
           dataCutoffDate
         ),
         poweredBy: "Data AI",
+        showDataLabels: false,
       });
       appUsageSectionBuilder.push(
         {

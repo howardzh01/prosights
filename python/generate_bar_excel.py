@@ -12,7 +12,7 @@ stub = modal.Stub("generate_bar_excel")
 
 @stub.function(image=xlsxwriter_image)
 @modal.web_endpoint(method="POST")
-def generate_bar_excel(req: Dict, workbook, sheetName="Sheet1", poweredBy=None, sheetTabColor="#FF0000"):
+def generate_bar_excel(req: Dict, workbook, sheetName="Sheet1", poweredBy=None, sheetTabColor="#FF0000", showDataLabels=True):
     """
     'req' follows the structure:
 
@@ -110,10 +110,10 @@ def generate_bar_excel(req: Dict, workbook, sheetName="Sheet1", poweredBy=None, 
     current_chart_row = 5 if poweredBy else 2  # Initialize the row for the data for the first chart
     current_graph_row = 2  # Initialize the row for the graph for the first chart
     for dataset_index, dataset in enumerate(datasets):
-        current_chart_row, current_graph_row = add_chart_for_dataset(worksheet, workbook, dataset, columnTitles[dataset_index], current_chart_row, current_graph_row, dataset_index, titles, sheetName)
+        current_chart_row, current_graph_row = add_chart_for_dataset(worksheet, workbook, dataset, columnTitles[dataset_index], current_chart_row, current_graph_row, dataset_index, titles, sheetName, showDataLabels)
 
 # Function to add a chart for a given dataset
-def add_chart_for_dataset(worksheet, workbook, dataset, columnTitles, data_starting_row, graph_starting_row, dataset_index, titles=None, sheet_name="Sheet1"):
+def add_chart_for_dataset(worksheet, workbook, dataset, columnTitles, data_starting_row, graph_starting_row, dataset_index, titles=None, sheet_name="Sheet1", showDataLabels=True):
     chart = workbook.add_chart({'type': 'column'})
     dataset_length = len(dataset[columnTitles[0]])
     data_start_row = data_starting_row + 1  # Data starts one row after the data_starting_row
@@ -127,7 +127,7 @@ def add_chart_for_dataset(worksheet, workbook, dataset, columnTitles, data_start
         'categories': f'={safe_sheet_name}!$B${data_start_row}:$B${data_end_row}',
         'values': f'={safe_sheet_name}!$C${data_start_row}:$C${data_end_row}',
         'data_labels': {
-            'value': True,
+            'value': showDataLabels,
             'position': 'outside_end',
             'font': {'name': 'Arial', 'size': 8, 'color': '#404040'}
         },

@@ -26,14 +26,13 @@ export function convertToHeadcountChartData(
     "left"
   );
 
+  const processedValues = values.slice(cutoffIndex).map((item) => item ?? "--");
   const chartData = {
     labels: labels.slice(cutoffIndex),
     datasets: [
       {
         label: displayedLabel,
-        data: values
-          .map((item) => (item == null ? "--" : item))
-          .slice(cutoffIndex),
+        data: processedValues,
       },
     ],
   };
@@ -52,7 +51,27 @@ export function convertToHeadcountChartData(
   return { chartData: chartData, tableData: tableData };
 }
 
-export function convertToGrowthChartData(data, displayedLabel, dataCutoffDate) {
+export function checkIfGrowthDataHasValuesGreaterThanOneMillion(
+  data,
+  dataCutoffDate
+) {
+  let { labels, values, tableHeaders, tableLabels, growthPercentages } =
+    getTableInfo(data);
+  const cutoffIndex = findInsertIndex(
+    labels.map((x) => convertLabelToDate(x)),
+    dataCutoffDate,
+    "left"
+  );
+
+  return values.slice(cutoffIndex).some((x) => x > 1e6);
+}
+
+export function convertToGrowthChartData(
+  data,
+  displayedLabel,
+  dataCutoffDate,
+  units = null // Make sure either "M", "K", or null
+) {
   // input: {time_key: output_key}
   let { labels, values, tableHeaders, tableLabels, growthPercentages } =
     getTableInfo(data);
@@ -61,13 +80,22 @@ export function convertToGrowthChartData(data, displayedLabel, dataCutoffDate) {
     dataCutoffDate,
     "left"
   );
+
   const chartData = {
     labels: labels.slice(cutoffIndex),
     datasets: [
       {
-        label: displayedLabel + " (M)",
+        label:
+          displayedLabel +
+          `${units === "M" ? " (M)" : units === "K" ? " (K)" : ""}`,
         data: values
-          .map((item) => (item == null ? "--" : (item / 1e6).toFixed(1)))
+          .map((item) =>
+            item == null
+              ? "--"
+              : (
+                  item / (units === "M" ? 1e6 : units === "K" ? 1e3 : 1)
+                ).toFixed(1)
+          )
           .slice(cutoffIndex),
       },
     ],
