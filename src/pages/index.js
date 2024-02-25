@@ -57,7 +57,7 @@ function App() {
     !isSignedIn && (
       <div className="flex flex-col items-center justify-between min-h-screen">
         <div className="flex-grow flex flex-col items-center">
-          {isModalOpen && (
+          {/* {isModalOpen && (
             <div
               className="fixed z-50 top-0 left-0 px-8 w-full h-full flex items-center justify-center bg-customGray-800 bg-opacity-90"
               onClick={handleVideoModal}
@@ -66,14 +66,11 @@ function App() {
                 className="drop-shadow-lg flex flex-row items-center justify-center w-3/4"
                 onClick={(e) => e.stopPropagation()} // Add this line
               >
-                {/* <button onClick={handleVideoModal} className="float-right">
-                Close
-              </button> */}
                 <button
                   onClick={handleVideoModal}
                   className="absolute z-50 top-3 right-2 text-4xl text-customGray-300 hover:text-customGray-100 transition duration-300"
                 >
-                  &times; {/* This is the X button */}
+                  &times;
                 </button>
                 <video controls autoPlay className="mt-4 ">
                   <source src="/assets/ProSightsDemo.mp4" type="video/mp4" />
@@ -81,7 +78,7 @@ function App() {
                 </video>
               </div>
             </div>
-          )}
+          )} */}
           <div
             className="hidden md:flex md:h-[750px] w-full absolute top-0 left-0 bg-cover bg-center bg-customGray-800"
             style={{
@@ -125,10 +122,10 @@ function App() {
               </p>
               <div className="flex items-center">
                 <a
-                  href={`https://calendly.com/prosightsdemo/30min?date=${today}`}
+                  href={`https://calendly.com/aaron-guo/30min?date=${today}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex flex-row items-center bg-primary text-customGray-50 py-2 px-4 md:px-6 rounded-md hover:bg-blue-600 drop-shadow-lg mr-8 md:mr-12 transition duration-300"
+                  className="flex flex-row items-center bg-primary text-customGray-50 py-2 px-4 md:px-6 rounded-md hover:bg-blue-600 drop-shadow-lg transition duration-300"
                 >
                   <p className="mr-2 md:mr-4 text-sm md:text-lg text-white font-normal">
                     Book a Demo
@@ -141,7 +138,7 @@ function App() {
                     height={64}
                   />
                 </a>
-                <Link
+                {/* <Link
                   onClick={handleVideoModal}
                   href=""
                   className="group flex flex-row items-center rounded-md"
@@ -163,7 +160,7 @@ function App() {
                       1 min
                     </p>
                   </div>
-                </Link>
+                </Link> */}
               </div>
             </div>
             <div className="flex flex-col justify-center items-center pt-[10vh] md:pt-36">
