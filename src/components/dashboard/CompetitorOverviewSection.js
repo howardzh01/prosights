@@ -173,7 +173,7 @@ function CompetitorOverviewSection({
               Add Competitors to Compare
             </p>
           </div>
-        ) : !companyDescriptions || !crunchbaseData || !headCountData ? (
+        ) : !companyDescriptions || !headCountData ? (
           <Skeleton className="w-full h-80 rounded-lg bg-customGray-50" />
         ) : (
           <>
