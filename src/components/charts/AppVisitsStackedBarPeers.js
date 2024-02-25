@@ -4,7 +4,7 @@ import TwoColumnView from "./templates/TwoColumnView";
 import { roundPeNumbers } from "../../utils/Utils";
 import { convertToAppUsageMarketShareVsPeersData } from "../../utils/ChartUtils";
 import GenericStackedBar from "./templates/GenericStackedBar";
-import { CHARTS } from "../../constants";
+import { CHARTS, INFO_HOVERS } from "../../constants";
 import Image from "next/image";
 
 function AppVisitsStackedBarPeers({
@@ -38,6 +38,7 @@ function AppVisitsStackedBarPeers({
         appByChannelTimescale
       )}
       title={"Average App MAU Market Share (%)"}
+      info={INFO_HOVERS.APP_USAGE.MARKET_SHARE_VS_PEERS}
       showDataLabels={appByChannelTimescale === "quarterYear"}
       timescale={appByChannelTimescale}
       setTimescale={setAppByChannelTimescale}

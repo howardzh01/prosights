@@ -48,7 +48,7 @@ function GenericTimeScale({
         )}
         <div
           id="infoPopup"
-          className="absolute bg-customGray-700 text-white rounded-lg px-4 py-2 w-96 bottom-24 md:bottom-8 text-sm z-50"
+          className="absolute bg-customGray-700 text-white rounded-lg px-4 py-2 w-96 bottom-24 md:bottom-8 -left-12 text-xs z-50"
           style={{
             display: showPopup ? "block" : "none",
           }}

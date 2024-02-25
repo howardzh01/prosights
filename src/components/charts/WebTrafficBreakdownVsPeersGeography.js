@@ -4,6 +4,7 @@ import GenericStackedBar from "./templates/GenericStackedBar";
 import { generateQuarters } from "../../utils/Utils";
 import { CHARTS } from "../../constants";
 import Image from "next/image";
+import { INFO_HOVERS } from "../../constants";
 
 function WebTrafficBreakdownVsPeersGeography({
   geoTrafficData,
@@ -24,6 +25,7 @@ function WebTrafficBreakdownVsPeersGeography({
           }}
           showTable={false}
           title={"Geography"}
+          info={INFO_HOVERS.TRAFFIC.GEOGRAPHY}
           lastTwelveMonthsView={true}
           showDataLabels={true}
           showTimescaleButtons={false}

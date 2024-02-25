@@ -9,6 +9,7 @@ import {
   formatDealRound,
   formatNumberToAbbreviation,
 } from "../../utils/Utils";
+import { INFO_HOVERS } from "../../constants";
 import { getCompanyDescription } from "../../api";
 import { US_STATE_TO_ABBREV } from "../../constants";
 import InvestorTable from "../InvestorTable";
@@ -199,16 +200,12 @@ function OverviewSection({
             </div>
             <div
               id="infoPopup"
-              className="absolute block bg-customGray-700 text-white rounded-lg px-4 py-2 w-96 bottom-24 md:bottom-8 text-sm z-50"
+              className="absolute block bg-customGray-700 text-white rounded-lg px-4 py-2 w-96 bottom-24 md:bottom-8 text-xs z-50"
               style={{
                 display: showAboutPopup ? "block" : "none",
               }}
             >
-              <span>
-                <strong>Field:</strong> Explains what a company does, using
-                proprietary LLM model that is trained with real-time web data
-                and tailored to investor preferences.
-              </span>
+              {INFO_HOVERS.SUMMARY.ABOUT}
             </div>
           </div>
           {/* NOTE: companyAbout depends on crunchbase data */}
@@ -246,16 +243,12 @@ function OverviewSection({
             </div>
             <div
               id="infoPopup"
-              className="absolute block bg-customGray-700 text-white rounded-lg px-4 py-2 w-96 bottom-24 md:bottom-8 text-sm z-50"
+              className="absolute block bg-customGray-700 text-white rounded-lg px-4 py-2 w-96 bottom-24 md:bottom-8 text-xs z-50"
               style={{
                 display: showBusinessModelPopup ? "block" : "none",
               }}
             >
-              <span>
-                <strong>Field:</strong> Explains how the company makes money,
-                using proprietary LLM model that is trained with real-time web
-                data and tailored to investor preferences.
-              </span>
+              {INFO_HOVERS.SUMMARY.BUSINESS_MODEL}
             </div>
           </div>
           {companyBusinessModel ? (

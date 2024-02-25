@@ -7,6 +7,7 @@ import {
   convertToGrowthChartData,
   checkIfGrowthDataHasValuesGreaterThanOneMillion,
 } from "../../utils/ChartUtils";
+import { INFO_HOVERS } from "../../constants";
 
 function AppUsersSignal({ appData, country, cutOffDate = new Date("2019") }) {
   if (!appData) return null;
@@ -35,21 +36,7 @@ function AppUsersSignal({ appData, country, cutOffDate = new Date("2019") }) {
         usersUnits
       )}
       title={`App Users (${usersUnits})`}
-      info={
-        <span>
-          <strong>Metric:</strong> Refers to the estimated number of average
-          monthly unique app users for a given company. If a company has
-          multiple apps, this metric only refers to the most popular app. An app
-          user refers to an individual who has opened the app at least once
-          during the month (excludes individuals with apps downloaded but not
-          opened).
-          <br />
-          <br />
-          <strong>Data Methodology:</strong> Data.ai sources its data from a
-          combination of public app store data, anonymized 1st party data, and
-          consumer panels to track over 1 million apps.
-        </span>
-      }
+      info={INFO_HOVERS.SUMMARY.APP_USERS}
       showTable={false}
       showTimescaleButtons={false}
       showModalButtons={true}

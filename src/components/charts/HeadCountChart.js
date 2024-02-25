@@ -4,6 +4,7 @@ import GenericBarAndTable from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
 import { CHARTS } from "../../constants";
 import { convertToHeadcountChartData } from "../../utils/ChartUtils";
+import { INFO_HOVERS } from "../../constants";
 
 function HeadCountChart({ headCountData, cutOffDate = new Date("2019") }) {
   const [timescale, setTimescale] = useState("quarterYear");
@@ -25,6 +26,7 @@ function HeadCountChart({ headCountData, cutOffDate = new Date("2019") }) {
   const quarterHeadCountGraph = (
     <GenericBarAndTable
       data={customChartData}
+      info={INFO_HOVERS.SUMMARY.EMPLOYEE_HEADCOUNT}
       title={"Total Headcount"}
       showDataLabels={timescale !== "month"}
       timescale={timescale}

@@ -4,7 +4,7 @@ import TwoColumnView from "./templates/TwoColumnView";
 import { roundPeNumbers } from "../../utils/Utils";
 import { convertToMarketShareData } from "../../utils/ChartUtils";
 import GenericStackedBar from "./templates/GenericStackedBar";
-import { CHARTS } from "../../constants";
+import { CHARTS, INFO_HOVERS } from "../../constants";
 import Image from "next/image";
 
 function WebTrafficStackedBarPeers({
@@ -26,6 +26,7 @@ function WebTrafficStackedBarPeers({
         cutOffDate
       )}
       title={"Total Visits Market Share (%)"}
+      info={INFO_HOVERS.TRAFFIC.MARKET_SHARE_VS_PEERS}
       showDataLabels={trafficByChannelTimescale === "quarterYear"}
       timescale={trafficByChannelTimescale}
       setTimescale={setTrafficByChannelTimescale}
