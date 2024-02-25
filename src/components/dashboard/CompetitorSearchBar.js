@@ -57,8 +57,10 @@ export default function CompetitorSearchBar({
         return (
           <TextField
             {...params}
-            label="Add Competitors"
-            placeholder={companyCompetitors.length >= 3 ? "" : "Company"}
+            // label="Add Competitors"
+            placeholder={
+              companyCompetitors.length >= 3 ? "" : "Add Competitors"
+            }
             sx={{
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
@@ -67,6 +69,11 @@ export default function CompetitorSearchBar({
               },
               bgcolor: "white",
               borderRadius: "0.375rem", // Equivalent to Tailwind's rounded-lg
+              "& .MuiInputBase-input::placeholder": {
+                // Targeting the placeholder
+                color: "#9DA4B9",
+                opacity: 1, // Ensure the color is not transparent
+              },
             }}
             className="flex-1 min-w-0"
             InputLabelProps={{
@@ -78,6 +85,9 @@ export default function CompetitorSearchBar({
             }}
             InputProps={{
               ...params.InputProps,
+              style: {
+                fontFamily: "Inter",
+              },
               startAdornment: [
                 <Image
                   src="/assets/compare.svg"
