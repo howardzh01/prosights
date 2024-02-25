@@ -52,16 +52,18 @@ export async function getStaticProps(context) {
     )
   );
   return {
-    props: { companyList }, // will be passed to the page component as props
+    props: { initCompanyList: companyList }, // will be passed to the page component as props
   };
 }
 
 function Dashboard({
-  enableCrunchbase = true,
+  enableCrunchbase = false,
   enableOnlyWebTraffic,
-  companyList = [],
+  initCompanyList = [],
 }) {
   const { isSignedIn, user, isLoaded } = useUser();
+  const [companyList, setCompanyList] = useState(initCompanyList);
+
   const companyDirectory = new CompanyDirectory(companyList);
   const [companyDic, setCompanyDic] = useState(
     companyDirectory.findCompanyByUrl("stockx.com")
@@ -266,6 +268,23 @@ function Dashboard({
   //     section.scrollIntoView({ behavior: "smooth", block: "start" });
   //   }
   // }, []); // The empty array ensures this effect runs only once after initial render
+
+  // useEffect(() => {
+  //   const fetchCompanyList = async () => {
+  //     try {
+  //       const response = await fetch("/api/companyList");
+  //       if (!response.ok) {
+  //         throw new Error("Failed to fetch company list");
+  //       }
+  //       const data = await response.json();
+  //       setCompanyList(data);
+  //     } catch (error) {
+  //       console.error("Error fetching company list:", error);
+  //     }
+  //   };
+
+  //   fetchCompanyList();
+  // }, []);
 
   useEffect(() => {
     if (!dataLoading && companyDic) {
@@ -654,47 +673,6 @@ function Dashboard({
     pdf.save(`${companyDic.displayedName} - ${country} (Full Report)`);
   };
 
-  //   const downloadPDF = async () => {
-  //     const { default: html2pdf } = await import("html2pdf.js");
-  //
-  //     const element = document.getElementById("main-content");
-  //     const contentWidth = element.scrollWidth; // Get the full scrollable width of the content
-  //     // TODO: Manual 1.5x multiplier to add in extra space to the height; this is a temporary fix.
-  //     // Otherwise, scroll height is too short because of pagebreak avoid all mode
-  //     const contentHeight = element.scrollHeight * 1.5; // Get the full scrollable height of the content
-  //
-  //     const opt = {
-  //       margin: [0.5, 0.5],
-  //       filename: "dashboard.pdf",
-  //       image: { type: "jpeg", quality: 0.98 },
-  //       html2canvas: {
-  //         useCORS: true,
-  //         scale: 2, // Adjust this as needed
-  //         logging: true,
-  //         dpi: 192,
-  //         letterRendering: true,
-  //         scrollX: 0,
-  //         scrollY: 0,
-  //         windowHeight: contentHeight,
-  //         windowWidth: contentWidth, // Set the canvas width to the full content width
-  //       },
-  //       jsPDF: {
-  //         unit: "pt", // Points can allow for more fine-grained control over the size
-  //         format: [contentWidth, 792], // Custom format size [width, height] in points (72 points per inch)
-  //         orientation: "landscape",
-  //       },
-  //       pagebreak: { mode: "avoid-all" },
-  //     };
-  //
-  //     html2pdf()
-  //       .set(opt)
-  //       .from(element)
-  //       .save() // Save the PDF directly, without opening it in a new window
-  //       .catch((err) => {
-  //         console.error("Error exporting PDF:", err);
-  //       });
-  //   };
-
   const {
     headCountData,
     headCountError,
@@ -716,12 +694,7 @@ function Dashboard({
     country,
     enableCrunchbase
   );
-  // console.log("Web Traffic", webTrafficData);
-  // console.log("DAATA AI", dataAIData);
 
-  // const competitorData = getApiData(user, competitor.name, country);
-
-  // console.log(competitorData);
   return (
     <SelectedChartContext.Provider value={{ selectedChart, setSelectedChart }}>
       <ChartDataContext.Provider value={{ chartData, setChartData }}>
@@ -745,9 +718,9 @@ function Dashboard({
               navbarCalculatedHeight={navbarCalculatedHeight}
             />
           </div>
-          <div className="flex flex-col relative h-screen w-full overflow-x-hidden bg-transparent z-50 mr-4">
+          <div className="flex flex-col relative h-screen w-full overflow-x-hidden bg-transparent z-50">
             {companyDic && companyDic.name && (
-              <div className="sticky top-0 z-50 bg-transparent h-14 flex items-center justify-between">
+              <div className="sticky top-0 z-50 bg-transparent h-14 flex items-center justify-between mr-4">
                 <div className="flex relative z-50">
                   <div className="mt-4 group cursor-pointer hidden">
                     <Image
@@ -802,7 +775,7 @@ function Dashboard({
             ) : companyDic && companyDic.name ? (
               // Main Content
               <div
-                className="h-full z-40 px-10 relative flex flex-col w-full bg-white bg-repeat bg-center overflow-x-hidden rounded-t-lg"
+                className="h-full z-40 px-10 relative flex flex-col w-full bg-white bg-repeat bg-center overflow-x-hidden rounded-tl-lg"
                 id="main-content"
                 style={{
                   backgroundImage: "url('/assets/backgroundPatternLight.svg')",

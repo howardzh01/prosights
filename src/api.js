@@ -125,8 +125,6 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
     );
 
   let crunchbaseDataPull, crunchbaseErrorPull;
-  // companyDescriptionPull,
-  // companyDescriptionErrorPull;
   if (enableCrunchbase) {
     const { data: crunchbaseData, error: crunchbaseError } = useSWR(
       user && companyCrunchbaseNameList
@@ -172,6 +170,9 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
     crunchbaseErrorPull = crunchbaseError;
     // companyDescriptionPull = companyDescription;
     // companyDescriptionErrorPull = companyDescriptionError;
+  } else {
+    crunchbaseDataPull = null;
+    crunchbaseErrorPull = null;
   }
 
   const { data: dataAIData, error: dataAIError } = useSWR(

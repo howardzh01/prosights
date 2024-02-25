@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import UserProfileButton from "../UserProfileButton";
-import { API_LIMIT } from "../../constants";
+import { CONSTANTS } from "../../constants";
 
 function SideBar({
   sections,
@@ -52,7 +52,8 @@ function SideBar({
         />
       </button>
       <p className="pt-3 text-white text-base font-semibold">
-        Queries Left: {apiUsage == null ? "--" : 200 - apiUsage}
+        Queries Left:{" "}
+        {apiUsage == null ? "--" : Math.max(0, CONSTANTS.API_LIMIT - apiUsage)}
       </p>
       <div className="mt-8 flex-grow relative overflow-y-auto overflow-x-hidden">
         {sections.map((section, index) => {
