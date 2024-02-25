@@ -6,7 +6,6 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Image from "next/image";
 import Chip from "@mui/material/Chip";
 import CompanyLogoSkeleton from "./CompanyLogoSkeleton";
-import { matchSorter } from "match-sorter";
 
 export default function SearchBar({
   companyDirectory,
