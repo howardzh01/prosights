@@ -81,8 +81,8 @@ export const CHARTS = {
   trafficByGeo: "Traffic by Geo",
   appLTMRetention: "D30 Usage Retention",
   appLTMActiveDays: "Active Days",
-  appLTMTimePerUser: "Average User Time Per Month",
-  appLTMTimePerSession: "Average Session Time",
+  appLTMTimePerUser: "Average Time Per User",
+  appLTMTimePerSession: "Average Session Duration",
   appActiveUsers: "App Users",
 };
 
