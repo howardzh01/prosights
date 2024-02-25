@@ -11,6 +11,7 @@ export default function SearchBar({
   companyDirectory,
   setCompany,
   setCompanyCompetitors,
+  darkMode,
 }) {
   const [value, setValue] = React.useState(null);
 
@@ -121,32 +122,53 @@ export default function SearchBar({
               ...params.InputProps,
               type: "search",
               style: {
-                fontSize: "0.9rem",
-                paddingTop: "4px", // Reduced top padding
-                paddingBottom: "4px", // Reduced bottom padding
+                fontSize: "0.875rem",
+                paddingTop: "2px", // Reduced top padding
+                paddingBottom: "2px", // Reduced bottom padding
                 fontFamily: "Inter",
+                color: darkMode ? "#ffffff" : "#000000",
               },
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Image
+                    src="/assets/search.svg"
+                    alt="User Avatar"
+                    width={64}
+                    height={64}
+                    className="w-4 ml-1"
+                  />
+                </InputAdornment>
+              ),
+              endAdornment: <></>,
             }}
             sx={{
               "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#EFF1F5", // Hide the default border
+                borderColor: darkMode ? "#373B46" : "#FFFFFF", // Hide the default border
                 borderRadius: "0.5rem",
                 boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
               },
               "& .MuiOutlinedInput-root": {
-                backgroundColor: "#FFFFFF",
+                backgroundColor: darkMode ? "#373B46" : "#FFFFFF",
+                borderRadius: "0.5rem",
+                opacity: 0.8,
                 fontSize: "0.75rem",
+                color: darkMode ? "#ffffff" : "#000000",
 
                 "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#EFF1F5", // border-customGray-50 on hover
+                  borderColor: darkMode ? "#4F5153" : "#FFFFFF", // border-customGray-50 on hover
                 },
                 "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#EFF1F5", // border-customGray-50 when focused
+                  borderColor: darkMode ? "#4F5153" : "#FFFFFF", // border-customGray-50 when focused
                 },
               },
               "& .MuiInputBase-input::-webkit-search-cancel-button": {
                 // WebkitAppearance: "none",
                 display: "none",
+              },
+              "& .MuiInputBase-input::placeholder": {
+                // Targeting the placeholder
+                color: darkMode ? "#B4BCD4" : "#828BA4", // Placeholder color for dark and light mode
+                opacity: 1, // Ensure the color is not transparent
               },
             }}
           />

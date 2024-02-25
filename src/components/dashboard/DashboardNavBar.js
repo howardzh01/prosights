@@ -49,11 +49,7 @@ const DashboardNavBar = ({
     };
   }, [downloadDropdownRef]);
   return (
-    <div
-      ref={navbarRef}
-      // className="z-50 pt-4 pb-2 sticky top-0 bg-white w-full"
-      className="z-50 pt-4 pb-2 sticky top-0 bg-white w-full"
-    >
+    <div ref={navbarRef} className="z-50 bg-white w-full">
       <div className="flex flex-row justify-between w-full items-center">
         <div className="flex flex-row items-center">
           {crunchbaseDataPull?.[companyDic.displayedName]?.["fields"]?.[
@@ -159,13 +155,13 @@ const DashboardNavBar = ({
             </div>
           </div>
 
-          <div className="ml-6 w-[24rem] 2xl:ml-16 2xl:w-[28rem] items-center">
+          {/* <div className="ml-6 w-[24rem] 2xl:ml-16 2xl:w-[28rem] items-center">
             <SearchBar
               companyDirectory={companyDirectory}
               setCompany={setCompanyDic}
               setCompanyCompetitors={setCompanyCompetitors}
             />
-          </div>
+          </div> */}
         </div>
         <CompetitorContainer
           targetCompany={companyDic}
@@ -174,7 +170,7 @@ const DashboardNavBar = ({
           setCompanyCompetitors={setCompanyCompetitors}
         />
       </div>
-      <hr className="border-none h-px bg-black w-full mt-2" />
+      <hr className="border-none h-px bg-customGray-100 w-full mt-2" />
     </div>
   );
 };

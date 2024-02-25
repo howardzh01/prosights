@@ -9,7 +9,6 @@ function SideBar({
   apiUsage,
   navbarCalculatedHeight,
 }) {
-  const [showPopup, setShowPopup] = useState(false);
   // Determine if we should extend the bar to cover multiple consecutive active sections
   const isSectionActive = (section) => activeSections[section.id];
 
@@ -100,32 +99,6 @@ function SideBar({
             </div>
           );
         })}
-      </div>
-      <div className="flex relative z-50">
-        <div
-          className="mt-4 group cursor-pointer"
-          onMouseOver={() => setShowPopup(true)}
-          onMouseOut={() => setShowPopup(false)}
-        >
-          <Image
-            src={
-              showPopup ? "/assets/helpActive.svg" : "/assets/helpInactive.svg"
-            }
-            alt="Help Icon"
-            width={24}
-            height={24}
-            className="w-5 h-5"
-          />
-        </div>
-        <div
-          id="infoPopup"
-          className="absolute bg-customGray-700 text-white rounded-lg px-4 py-2 text-center w-64 bottom-24 md:bottom-8 text-sm"
-          style={{
-            display: showPopup ? "block" : "none",
-          }}
-        >
-          Call us at (312)-709-9987 and we'll help you ASAP
-        </div>
       </div>
       <div className={`flex flex-row items-center pt-4`}>
         <UserProfileButton />

@@ -9,7 +9,7 @@ const EmptyState = ({
 }) => {
   return (
     <div
-      className="flex flex-col w-screen overflow-x-hidden items-center px-10 bg-white bg-repeat bg-center"
+      className="flex flex-col h-full w-full items-center bg-white bg-repeat bg-center"
       style={{
         backgroundImage: "url('/assets/backgroundPatternLight.svg')",
       }}
