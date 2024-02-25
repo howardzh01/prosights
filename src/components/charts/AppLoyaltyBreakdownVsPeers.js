@@ -19,7 +19,7 @@ function AppLoyaltyBreakdownVsPeers({
   switch (selectedChart) {
     case CHARTS.appLTMRetention:
       formatChartLabelFunction = (value) => (value !== null ? `${value}%` : "");
-      info = INFO_HOVERS.APP_USAGE.D30_USAGE_RETENTION;
+      info = INFO_HOVERS.APP_USAGE.M6_USAGE_RETENTION;
       break;
     case CHARTS.appLTMActiveDays:
       formatChartLabelFunction = (value) => (value !== null ? `${value}%` : "");

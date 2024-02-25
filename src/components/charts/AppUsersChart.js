@@ -43,7 +43,7 @@ function AppUsersChart({
         cutOffDate,
         usersUnits
       )}
-      title={`App Users (${usersUnits})`}
+      title={`Monthly App Users (${usersUnits})`}
       info={INFO_HOVERS.APP_USAGE.APP_USERS}
       showDataLabels={appTimescale !== "month"}
       timescale={appTimescale}

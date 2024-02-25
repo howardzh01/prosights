@@ -49,7 +49,7 @@ function WebTrafficByChannelChart({
         cutOffDate
       )}
       title={title}
-      // info={INFO_HOVERS.TRAFFIC.CHANNEL}
+      info={INFO_HOVERS.TRAFFIC.CHANNEL}
       showDataLabels={trafficByChannelTimescale === "quarterYear"}
       timescale={trafficByChannelTimescale}
       setTimescale={setTrafficByChannelTimescale}

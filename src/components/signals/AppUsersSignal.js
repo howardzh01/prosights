@@ -35,7 +35,7 @@ function AppUsersSignal({ appData, country, cutOffDate = new Date("2019") }) {
         cutOffDate,
         usersUnits
       )}
-      title={`Average Monthly App Users (${usersUnits})`}
+      title={`Monthly App Users (${usersUnits})`}
       info={INFO_HOVERS.SUMMARY.APP_USERS}
       showTable={false}
       showTimescaleButtons={false}
