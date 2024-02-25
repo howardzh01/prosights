@@ -29,7 +29,7 @@ function WebUsersSignal({
         cutOffDate,
         usersUnits
       )}
-      title={`Unique Monthly Web Visitors (${usersUnits})`}
+      title={`Monthly Web Visitors (${usersUnits})`}
       info={INFO_HOVERS.SUMMARY.WEB_USERS}
       showTable={false}
       showTimescaleButtons={false}

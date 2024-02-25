@@ -103,10 +103,13 @@ function AppUsageSection({
           )}
         </div>
 
-        <div id="App Market Share vs. Peers" className="content-section mt-8">
+        <div
+          id="App Comparative Market Share vs. Peers"
+          className="content-section mt-8"
+        >
           <div className="flex flex-row items-center mb-3">
             <p className="text-lg font-semibold text-gray-800 mr-2">
-              Market Share vs. Peers
+              Comparative Market Share vs. Peers
             </p>
           </div>
           {companyCompetitors.length === 0 ? (

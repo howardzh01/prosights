@@ -165,8 +165,8 @@ function Dashboard({
       level: 2,
     },
     {
-      title: "Market Share vs. Peers",
-      id: "App Market Share vs. Peers",
+      title: "Comparative Market Share vs. Peers",
+      id: "App Comparative Market Share vs. Peers",
       parentId: "App Usage",
       level: 2,
     },
@@ -562,7 +562,7 @@ function Dashboard({
         },
         {
           type: "stacked",
-          sheetName: "App Market Share vs. Peers",
+          sheetName: "Comparative App Market Share",
           sheetTabColor: "#FFFFCC",
           req: convertAppUsageMarketShareVsPeersDataToExcelFormat(
             dataAIData,
