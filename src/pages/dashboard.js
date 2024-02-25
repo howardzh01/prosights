@@ -66,7 +66,7 @@ function Dashboard({
 
   const companyDirectory = new CompanyDirectory(companyList);
   const [companyDic, setCompanyDic] = useState(
-    companyDirectory.findCompanyByUrl("stockx.com")
+    companyDirectory.findCompanyByUrl("")
   );
   const [country, setCountry] = useState("US");
   const [companyCompetitors, setCompanyCompetitors] = useState([]); // Array of company names
@@ -272,11 +272,19 @@ function Dashboard({
   // useEffect(() => {
   //   const fetchCompanyList = async () => {
   //     try {
-  //       const response = await fetch("/api/companyList");
+  //       console.log("Fetching company list");
+  //       const response = await fetch("/api/private/getMappingData", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({ csvUrl: CONSTANTS.MAPPINGS_CSV_URL }),
+  //       });
   //       if (!response.ok) {
   //         throw new Error("Failed to fetch company list");
   //       }
   //       const data = await response.json();
+  //       console.log("Fetched company list:", data);
   //       setCompanyList(data);
   //     } catch (error) {
   //       console.error("Error fetching company list:", error);
@@ -350,7 +358,7 @@ function Dashboard({
     const competitors = competitorsMap?.[companyDic?.url];
     if (competitors) {
       setCompanyCompetitors(
-        competitors.map((name) => companyDirectory.findCompanyByUrl(name))
+        competitors.map((url) => companyDirectory.findCompanyByUrl(url))
       );
     } else {
       setCompanyCompetitors([]);

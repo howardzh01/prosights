@@ -10,10 +10,12 @@ import {
   reformatWebsiteUrl,
   mergeAndOperate,
 } from "../../../utils/Utils.js";
+import { limitConcurrency } from "../../../utils/ConcurrencyUtils";
 
 export const config = {
   runtime: "edge",
 };
+// "Note: categories" cannot be in  exportColumns due to parseSemrushOutput handling ;
 const exportColumns =
   "target,rank,visits,desktop_visits,mobile_visits,users,desktop_users,mobile_users,desktop_hits,mobile_hits,direct,search_organic,search_paid,social_organic,social_paid,referral,mail,display_ad,search,social,paid,unknown_channel,time_on_site,desktop_time_on_site,mobile_time_on_site,pages_per_visit,desktop_pages_per_visit,mobile_pages_per_visit,bounce_rate,desktop_bounce_rate,mobile_bounce_rate,desktop_share,mobile_share,accuracy,display_date,country,device_type";
 
@@ -75,18 +77,26 @@ const handler = async (req) => {
   const reqJSON = await req.json();
   const { userId, companyUrl, country } = reqJSON;
   const displayDates = generateMonthsFromStartYear(2019);
-  //   const displayDates = ["2023-10-01"];
-  // "categories" cannot be in  exportColumns due to parseSemrushOutput handling ;
-  const promises = displayDates.map(async (date) => {
-    const webTrafficData = await getSemrushWebTraffic(
-      reformatWebsiteUrl(companyUrl),
-      date,
-      country
-    );
-    return webTrafficData;
+
+  // Create tasks for each date
+  const tasks = displayDates.map((date) => {
+    return () =>
+      getSemrushWebTraffic(reformatWebsiteUrl(companyUrl), date, country);
   });
 
-  const webTrafficHistoricalData = await Promise.all(promises);
+  // Limit to 20 concurrent tasks with a 5-second timeout
+  const webTrafficHistoricalData = await limitConcurrency(tasks, 25, 5000)
+    .then((results) => {
+      // Here, results will be an array of web traffic data or nulls (for timeouts/errors)
+      // You can process these results further as needed
+      return results;
+      // return results.filter((result) => result !== null); // Example: Remove nulls
+    })
+    .catch((error) => {
+      console.error("Error fetching web traffic data:", error);
+      return [];
+    });
+
   return new Response(JSON.stringify(webTrafficHistoricalData), {
     status: 200,
     headers: {
