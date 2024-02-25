@@ -54,6 +54,8 @@ const getSemrushWebTraffic = async (companyUrl, displayDate, country) => {
   if (country !== "WW" && country !== "ROW") {
     url.searchParams.append("country", country);
   }
+  const cacheKeyUrl = new URL(url);
+  cacheKeyUrl.searchParams.delete("key");
   const output = await cachedFetch({
     url: url,
     options: {
@@ -62,6 +64,7 @@ const getSemrushWebTraffic = async (companyUrl, displayDate, country) => {
     serviceSup: serviceSup,
     responseFormat: "text",
     tableName: "api_calls_semrush",
+    cacheKeyOverride: cacheKeyUrl.toString(),
   });
   return parseSemrushOutput(output);
 };

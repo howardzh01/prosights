@@ -241,7 +241,7 @@ export const getTrafficData = async ([
   var data = await response.json();
   // transform data into {month: {key:value}}
   if (!data) {
-    return;
+    return null;
   }
   data = data.reduce((acc, item, i) => {
     if (!item || item.length === 0) {
@@ -304,7 +304,7 @@ export const getGeoTrafficData = async ([
   // transform data into {month: {key:value}}
   if (!data) {
     console.log("No data for geotraffic", companyUrl);
-    return;
+    return null;
   }
 
   data = data.reduce((acc, monthItem, i) => {
