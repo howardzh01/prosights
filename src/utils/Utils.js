@@ -605,6 +605,10 @@ export function formatNumberToAbbreviation(number) {
         formattedNumber.length - 2
       );
     }
+    // If over 3 sigifig, dont add decimal. Eg: 842.1 -> 842
+    if (formattedNumber.replace(".", "").length >= 4) {
+      formattedNumber = (number / divisor).toFixed(0);
+    }
     return `${formattedNumber}${abbreviation}`;
   }
 

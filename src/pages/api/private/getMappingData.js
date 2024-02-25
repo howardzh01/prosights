@@ -13,7 +13,10 @@ const handler = async (req, res) => {
   let companyList = await fetchCompanyList(csvUrl);
   if (companyUrl) {
     companyList = companyList.filter((company) => company.url === companyUrl);
-    return res.status(200).json(companyList);
+    if (companyList.length === 0) {
+      return res.status(404).json([]);
+    }
+    return res.status(200).json(companyList[0]);
   }
 
   return res.status(200).json(companyList);

@@ -5,6 +5,7 @@ import {
   formatMoney,
   formatDealRound,
   formatNumberToAbbreviation,
+  roundPeNumbers,
 } from "../../utils/Utils";
 import Image from "next/image";
 import CompetitorOverviewIcon from "/public/assets/CompetitorOverviewIcon.svg";
@@ -35,16 +36,21 @@ function CompetitorOverviewSection({
 
   if (companyDescriptions && companyInfo) {
     competitors = Object.keys(companyDescriptions).map((companyName) => {
-      let companyHeadcount = headCountData[companyName]
-        ? Object.values(headCountData[companyName])
-            .slice(-1)[0]
-            ["headcount"].toLocaleString()
-        : undefined;
-      if (!headCountData[companyName]) {
-        companyHeadcount = companyInfo[companyName]["Employee Count (Jan 24)"]
-          ? Math.round(companyInfo[companyName]["Employee Count (Jan 24)"])
-          : "--";
+      let rawCompanyHeadcount = headCountData?.[companyName]
+        ? Object.values(headCountData[companyName]).slice(-1)[0]["headcount"]
+        : "";
+      if (!rawCompanyHeadcount) {
+        rawCompanyHeadcount = companyInfo[companyName]?.[
+          "Employee Count (Jan 24)"
+        ]
+          ? parseInt(companyInfo[companyName]["Employee Count (Jan 24)"])
+          : "";
       }
+      let companyHeadcount = rawCompanyHeadcount
+        ? rawCompanyHeadcount > 10000
+          ? formatNumberToAbbreviation(rawCompanyHeadcount)
+          : roundPeNumbers(rawCompanyHeadcount)
+        : "";
 
       return {
         logo: "--",
@@ -53,21 +59,28 @@ function CompetitorOverviewSection({
           ? companyDescriptions[companyName].company_description
           : "--",
         companyHeadquarters: companyInfo[companyName]
-          ? companyInfo[companyName][0]["headquarter_country"]
+          ? companyInfo[companyName]["headquarter_country"]
           : "--",
         companyHeadcount: companyHeadcount ? companyHeadcount : "--",
         companyTotalRaised: companyInfo[companyName]
-          ? `$${formatNumberToAbbreviation(
-              Math.round(
-                companyInfo[companyName][0]["Total Funding Amount (Amount)"]
-              )
-            )}`
-          : "--",
+          ? !companyInfo[companyName]["Total Funding Amount (Amount)"]
+            ? "--"
+            : `$${formatNumberToAbbreviation(
+                Math.round(
+                  companyInfo[companyName]["Total Funding Amount (Amount)"]
+                )
+              )}`
+          : "",
         companyLastFundedDate: companyInfo[companyName]
-          ? companyInfo[companyName][0]["Last Funded In (Date)"]
+          ? companyInfo[companyName]["Last Funded In (Date)"]
+            ? companyInfo[companyName]["Last Funded In (Date)"]
+            : "--"
           : "--",
         companyLastDealType: companyInfo[companyName]
-          ? companyInfo[companyName][0]["Funding Stage (Type)"]
+          ? companyInfo[companyName]["Funding Stage (Type)"].replace(
+              "Unfunded",
+              "--"
+            )
           : "--",
       };
     });

@@ -8,6 +8,7 @@ import {
   formatMoney,
   formatDealRound,
   formatNumberToAbbreviation,
+  roundPeNumbers,
 } from "../../utils/Utils";
 import { INFO_HOVERS } from "../../constants";
 import { getCompanyDescription } from "../../api";
@@ -22,7 +23,7 @@ export const SelectedChartContext = createContext();
 export const ChartDataContext = createContext();
 
 function OverviewSection({
-  companyInfo,
+  companyInfo, // Note: will be ""
   companyAbout,
   crunchbaseData,
   headCountData,
@@ -45,23 +46,35 @@ function OverviewSection({
       .join("-");
   }
 
-  let companyFoundedYear = companyInfo ? companyInfo[0]["founded_in_year"] : "";
-  let companyHeadcount = companyInfo
-    ? Math.round(companyInfo[0]["Employee Count (Jan 24)"])
+  let companyFoundedYear = companyInfo ? companyInfo["founded_in_year"] : "";
+  let rawCompanyHeadcount = headCountData
+    ? Object.values(headCountData).slice(-1)[0]["headcount"]
+    : "";
+  if (!rawCompanyHeadcount) {
+    rawCompanyHeadcount = companyInfo?.["Employee Count (Jan 24)"]
+      ? parseInt(companyInfo["Employee Count (Jan 24)"])
+      : "";
+  }
+  let companyHeadcount = rawCompanyHeadcount
+    ? rawCompanyHeadcount > 10000
+      ? formatNumberToAbbreviation(rawCompanyHeadcount)
+      : roundPeNumbers(rawCompanyHeadcount)
     : "";
   let companyHeadquarters = companyInfo
-    ? companyInfo[0]["headquarter_country"]
+    ? companyInfo["headquarter_country"]
     : "";
   let companyTotalRaised = companyInfo
-    ? `$${formatNumberToAbbreviation(
-        Math.round(companyInfo[0]["Total Funding Amount (Amount)"])
-      )}`
+    ? !companyInfo["Total Funding Amount (Amount)"]
+      ? ""
+      : `$${formatNumberToAbbreviation(
+          Math.round(companyInfo["Total Funding Amount (Amount)"])
+        )}`
     : "";
   let companyLastDealType = companyInfo
-    ? companyInfo[0]["Funding Stage (Type)"]
+    ? companyInfo["Funding Stage (Type)"].replace("Unfunded", "")
     : "";
   let companyLastFundedDate = companyInfo
-    ? companyInfo[0]["Last Funded In (Date)"]
+    ? companyInfo["Last Funded In (Date)"].replace(/(\d{2})(\d{2})$/, "'$2") // Jan 2021 -> Jan '21
     : "";
 
   //   const cbfields = crunchbaseData?.["fields"] || {};
@@ -101,11 +114,11 @@ function OverviewSection({
   //
   //   let companyDescription = companyInfo
   //     ? getCompanyDescription([
-  //         companyInfo[0][
+  //         companyInfo[
   //           ("displayedName",
   //           `/api/private/getCompanyDescription`,
   //           "",
-  //           companyInfo[0]["description"])
+  //           companyInfo["description"])
   //         ],
   //       ]).then((res) => {
   //         console.log("got result", res);

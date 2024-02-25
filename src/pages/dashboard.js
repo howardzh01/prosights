@@ -66,7 +66,7 @@ function Dashboard({
 
   const companyDirectory = new CompanyDirectory(companyList);
   const [companyDic, setCompanyDic] = useState(
-    companyDirectory.findCompanyByUrl("")
+    companyDirectory.findCompanyByUrl("tcs.com")
   );
   const [country, setCountry] = useState("US");
   const [companyCompetitors, setCompanyCompetitors] = useState([]); // Array of company names
@@ -349,6 +349,7 @@ function Dashboard({
   useEffect(() => {
     const competitorsMap = {
       "stockx.com": ["grailed.com"],
+      "tcs.com": ["amazon.com"],
       stockx: ["goat", "grailed"],
       goat: ["stockx", "grailed"],
       grailed: ["stockx", "goat"],
@@ -702,7 +703,7 @@ function Dashboard({
     country,
     enableCrunchbase
   );
-
+  console.log(fullCompanyInfo);
   return (
     <SelectedChartContext.Provider value={{ selectedChart, setSelectedChart }}>
       <ChartDataContext.Provider value={{ chartData, setChartData }}>
