@@ -6,6 +6,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Image from "next/image";
 import Chip from "@mui/material/Chip";
 import CompanyLogoSkeleton from "./CompanyLogoSkeleton";
+import { matchSorter } from "match-sorter";
 
 export default function SearchBar({
   companyDirectory,
@@ -46,10 +47,52 @@ export default function SearchBar({
     }
   };
 
-  const filterOptions = createFilterOptions({
-    matchFrom: "any",
-    limit: 100,
-  });
+  const filterOptions = (options, { inputValue }) => {
+    const limit = 50;
+    if (inputValue === "") {
+      return options.slice(0, limit);
+    }
+
+    const inputLower = inputValue.toLowerCase();
+
+    // First priority: displayedName starts with input
+    const displayedNameStartsWithInput = options.filter((option) =>
+      option.displayedName.toLowerCase().startsWith(inputLower)
+    );
+    if (displayedNameStartsWithInput.length > limit) {
+      return displayedNameStartsWithInput.slice(0, limit);
+    }
+
+    // Second priority: url starts with input, excluding those already included
+    const urlStartsWithInput = options.filter(
+      (option) =>
+        option.url.toLowerCase().startsWith(inputLower) &&
+        !displayedNameStartsWithInput.includes(option)
+    );
+    if (displayedNameStartsWithInput.length > limit) {
+      return displayedNameStartsWithInput.slice(0, limit);
+    }
+    // Third priority: either displayedName or url contains the input but does not start with it,
+    // excluding those already included in the first two priorities
+    const nameOrUrlContainsInput = options.filter(
+      (option) =>
+        (option.displayedName.toLowerCase().includes(inputLower) ||
+          option.url.toLowerCase().includes(inputLower)) &&
+        !displayedNameStartsWithInput.includes(option) &&
+        !urlStartsWithInput.includes(option)
+    );
+
+    // Combine the three arrays, maintaining the priority order
+    const filteredOptions = [
+      ...displayedNameStartsWithInput,
+      ...urlStartsWithInput,
+      ...nameOrUrlContainsInput,
+    ];
+
+    // Optionally, limit the number of options to improve performance
+    return filteredOptions.slice(0, limit);
+  };
+
   return (
     <div className="">
       <Autocomplete
