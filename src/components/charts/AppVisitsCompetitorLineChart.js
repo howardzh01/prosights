@@ -12,7 +12,7 @@ import {
 } from "../../utils/Utils";
 import { convertToLineChartData } from "../../utils/ChartUtils";
 import GenericLine from "./templates/GenericLine";
-import { CHARTS } from "../../constants";
+import { CHARTS, INFO_HOVERS } from "../../constants";
 import Image from "next/image";
 
 function AppVisitsCompetitorLineChart({
@@ -48,6 +48,7 @@ function AppVisitsCompetitorLineChart({
         cutOffDate
       )}
       title={"Visits Growth"}
+      info={INFO_HOVERS.APP_USAGE.GROWTH_VS_PEERS}
       timescale={timescale}
       setTimescale={setTimeScale}
       location={country}

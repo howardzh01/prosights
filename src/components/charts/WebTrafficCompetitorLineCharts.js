@@ -5,6 +5,7 @@ import { roundPeNumbers } from "../../utils/Utils";
 import { convertToLineChartData } from "../../utils/ChartUtils";
 import GenericLine from "./templates/GenericLine";
 import Image from "next/image";
+import { INFO_HOVERS } from "../../constants";
 
 function WebTrafficCompetitorLineCharts({
   multiCompanyTrafficData,
@@ -25,6 +26,7 @@ function WebTrafficCompetitorLineCharts({
         "visits"
       )}
       title={"Visits Growth"}
+      info={INFO_HOVERS.TRAFFIC.GROWTH_VS_PEERS}
       showDataLabels={timescale === "quarterYear"}
       timescale={timescale}
       setTimescale={setTimeScale}

@@ -783,14 +783,14 @@ function Dashboard({
             ) : companyDic && companyDic.name ? (
               // Main Content
               <div
-                className="h-full z-40 px-10 relative flex flex-col w-full bg-white bg-repeat bg-center overflow-x-hidden rounded-tl-lg"
+                className="h-full z-40 relative flex flex-col w-full bg-white bg-repeat bg-center overflow-x-hidden rounded-tl-lg"
                 id="main-content"
                 style={{
                   backgroundImage: "url('/assets/backgroundPatternLight.svg')",
                 }}
               >
                 {/* Company name, country, and comparing section */}
-                <div className="sticky top-0 pt-6 z-40 bg-white">
+                <div className="sticky top-0 px-10 pt-6 z-40 bg-white">
                   <DashboardNavbar
                     companyDic={companyDic}
                     country={country}
@@ -806,7 +806,7 @@ function Dashboard({
                     setNavbarCalculatedHeight={setNavbarCalculatedHeight}
                   />
                 </div>
-                <div className="h-full flex flex-col w-full items-center">
+                <div className="h-full px-10 flex flex-col w-full items-center">
                   {/* Overview Section */}
                   <div
                     id="Company Overview"

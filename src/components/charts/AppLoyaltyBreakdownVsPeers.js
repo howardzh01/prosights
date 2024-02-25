@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { CHARTS, CHARTJS_COLORS } from "../../constants";
+import { CHARTS, CHARTJS_COLORS, INFO_HOVERS } from "../../constants";
 import Image from "next/image";
 import { convertToAppUsageLoyaltyVsPeersData } from "../../utils/ChartUtils";
 import GenericBarAndTable from "./templates/GenericBar";
@@ -15,20 +15,25 @@ function AppLoyaltyBreakdownVsPeers({
   if (!multiCompanyAppData) return null;
 
   let formatChartLabelFunction;
+  let info;
   switch (selectedChart) {
     case CHARTS.appLTMRetention:
       formatChartLabelFunction = (value) => (value !== null ? `${value}%` : "");
+      info = INFO_HOVERS.APP_USAGE.D30_USAGE_RETENTION;
       break;
     case CHARTS.appLTMActiveDays:
       formatChartLabelFunction = (value) => (value !== null ? `${value}%` : "");
+      info = INFO_HOVERS.APP_USAGE.ACTIVE_DAYS;
       break;
     case CHARTS.appLTMTimePerUser:
       formatChartLabelFunction = (value) =>
         value !== null ? `${value} min` : "";
+      info = INFO_HOVERS.APP_USAGE.AVG_TIME_PER_USER;
       break;
     case CHARTS.appLTMTimePerSession:
       formatChartLabelFunction = (value) =>
         value !== null ? `${value} min` : "";
+      info = INFO_HOVERS.APP_USAGE.AVG_TIME_PER_SESSION;
       break;
     // if no selected chart, return by channel
     default:
@@ -47,6 +52,7 @@ function AppLoyaltyBreakdownVsPeers({
             tableData: null,
           }}
           title={selectedChart}
+          info={info}
           showTable={false}
           showDataLabels={true}
           showTimescaleButtons={false}

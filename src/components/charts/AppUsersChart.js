@@ -7,7 +7,7 @@ import {
   checkIfGrowthDataHasValuesGreaterThanOneMillion,
 } from "../../utils/ChartUtils";
 import GenericStackedBar from "./templates/GenericStackedBar";
-import { CHARTS } from "../../constants";
+import { CHARTS, INFO_HOVERS } from "../../constants";
 import Image from "next/image";
 
 function AppUsersChart({
@@ -44,6 +44,7 @@ function AppUsersChart({
         usersUnits
       )}
       title={`App Users (${usersUnits})`}
+      info={INFO_HOVERS.APP_USAGE.APP_USERS}
       showDataLabels={appTimescale !== "month"}
       timescale={appTimescale}
       setTimescale={setAppTrafficTimescale}
