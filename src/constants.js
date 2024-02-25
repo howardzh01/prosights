@@ -169,4 +169,5 @@ export const COUNTRY_LIST = {
   // DE: "Germany",
   // ES: "Spain",
   WW: "Worldwide",
+  ROW: "Rest of World",
 };

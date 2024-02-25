@@ -87,7 +87,7 @@ function WebsiteTrafficSection({
         <div id="Breakdown" className="content-section">
           <div className="flex mb-3">
             <p className="text-lg font-semibold text-gray-800 mr-2">
-              Breakdown
+              Visits Breakdown
             </p>
           </div>
           <div className="flex flex-row items-center w-full space-x-8">

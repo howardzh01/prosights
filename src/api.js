@@ -222,13 +222,10 @@ export const getTrafficData = async ([
   if (!companyUrl) {
     return null;
   }
-  const exportColumns =
-    "target,rank,visits,desktop_visits,mobile_visits,users,desktop_users,mobile_users,desktop_hits,mobile_hits,direct,search_organic,search_paid,social_organic,social_paid,referral,mail,display_ad,search,social,paid,unknown_channel,time_on_site,desktop_time_on_site,mobile_time_on_site,pages_per_visit,desktop_pages_per_visit,mobile_pages_per_visit,bounce_rate,desktop_bounce_rate,mobile_bounce_rate,desktop_share,mobile_share,accuracy,display_date,country,device_type";
 
   const bodyObj = {
     userId: userId,
     companyUrl: companyUrl,
-    exportColumns: exportColumns,
     country: country,
   };
   const response = await fetch(api_url, {

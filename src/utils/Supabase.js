@@ -40,7 +40,7 @@ export async function cachedFetch({
 
   if (error || !rows || rows.length === 0) {
     if (error) {
-      console.log("Initial Fetch Error", error);
+      console.log("Initial Fetch Error", error, url);
     }
     let new_response;
     if (customFetchFunction) {

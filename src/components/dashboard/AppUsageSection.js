@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { RELEVANT_CONTINENTS, CHARTS } from "../../constants";
+import { RELEVANT_CONTINENTS, CHARTS, COUNTRY_LIST } from "../../constants";
 import WebGeoTrafficDoughnut from "../charts/WebGeoTrafficDoughnut";
 import WebTrafficDoughnut from "../charts/WebTrafficDoughnut";
 import Image from "next/image";
@@ -151,11 +151,11 @@ function AppUsageSection({
               </div>
             ) : (
               <>
-                {country === "WW" ? (
+                {country === "WW" || country === "ROW" ? (
                   <div className="w-96 h-60 rounded-lg bg-customGray-50 flex items-center justify-center">
-                    <p className="text-sm text-customGray-200 px-12 text-center">
-                      Metric for Worldwide not available. Select a specific
-                      geography to view.
+                    <p className="text-sm text-customGray-200 px-10 text-center">
+                      Metric for '{COUNTRY_LIST[country]}' is not available.
+                      Select a specific geography to view.
                     </p>
                   </div>
                 ) : (

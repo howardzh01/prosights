@@ -536,3 +536,42 @@ export function calculateMean(array) {
   const count = filteredArray.length;
   return count > 0 ? sum / count : null;
 }
+
+export const mergeAndOperate = (
+  obj1,
+  obj2,
+  operatedKeys, // type array
+  mergedOn, // type array
+  operation
+) => {
+  // Function to merge two dictionaries and apply an operation to the values of certain keys based on mergedOn
+
+  // Check if the keys in `mergedOn` are aligned
+  const isAligned = mergedOn.every((key) => obj1[key] === obj2[key]);
+
+  if (!isAligned) {
+    console.error("The dictionaries are not aligned based on merged_on keys.");
+    return;
+  }
+  // Create a new object to store the result
+  const result = {};
+
+  // Copy the merged_on keys and values to the result
+  mergedOn.forEach((key) => {
+    result[key] = obj1[key];
+  });
+
+  // Apply the operation to the values of other keys
+  operatedKeys.forEach((key) => {
+    if (!mergedOn.includes(key)) {
+      if (obj1[key] == null || obj2[key] == null) {
+        result[key] = null;
+      } else {
+        // Ensure we're not processing merged_on keys again
+        result[key] = operation(obj1[key], obj2[key]);
+      }
+    }
+  });
+
+  return result;
+};
