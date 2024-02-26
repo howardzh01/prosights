@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import SideBar from "../components/dashboard/SideBar";
 import SearchBar from "../components/dashboard/SearchBar";
 import OverviewSection from "../components/dashboard/OverviewSection";
@@ -57,7 +57,7 @@ function Dashboard({
 
   const companyDirectory = new CompanyDirectory(companyList);
   const [companyDic, setCompanyDic] = useState(
-    companyDirectory.findCompanyByUrl("stockx.com")
+    companyDirectory.findCompanyByUrl("")
   );
   const [country, setCountry] = useState("US");
   const [companyCompetitors, setCompanyCompetitors] = useState([]); // Array of company names
@@ -102,7 +102,21 @@ function Dashboard({
     activeSections
   );
 
+  const [searchbarCalculatedHeight, setSearchbarCalculatedHeight] = useState(0);
   const [navbarCalculatedHeight, setNavbarCalculatedHeight] = useState(0);
+  const searchbarRef = useRef(null);
+  const navbarRef = useRef(null);
+  // Compute NavBar Height
+  useEffect(() => {
+    if (searchbarRef.current) {
+      const height = searchbarRef.current.getBoundingClientRect().height;
+      setSearchbarCalculatedHeight(height);
+    }
+    if (navbarRef.current) {
+      const height = navbarRef.current.getBoundingClientRect().height;
+      setNavbarCalculatedHeight(height);
+    }
+  }, [companyDic]); // Empty dependency array means this effect runs once after the initial render
 
   const todaysDate = new Date()
     .toLocaleDateString("en-CA", {
@@ -314,12 +328,17 @@ function Dashboard({
               sections={SECTIONS}
               activeSections={activeSections}
               apiUsage={apiCalls}
-              navbarCalculatedHeight={navbarCalculatedHeight}
+              stickyTopHeight={
+                navbarCalculatedHeight + searchbarCalculatedHeight - 24 * 2 // TODO: 24 offset is do to pt-6
+              }
             />
           </div>
           <div className="flex flex-col relative h-screen w-full overflow-x-hidden bg-transparent z-40">
             {companyDic && companyDic.name && (
-              <div className="sticky top-0 z-40 bg-transparent h-14 flex items-center justify-between">
+              <div
+                ref={searchbarRef}
+                className="sticky top-0 z-40 bg-transparent h-14 flex items-center justify-between"
+              >
                 <div className="flex items-center px-8 py-2 border-2 border-[#373B46] rounded-lg opacity-0 cursor-default ml-2">
                   <p className="text-sm font-semibold text-customGray-200">
                     Wrong or missing company data?
@@ -355,7 +374,10 @@ function Dashboard({
                 }}
               >
                 {/* Company name, country, and comparing section */}
-                <div className="sticky top-0 px-10 pt-6 z-30 bg-white">
+                <div
+                  ref={navbarRef}
+                  className="sticky top-0 px-10 pt-6 z-30 bg-white"
+                >
                   <DashboardNavbar
                     companyDic={companyDic}
                     country={country}
@@ -368,7 +390,6 @@ function Dashboard({
                     setCompanyCompetitors={setCompanyCompetitors}
                     crunchbaseDataPull={crunchbaseDataPull}
                     activeLevel1SectionName={activeLevel1SectionName}
-                    setNavbarCalculatedHeight={setNavbarCalculatedHeight}
                   />
                 </div>
                 <div className="h-full px-10 flex flex-col w-full items-center">

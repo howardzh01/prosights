@@ -3,12 +3,7 @@ import Image from "next/image";
 import UserProfileButton from "../UserProfileButton";
 import { CONSTANTS } from "../../constants";
 
-function SideBar({
-  sections,
-  activeSections,
-  apiUsage,
-  navbarCalculatedHeight,
-}) {
+function SideBar({ sections, activeSections, apiUsage, stickyTopHeight }) {
   // Determine if we should extend the bar to cover multiple consecutive active sections
   const isSectionActive = (section) => activeSections[section.id];
   const [showPopup, setShowPopup] = useState(false);
@@ -20,15 +15,15 @@ function SideBar({
     if (sectionElement) {
       // Temporarily set the scroll-margin-top to accommodate the navbar height
       const originalScrollMarginTop = sectionElement.style.scrollMarginTop;
-      sectionElement.style.scrollMarginTop = `${navbarCalculatedHeight}px`;
+      sectionElement.style.scrollMarginTop = `${stickyTopHeight}px`;
 
       sectionElement.scrollIntoView();
 
       // Reset the scroll-margin-top after scrolling
       // This delay ensures the scroll action completes before resetting the style
-      // setTimeout(() => {
-      //   sectionElement.style.scrollMarginTop = originalScrollMarginTop;
-      // }, 0);
+      setTimeout(() => {
+        sectionElement.style.scrollMarginTop = originalScrollMarginTop;
+      }, 0);
     }
   };
 

@@ -18,18 +18,9 @@ const DashboardNavBar = ({
   setCompanyCompetitors,
   crunchbaseDataPull,
   activeLevel1SectionName,
-  setNavbarCalculatedHeight,
 }) => {
   const [showDownloadDropdown, setShowDownloadDropdown] = useState(false);
   const downloadDropdownRef = useRef(null);
-  const navbarRef = useRef(null);
-  // Compute NavBar Height
-  useEffect(() => {
-    if (navbarRef.current) {
-      const height = navbarRef.current.getBoundingClientRect().height;
-      setNavbarCalculatedHeight(height);
-    }
-  }, []); // Empty dependency array means this effect runs once after the initial render
 
   // Download dropdown
   useEffect(() => {
@@ -49,7 +40,7 @@ const DashboardNavBar = ({
     };
   }, [downloadDropdownRef]);
   return (
-    <div ref={navbarRef} className="z-50 bg-white w-full">
+    <div className="z-50 bg-white w-full">
       <div className="flex flex-row justify-between w-full items-center">
         <div className="flex flex-row items-center">
           {crunchbaseDataPull?.[companyDic.displayedName]?.["fields"]?.[
