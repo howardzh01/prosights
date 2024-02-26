@@ -42,8 +42,9 @@ const handler = async (req, res) => {
     return res.status(200).json(companyList[0]);
   }
   const filteredCompanyList = companyList.map((company) => ({
+    name: company.name,
     displayedName: company.displayedName,
-    appId: company.appId,
+    appId: company.appId.slice(1), // starts with ' for now
     url: company.url,
   }));
   return res.status(200).json(filteredCompanyList);

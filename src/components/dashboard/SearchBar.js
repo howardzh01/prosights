@@ -43,7 +43,7 @@ export default function SearchBar({
         value.displayedName = value.name;
       }
       if (!value.name) {
-        value.name = value.displayedName;
+        value.name = value.displayedName.toLowerCase();
       }
       return value;
     }

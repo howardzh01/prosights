@@ -195,7 +195,7 @@ function Dashboard({
 
   useEffect(() => {
     const competitorsMap = {
-      "stockx.com": ["grailed.com"],
+      "stockx.com": ["grailed.com", "goat.com"],
       "tcs.com": ["amazon.com"],
       stockx: ["goat", "grailed"],
       goat: ["stockx", "grailed"],
