@@ -49,6 +49,37 @@ export default function ChartModal({
       );
       break;
 
+    case CHARTS.trafficCompsByChannel:
+    case CHARTS.trafficCompsByDevice:
+    case CHARTS.trafficCompsByOrganicVsPaid:
+    case CHARTS.trafficCompsByGeo:
+      const newSelectedChartMap = {
+        [CHARTS.trafficCompsByChannel]: CHARTS.trafficByChannel,
+        [CHARTS.trafficCompsByDevice]: CHARTS.trafficByDevice,
+        [CHARTS.trafficCompsByOrganicVsPaid]: CHARTS.trafficByOrganicVsPaid,
+      };
+      chart = (
+        // Adjust top margin to account for company name
+        <div className="space-y-12 mt-[-20px]">
+          {Object.entries(chartData).map(([displayedName, data], index) => (
+            <div key={index} className="">
+              {/* Margin bottom for spacing between charts */}
+              <h3 className="text-lg font-semibold mb-2">{displayedName}</h3>
+              {selectedChart === CHARTS.trafficCompsByGeo ? (
+                <WebGeoTrafficChart geoTrafficData={data} />
+              ) : (
+                <WebTrafficByChannelChart
+                  trafficData={data}
+                  country={country}
+                  selectedChart={newSelectedChartMap[selectedChart]}
+                />
+              )}
+            </div>
+          ))}
+        </div>
+      );
+      break;
+
     case CHARTS.appActiveUsers:
       chart = (
         <AppGrowthChart
@@ -92,7 +123,7 @@ export default function ChartModal({
         >
           <div className="fixed inset-0 bg-customGray-800 bg-opacity-50 transition-opacity" />
         </Transition.Child>
-        <div className="fixed inset-0 w-screen overflow-y-auto">
+        <div className="fixed inset-0 w-screen">
           <div className="flex h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
             <Transition.Child
               as={Fragment}
@@ -103,7 +134,7 @@ export default function ChartModal({
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg px-8 bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-[80%]">
+              <Dialog.Panel className="relative overflow-y-auto max-h-[75%] transform rounded-lg px-8 bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-[80%]">
                 <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
                   <button
                     type="button"

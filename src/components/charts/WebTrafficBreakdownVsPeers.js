@@ -17,17 +17,17 @@ function WebTrafficBreakdownVsPeers({
   let title;
   let info;
   switch (selectedChart) {
-    case CHARTS.trafficByChannel:
+    case CHARTS.trafficCompsByChannel:
       chartType = "traffic_by_channel";
       title = "Channel";
       info = INFO_HOVERS.TRAFFIC.CHANNEL;
       break;
-    case CHARTS.trafficByDevice:
+    case CHARTS.trafficCompsByDevice:
       chartType = "traffic_by_device";
       title = "Device";
       info = INFO_HOVERS.TRAFFIC.DEVICE_BREAKDOWN;
       break;
-    case CHARTS.trafficByOrganicVsPaid:
+    case CHARTS.trafficCompsByOrganicVsPaid:
       chartType = "traffic_by_organic_paid";
       title = "Organic vs Paid";
       info = INFO_HOVERS.TRAFFIC.ORGANIC_VS_PAID;
@@ -50,6 +50,7 @@ function WebTrafficBreakdownVsPeers({
           }}
           showTable={false}
           showDataLabels={true}
+          showModalButtons={true}
           showTimescaleButtons={false}
           title={title}
           info={info}
@@ -57,7 +58,7 @@ function WebTrafficBreakdownVsPeers({
           lastTwelveMonthsView={true}
           timescale={"quarterYear"}
           setTimescale={null}
-          selectedChart={null}
+          selectedChart={selectedChart}
           rawChartData={trafficData}
           height={"h-3/4"}
           legendPosition={"right"}
