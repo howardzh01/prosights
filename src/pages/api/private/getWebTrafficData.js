@@ -87,10 +87,7 @@ const handler = async (req) => {
   // Limit to 20 concurrent tasks with a 5-second timeout
   const webTrafficHistoricalData = await limitConcurrency(tasks, 25, 5000)
     .then((results) => {
-      // Here, results will be an array of web traffic data or nulls (for timeouts/errors)
-      // You can process these results further as needed
       return results;
-      // return results.filter((result) => result !== null); // Example: Remove nulls
     })
     .catch((error) => {
       console.error("Error fetching web traffic data:", error);

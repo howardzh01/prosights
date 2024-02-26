@@ -1,4 +1,8 @@
-import { fetchCompanyList } from "../../../utils/BackendUtils.js";
+import {
+  fetchCompanyList,
+  parseCsvBufferToJson,
+} from "../../../utils/BackendUtils.js";
+import { serviceSup } from "../../../utils/Supabase.js";
 
 export const config = {
   runtime: "nodejs",
@@ -10,7 +14,27 @@ const handler = async (req, res) => {
   if (!csvUrl) {
     return res.status(404).json([]);
   }
-  let companyList = await fetchCompanyList(csvUrl);
+  // let companyList = await fetchCompanyList(csvUrl);
+
+  const { data: companyListBlob, error: downloadError } =
+    await serviceSup.storage
+      .from("backend_storage")
+      .download(`${csvUrl.split("/").slice(-1)[0]}`);
+  if (downloadError) {
+    console.error(
+      `Error fetching companies for ${csvUrl.split("/").slice(-1)[0]}:`,
+      downloadError
+    );
+    return res.status(500).json({ error: "Failed to fetch companies" });
+  }
+  const buffer = await companyListBlob.arrayBuffer();
+
+  let companyList = await parseCsvBufferToJson(Buffer.from(buffer));
+  if (!companyList) {
+    console.log("Error parsing CSV to JSON");
+    return res.status(404).json([]);
+  }
+  console.log("companyList", companyList);
   if (companyUrl) {
     companyList = companyList.filter((company) => company.url === companyUrl);
     if (companyList.length === 0) {

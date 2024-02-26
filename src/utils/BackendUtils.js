@@ -2,6 +2,7 @@ const assert = require("assert");
 import fs from "fs";
 import path from "path";
 import { parse } from "csv-parse/sync"; // Correct import for synchronous parsing
+import Papa from "papaparse";
 
 export function parseSemrushOutput(output) {
   if (!output) {
@@ -44,3 +45,21 @@ export async function fetchCompanyList(pathToFile) {
     return []; // Return an empty array in case of error
   }
 }
+
+export const parseCsvBufferToJson = (buffer) => {
+  try {
+    // Convert the buffer to a string using the appropriate encoding (e.g., 'utf-8')
+    const csvText = buffer.toString("utf-8");
+
+    // Parse the CSV data
+    const records = parse(csvText, {
+      columns: true, // Interpret the first row as column names
+      skip_empty_lines: true,
+    });
+
+    return records;
+  } catch (error) {
+    console.error("Failed to parse CSV:", error);
+    return [];
+  }
+};
