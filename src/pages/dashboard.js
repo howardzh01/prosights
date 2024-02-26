@@ -57,7 +57,7 @@ function Dashboard({
 
   const companyDirectory = new CompanyDirectory(companyList);
   const [companyDic, setCompanyDic] = useState(
-    companyDirectory.findCompanyByUrl("tcs.com")
+    companyDirectory.findCompanyByUrl("")
   );
   const [country, setCountry] = useState("US");
   const [companyCompetitors, setCompanyCompetitors] = useState([]); // Array of company names
@@ -132,7 +132,6 @@ function Dashboard({
           throw new Error("Failed to fetch company list");
         }
         const data = await response.json();
-        console.log("Fetched company list:", data);
         setCompanyList(data);
       } catch (error) {
         console.error("Error fetching company list:", error);

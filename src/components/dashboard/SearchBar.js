@@ -42,6 +42,9 @@ export default function SearchBar({
       if (!value.displayedName) {
         value.displayedName = value.name;
       }
+      if (!value.name) {
+        value.name = value.displayedName;
+      }
       return value;
     }
   };
