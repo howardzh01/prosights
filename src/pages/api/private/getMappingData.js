@@ -41,8 +41,12 @@ const handler = async (req, res) => {
     }
     return res.status(200).json(companyList[0]);
   }
-
-  return res.status(200).json(companyList);
+  const filteredCompanyList = companyList.map((company) => ({
+    displayedName: company.displayedName,
+    appId: company.appId,
+    url: company.url,
+  }));
+  return res.status(200).json(filteredCompanyList);
 };
 
 export default handler;

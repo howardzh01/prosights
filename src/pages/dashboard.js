@@ -23,7 +23,10 @@ import CountrySelector from "../components/dashboard/CountrySelector";
 import DashboardNavbar from "../components/dashboard/DashboardNavBar";
 import EmptyState from "../components/dashboard/EmptyState";
 import APILimitReached from "../components/dashboard/APILimitReached";
-import { downloadPDF, downloadExcelBuilder } from "../utils/Utils";
+import {
+  downloadPDF,
+  downloadExcelBuilder,
+} from "../utils/FrontendDownloadUtils";
 import { fetchCompanyList } from "../utils/BackendUtils";
 
 export const SelectedChartContext = createContext();
