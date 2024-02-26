@@ -5,7 +5,7 @@ import HeadCountChart from "./charts/HeadCountChart";
 import { CHARTS } from "../constants";
 import WebGeoTrafficChart from "./charts/WebGeoTrafficChart";
 import WebTrafficChart from "./charts/WebTrafficChart";
-import AppUsersChart from "./charts/AppUsersChart";
+import AppGrowthChart from "./charts/AppUsersChart";
 import WebTrafficByChannelChart from "./charts/WebTrafficByChannelChart";
 import AppLoyaltyPeersModalCharts from "./charts/AppLoyaltyPeersModalCharts";
 
@@ -51,10 +51,11 @@ export default function ChartModal({
 
     case CHARTS.appActiveUsers:
       chart = (
-        <AppUsersChart
+        <AppGrowthChart
           appData={chartData}
           country={country}
           selectedChart={CHARTS.appActiveUsers}
+          type="est_average_active_users"
         />
       );
       break;

@@ -9,7 +9,7 @@ import AppUsageIcon from "/public/assets/AppUsageIcon.svg";
 import AppVisitsStackedBarPeers from "../charts/AppVisitsStackedBarPeers";
 import AppVisitsCompetitorLineChart from "../charts/AppVisitsCompetitorLineChart";
 import AppLoyaltyBreakdownVsPeers from "../charts/AppLoyaltyBreakdownVsPeers";
-import AppUsersChart from "../charts/AppUsersChart";
+import AppGrowthChart from "../charts/AppUsersChart";
 import AppLoyaltyPeersModalCharts from "../charts/AppLoyaltyPeersModalCharts";
 
 function AppUsageSection({
@@ -69,14 +69,32 @@ function AppUsageSection({
           ) : !multiCompanyAppData[company] ? (
             <div className="w-full h-80 rounded-lg mt-2 mb-6 bg-customGray-50 flex items-center justify-center">
               <p className="text-sm text-customGray-200">
+                No App Download Data Available
+              </p>
+            </div>
+          ) : (
+            <AppGrowthChart
+              appData={multiCompanyAppData[company]}
+              country={country}
+              type="est_download"
+            ></AppGrowthChart>
+          )}
+
+          {multiCompanyAppData === undefined ||
+          Object.keys(multiCompanyAppData).length === 0 ? (
+            <Skeleton className="w-full mt-2 mb-6 h-80 rounded-lg bg-customGray-50" />
+          ) : !multiCompanyAppData[company] ? (
+            <div className="w-full h-80 rounded-lg mt-2 mb-6 bg-customGray-50 flex items-center justify-center">
+              <p className="text-sm text-customGray-200">
                 No App Users Data Available
               </p>
             </div>
           ) : (
-            <AppUsersChart
+            <AppGrowthChart
               appData={multiCompanyAppData[company]}
               country={country}
-            ></AppUsersChart>
+              type="est_average_active_users"
+            ></AppGrowthChart>
           )}
         </div>
 

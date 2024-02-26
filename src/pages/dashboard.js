@@ -50,14 +50,14 @@ export const ChartDataContext = createContext();
 function Dashboard({
   enableCrunchbase = false,
   enableOnlyWebTraffic,
-  initCompanyList = [],
+  initCompanyList = companyListFixed,
 }) {
   const { isSignedIn, user, isLoaded } = useUser();
   const [companyList, setCompanyList] = useState(initCompanyList);
 
   const companyDirectory = new CompanyDirectory(companyList);
   const [companyDic, setCompanyDic] = useState(
-    companyDirectory.findCompanyByUrl("")
+    companyDirectory.findCompanyByUrl("stockx.com")
   );
   const [country, setCountry] = useState("US");
   const [companyCompetitors, setCompanyCompetitors] = useState([]); // Array of company names

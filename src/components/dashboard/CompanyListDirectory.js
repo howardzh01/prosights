@@ -15,13 +15,14 @@ export class CompanyDirectory {
   }
 
   // Method to find a company by name and return the dictionary (object)
-  findCompanyByDisplayedName(name) {
+  findCompanyByDisplayedName(displayedName) {
     // console.log(name);
 
-    if (!name) return null;
+    if (!displayedName) return null;
     return (
       this.companyList.find(
-        (company) => company.displayedName.toLowerCase() === name.toLowerCase()
+        (company) =>
+          company.displayedName.toLowerCase() === displayedName.toLowerCase()
       ) || null
     );
   }
