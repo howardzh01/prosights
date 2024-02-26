@@ -2,7 +2,6 @@ const assert = require("assert");
 import fs from "fs";
 import path from "path";
 import { parse } from "csv-parse/sync"; // Correct import for synchronous parsing
-import Papa from "papaparse";
 
 export function parseSemrushOutput(output) {
   if (!output) {
