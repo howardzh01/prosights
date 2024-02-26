@@ -9,11 +9,11 @@ import AdSpendSection from "../components/dashboard/AdSpendSection";
 import CompetitorOverviewSection from "../components/dashboard/CompetitorOverviewSection";
 import Image from "next/image";
 import { useUser } from "@clerk/clerk-react";
-import { getApiData, getExcelDownload } from "../api";
+import { getApiData } from "../api";
 import { createContext } from "react";
 import ChartModal from "../components/ChartModal";
 import HeadCountChart from "../components/charts/HeadCountChart";
-import { CHARTS, CONSTANTS } from "../constants";
+import { CHARTS, CONSTANTS, SECTIONS } from "../constants";
 import CompetitorContainer from "../components/dashboard/CompetitorContainer";
 import { Skeleton } from "@nextui-org/react";
 import { CompanyDirectory } from "../components/dashboard/CompanyListDirectory";
@@ -23,20 +23,7 @@ import CountrySelector from "../components/dashboard/CountrySelector";
 import DashboardNavbar from "../components/dashboard/DashboardNavBar";
 import EmptyState from "../components/dashboard/EmptyState";
 import APILimitReached from "../components/dashboard/APILimitReached";
-import {
-  convertHeadCountChartDataToExcelFormat,
-  convertTotalVisitsChartDataToExcelFormat,
-  convertWebUsersChartDataToExcelFormat,
-  convertBreakdownChartDataToExcelFormat,
-  convertTrafficByChannelChartDataToExcelFormat,
-  convertTrafficGrowthVsPeersChartDataToExcelFormat,
-  convertTrafficMarketShareVsPeersDataToExcelFormat,
-  convertTrafficBreakdownVsPeersDataToExcelFormat,
-  convertAppUsersChartDataToExcelFormat,
-  convertAppUsageGrowthVsPeersChartDataToExcelFormat,
-  convertAppUsageMarketShareVsPeersDataToExcelFormat,
-  convertAppUsageLoyalUsersVsPeersDataToExcelFormat,
-} from "../utils/ChartUtils";
+import { downloadPDF, downloadExcelBuilder } from "../utils/Utils";
 import { fetchCompanyList } from "../utils/BackendUtils";
 
 export const SelectedChartContext = createContext();
@@ -84,148 +71,6 @@ function Dashboard({
 
   const [showPopup, setShowPopup] = useState(false);
 
-  // Sections for sidebar; MUST have same title as section id, which might be used in child components
-  const sections = [
-    {
-      title: "Company Overview",
-      id: "Company Overview",
-      parentId: "",
-      level: 1,
-    },
-    {
-      title: "Competitor Overview",
-      id: "Competitor Overview",
-      parentId: "",
-      level: 1,
-    },
-    {
-      title: "Headcount",
-      id: "Headcount",
-      parentId: "",
-      level: 1,
-    },
-    {
-      title: "Website Traffic",
-      id: "Website Traffic",
-      parentId: "",
-      level: 1,
-    },
-    {
-      title: "Growth",
-      id: "Growth",
-      parentId: "Website Traffic",
-      level: 2,
-    },
-    {
-      title: "Breakdown",
-      id: "Breakdown",
-      parentId: "Website Traffic",
-      level: 2,
-    },
-    {
-      title: "Quality Over Time",
-      id: "Quality Over Time",
-      parentId: "Website Traffic",
-      level: 2,
-    },
-    {
-      title: "Growth vs. Peers",
-      id: "Traffic Growth vs. Peers",
-      parentId: "Website Traffic",
-      level: 2,
-    },
-    {
-      title: "Market Share vs. Peers",
-      id: "Traffic Market Share vs. Peers",
-      parentId: "Website Traffic",
-      level: 2,
-    },
-    {
-      title: "Breakdown vs. Peers",
-      id: "Traffic Breakdown vs. Peers",
-      parentId: "Website Traffic",
-      level: 2,
-    },
-    {
-      title: "App Usage",
-      id: "App Usage",
-      parentId: "",
-      level: 1,
-    },
-    {
-      title: "Growth",
-      id: "App Growth",
-      parentId: "App Usage",
-      level: 2,
-    },
-    {
-      title: "Growth vs. Peers",
-      id: "App Growth vs. Peers",
-      parentId: "App Usage",
-      level: 2,
-    },
-    {
-      title: "Comparative Market Share vs. Peers",
-      id: "App Comparative Market Share vs. Peers",
-      parentId: "App Usage",
-      level: 2,
-    },
-    {
-      title: "Loyalty vs. Peers",
-      id: "Loyalty vs. Peers",
-      parentId: "App Usage",
-      level: 2,
-    },
-    {
-      title: "Consumer Spend",
-      id: "Consumer Spend",
-      parentId: "",
-      level: 1,
-    },
-    {
-      title: "Customer Loyalty vs. Peers",
-      id: "Customer Loyalty vs. Peers",
-      parentId: "Consumer Spend",
-      level: 2,
-    },
-    {
-      title: "Growth vs. Peers",
-      id: "Consumer Growth vs. Peers",
-      parentId: "Consumer Spend",
-      level: 2,
-    },
-    {
-      title: "Market Share vs. Peers",
-      id: "Consumer Market Share vs. Peers",
-      parentId: "Consumer Spend",
-      level: 2,
-    },
-    {
-      title: "Ad Spend",
-      id: "Ad Spend",
-      parentId: "",
-      level: 1,
-    },
-    {
-      title: "Market Spend",
-      id: "Market Spend",
-      parentId: "Ad Spend",
-      level: 2,
-    },
-    {
-      title: "Channel Breakdown",
-      id: "Channel Breakdown",
-      parentId: "Ad Spend",
-      level: 2,
-    },
-    {
-      title: "Breakdown vs. Peers",
-      id: "Ad Breakdown vs. Peers",
-      parentId: "Ad Spend",
-      level: 2,
-    },
-  ];
-
   function getActiveLevel1SectionName(sections, activeSections) {
     if (Object.keys(activeSections).length === 0) return "Company Overview"; // Loading state
     let activeSectionOrParentName = "No active section";
@@ -250,7 +95,7 @@ function Dashboard({
     return activeSectionOrParentName;
   }
   const activeLevel1SectionName = getActiveLevel1SectionName(
-    sections,
+    SECTIONS,
     activeSections
   );
 
@@ -406,280 +251,18 @@ function Dashboard({
   //   setAppUsageData(null);
   // }, [country]);
 
-  function downloadExcel(name, devMode = false) {
-    // Excel sheet builder
-    const headcountSectionBuilder =
-      headCountData && headCountData?.[companyDic.displayedName]
-        ? [
-            {
-              type: "bar",
-              sheetName: "Headcount",
-              sheetTabColor: "#D7ECFB",
-              req: convertHeadCountChartDataToExcelFormat(
-                headCountData[companyDic.displayedName],
-                dataCutoffDate
-              ),
-              poweredBy: "Coresignal",
-            },
-          ]
-        : [];
-    const webTrafficSectionBuilder = [
-      webTrafficData?.[companyDic.displayedName] !== undefined &&
-      Object.keys(webTrafficData?.[companyDic.displayedName]).length != 0
-        ? {
-            type: "bar",
-            sheetName: "Traffic Total Visits",
-            sheetTabColor: "#808080",
-            req: convertTotalVisitsChartDataToExcelFormat(
-              webTrafficData[companyDic.displayedName],
-              dataCutoffDate
-            ),
-            poweredBy: "Semrush",
-            showDataLabels: false,
-          }
-        : null,
-      webTrafficData?.[companyDic.displayedName] !== undefined &&
-      Object.keys(webTrafficData?.[companyDic.displayedName]).length != 0
-        ? {
-            type: "bar",
-            sheetName: "Traffic Web Users",
-            sheetTabColor: "#808080",
-            req: convertWebUsersChartDataToExcelFormat(
-              webTrafficData[companyDic.displayedName],
-              dataCutoffDate
-            ),
-            poweredBy: "Semrush",
-            showDataLabels: false,
-          }
-        : null,
-      // TODO: Need to split cases on geo and non-geo data
-      webTrafficGeoData?.[companyDic.displayedName] !== undefined &&
-      webTrafficGeoData?.[companyDic.displayedName] !== null &&
-      Object.keys(webTrafficGeoData?.[companyDic.displayedName]).length !== 0 &&
-      webTrafficData?.[companyDic.displayedName] !== undefined &&
-      webTrafficData?.[companyDic.displayedName] !== null &&
-      Object.keys(webTrafficData?.[companyDic.displayedName]).length !== 0
-        ? {
-            type: "doughnut",
-            sheetName: "Traffic Breakdown",
-            sheetTabColor: "#808080",
-            req: convertBreakdownChartDataToExcelFormat(
-              webTrafficGeoData[companyDic.displayedName],
-              webTrafficData[companyDic.displayedName]
-            ),
-            poweredBy: "Semrush",
-          }
-        : null,
-      webTrafficData?.[companyDic.displayedName] !== undefined &&
-      Object.keys(webTrafficData?.[companyDic.displayedName]).length !== 0
-        ? {
-            type: "stacked",
-            sheetName: "Traffic Total Visits by Channel",
-            sheetTabColor: "#808080",
-            req: convertTrafficByChannelChartDataToExcelFormat(
-              webTrafficData[companyDic.displayedName],
-              dataCutoffDate
-            ),
-            poweredBy: "Semrush",
-          }
-        : null,
-      webTrafficData !== undefined &&
-      Object.keys(webTrafficData).length != 0 &&
-      Object.keys(webTrafficData?.[companyDic.displayedName]).length !== 0
-        ? {
-            type: "line",
-            sheetName: "Traffic Growth vs. Peers",
-            sheetTabColor: "#808080",
-            req: convertTrafficGrowthVsPeersChartDataToExcelFormat(
-              webTrafficData,
-              dataCutoffDate
-            ),
-            poweredBy: "Semrush",
-          }
-        : null,
-      webTrafficData !== undefined &&
-      Object.keys(webTrafficData).length != 0 &&
-      Object.keys(webTrafficData?.[companyDic.displayedName]).length !== 0
-        ? {
-            type: "stacked",
-            sheetName: "Traffic Market Share vs. Peers",
-            sheetTabColor: "#808080",
-            req: convertTrafficMarketShareVsPeersDataToExcelFormat(
-              webTrafficData,
-              dataCutoffDate
-            ),
-            poweredBy: "Semrush",
-          }
-        : null,
-      // TODO: Need to split cases on geo and non-geo data
-      webTrafficData !== undefined &&
-      Object.keys(webTrafficData).length != 0 &&
-      Object.keys(webTrafficData?.[companyDic.displayedName]).length !== 0 &&
-      webTrafficGeoData !== undefined &&
-      Object.keys(webTrafficGeoData).length != 0 &&
-      Object.keys(webTrafficGeoData?.[companyDic.displayedName]).length !== 0
-        ? {
-            type: "stacked",
-            sheetName: "Traffic Breakdown vs. Peers",
-            sheetTabColor: "#808080",
-            req: convertTrafficBreakdownVsPeersDataToExcelFormat(
-              webTrafficGeoData,
-              webTrafficData
-            ),
-            poweredBy: "Semrush",
-          }
-        : null,
-    ].filter(Boolean);
-    const appUsageSectionBuilder = [];
-    if (
-      dataAIData &&
-      (dataAIData[companyDic?.displayedName] || dataAIData[companyDic?.name]) &&
-      Object.keys(dataAIData).length !== 0
-    ) {
-      appUsageSectionBuilder.push({
-        type: "bar",
-        sheetName: "App Users",
-        sheetTabColor: "#FFFFCC",
-        req: convertAppUsersChartDataToExcelFormat(
-          dataAIData[companyDic?.displayedName || companyDic?.name][
-            "app_performance"
-          ],
-          dataCutoffDate
-        ),
-        poweredBy: "Data AI",
-        showDataLabels: false,
-      });
-      appUsageSectionBuilder.push(
-        {
-          type: "line",
-          sheetName: "App Growth vs. Peers",
-          sheetTabColor: "#FFFFCC",
-          req: convertAppUsageGrowthVsPeersChartDataToExcelFormat(
-            dataAIData,
-            dataCutoffDate
-          ),
-          poweredBy: "Data AI",
-        },
-        {
-          type: "stacked",
-          sheetName: "Comparative App Market Share",
-          sheetTabColor: "#FFFFCC",
-          req: convertAppUsageMarketShareVsPeersDataToExcelFormat(
-            dataAIData,
-            dataCutoffDate
-          ),
-          poweredBy: "Data AI",
-        },
-        {
-          type: "bar",
-          sheetName: "App Loyalty vs. Peers",
-          sheetTabColor: "#FFFFCC",
-          req: convertAppUsageLoyalUsersVsPeersDataToExcelFormat(dataAIData),
-          poweredBy: "Data AI",
-        }
-      );
-    }
-    const dividerBuilder = (name, tabColor) => ({
-      type: "divider",
-      sheetName: name,
-      sheetTabColor: tabColor,
-      req: {},
-      poweredBy: "",
-    });
-
-    switch (name) {
-      case "Headcount":
-        getExcelDownload(
-          headcountSectionBuilder,
-          `${companyDic.displayedName} - ${country} (Headcount)`,
-          devMode
-        );
-        break;
-      case "Web Traffic":
-        getExcelDownload(
-          webTrafficSectionBuilder,
-          `${companyDic.displayedName} - ${country} (Web Traffic)`,
-          devMode
-        );
-        break;
-      case "App Usage":
-        getExcelDownload(
-          appUsageSectionBuilder,
-          `${companyDic.displayedName} - ${country} (App Usage)`,
-          devMode
-        );
-        break;
-      default:
-        // Case of downloading everything
-        getExcelDownload(
-          [
-            dividerBuilder("Headcount >>>", "#36A2EB"),
-            ...headcountSectionBuilder,
-            dividerBuilder("Web Traffic >>>", "#000000"),
-            ...webTrafficSectionBuilder,
-            dividerBuilder("App Usage >>>", "#FF9F40"),
-            ...appUsageSectionBuilder,
-          ],
-          `${companyDic.displayedName} - ${country} (Full Report)`,
-          devMode
-        );
-        break;
-    }
-  }
-
-  const downloadPDF = async () => {
-    const { jsPDF } = await import("jspdf");
-    const html2canvas = (await import("html2canvas")).default;
-
-    // Scroll to the top of the page to ensure the content starts from the very beginning
-    window.scrollTo(0, 0);
-
-    const element = document.getElementById("main-content");
-    const contentWidth = element.scrollWidth * 1.3; // Full scrollable content width, hardcoded 1.3x
-    const contentHeight = element.scrollHeight; // Full scrollable content height
-
-    // Create a canvas with the full content
-    const canvas = await html2canvas(element, {
-      useCORS: true,
-      scale: window.devicePixelRatio, // Use the device pixel ratio for better resolution
-      logging: true,
-      dpi: 192,
-      letterRendering: true,
-      scrollX: 0,
-      scrollY: 0,
-      width: contentWidth,
-      height: contentHeight,
-      windowHeight: contentHeight,
-      windowWidth: contentWidth,
-    });
-
-    const imgData = canvas.toDataURL("image/jpeg", 1.0);
-
-    // Calculate the PDF width and height in points (1 point = 1/72 inch)
-    const pdfWidth = 595.28; // A4 width in points at 72 DPI
-    const pdfHeight = (pdfWidth * contentHeight) / contentWidth; // Calculate the height based on the content aspect ratio
-
-    // Calculate the ratio to fit the content within the A4 dimensions
-    const ratio = Math.min(pdfWidth / contentWidth, pdfHeight / contentHeight);
-
-    // Calculate the dimensions of the image on the PDF
-    const imgWidth = contentWidth * ratio;
-    const imgHeight = contentHeight * ratio;
-
-    // Calculate the position to center the content
-    const xPosition = (pdfWidth - imgWidth) / 2;
-    const yPosition = (pdfHeight - imgHeight) / 2;
-
-    // Create a PDF with a custom page size that matches the content's aspect ratio
-    const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "pt",
-      format: [pdfWidth, pdfHeight],
-    });
-
-    // Add the image to the PDF centered
-    pdf.addImage(imgData, "JPEG", xPosition, yPosition, pdfWidth, pdfHeight);
-    pdf.save(`${companyDic.displayedName} - ${country} (Full Report)`);
+  const downloadExcel = (name) => {
+    downloadExcelBuilder(
+      headCountData,
+      webTrafficData,
+      webTrafficGeoData,
+      dataAIData,
+      companyDic,
+      dataCutoffDate,
+      country,
+      name,
+      false
+    );
   };
 
   const {
@@ -703,7 +286,6 @@ function Dashboard({
     country,
     enableCrunchbase
   );
-  console.log(fullCompanyInfo);
   return (
     <SelectedChartContext.Provider value={{ selectedChart, setSelectedChart }}>
       <ChartDataContext.Provider value={{ chartData, setChartData }}>
@@ -721,25 +303,19 @@ function Dashboard({
           {/* Sidebar */}
           <div className="flex-shrink-0 w-60 h-screen z-0">
             <SideBar
-              sections={sections}
+              sections={SECTIONS}
               activeSections={activeSections}
               apiUsage={apiCalls}
               navbarCalculatedHeight={navbarCalculatedHeight}
             />
           </div>
-          <div className="flex flex-col relative h-screen w-full overflow-x-hidden bg-transparent z-50">
+          <div className="flex flex-col relative h-screen w-full overflow-x-hidden bg-transparent z-40">
             {companyDic && companyDic.name && (
-              <div className="sticky top-0 z-50 bg-transparent h-14 flex items-center justify-between mr-4">
-                <div className="flex relative z-50">
-                  <div className="mt-4 group cursor-pointer hidden">
-                    <Image
-                      src={"/assets/helpInactive.svg"}
-                      alt="Help Icon"
-                      width={24}
-                      height={24}
-                      className="w-5 h-5"
-                    />
-                  </div>
+              <div className="sticky top-0 z-40 bg-transparent h-14 flex items-center justify-between">
+                <div className="flex items-center px-8 py-2 border-2 border-[#373B46] rounded-lg opacity-0 cursor-default ml-2">
+                  <p className="text-sm font-semibold text-customGray-200">
+                    Wrong or missing company data?
+                  </p>
                 </div>
                 <div className="w-[30rem] 2xl:w-[34rem] mx-auto">
                   <SearchBar
@@ -749,33 +325,10 @@ function Dashboard({
                     darkMode={true}
                   />
                 </div>
-                <div className="flex relative z-50">
-                  <div
-                    className="group cursor-pointer"
-                    onMouseOver={() => setShowPopup(true)}
-                    onMouseOut={() => setShowPopup(false)}
-                  >
-                    <Image
-                      src={
-                        showPopup
-                          ? "/assets/helpActive.svg"
-                          : "/assets/helpInactive.svg"
-                      }
-                      alt="Help Icon"
-                      width={24}
-                      height={24}
-                      className="w-6 h-6"
-                    />
-                  </div>
-                  <div
-                    id="infoPopup"
-                    className="absolute z-50 bg-customGray-700 text-white rounded-lg px-4 py-2 text-center w-64 -bottom-16 -left-64 text-sm"
-                    style={{
-                      display: showPopup ? "block" : "none",
-                    }}
-                  >
-                    Call us at (312)-709-9987 and we'll help you ASAP
-                  </div>
+                <div className="group flex items-center px-6 py-2 border-2 border-[#373B46] rounded-lg mr-2 cursor-pointer hover:border-primary">
+                  <p className="text-sm font-medium text-customGray-200 group-hover:text-primaryMedium">
+                    Wrong or missing company data?
+                  </p>
                 </div>
               </div>
             )}
@@ -784,14 +337,14 @@ function Dashboard({
             ) : companyDic && companyDic.name ? (
               // Main Content
               <div
-                className="h-full z-40 relative flex flex-col w-full bg-white bg-repeat bg-center overflow-x-hidden rounded-tl-lg"
+                className="h-full z-30 relative flex flex-col w-full bg-white bg-repeat bg-center overflow-x-hidden rounded-tl-lg"
                 id="main-content"
                 style={{
                   backgroundImage: "url('/assets/backgroundPatternLight.svg')",
                 }}
               >
                 {/* Company name, country, and comparing section */}
-                <div className="sticky top-0 px-10 pt-6 z-40 bg-white">
+                <div className="sticky top-0 px-10 pt-6 z-30 bg-white">
                   <DashboardNavbar
                     companyDic={companyDic}
                     country={country}

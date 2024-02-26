@@ -39,7 +39,6 @@ const getGPTDescriptions = async (
       },
     ],
   };
-  console.log("GPT REFETCH", payload);
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     headers: {
       "Content-Type": "application/json",

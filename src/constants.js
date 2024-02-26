@@ -34,6 +34,7 @@ export const CHARTJS_COLOR_PLUGIN = {
     });
   },
 };
+
 export const UN_M49_CONTINENTS = {
   19: "North America",
   150: "Europe",
@@ -171,6 +172,148 @@ export const COUNTRY_LIST = {
   WW: "Worldwide",
   ROW: "Rest of World",
 };
+
+// Sections for sidebar; MUST have same title as section id, which might be used in child components
+export const SECTIONS = [
+  {
+    title: "Company Overview",
+    id: "Company Overview",
+    parentId: "",
+    level: 1,
+  },
+  {
+    title: "Competitor Overview",
+    id: "Competitor Overview",
+    parentId: "",
+    level: 1,
+  },
+  {
+    title: "Headcount",
+    id: "Headcount",
+    parentId: "",
+    level: 1,
+  },
+  {
+    title: "Website Traffic",
+    id: "Website Traffic",
+    parentId: "",
+    level: 1,
+  },
+  {
+    title: "Growth",
+    id: "Growth",
+    parentId: "Website Traffic",
+    level: 2,
+  },
+  {
+    title: "Breakdown",
+    id: "Breakdown",
+    parentId: "Website Traffic",
+    level: 2,
+  },
+  {
+    title: "Quality Over Time",
+    id: "Quality Over Time",
+    parentId: "Website Traffic",
+    level: 2,
+  },
+  {
+    title: "Growth vs. Peers",
+    id: "Traffic Growth vs. Peers",
+    parentId: "Website Traffic",
+    level: 2,
+  },
+  {
+    title: "Market Share vs. Peers",
+    id: "Traffic Market Share vs. Peers",
+    parentId: "Website Traffic",
+    level: 2,
+  },
+  {
+    title: "Breakdown vs. Peers",
+    id: "Traffic Breakdown vs. Peers",
+    parentId: "Website Traffic",
+    level: 2,
+  },
+  {
+    title: "App Usage",
+    id: "App Usage",
+    parentId: "",
+    level: 1,
+  },
+  {
+    title: "Growth",
+    id: "App Growth",
+    parentId: "App Usage",
+    level: 2,
+  },
+  {
+    title: "Growth vs. Peers",
+    id: "App Growth vs. Peers",
+    parentId: "App Usage",
+    level: 2,
+  },
+  {
+    title: "Comparative Market Share vs. Peers",
+    id: "App Comparative Market Share vs. Peers",
+    parentId: "App Usage",
+    level: 2,
+  },
+  {
+    title: "Loyalty vs. Peers",
+    id: "Loyalty vs. Peers",
+    parentId: "App Usage",
+    level: 2,
+  },
+  {
+    title: "Consumer Spend",
+    id: "Consumer Spend",
+    parentId: "",
+    level: 1,
+  },
+  {
+    title: "Customer Loyalty vs. Peers",
+    id: "Customer Loyalty vs. Peers",
+    parentId: "Consumer Spend",
+    level: 2,
+  },
+  {
+    title: "Growth vs. Peers",
+    id: "Consumer Growth vs. Peers",
+    parentId: "Consumer Spend",
+    level: 2,
+  },
+  {
+    title: "Market Share vs. Peers",
+    id: "Consumer Market Share vs. Peers",
+    parentId: "Consumer Spend",
+    level: 2,
+  },
+  {
+    title: "Ad Spend",
+    id: "Ad Spend",
+    parentId: "",
+    level: 1,
+  },
+  {
+    title: "Market Spend",
+    id: "Market Spend",
+    parentId: "Ad Spend",
+    level: 2,
+  },
+  {
+    title: "Channel Breakdown",
+    id: "Channel Breakdown",
+    parentId: "Ad Spend",
+    level: 2,
+  },
+  {
+    title: "Breakdown vs. Peers",
+    id: "Ad Breakdown vs. Peers",
+    parentId: "Ad Spend",
+    level: 2,
+  },
+];
 
 const DATA_METHODOLOGY = {
   EMPLOYEE_HEADCOUNT:

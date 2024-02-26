@@ -11,6 +11,7 @@ function SideBar({
 }) {
   // Determine if we should extend the bar to cover multiple consecutive active sections
   const isSectionActive = (section) => activeSections[section.id];
+  const [showPopup, setShowPopup] = useState(false);
 
   // const isParentSectionActive = (section) => activeSections[section.id];
 
@@ -101,8 +102,38 @@ function SideBar({
           );
         })}
       </div>
-      <div className={`flex flex-row items-center pt-4`}>
+      <div
+        className={`flex flex-row z-50 items-center pt-4 w-full justify-between`}
+      >
         <UserProfileButton />
+        <div className="flex relative z-50">
+          <div
+            className="group cursor-pointer"
+            onMouseOver={() => setShowPopup(true)}
+            onMouseOut={() => setShowPopup(false)}
+          >
+            <Image
+              src={
+                showPopup
+                  ? "/assets/helpActive.svg"
+                  : "/assets/helpInactive.svg"
+              }
+              alt="Help Icon"
+              width={24}
+              height={24}
+              className="w-6 h-6"
+            />
+          </div>
+          <div
+            id="infoPopup"
+            className="absolute z-50 bg-customGray-700 text-white rounded-lg px-4 py-2 text-center w-52 bottom-12 -left-[11.5rem] text-sm"
+            style={{
+              display: showPopup ? "block" : "none",
+            }}
+          >
+            Call us at (312)-709-9987 and we'll help you ASAP
+          </div>
+        </div>
       </div>
     </div>
   );
