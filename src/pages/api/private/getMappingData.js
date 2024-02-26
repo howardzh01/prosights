@@ -46,6 +46,7 @@ const handler = async (req, res) => {
     displayedName: company.displayedName,
     appId: company.appId.slice(1), // starts with ' for now
     url: company.url,
+    linkedInSlug: company.linkedInSlug,
   }));
   return res.status(200).json(filteredCompanyList);
 };

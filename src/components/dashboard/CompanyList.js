@@ -6,6 +6,7 @@ export const companyListFixed = [
     displayedName: "StockX",
     logo: "https://images.crunchbase.com/image/upload/t_cb-default-original/hvhqzscb7we0hifjqr2q",
     appId: "1000600000607381",
+    linkedInSlug: "stockx",
   },
   {
     name: "goat",
@@ -14,6 +15,7 @@ export const companyListFixed = [
     displayedName: "GOAT",
     logo: "https://images.crunchbase.com/image/upload/c_pad,h_170,w_170,f_auto,b_white,q_auto:eco,dpr_1/vtpvp46fr98de2r1txof",
     appId: "1000600000606873",
+    linkedInSlug: "goatgroup",
   },
   {
     name: "grailed",
@@ -22,6 +24,7 @@ export const companyListFixed = [
     displayedName: "Grailed",
     logo: "https://images.crunchbase.com/image/upload/c_pad,h_170,w_170,f_auto,b_white,q_auto:eco,dpr_1/cy5oo3m3njxtojnvz198",
     appId: "1000600000657044",
+    linkedInSlug: "grailed",
   },
   {
     name: "flight-club",

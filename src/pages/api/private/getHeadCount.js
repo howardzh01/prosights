@@ -34,9 +34,9 @@ const handler = async (req) => {
   // reqJSON.userId, reqJSON.messages
   // console.log(req.companyName);
   const reqJSON = await req.json();
-  const { userId, companyName } = reqJSON;
+  const { userId, linkedInSlug } = reqJSON;
   // console.log("before", companyName);
-  const headcountData = await getCSignalHeadCount(companyName.toLowerCase());
+  const headcountData = await getCSignalHeadCount(linkedInSlug.toLowerCase());
   if (!headcountData) {
     return new Response(JSON.stringify([]), {
       status: 404,

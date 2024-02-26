@@ -38,7 +38,6 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
       fullCompanyInfoError: undefined,
     };
   }
-
   const companyNameList = companyDicList.map((company) => company.name);
   const companyDisplayedNameList = companyDicList.map(
     (company) => company.displayedName
@@ -52,7 +51,11 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
 
   const { data: headCountData, error: headCountError } = useSWR(
     user && companyNameList
-      ? [companyNameList, `/api/private/getHeadCount`, user.id]
+      ? [
+          companyDicList.map((company) => company.linkedInSlug),
+          `/api/private/getHeadCount`,
+          user.id,
+        ]
       : null,
     (args) => {
       return apiMultiCall(companyDisplayedNameList, getHeadCount, args);
@@ -208,10 +211,9 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
   };
 }
 
-export const getHeadCount = async ([companyName, api_url, userId]) => {
+export const getHeadCount = async ([linkedInSlug, api_url, userId]) => {
   // expect `/api/private/getHeadCount`
-  // TODO: REMOVE IN FUTURE
-  if (companyName.toLowerCase() === "goat") {
+  if (!linkedInSlug) {
     return null;
   }
   const response = await fetch(api_url, {
@@ -221,7 +223,7 @@ export const getHeadCount = async ([companyName, api_url, userId]) => {
     },
     body: JSON.stringify({
       userId: userId,
-      companyName: companyName,
+      linkedInSlug: linkedInSlug,
     }),
   });
   if (!response.ok) {
@@ -298,6 +300,9 @@ export const getGeoTrafficData = async ([
   userId,
   relevant_continents,
 ]) => {
+  if (!companyUrl) {
+    return null;
+  }
   //`/api/private/getWebTrafficGeoData`
   function getContinentName(continentItem) {
     // return continent name if exists and in relevant_continents else null
@@ -371,6 +376,9 @@ export const getGeoTrafficData = async ([
 
 export const getCrunchbaseData = async ([companyName, api_url, userId]) => {
   // `/api/private/getCrunchbaseData`;
+  if (!companyName) {
+    return null;
+  }
   const response = await fetch(api_url, {
     method: "POST",
     headers: {
@@ -397,6 +405,9 @@ export const getCompanyDescription = async ([
   userId,
   crunchbaseDescription,
 ]) => {
+  if (!companyName) {
+    return null;
+  }
   //`/api/private/getCompanyDescription`
   // data["fields"]["description"]
   // Should include company_description + business_model
@@ -476,6 +487,9 @@ export const getDataAIData = async ([
 };
 
 export const getFullCompanyInfo = async ([companyUrl, api_url, userId]) => {
+  if (!companyUrl) {
+    return null;
+  }
   const response = await fetch(api_url, {
     method: "POST",
     headers: {
