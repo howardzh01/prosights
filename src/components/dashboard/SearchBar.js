@@ -32,7 +32,7 @@ export default function SearchBar({
           }
         );
       } else {
-        const company = companyDirectory.findCompanyByName(value);
+        const company = companyDirectory.findCompanyByDisplayedName(value);
         return (
           company || { name: value, url: `${value}.com`, displayedName: value }
         );

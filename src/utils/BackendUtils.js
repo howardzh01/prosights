@@ -1,5 +1,5 @@
 const assert = require("assert");
-import fs from "fs";
+// import fs from "fs";
 import path from "path";
 import { parse } from "csv-parse/sync"; // Correct import for synchronous parsing
 
@@ -29,21 +29,21 @@ export async function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export async function fetchCompanyList(pathToFile) {
-  const filePath = path.join(process.cwd(), pathToFile);
-  // const filePath = "/assets/mappings/prosights_mappings_v1_prod_search.csv";
-  const fileContent = fs.readFileSync(filePath, "utf8");
-  try {
-    const data = parse(fileContent, {
-      columns: true, // Assumes the first row contains column names
-      skip_empty_lines: true,
-    });
-    return data;
-  } catch (error) {
-    console.error("Failed to load company list:", error);
-    return []; // Return an empty array in case of error
-  }
-}
+// export async function fetchCompanyList(pathToFile) {
+//   const filePath = path.join(process.cwd(), pathToFile);
+//   // const filePath = "/assets/mappings/prosights_mappings_v1_prod_search.csv";
+//   const fileContent = fs.readFileSync(filePath, "utf8");
+//   try {
+//     const data = parse(fileContent, {
+//       columns: true, // Assumes the first row contains column names
+//       skip_empty_lines: true,
+//     });
+//     return data;
+//   } catch (error) {
+//     console.error("Failed to load company list:", error);
+//     return []; // Return an empty array in case of error
+//   }
+// }
 
 export const parseCsvBufferToJson = (buffer) => {
   try {

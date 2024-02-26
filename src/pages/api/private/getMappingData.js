@@ -34,7 +34,6 @@ const handler = async (req, res) => {
     console.log("Error parsing CSV to JSON");
     return res.status(404).json([]);
   }
-  console.log("companyList", companyList);
   if (companyUrl) {
     companyList = companyList.filter((company) => company.url === companyUrl);
     if (companyList.length === 0) {
