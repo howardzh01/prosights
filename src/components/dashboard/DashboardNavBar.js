@@ -139,7 +139,11 @@ const DashboardNavBar = ({
                   className="hover:cursor-pointer hover:text-primary px-4 py-2 text-sm"
                   role="menuitem"
                   tabIndex="-1"
-                  onClick={downloadPDF}
+                  onClick={() =>
+                    downloadPDF(
+                      `${companyDic.displayedName} - ${country} (Full Report)`
+                    )
+                  }
                 >
                   Download PDF
                 </button>
