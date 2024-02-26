@@ -89,7 +89,7 @@ export default function ChartModal({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          <div className="fixed inset-0 bg-customGray-800 bg-opacity-50 transition-opacity" />
         </Transition.Child>
         <div className="fixed inset-0 w-screen overflow-y-auto">
           <div className="flex h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">

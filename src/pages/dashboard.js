@@ -12,6 +12,7 @@ import { useUser } from "@clerk/clerk-react";
 import { getApiData } from "../api";
 import { createContext } from "react";
 import ChartModal from "../components/ChartModal";
+import DefineNewCompanyModal from "../components/DefineNewCompanyModal";
 import HeadCountChart from "../components/charts/HeadCountChart";
 import { CHARTS, CONSTANTS, SECTIONS } from "../constants";
 import CompetitorContainer from "../components/dashboard/CompetitorContainer";
@@ -71,7 +72,7 @@ function Dashboard({
   const [activeSections, setActiveSections] = useState({});
   const [apiCalls, setApiCalls] = useState(null); // Initialize apiCalls state
 
-  const [showPopup, setShowPopup] = useState(false);
+  const [showManualMappingModal, setShowManualMappingModal] = useState(false);
 
   function getActiveLevel1SectionName(sections, activeSections) {
     if (Object.keys(activeSections).length === 0) return "Company Overview"; // Loading state
@@ -301,6 +302,12 @@ function Dashboard({
           chartData={chartData}
           country={country}
         />
+        <DefineNewCompanyModal
+          show={showManualMappingModal}
+          toggleOff={() => {
+            setShowManualMappingModal(false);
+          }}
+        />
         <div className="relative flex flex-row bg-customGray-900">
           {/* Sidebar */}
           <div className="flex-shrink-0 w-60 h-screen z-0">
@@ -327,7 +334,10 @@ function Dashboard({
                     darkMode={true}
                   />
                 </div>
-                <div className="group flex items-center px-6 py-2 border-2 border-[#373B46] rounded-lg mr-2 cursor-pointer hover:border-primary">
+                <div
+                  className="group flex items-center px-6 py-2 border-2 border-[#373B46] rounded-lg mr-2 cursor-pointer hover:border-primary"
+                  onClick={() => setShowManualMappingModal(true)}
+                >
                   <p className="text-sm font-medium text-customGray-200 group-hover:text-primaryMedium">
                     Wrong or missing company data?
                   </p>
