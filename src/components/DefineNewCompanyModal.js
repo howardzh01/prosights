@@ -241,7 +241,7 @@ export default function DefineNewCompanyModal({
                         : undefined
                     }
                   >
-                    Generate Report
+                    Run Analysis
                   </div>
                 </div>
               </Dialog.Panel>
