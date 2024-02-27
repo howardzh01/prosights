@@ -692,3 +692,28 @@ export const createCompanyDic = (value, companyDirectory) => {
     return value;
   }
 };
+
+// Utility function to sum data for related keys. Used for web traffic channel tables
+export function sumRelatedTableRows(
+  tableDatasets,
+  relatedKeys,
+  valueType = "data"
+) {
+  return relatedKeys.reduce((acc, key) => {
+    // Find the dataset corresponding to the current key
+    const dataset = tableDatasets.find((d) => d.label === key);
+    if (dataset) {
+      dataset[valueType].forEach((value, index) => {
+        // Initialize the accumulator for this index if necessary
+        if (acc[index] === undefined) {
+          acc[index] = 0;
+        }
+        // Ensure value is a number before adding it to the sum
+        if (!isNaN(value)) {
+          acc[index] += value;
+        }
+      });
+    }
+    return acc;
+  }, []);
+}

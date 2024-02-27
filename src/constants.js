@@ -18,6 +18,17 @@ export const CHARTJS_COLORS = [
   // ...add as many colors as you need, with labels as comments
 ];
 
+export const TRAFFIC_BY_CHANNEL_COLORS = {
+  Direct: "rgba(0,128,126,1)",
+  Mail: "rgba(0,181,179,1)",
+  "Organic Search": "rgba(125,213,212,1)",
+  "Organic Social": "rgba(198,240,240,1)",
+  Referral: "rgba(255,217,227,1)",
+  "Paid Search": "rgba(255,153,180,1)",
+  "Paid Social": "rgba(255,84,130,1)",
+  "Display Ads": "rgba(255,0,69,1)",
+};
+
 export const CHARTJS_COLOR_PLUGIN = {
   id: "chartJSColorPlugin",
   beforeUpdate: (chart) => {
@@ -30,6 +41,7 @@ export const CHARTJS_COLOR_PLUGIN = {
     const backgroundColors = CHARTJS_COLORS;
     chart.data.datasets.forEach((dataset, index) => {
       dataset.backgroundColor =
+        dataset.backgroundColor ||
         backgroundColors[index % backgroundColors.length];
     });
   },

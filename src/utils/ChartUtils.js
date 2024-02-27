@@ -9,8 +9,13 @@ import {
   normalizeStackedAggData,
   convertToGrowthData,
   calculateMean,
+  sumRelatedTableRows,
 } from "./Utils";
-import { CHARTS, CHARTJS_COLORS } from "../constants";
+import {
+  CHARTS,
+  CHARTJS_COLORS,
+  TRAFFIC_BY_CHANNEL_COLORS,
+} from "../constants";
 
 // Below are API data converters
 export function convertToHeadcountChartData(
@@ -206,6 +211,10 @@ export function convertToChannelDoughnutData(
         data: percentages,
         rawData: Object.values(sums),
         borderWidth: 1,
+        backgroundColor:
+          type === "traffic_by_channel"
+            ? Object.values(TRAFFIC_BY_CHANNEL_COLORS) // Order of values must be right
+            : null,
         // Here you could add backgroundColors and other properties as needed
       },
     ],
@@ -215,7 +224,16 @@ export function convertToChannelDoughnutData(
 function getRelevantTrafficKeys(type) {
   switch (type) {
     case "traffic_by_channel":
-      return ["direct", "mail", "social", "search", "referral", "display_ad"];
+      return [
+        "direct",
+        "mail",
+        "search_organic",
+        "social_organic",
+        "referral",
+        "search_paid",
+        "social_paid",
+        "display_ad",
+      ];
     case "traffic_by_device":
       return ["mobile_visits", "desktop_visits"];
     case "users_by_device":
@@ -237,7 +255,7 @@ function formatRelevantTrafficKeys(key) {
     social_organic: "Organic Social",
     search_paid: "Paid Search",
     social_paid: "Paid Social",
-    display_ad: "Display Ad",
+    display_ad: "Display Ads",
     unknown_channel: "Other",
   };
   if (key in displayedKeyMap) {
@@ -253,51 +271,34 @@ export function convertToChannelChartData(
   timescale,
   dataCutoffDate
 ) {
-  const paidTrafficKeys = ["search_paid", "social_paid", "display_ad"];
-  const paidTrafficRowName = "Paid Visits";
-  let relevant_keys,
-    condensePaidKeys = false;
+  const paidTrafficKeys = [
+    "referrals",
+    "search_paid",
+    "social_paid",
+    "display_ad",
+  ];
+  const paidTrafficRowName = "Total Paid";
+  const organicTrafficKeys = [
+    "direct",
+    "mail",
+    "search_organic",
+    "social_organic",
+  ];
+  const organicTrafficRowName = "Total Organic";
+  let trafficByChannelColors;
+  const relevant_keys = getRelevantTrafficKeys(type);
+
+  let addOrganicPaidRows = false;
   if (type === "traffic_by_channel") {
-    relevant_keys = [
-      "direct",
-      "mail",
-      "referral",
-      "search_organic",
-      "social_organic",
-      "search_paid",
-      "social_paid",
-      "display_ad",
-      "unknown_channel",
-    ];
-    condensePaidKeys = true;
-  } else {
-    relevant_keys = getRelevantTrafficKeys(type);
+    addOrganicPaidRows = true;
+    trafficByChannelColors = TRAFFIC_BY_CHANNEL_COLORS;
   }
-  // } else if (type === "traffic_by_device") {
-  //   relevant_keys = ["mobile_visits", "desktop_visits"];
-  // } else if (type === "users_by_device") {
-  //   relevant_keys = ["mobile_users", "desktop_users"];
-  // } else if (type === "traffic_by_organic_paid") {
-  //   relevant_keys = [
-  //     "search_organic",
-  //     "social_organic",
-  //     "search_paid",
-  //     "social_paid",
-  //   ];
-  // } else {
-  //   relevant_keys = [
-  //     "search_organic",
-  //     "social_organic",
-  //     "search_paid",
-  //     "social_paid",
-  //   ];
-  // }
 
   const aggData = relevant_keys.reduce((acc, key) => {
-    const displayedKey =
-      condensePaidKeys && paidTrafficKeys.includes(key)
-        ? paidTrafficRowName
-        : formatRelevantTrafficKeys(key);
+    const displayedKey = formatRelevantTrafficKeys(key);
+    // condensePaidKeys && paidTrafficKeys.includes(key)
+    //   ? paidTrafficRowName
+    //   : formatRelevantTrafficKeys(key);
 
     acc[displayedKey] = aggregateData(trafficData, key, "sum", timescale);
     return acc;
@@ -321,21 +322,51 @@ export function convertToChannelChartData(
           (x) => (x ? Number(roundPeNumbers(x)) : null) // this will convert null to 0
         ),
       rawData: Object.values(aggData[key]).slice(cutoffIndex),
+      backgroundColor: trafficByChannelColors?.[key], // If undefined, ChartJS will use default colors
       borderWidth: 1,
       label: key,
     })),
   };
-  // chartData.datasets = convertStackedChartDataToPercent(chartData.datasets); // convert to percent so bars add to 100%
+
+  let tableDatasets = chartData["datasets"];
+  if (addOrganicPaidRows) {
+    tableDatasets = JSON.parse(JSON.stringify(chartData["datasets"]));
+    for (const [rowName, relatedKeys] of [
+      [paidTrafficRowName, paidTrafficKeys],
+      [organicTrafficRowName, organicTrafficKeys],
+    ]) {
+      const lastOrganicKeyIndex = relevant_keys.lastIndexOf(
+        relatedKeys[relatedKeys.length - 1]
+      );
+      const newRowPosition = lastOrganicKeyIndex + 1; // Position after the last organic key
+      const newRow = JSON.parse(JSON.stringify(tableDatasets[0])); // Deep copy the first row
+      newRow.label = rowName;
+      newRow.data = sumRelatedTableRows(
+        tableDatasets,
+        relatedKeys.map((key) => formatRelevantTrafficKeys(key)),
+        "data"
+      );
+      newRow.rawData = sumRelatedTableRows(
+        tableDatasets,
+        relatedKeys.map((key) => formatRelevantTrafficKeys(key)),
+        "rawData"
+      );
+
+      // Insert the new row into the tableDatasets at the calculated position
+      tableDatasets.splice(newRowPosition, 0, newRow);
+    }
+  }
 
   let { tableHeaders, tableLabels } = getTableInfo(firstChannelData);
 
   const tableData = {
     tableHeaders: tableHeaders.slice(cutoffIndex),
     tableLabels: tableLabels.slice(cutoffIndex),
-    tableDatasets: [...chartData["datasets"]],
+    tableDatasets: tableDatasets,
     topBorderedRows: [paidTrafficRowName],
     highlightedRows: {
-      Direct: "bg-primaryLight",
+      // Direct: "bg-primaryLight",
+      [organicTrafficRowName]: "bg-customGray-75",
       [paidTrafficRowName]: "bg-customGray-75",
       // [totalTrafficRow.label]: "bg-customGray-75",
     },
@@ -659,6 +690,10 @@ export function convertToTrafficBreakdownVsPeersData(
         ),
         rawData: Object.values(companyRawData).map((company) => company[key]),
         borderWidth: 1,
+        backgroundColor:
+          type === "traffic_by_channel"
+            ? TRAFFIC_BY_CHANNEL_COLORS[formatRelevantTrafficKeys(key)]
+            : null,
         label: formatRelevantTrafficKeys(key),
       })),
     ],
