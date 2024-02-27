@@ -48,7 +48,7 @@ const handler = async (req) => {
   // console.log(req.companyName);
   const reqJSON = await req.json();
   const { userId, companyUrl, geoType } = reqJSON;
-  const displayDates = generateMonthsFromStartYear(2019); // array of format ["2023-10-01", ...]
+  const displayDates = generateMonthsFromStartYear(2023); // array of format ["2023-10-01", ...]
 
   // Create tasks for each date
   const tasks = displayDates.map((date) => {
