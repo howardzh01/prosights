@@ -5,6 +5,7 @@ import useSWR from "swr";
 import { data } from "autoprefixer";
 
 async function apiMultiCall(companyDisplayedNameList, func, args) {
+  console.log("multicall", companyDisplayedNameList, func);
   // Make sure first element of args is the company names or urls
   const promises = companyDisplayedNameList.map(
     (company, ind) => func([args[0][ind], ...args.slice(1)]) // replace args companyList with specific company
@@ -40,6 +41,7 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
   }
 
   const companyNameList = companyDicList.map((company) => company.name);
+  console.log("at this point", companyDicList);
   const companyDisplayedNameList = companyDicList.map(
     (company) => company.displayedName
   );
@@ -70,7 +72,13 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
       : null,
 
     (args) => {
-      return apiMultiCall(companyDisplayedNameList, getTrafficData, args);
+      const urmom = apiMultiCall(
+        companyDisplayedNameList,
+        getTrafficData,
+        args
+      );
+      console.log("urmom", urmom);
+      return urmom;
     },
     { revalidateOnFocus: false }
   );
@@ -271,6 +279,7 @@ export const getTrafficData = async ([
     return null;
   }
   var data = await response.json();
+  console.log("raw data", data);
   // transform data into {month: {key:value}}
   if (!data) {
     return null;

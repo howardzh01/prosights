@@ -301,6 +301,7 @@ function Dashboard({
     country,
     enableCrunchbase
   );
+
   return (
     <SelectedChartContext.Provider value={{ selectedChart, setSelectedChart }}>
       <ChartDataContext.Provider value={{ chartData, setChartData }}>
@@ -319,6 +320,7 @@ function Dashboard({
           toggleOff={() => {
             setShowManualMappingModal(false);
           }}
+          initialCompanyDic={companyDic}
           setCompanyDic={setCompanyDic}
           setCompanyCompetitors={setCompanyCompetitors}
           companyDirectory={companyDirectory}
@@ -501,6 +503,11 @@ function Dashboard({
                     </div>
                   </div>
                   {/* Website Traffic */}
+                  {console.log(
+                    "web",
+                    webTrafficData,
+                    companyDic?.displayedName || companyDic?.name
+                  )}
                   <div className="w-full">
                     <WebsiteTrafficSection
                       company={companyDic?.displayedName || companyDic?.name}
