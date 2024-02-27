@@ -110,7 +110,7 @@ function GenericBarAndTable({
       </div>
 
       {showTable && (
-        <div>
+        <div className={`flex flex-row justify-start`}>
           {/* Default to use data if tableChartData is undefined */}
           <GenericTable
             tableData={tableData}

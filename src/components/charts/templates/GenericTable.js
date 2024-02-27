@@ -61,12 +61,12 @@ function GenericTable({
             ))}
           </tr>
           <tr>
-            <td className="px-6 text-xs font-medium text-customGray-500 tracking-wider text-left sticky left-0 z-10 bg-white bg-opacity-100"></td>
+            <td className="px-16 text-xs font-medium text-customGray-500 tracking-wider text-left sticky left-0 z-10 bg-white bg-opacity-100"></td>
             {/* Empty cell for alignment */}
             {tableLabels.map((label, index) => (
               <td
                 key={index}
-                className="px-3 pt-1 pb-2 text-xs font-semibold text-customGray-500 tracking-wider text-center"
+                className="px-4 pt-1 pb-2 text-xs font-semibold text-customGray-500 tracking-wider text-center"
               >
                 {label}
               </td>
