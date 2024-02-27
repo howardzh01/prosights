@@ -44,7 +44,7 @@ const handler = async (req, res) => {
   const filteredCompanyList = companyList.map((company) => ({
     name: company.name,
     displayedName: company.displayedName,
-    appId: company.appId.slice(1), // starts with ' for now
+    appId: company.appId,
     url: company.url,
     linkedInSlug: company.linkedInSlug,
   }));

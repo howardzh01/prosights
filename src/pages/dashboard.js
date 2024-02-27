@@ -33,27 +33,27 @@ import { fetchCompanyList } from "../utils/BackendUtils";
 export const SelectedChartContext = createContext();
 export const ChartDataContext = createContext();
 
-// export async function getStaticProps(context) {
-//   const companyListRaw = await fetchCompanyList(CONSTANTS.MAPPINGS_CSV_URL);
-//   const companyList = companyListRaw.map((company) =>
-//     Object.fromEntries(
-//       Object.entries(company).filter(([key]) =>
-//         ["displayedName", "appId", "url"].includes(key)
-//       )
-//     )
-//   );
-//   return {
-//     props: { initCompanyList: companyList }, // will be passed to the page component as props
-//   };
-// }
+export async function getStaticProps(context) {
+  const companyListRaw = await fetchCompanyList(CONSTANTS.MAPPINGS_CSV_URL);
+  const companyList = companyListRaw.map((company) =>
+    Object.fromEntries(
+      Object.entries(company).filter(([key]) =>
+        ["displayedName", "appId", "url"].includes(key)
+      )
+    )
+  );
+  return {
+    props: { initCompanyList: companyList }, // will be passed to the page component as props
+  };
+}
 
 function Dashboard({
   enableCrunchbase = false,
   enableOnlyWebTraffic,
-  initCompanyList = companyListFixed,
+  initCompanyList = [],
 }) {
   const { isSignedIn, user, isLoaded } = useUser();
-  const [companyList, setCompanyList] = useState([]);
+  const [companyList, setCompanyList] = useState(initCompanyList);
 
   const companyDirectory = new CompanyDirectory(companyList);
   const [companyDic, setCompanyDic] = useState(
@@ -131,28 +131,28 @@ function Dashboard({
   //   }
   // }, []); // The empty array ensures this effect runs only once after initial render
 
-  useEffect(() => {
-    const fetchCompanyList = async () => {
-      try {
-        const response = await fetch("/api/private/getMappingData", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ csvUrl: CONSTANTS.MAPPINGS_CSV_URL }),
-        });
-        if (!response.ok) {
-          throw new Error("Failed to fetch company list");
-        }
-        const data = await response.json();
-        setCompanyList(data);
-      } catch (error) {
-        console.error("Error fetching company list:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchCompanyList = async () => {
+  //     try {
+  //       const response = await fetch("/api/private/getMappingData", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({ csvUrl: CONSTANTS.MAPPINGS_CSV_URL }),
+  //       });
+  //       if (!response.ok) {
+  //         throw new Error("Failed to fetch company list");
+  //       }
+  //       const data = await response.json();
+  //       setCompanyList(data);
+  //     } catch (error) {
+  //       console.error("Error fetching company list:", error);
+  //     }
+  //   };
 
-    fetchCompanyList();
-  }, []);
+  //   fetchCompanyList();
+  // }, []);
 
   useEffect(() => {
     if (!dataLoading && companyDic) {
