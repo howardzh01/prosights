@@ -38,7 +38,6 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
       fullCompanyInfoError: undefined,
     };
   }
-
   const companyNameList = companyDicList.map((company) => company.name);
   const companyDisplayedNameList = companyDicList.map(
     (company) => company.displayedName
@@ -97,34 +96,31 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
     { revalidateOnFocus: false }
   );
 
-  const { data: fullCompanyInfo, error: fullCompanyInfoError } = useSWR(
-    user && companyNameList
-      ? [companyUrlList, `/api/private/getMappingData`, user.id]
-      : null,
-    (args) => {
-      return apiMultiCall(companyDisplayedNameList, getFullCompanyInfo, args);
-    },
-    { revalidateOnFocus: false }
-  );
-
+  // const { data: fullCompanyInfo, error: fullCompanyInfoError } = useSWR(
+  //   user && companyNameList
+  //     ? [companyUrlList, `/api/private/getMappingData`, user.id]
+  //     : null,
+  //   (args) => {
+  //     return apiMultiCall(companyDisplayedNameList, getFullCompanyInfo, args);
+  //   },
+  //   { revalidateOnFocus: false }
+  // );
+  console.log(companyDicList);
   const { data: companyDescriptionPull, error: companyDescriptionErrorPull } =
     useSWR(
-      user && companyNameList && fullCompanyInfo
+      user &&
+        companyNameList &&
+        companyDicList.map((company) => company.Description)
         ? [
             companyNameList,
             `/api/private/getCompanyDescription`,
-            fullCompanyInfo,
+            companyDicList.map((company) => company.Description),
           ]
         : null,
 
       async ([companyList, url, fullCompanyInfo]) => {
         const promises = companyList.map((company, ind) =>
-          getCompanyDescription([
-            company,
-            url,
-            user.id,
-            fullCompanyInfo[companyDisplayedNameList[ind]]["description"],
-          ])
+          getCompanyDescription([company, url, user.id, fullCompanyInfo[ind]])
         );
         const results = await Promise.all(promises);
         return companyDisplayedNameList.reduce((acc, company, index) => {
@@ -214,8 +210,6 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
     companyDescriptionErrorPull,
     dataAIData,
     dataAIError,
-    fullCompanyInfo,
-    fullCompanyInfoError,
   };
 }
 

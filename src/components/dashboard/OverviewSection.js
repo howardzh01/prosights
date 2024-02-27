@@ -31,6 +31,7 @@ function OverviewSection({
   appData,
   country,
 }) {
+  console.log(companyInfo);
   const [showAboutPopup, setShowAboutPopup] = useState(false);
   const [showBusinessModelPopup, setShowBusinessModelPopup] = useState(false);
   // headcountData comes sorted by date

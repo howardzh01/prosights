@@ -33,19 +33,19 @@ import { fetchCompanyList } from "../utils/BackendUtils";
 export const SelectedChartContext = createContext();
 export const ChartDataContext = createContext();
 
-export async function getStaticProps(context) {
-  const companyListRaw = await fetchCompanyList(CONSTANTS.MAPPINGS_CSV_URL);
-  const companyList = companyListRaw.map((company) =>
-    Object.fromEntries(
-      Object.entries(company).filter(([key]) =>
-        ["displayedName", "appId", "url"].includes(key)
-      )
-    )
-  );
-  return {
-    props: { initCompanyList: companyList }, // will be passed to the page component as props
-  };
-}
+// export async function getStaticProps(context) {
+//   const companyListRaw = await fetchCompanyList(CONSTANTS.MAPPINGS_CSV_URL);
+//   const companyList = companyListRaw.map((company) =>
+//     Object.fromEntries(
+//       Object.entries(company).filter(([key]) =>
+//         ["displayedName", "appId", "url"].includes(key)
+//       )
+//     )
+//   );
+//   return {
+//     props: { initCompanyList: companyList }, // will be passed to the page component as props
+//   };
+// }
 
 function Dashboard({
   enableCrunchbase = false,
@@ -208,25 +208,25 @@ function Dashboard({
     }
   }, []);
 
-  useEffect(() => {
-    const competitorsMap = {
-      "stockx.com": ["grailed.com"],
-      "tcs.com": ["amazon.com"],
-      stockx: ["goat", "grailed"],
-      goat: ["stockx", "grailed"],
-      grailed: ["stockx", "goat"],
-      tinder: ["bumble"],
-      bumble: ["tinder"],
-    };
-    const competitors = competitorsMap?.[companyDic?.url];
-    if (competitors) {
-      setCompanyCompetitors(
-        competitors.map((url) => companyDirectory.findCompanyByUrl(url))
-      );
-    } else {
-      setCompanyCompetitors([]);
-    }
-  }, [companyDic]);
+  // useEffect(() => {
+  //   const competitorsMap = {
+  //     "stockx.com": ["grailed.com"],
+  //     "tcs.com": ["amazon.com"],
+  //     stockx: ["goat", "grailed"],
+  //     goat: ["stockx", "grailed"],
+  //     grailed: ["stockx", "goat"],
+  //     tinder: ["bumble"],
+  //     bumble: ["tinder"],
+  //   };
+  //   const competitors = competitorsMap?.[companyDic?.url];
+  //   if (competitors) {
+  //     setCompanyCompetitors(
+  //       competitors.map((url) => companyDirectory.findCompanyByUrl(url))
+  //     );
+  //   } else {
+  //     setCompanyCompetitors([]);
+  //   }
+  // }, [companyDic]);
 
   useEffect(() => {
     if (!user) return;
@@ -281,6 +281,15 @@ function Dashboard({
       false
     );
   };
+  const fullCompanyInfo = [companyDic, ...companyCompetitors]
+    .filter((company) => company) // remove null
+    .reduce(
+      (acc, company) => ({
+        ...acc,
+        [company.displayedName]: company,
+      }),
+      {}
+    );
 
   const {
     headCountData,
@@ -295,8 +304,6 @@ function Dashboard({
     companyDescriptionErrorPull,
     dataAIData,
     dataAIError,
-    fullCompanyInfo,
-    fullCompanyInfoError,
   } = getApiData(
     user,
     companyDic ? [companyDic, ...companyCompetitors] : [],

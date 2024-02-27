@@ -69,9 +69,7 @@ export default function FundedEntitySearch({
         options={options}
         onChange={(event, value) => {
           if (!value) return;
-          console.log(createCompanyDic(value, companyDirectory));
-
-          setCompany(createCompanyDic(value, companyDirectory));
+          setCompany(value);
           setCompanyCompetitors([]);
           setInputValue("");
         }}
