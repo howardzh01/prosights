@@ -193,7 +193,7 @@ function CompetitorOverviewSection({
             {competitors.map((competitor, index) => (
               <div
                 key={index}
-                className="max-w-sm bg-white rounded-lg px-6 py-4 shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] border border-customGray-50 flex flex-col justify-between"
+                className="w-96 bg-white rounded-lg px-6 py-4 shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] border border-customGray-50 flex flex-col justify-between"
               >
                 <div className="flex flex-col mb-4">
                   <div className="flex flex-row items-center">
