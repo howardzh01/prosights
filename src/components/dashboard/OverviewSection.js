@@ -63,17 +63,21 @@ function OverviewSection({
     ? companyInfo["headquarter_country"]
     : "";
   let companyTotalRaised = companyInfo
-    ? !companyInfo["Total Funding Amount (Amount)"]
-      ? ""
-      : `$${formatNumberToAbbreviation(
+    ? companyInfo["Total Funding Amount (Amount)"]
+      ? `$${formatNumberToAbbreviation(
           Math.round(companyInfo["Total Funding Amount (Amount)"])
         )}`
+      : ""
     : "";
   let companyLastDealType = companyInfo
-    ? companyInfo["Funding Stage (Type)"].replace("Unfunded", "")
+    ? companyInfo["Funding Stage (Type)"]
+      ? companyInfo["Funding Stage (Type)"].replace("Unfunded", "")
+      : ""
     : "";
   let companyLastFundedDate = companyInfo
-    ? companyInfo["Last Funded In (Date)"].replace(/(\d{2})(\d{2})$/, "'$2") // Jan 2021 -> Jan '21
+    ? companyInfo["Last Funded In (Date)"]
+      ? companyInfo["Last Funded In (Date)"].replace(/(\d{2})(\d{2})$/, "'$2") // Jan 2021 -> Jan '21
+      : ""
     : "";
 
   //   const cbfields = crunchbaseData?.["fields"] || {};

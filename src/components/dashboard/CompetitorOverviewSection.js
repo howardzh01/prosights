@@ -77,7 +77,7 @@ function CompetitorOverviewSection({
             : "--"
           : "--",
         companyLastDealType: companyInfo[companyName]
-          ? companyInfo[companyName]["Funding Stage (Type)"].replace(
+          ? companyInfo[companyName]?.["Funding Stage (Type)"]?.replace(
               "Unfunded",
               "--"
             )
