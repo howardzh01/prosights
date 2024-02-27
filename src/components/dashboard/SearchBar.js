@@ -26,6 +26,15 @@ export default function SearchBar({
     debounceTimeoutRef.current = setTimeout(func, delay);
   };
 
+  // Initialize results to be local storage, user-defined companies
+  const existingDics = JSON.parse(
+    localStorage.getItem("userDefinedCompanyDics") || "{}"
+  );
+  const userDefinedOptions = Object.keys(existingDics).map((key) => {
+    // Add a "userDefined" property to the company object to differentiate it from the server results
+    return { ...existingDics[key], userDefined: true };
+  });
+
   useEffect(() => {
     if (!inputValue.trim()) {
       setOptions([]);
@@ -69,10 +78,12 @@ export default function SearchBar({
         autoComplete={true}
         disableListWrap
         // options={companyDirectory.companyList} // Limit the options to the first 10 items
-        options={options}
+        options={[...userDefinedOptions, ...options]}
         getOptionLabel={(option) =>
           typeof option === "string"
             ? option
+            : option.userDefined
+            ? `${option.name} (User Defined) - ${option.url}`
             : `${option.displayedName} - ${option.url}`
         }
         clearIcon={null} // Removes the clear icon
@@ -92,10 +103,20 @@ export default function SearchBar({
         renderOption={(props, option, { selected }) => (
           <Box component="li" {...props}>
             <div className="w-5 h-5 mr-2 text-xs">
-              <CompanyLogoSkeleton name={option.displayedName} />
+              <CompanyLogoSkeleton
+                name={option.userDefined ? option.name : option.displayedName}
+              />
             </div>
             <span className="text-sm text-customGray-800">
-              <strong>{option.displayedName}</strong> - {option.url}
+              {option.userDefined ? (
+                <>
+                  <strong>{option.name}</strong> (User Defined) - {option.url}
+                </>
+              ) : (
+                <>
+                  <strong>{option.displayedName}</strong> - {option.url}
+                </>
+              )}
             </span>
           </Box>
         )}

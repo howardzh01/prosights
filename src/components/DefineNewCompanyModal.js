@@ -61,19 +61,19 @@ export default function DefineNewCompanyModal({
   //     initialCompanyDic ? `${initialCompanyDic.name} (V2)` : ""
   //   );
   const [companyName, setCompanyName] = useState(initialCompanyDic?.name || "");
-  const [fundedEntity, setFundedEntity] = useState(initialCompanyDic || "");
+  const [fundedEntity, setFundedEntity] = useState("");
   const [linkedInURL, setLinkedInURL] = useState(
     `linkedin.com/company/${initialCompanyDic?.linkedInSlug || ""}/`
   );
   const [websiteURL, setWebsiteURL] = useState(initialCompanyDic?.url || "");
   const [appID, setAppID] = useState(initialCompanyDic?.appId || "");
   const atLeastOneFieldPopulated = () => {
-    return companyName || fundedEntity || linkedInURL || websiteURL || appID;
+    return fundedEntity && (companyName || linkedInURL || websiteURL || appID);
   };
 
   useEffect(() => {
     setCompanyName(initialCompanyDic?.name || "");
-    setFundedEntity(initialCompanyDic?.displayedName || "");
+    setFundedEntity("");
     setLinkedInURL(
       `linkedin.com/company/${initialCompanyDic?.linkedInSlug || ""}/`
     );
@@ -89,7 +89,7 @@ export default function DefineNewCompanyModal({
     if (match) {
       linkedInSlug = match[1];
     }
-    setCompanyDic({
+    const newCompanyDic = {
       // Funded entity is a companyDic that contains a lot of info we need (e.g. employee count, total funding amount, etc.)
       ...fundedEntity,
       // Rewriting the companyDic with the new info for some fields
@@ -98,17 +98,24 @@ export default function DefineNewCompanyModal({
       appId: appID,
       url: websiteURL,
       linkedInSlug: linkedInSlug,
-    });
+    };
+    setCompanyDic(newCompanyDic);
     setCompanyCompetitors([]);
     toggleOff();
 
-    // companyDirectory.insertCompany({
-    //     name: companyName,
-    //     displayedName: fundedEntity,
-    //     appId: appID,
-    //     url: websiteURL,
-    //     linkedInSlug: linkedInSlug,
-    //     });
+    // Retrieve the existing dictionary from local storage
+    const existingDics = JSON.parse(
+      localStorage.getItem("userDefinedCompanyDics") || "{}"
+    );
+
+    // Add the new companyDic to the dictionary using its name as the key
+    existingDics[newCompanyDic.name] = newCompanyDic;
+
+    // Save the updated dictionary back to local storage
+    localStorage.setItem(
+      "userDefinedCompanyDics",
+      JSON.stringify(existingDics)
+    );
   };
 
   return (
@@ -277,9 +284,9 @@ export default function DefineNewCompanyModal({
                     />
                   </div>
                   <div
-                    className={`flex flex-row mt-12 px-8 py-2 mx-auto ${
+                    className={`flex flex-row mt-12 px-6 py-2 mx-auto ${
                       atLeastOneFieldPopulated()
-                        ? "bg-primary text-white cursor-pointer"
+                        ? "bg-primary text-white cursor-pointer hover:bg-blue-600 transition duration-300"
                         : "bg-primaryLight text-white cursor-default"
                     } rounded-md font-semibold`}
                     onClick={
@@ -288,7 +295,7 @@ export default function DefineNewCompanyModal({
                         : undefined
                     }
                   >
-                    Run Analysis
+                    Save and Run Analysis
                   </div>
                 </div>
               </Dialog.Panel>

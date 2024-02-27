@@ -7,6 +7,7 @@ import Image from "next/image";
 import Chip from "@mui/material/Chip";
 import CompanyLogoSkeleton from "./CompanyLogoSkeleton";
 
+// NOTE: Most changes w/ comments are in SearchBar
 export default function CompetitorSearchBar({
   targetCompany, //TODO: remove target company from searchbar
   companyCompetitors,
@@ -22,6 +23,15 @@ export default function CompetitorSearchBar({
     clearTimeout(debounceTimeoutRef.current);
     debounceTimeoutRef.current = setTimeout(func, delay);
   };
+
+  // Initialize results to be local storage, user-defined companies
+  const existingDics = JSON.parse(
+    localStorage.getItem("userDefinedCompanyDics") || "{}"
+  );
+  const userDefinedOptions = Object.keys(existingDics).map((key) => {
+    // Add a "userDefined" property to the company object to differentiate it from the server results
+    return { ...existingDics[key], userDefined: true };
+  });
 
   useEffect(() => {
     if (!inputValue.trim()) {
@@ -62,8 +72,14 @@ export default function CompetitorSearchBar({
       limitTags={4}
       autoHighlight={true} // only use if freesolo=false
       id="multiple-limit-tags"
-      options={options}
-      getOptionLabel={(option) => `${option.displayedName} - ${option.url}`}
+      options={[...userDefinedOptions, ...options]}
+      getOptionLabel={(option) =>
+        typeof option === "string"
+          ? option
+          : option.userDefined
+          ? `${option.name} (User Defined) - ${option.url}`
+          : `${option.displayedName} - ${option.url}`
+      }
       onChange={(event, value) => {
         if (!value) return;
         setCompanyCompetitors(value);
@@ -80,7 +96,9 @@ export default function CompetitorSearchBar({
           <Chip
             icon={
               <div className="w-5 h-5 mr-2 text-xs">
-                <CompanyLogoSkeleton name={option.displayedName} />
+                <CompanyLogoSkeleton
+                  name={option.userDefined ? option.name : option.displayedName}
+                />
               </div>
               // <Image
               //   src={option.logo} // Assuming 'option' has a 'logo' property with the image URL
@@ -90,7 +108,11 @@ export default function CompetitorSearchBar({
               //   className="object-contain rounded"
               // />
             }
-            label={option.displayedName} // Assuming 'option' has a 'displayedName' property
+            label={
+              option.userDefined
+                ? `${option.name} (User Defined)`
+                : option.displayedName
+            } // Assuming 'option' has a 'displayedName' property
             {...getTagProps({ index })}
             disabled={false}
             className="MuiAutocomplete-tag pl-1"
@@ -153,10 +175,20 @@ export default function CompetitorSearchBar({
             className="w-5 h-5 mr-2 flex-shrink-0 flex-grow-0 text-xs"
             style={{ minWidth: "1.25rem", minHeight: "1.25rem" }}
           >
-            <CompanyLogoSkeleton name={option.displayedName} />
+            <CompanyLogoSkeleton
+              name={option.userDefined ? option.name : option.displayedName}
+            />
           </div>
           <span className="text-sm text-customGray-800">
-            <strong>{option.displayedName}</strong> - {option.url}
+            {option.userDefined ? (
+              <>
+                <strong>{option.name}</strong> (User Defined) - {option.url}
+              </>
+            ) : (
+              <>
+                <strong>{option.displayedName}</strong> - {option.url}
+              </>
+            )}
           </span>
         </Box>
         // <Box component="li" {...props}>
