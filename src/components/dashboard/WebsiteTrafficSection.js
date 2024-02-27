@@ -84,7 +84,7 @@ function WebsiteTrafficSection({
             <WebTrafficChart trafficData={webTrafficData} country={country} />
           )}
         </div>
-        <div id="Breakdown" className="content-section">
+        <div id="Visits Breakdown" className="content-section">
           <div className="flex mb-3">
             <p className="text-lg font-semibold text-gray-800 mr-2">
               Visits Breakdown

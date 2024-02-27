@@ -222,8 +222,8 @@ export const SECTIONS = [
     level: 2,
   },
   {
-    title: "Breakdown",
-    id: "Breakdown",
+    title: "Visits Breakdown",
+    id: "Visits Breakdown",
     parentId: "Website Traffic",
     level: 2,
   },
