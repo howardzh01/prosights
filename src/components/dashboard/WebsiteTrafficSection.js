@@ -90,7 +90,7 @@ function WebsiteTrafficSection({
               Visits Breakdown
             </p>
           </div>
-          <div className="flex flex-row items-center w-full space-x-8">
+          <div className="flex flex-row items-center justify-between w-full space-x-8">
             {webTrafficGeoData !== undefined &&
             webTrafficGeoData !== null &&
             Object.keys(webTrafficGeoData).length !== 0 ? (
@@ -137,7 +137,7 @@ function WebsiteTrafficSection({
             {webTrafficData !== undefined &&
             webTrafficData !== null &&
             Object.keys(webTrafficData).length !== 0 ? (
-              <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6">
+              <div className="inline-block w-[30rem] rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6">
                 <WebTrafficDoughnut
                   trafficData={webTrafficData}
                   country={country}
@@ -263,7 +263,7 @@ function WebsiteTrafficSection({
               Breakdown vs. Peers
             </p>
           </div>
-          <div className="space-x-8 flex flex-row items-center justify-start w-full">
+          <div className="space-x-8 flex flex-row items-center justify-between w-full">
             {webTrafficGeoDic === undefined ||
             Object.keys(webTrafficGeoDic).length === 0 ? (
               <Skeleton className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
@@ -316,7 +316,7 @@ function WebsiteTrafficSection({
                 </div>
               </div>
             ) : (
-              <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-1/4 min-w-0">
+              <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6 w-[34rem] min-w-0">
                 <WebTrafficBreakdownVsPeers
                   trafficData={webTrafficDic}
                   selectedChart={CHARTS.trafficCompsByChannel}
