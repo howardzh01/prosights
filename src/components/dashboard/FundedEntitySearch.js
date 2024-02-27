@@ -1,8 +1,8 @@
-import * as React from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import { filterOptions, createCompanyDic } from "../../utils/Utils";
 import TextField from "@mui/material/TextField";
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import Image from "next/image";
 import Chip from "@mui/material/Chip";
@@ -14,11 +14,49 @@ export default function FundedEntitySearch({
   setCompany,
   setCompanyCompetitors,
 }) {
-  const [value, setValue] = React.useState(null);
+  const [inputValue, setInputValue] = useState("");
+  const [options, setOptions] = useState([]);
+  const [loading, setLoading] = useState(false); // Loading state
+  // Directly using useEffect to handle debouncing
+  const debounceTimeoutRef = useRef(); // Ref to hold debounce timeout
+  // Debounce function to delay execution
+  const debounce = (func, delay) => {
+    clearTimeout(debounceTimeoutRef.current);
+    debounceTimeoutRef.current = setTimeout(func, delay);
+  };
 
-  if (!companyDirectory.companyList) {
-    return;
-  }
+  useEffect(() => {
+    if (!inputValue.trim()) {
+      setOptions([]);
+      return;
+    }
+
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch("/api/private/getSearchResults", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ query: inputValue }),
+        });
+        const data = await response.json();
+        setOptions(data || []);
+      } catch (error) {
+        console.log("Failed to fetch company list:", error);
+        setOptions([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // Apply debounce to fetchData
+    debounce(fetchData, 200); // Adjust the delay as needed
+
+    // Cleanup on unmount or inputValue change
+    return () => clearTimeout(debounceTimeoutRef.current);
+  }, [inputValue]); // Effect runs on inputValue change
 
   return (
     <div className="">
@@ -26,23 +64,30 @@ export default function FundedEntitySearch({
         freeSolo={false}
         autoHighlight={true} // only use if freesolo=false
         id="autcomplete-search"
-        filterOptions={filterOptions}
         autoComplete={true}
         disableListWrap
-        options={companyDirectory.companyList} // Limit the options to the first 10 items
+        options={options}
+        onChange={(event, value) => {
+          if (!value) return;
+          console.log(createCompanyDic(value, companyDirectory));
+
+          setCompany(createCompanyDic(value, companyDirectory));
+          setCompanyCompetitors([]);
+          setInputValue("");
+        }}
+        onInputChange={(event, newInputValue) => {
+          setInputValue(newInputValue);
+        }}
+        loading={loading}
+        loadingText={<CircularProgress color="inherit" size={20} />} // Custom loading text/indicator
         getOptionLabel={(option) =>
           typeof option === "string"
             ? option
             : `${option.displayedName} - ${option.url}`
         }
         clearIcon={null} // Removes the clear icon
-        onChange={(event, value) => {
-          setCompany(createCompanyDic(value, companyDirectory));
-          setCompanyCompetitors([]);
-          setValue(null);
-        }}
         clearOnBlur={false}
-        value={value}
+        value={inputValue}
         renderOption={(props, option, { selected }) => (
           <Box component="li" {...props}>
             <div className="w-5 h-5 mr-2 text-xs">

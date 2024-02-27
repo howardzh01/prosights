@@ -131,28 +131,30 @@ function Dashboard({
   //   }
   // }, []); // The empty array ensures this effect runs only once after initial render
 
-  // useEffect(() => {
-  //   const fetchCompanyList = async () => {
-  //     try {
-  //       const response = await fetch("/api/private/getMappingData", {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({ csvUrl: CONSTANTS.MAPPINGS_CSV_URL }),
-  //       });
-  //       if (!response.ok) {
-  //         throw new Error("Failed to fetch company list");
-  //       }
-  //       const data = await response.json();
-  //       setCompanyList(data);
-  //     } catch (error) {
-  //       console.error("Error fetching company list:", error);
-  //     }
-  //   };
-
-  //   fetchCompanyList();
-  // }, []);
+  useEffect(() => {
+    const fetchCompanyList = async () => {
+      try {
+        const response = await fetch("/api/private/getMappingData", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ csvUrl: CONSTANTS.MAPPINGS_CSV_URL }),
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch company list");
+        }
+        const data = await response.json();
+        setCompanyList(data);
+        setCompanyDic(
+          new CompanyDirectory(data).findCompanyByUrl("stockx.com")
+        );
+      } catch (error) {
+        console.error("Error fetching company list:", error);
+      }
+      fetchCompanyList();
+    };
+  }, []);
 
   useEffect(() => {
     if (!dataLoading && companyDic) {

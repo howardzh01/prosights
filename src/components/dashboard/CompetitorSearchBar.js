@@ -1,35 +1,79 @@
-import * as React from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import Image from "next/image";
 import Chip from "@mui/material/Chip";
 import CompanyLogoSkeleton from "./CompanyLogoSkeleton";
 
 export default function CompetitorSearchBar({
-  targetCompany,
-  companyDirectory,
+  targetCompany, //TODO: remove target company from searchbar
   companyCompetitors,
   setCompanyCompetitors,
 }) {
-  if (!companyDirectory.companyList) return;
-  const filterOptions = createFilterOptions({
-    matchFrom: "any",
-    limit: 100,
-  });
+  const [inputValue, setInputValue] = useState("");
+  const [options, setOptions] = useState([]);
+  const [loading, setLoading] = useState(false); // Loading state
+  // Directly using useEffect to handle debouncing
+  const debounceTimeoutRef = useRef(); // Ref to hold debounce timeout
+  // Debounce function to delay execution
+  const debounce = (func, delay) => {
+    clearTimeout(debounceTimeoutRef.current);
+    debounceTimeoutRef.current = setTimeout(func, delay);
+  };
+
+  useEffect(() => {
+    if (!inputValue.trim()) {
+      setOptions([]);
+      return;
+    }
+
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch("/api/private/getSearchResults", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ query: inputValue }),
+        });
+        const data = await response.json();
+        setOptions(data || []);
+      } catch (error) {
+        console.log("Failed to fetch company list:", error);
+        setOptions([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // Apply debounce to fetchData
+    debounce(fetchData, 200); // Adjust the delay as needed
+
+    // Cleanup on unmount or inputValue change
+    return () => clearTimeout(debounceTimeoutRef.current);
+  }, [inputValue]); // Effect runs on inputValue change
+
   return (
     <Autocomplete
       multiple
       limitTags={4}
       autoHighlight={true} // only use if freesolo=false
       id="multiple-limit-tags"
-      filterOptions={filterOptions}
-      options={companyDirectory.companyList.filter(
-        (company) => company.url !== targetCompany.url
-      )}
+      options={options}
       getOptionLabel={(option) => `${option.displayedName} - ${option.url}`}
-      onChange={(event, value) => setCompanyCompetitors(value)}
+      onChange={(event, value) => {
+        if (!value) return;
+        setCompanyCompetitors(value);
+        setInputValue("");
+      }}
+      onInputChange={(event, newInputValue) => {
+        setInputValue(newInputValue);
+      }}
+      loading={loading}
+      loadingText={<CircularProgress color="inherit" size={20} />} // Custom loading text/indicator
       value={companyCompetitors}
       renderTags={(value, getTagProps) => {
         return value.map((option, index) => (

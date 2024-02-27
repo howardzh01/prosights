@@ -8,6 +8,7 @@ import Image from "next/image";
 import Chip from "@mui/material/Chip";
 import CompanyLogoSkeleton from "./CompanyLogoSkeleton";
 
+// IMPORTANT: every change here should be made in CompetitorSearchBar +
 export default function SearchBar({
   companyDirectory,
   setCompany,
@@ -79,7 +80,7 @@ export default function SearchBar({
           if (!value) return;
           setCompany(createCompanyDic(value, companyDirectory));
           setCompanyCompetitors([]);
-          setInputValue(null);
+          setInputValue("");
         }}
         clearOnBlur={true}
         value={inputValue}
