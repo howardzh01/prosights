@@ -57,7 +57,7 @@ function Dashboard({
 
   const companyDirectory = new CompanyDirectory(companyList);
   const [companyDic, setCompanyDic] = useState(
-    companyDirectory.findCompanyByUrl("")
+    companyDirectory.findCompanyByUrl("stockx.com")
   );
   const [country, setCountry] = useState("US");
   const [companyCompetitors, setCompanyCompetitors] = useState([]); // Array of company names
@@ -301,6 +301,7 @@ function Dashboard({
     country,
     enableCrunchbase
   );
+
   return (
     <SelectedChartContext.Provider value={{ selectedChart, setSelectedChart }}>
       <ChartDataContext.Provider value={{ chartData, setChartData }}>
@@ -319,6 +320,7 @@ function Dashboard({
           toggleOff={() => {
             setShowManualMappingModal(false);
           }}
+          initialCompanyDic={companyDic}
           setCompanyDic={setCompanyDic}
           setCompanyCompetitors={setCompanyCompetitors}
           companyDirectory={companyDirectory}

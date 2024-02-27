@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import FundedEntitySearch from "./dashboard/FundedEntitySearch";
@@ -7,6 +7,8 @@ import Image from "next/image";
 function InfoButton({ infoType }) {
   const [showPopup, setShowPopup] = useState(false);
   const infoText = {
+    analysisName:
+      "Specify the name of the analysis you want to run. This will be saved and appear in the search dropdown.",
     companyName:
       "Specify the company of interest to generate the “About” and “Business Model” descriptions in the Company Overview section.",
     fundedEntity:
@@ -50,21 +52,36 @@ function InfoButton({ infoType }) {
 export default function DefineNewCompanyModal({
   show,
   toggleOff,
+  initialCompanyDic,
   setCompanyDic,
   setCompanyCompetitors,
   companyDirectory,
 }) {
-  const [companyName, setCompanyName] = useState("");
+  //   const [analysisName, setAnalysisName] = useState(
+  //     initialCompanyDic ? `${initialCompanyDic.name} (V2)` : ""
+  //   );
+  const [companyName, setCompanyName] = useState(initialCompanyDic?.name || "");
   const [fundedEntity, setFundedEntity] = useState(
-    companyDirectory.findCompanyByUrl("")
+    initialCompanyDic?.displayedName || ""
   );
-  const [linkedInURL, setLinkedInURL] = useState("");
-  const [websiteURL, setWebsiteURL] = useState("");
-  const [appID, setAppID] = useState("");
-
+  const [linkedInURL, setLinkedInURL] = useState(
+    `linkedin.com/company/${initialCompanyDic?.linkedInSlug || ""}/`
+  );
+  const [websiteURL, setWebsiteURL] = useState(initialCompanyDic?.url || "");
+  const [appID, setAppID] = useState(initialCompanyDic?.appId || "");
   const atLeastOneFieldPopulated = () => {
     return companyName || fundedEntity || linkedInURL || websiteURL || appID;
   };
+
+  useEffect(() => {
+    setCompanyName(initialCompanyDic?.name || "");
+    setFundedEntity(initialCompanyDic?.displayedName || "");
+    setLinkedInURL(
+      `linkedin.com/company/${initialCompanyDic?.linkedInSlug || ""}/`
+    );
+    setWebsiteURL(initialCompanyDic?.url || "");
+    setAppID(initialCompanyDic?.appId || "");
+  }, [initialCompanyDic]);
 
   const handleGenerateReport = () => {
     let linkedInSlug = "";
@@ -76,12 +93,21 @@ export default function DefineNewCompanyModal({
     }
     setCompanyDic({
       name: companyName,
-      displayedName: fundedEntity.displayedName,
+      displayedName: fundedEntity,
       appId: appID,
       url: websiteURL,
       linkedInSlug: linkedInSlug,
     });
+    setCompanyCompetitors([]);
     toggleOff();
+
+    // companyDirectory.insertCompany({
+    //     name: companyName,
+    //     displayedName: fundedEntity,
+    //     appId: appID,
+    //     url: websiteURL,
+    //     linkedInSlug: linkedInSlug,
+    //     });
   };
 
   return (
@@ -140,6 +166,22 @@ export default function DefineNewCompanyModal({
                     to modify existing sections. Each field affects different
                     parts of the analysis (must populate at least 1).
                   </p>
+                  {/* <div className="flex flex-row items-center pt-8 w-full justify-between">
+                    <div className="flex flex-row items-center">
+                      <p className="text-base font-medium text-customGray-800 pr-2">
+                        Analysis Name
+                      </p>
+
+                      <InfoButton infoType="analysisName" />
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="TikTok (V2)"
+                      className="px-4 py-2 rounded-md bg-customGray-50 placeholder:text-customGray-300 text-customGray-800 focus:outline-none w-60 text-sm"
+                      value={analysisName}
+                      onChange={(e) => setAnalysisName(e.target.value)}
+                    />
+                  </div> */}
                   <div className="flex flex-row items-center pt-8 w-full justify-between">
                     <div className="flex flex-row items-center">
                       <p className="text-base font-medium text-customGray-800 pr-2">
@@ -167,8 +209,10 @@ export default function DefineNewCompanyModal({
                     <div className="w-60">
                       <FundedEntitySearch
                         companyDirectory={companyDirectory}
-                        setCompany={setFundedEntity}
-                        setCompanyCompetitors={setCompanyCompetitors}
+                        setCompany={(company) => {
+                          setFundedEntity(company.displayedName);
+                        }}
+                        setCompanyCompetitors={() => {}}
                       />
                     </div>
                     {/* <input

@@ -19,14 +19,22 @@ export const CHARTJS_COLORS = [
 ];
 
 export const TRAFFIC_BY_CHANNEL_COLORS = {
-  Direct: "rgba(0,128,126,1)",
-  Mail: "rgba(0,181,179,1)",
-  "Organic Search": "rgba(125,213,212,1)",
-  "Organic Social": "rgba(198,240,240,1)",
-  Referral: "rgba(255,217,227,1)",
-  "Paid Search": "rgba(255,153,180,1)",
-  "Paid Social": "rgba(255,84,130,1)",
-  "Display Ads": "rgba(255,0,69,1)",
+  // Direct: "rgba(0,128,126,1)",
+  // Mail: "rgba(0,181,179,1)",
+  // "Organic Search": "rgba(125,213,212,1)",
+  // "Organic Social": "rgba(198,240,240,1)",
+  // Referral: "rgba(255,217,227,1)",
+  // "Paid Search": "rgba(255,153,180,1)",
+  // "Paid Social": "rgba(255,84,130,1)",
+  // "Display Ads": "rgba(255,0,69,1)",
+  Direct: "rgba(0,165,241,1)",
+  Mail: "rgba(255,84,130,1)",
+  "Organic Search": "rgba(0,195,193,1)",
+  "Organic Social": "rgba(255,153,24,1)",
+  Referral: "rgba(166,99,255,1)",
+  "Paid Search": "rgba(255,203,52,1)",
+  "Paid Social": "rgba(31,20,80,0.2)",
+  "Display Ads": "rgba(192,128,0,1)",
 };
 
 export const CHARTJS_COLOR_PLUGIN = {
@@ -222,8 +230,8 @@ export const SECTIONS = [
     level: 2,
   },
   {
-    title: "Breakdown",
-    id: "Breakdown",
+    title: "Visits Breakdown",
+    id: "Visits Breakdown",
     parentId: "Website Traffic",
     level: 2,
   },
