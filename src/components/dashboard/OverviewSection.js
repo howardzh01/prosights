@@ -31,7 +31,6 @@ function OverviewSection({
   appData,
   country,
 }) {
-  console.log(companyInfo);
   const [showAboutPopup, setShowAboutPopup] = useState(false);
   const [showBusinessModelPopup, setShowBusinessModelPopup] = useState(false);
   // headcountData comes sorted by date
@@ -46,7 +45,6 @@ function OverviewSection({
       .map((num) => parseInt(num, 10))
       .join("-");
   }
-
   let companyFoundedYear = companyInfo ? companyInfo["founded_in_year"] : "";
   let rawCompanyHeadcount = headCountData
     ? Object.values(headCountData).slice(-1)[0]["headcount"]
