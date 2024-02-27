@@ -252,7 +252,9 @@ export default function DefineNewCompanyModal({
                       placeholder="tiktok.com"
                       className="px-4 py-2 rounded-md bg-customGray-50 placeholder:text-customGray-300 text-customGray-800 focus:outline-none w-60 text-sm"
                       value={websiteURL}
-                      onChange={(e) => setWebsiteURL(e.target.value)}
+                      onChange={(e) =>
+                        setWebsiteURL(e.target.value.replace(/\//g, ""))
+                      }
                     />
                   </div>
                   <div className="flex flex-row items-center pt-6 w-full justify-between">
