@@ -57,7 +57,7 @@ function Dashboard({
 
   const companyDirectory = new CompanyDirectory(companyList);
   const [companyDic, setCompanyDic] = useState(
-    companyDirectory.findCompanyByUrl("")
+    companyDirectory.findCompanyByUrl("stockx.com")
   );
   const [country, setCountry] = useState("US");
   const [companyCompetitors, setCompanyCompetitors] = useState([]); // Array of company names
@@ -146,6 +146,9 @@ function Dashboard({
         }
         const data = await response.json();
         setCompanyList(data);
+        setCompanyDic(
+          new CompanyDirectory(data).findCompanyByUrl("stockx.com")
+        );
       } catch (error) {
         console.error("Error fetching company list:", error);
       }

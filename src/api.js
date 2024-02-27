@@ -72,13 +72,7 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
       : null,
 
     (args) => {
-      const urmom = apiMultiCall(
-        companyDisplayedNameList,
-        getTrafficData,
-        args
-      );
-      console.log("urmom", urmom);
-      return urmom;
+      return apiMultiCall(companyDisplayedNameList, getTrafficData, args);
     },
     { revalidateOnFocus: false }
   );

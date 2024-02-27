@@ -65,10 +65,19 @@ export default function DefineNewCompanyModal({
   );
   const [websiteURL, setWebsiteURL] = useState(initialCompanyDic?.url || "");
   const [appID, setAppID] = useState(initialCompanyDic?.appId || "");
-
+  console.log(companyName, fundedEntity, linkedInURL, websiteURL, appID);
   const atLeastOneFieldPopulated = () => {
     return companyName || fundedEntity || linkedInURL || websiteURL || appID;
   };
+  useEffect(() => {
+    setCompanyName(initialCompanyDic?.name || "");
+    setFundedEntity(initialCompanyDic?.displayedName || "");
+    setLinkedInURL(
+      `linkedin.com/company/${initialCompanyDic?.linkedInSlug || ""}/`
+    );
+    setWebsiteURL(initialCompanyDic?.url || "");
+    setAppID(initialCompanyDic?.appId || "");
+  }, [initialCompanyDic]);
 
   const handleGenerateReport = () => {
     let linkedInSlug = "";
@@ -85,6 +94,13 @@ export default function DefineNewCompanyModal({
     //   url: null,
     //   linkedInSlug: null,
     // });
+    console.log("E", {
+      name: companyName,
+      displayedName: fundedEntity,
+      appId: appID,
+      url: websiteURL,
+      linkedInSlug: linkedInSlug,
+    });
     setCompanyDic({
       name: companyName,
       displayedName: fundedEntity,
