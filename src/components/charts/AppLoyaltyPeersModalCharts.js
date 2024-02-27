@@ -65,6 +65,7 @@ function AppLoyaltyPeersModalCharts({
       selectedChart={selectedChart}
       height={"h-full"}
       tickType={tickType}
+      beginAtZero={true}
     />
   );
   const yearAppLoyaltyPeersLineChart = (
@@ -81,6 +82,7 @@ function AppLoyaltyPeersModalCharts({
       scrollStart={"right"}
       formatTableDataFunction={formatTableDataFunction}
       tickType={tickType}
+      beginAtZero={true}
     />
   );
   return (
