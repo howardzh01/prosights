@@ -16,6 +16,7 @@ export default function CompetitorSearchBar({
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState([]);
   const [loading, setLoading] = useState(false); // Loading state
+  const [userDefinedOptions, setUserDefinedOptions] = useState([]); // State to hold user-defined companies
   // Directly using useEffect to handle debouncing
   const debounceTimeoutRef = useRef(); // Ref to hold debounce timeout
   // Debounce function to delay execution
@@ -24,14 +25,18 @@ export default function CompetitorSearchBar({
     debounceTimeoutRef.current = setTimeout(func, delay);
   };
 
-  // Initialize results to be local storage, user-defined companies
-  const existingDics = JSON.parse(
-    localStorage.getItem("userDefinedCompanyDics") || "{}"
-  );
-  const userDefinedOptions = Object.keys(existingDics).map((key) => {
-    // Add a "userDefined" property to the company object to differentiate it from the server results
-    return { ...existingDics[key], userDefined: true };
-  });
+  useEffect(() => {
+    // This code runs after the component has mounted, ensuring localStorage is available
+    const existingDicsString = localStorage.getItem("userDefinedCompanyDics");
+    const existingDics = existingDicsString
+      ? JSON.parse(existingDicsString)
+      : {};
+    const convertDicsToArray = Object.keys(existingDics).map((key) => {
+      // Add a "userDefined" property to the company object to differentiate it from the server results
+      return { ...existingDics[key], userDefined: true };
+    });
+    setUserDefinedOptions(convertDicsToArray);
+  }, []); // Empty dependency array means this effect runs once on mount
 
   useEffect(() => {
     if (!inputValue.trim()) {
