@@ -42,7 +42,7 @@ function GenericTable({
       <table className="divide-y divide-gray-200">
         <thead>
           <tr>
-            <th className="px-6 py-3 text-sm font-medium text-customGray-500 tracking-wider text-center sticky left-0 z-10 bg-white bg-opacity-100"></th>{" "}
+            <th className="px-6 py-3 text-xs font-medium text-customGray-500 tracking-wider text-center sticky left-0 z-10 bg-white bg-opacity-100"></th>{" "}
             {/* Empty header for shifting the row */}
             {[...new Set(tableHeaders)].map((header, index) => (
               <th
@@ -61,12 +61,12 @@ function GenericTable({
             ))}
           </tr>
           <tr>
-            <td className="px-6 text-sm font-medium text-customGray-500 tracking-wider text-left sticky left-0 z-10 bg-white bg-opacity-100"></td>
+            <td className="px-6 text-xs font-medium text-customGray-500 tracking-wider text-left sticky left-0 z-10 bg-white bg-opacity-100"></td>
             {/* Empty cell for alignment */}
             {tableLabels.map((label, index) => (
               <td
                 key={index}
-                className="px-4 pt-1 pb-2 text-sm font-semibold text-customGray-500 tracking-wider text-center"
+                className="px-3 pt-1 pb-2 text-xs font-semibold text-customGray-500 tracking-wider text-center"
               >
                 {label}
               </td>
@@ -88,14 +88,14 @@ function GenericTable({
                   }
                 >
                   <td
-                    className={`pr-2 pt-1 pb-2 whitespace-nowrap text-sm font-normal text-customGray-500 text-left sticky left-0 z-10 ${bgColor} bg-opacity-100`}
+                    className={`pr-2 pt-1 pb-2 whitespace-nowrap text-xs font-normal text-customGray-500 text-left sticky left-0 z-10 ${bgColor} bg-opacity-100`}
                   >
                     {dataset.label}
                   </td>
                   {dataset.data.map((value, index) => (
                     <td
                       key={index}
-                      className={`whitespace-nowrap text-sm text-customGray-500 text-center`}
+                      className={`whitespace-nowrap text-xs text-customGray-500 text-center`}
                     >
                       {formatTableDataFunction(value)}
                     </td>
