@@ -68,7 +68,13 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
 
   const { data: webTrafficData, error: webTrafficError } = useSWR(
     user && companyNameList && country
-      ? [companyUrlList, `/api/private/getWebTrafficData`, user.id, country]
+      ? [
+          companyUrlList,
+          `/api/private/getWebTrafficData`,
+          user.id,
+          country,
+          companyDicList,
+        ]
       : null,
 
     (args) => {
@@ -84,6 +90,7 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
           `/api/private/getWebTrafficGeoData`,
           user.id,
           RELEVANT_CONTINENTS,
+          companyDicList,
         ]
       : null,
     (args) => {
@@ -251,6 +258,7 @@ export const getTrafficData = async ([
   api_url,
   userId,
   country,
+  dummy = null,
 ]) => {
   // expect `/api/private/getWebTrafficData`
   if (!companyUrl) {
@@ -303,6 +311,7 @@ export const getGeoTrafficData = async ([
   api_url,
   userId,
   relevant_continents,
+  companyDicList,
 ]) => {
   if (!companyUrl) {
     return null;
