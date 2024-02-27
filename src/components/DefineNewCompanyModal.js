@@ -7,6 +7,8 @@ import Image from "next/image";
 function InfoButton({ infoType }) {
   const [showPopup, setShowPopup] = useState(false);
   const infoText = {
+    analysisName:
+      "Specify the name of the analysis you want to run. This will be saved and appear in the search dropdown.",
     companyName:
       "Specify the company of interest to generate the “About” and “Business Model” descriptions in the Company Overview section.",
     fundedEntity:
@@ -55,6 +57,9 @@ export default function DefineNewCompanyModal({
   setCompanyCompetitors,
   companyDirectory,
 }) {
+  //   const [analysisName, setAnalysisName] = useState(
+  //     initialCompanyDic ? `${initialCompanyDic.name} (V2)` : ""
+  //   );
   const [companyName, setCompanyName] = useState(initialCompanyDic?.name || "");
   const [fundedEntity, setFundedEntity] = useState(
     initialCompanyDic?.displayedName || ""
@@ -67,6 +72,7 @@ export default function DefineNewCompanyModal({
   const atLeastOneFieldPopulated = () => {
     return companyName || fundedEntity || linkedInURL || websiteURL || appID;
   };
+
   useEffect(() => {
     setCompanyName(initialCompanyDic?.name || "");
     setFundedEntity(initialCompanyDic?.displayedName || "");
@@ -94,6 +100,14 @@ export default function DefineNewCompanyModal({
     });
     setCompanyCompetitors([]);
     toggleOff();
+
+    // companyDirectory.insertCompany({
+    //     name: companyName,
+    //     displayedName: fundedEntity,
+    //     appId: appID,
+    //     url: websiteURL,
+    //     linkedInSlug: linkedInSlug,
+    //     });
   };
 
   return (
@@ -152,6 +166,22 @@ export default function DefineNewCompanyModal({
                     to modify existing sections. Each field affects different
                     parts of the analysis (must populate at least 1).
                   </p>
+                  {/* <div className="flex flex-row items-center pt-8 w-full justify-between">
+                    <div className="flex flex-row items-center">
+                      <p className="text-base font-medium text-customGray-800 pr-2">
+                        Analysis Name
+                      </p>
+
+                      <InfoButton infoType="analysisName" />
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="TikTok (V2)"
+                      className="px-4 py-2 rounded-md bg-customGray-50 placeholder:text-customGray-300 text-customGray-800 focus:outline-none w-60 text-sm"
+                      value={analysisName}
+                      onChange={(e) => setAnalysisName(e.target.value)}
+                    />
+                  </div> */}
                   <div className="flex flex-row items-center pt-8 w-full justify-between">
                     <div className="flex flex-row items-center">
                       <p className="text-base font-medium text-customGray-800 pr-2">

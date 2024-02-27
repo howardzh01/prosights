@@ -45,4 +45,8 @@ export class CompanyDirectory {
       ) || null
     );
   }
+
+  insertCompany(company) {
+    this.companyList.push(company);
+  }
 }
