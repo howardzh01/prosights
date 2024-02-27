@@ -134,7 +134,6 @@ function Dashboard({
   useEffect(() => {
     const fetchCompanyList = async () => {
       try {
-        console.log("Fetching company list");
         const response = await fetch("/api/private/getMappingData", {
           method: "POST",
           headers: {
@@ -320,6 +319,9 @@ function Dashboard({
           toggleOff={() => {
             setShowManualMappingModal(false);
           }}
+          setCompanyDic={setCompanyDic}
+          setCompanyCompetitors={setCompanyCompetitors}
+          companyDirectory={companyDirectory}
         />
         <div className="relative flex flex-row bg-customGray-900">
           {/* Sidebar */}

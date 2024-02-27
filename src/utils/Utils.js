@@ -616,3 +616,80 @@ export function formatNumberToAbbreviation(number) {
   // If the number is less than 1000, just round it to 1 decimal point without any abbreviation
   return number.toFixed(1);
 }
+
+export const filterOptions = (options, { inputValue }) => {
+  const limit = 50;
+  if (inputValue === "") {
+    return options.slice(0, limit);
+  }
+
+  const inputLower = inputValue.toLowerCase();
+
+  // First priority: displayedName starts with input
+  const displayedNameStartsWithInput = options.filter((option) =>
+    option.displayedName.toLowerCase().startsWith(inputLower)
+  );
+  if (displayedNameStartsWithInput.length > limit) {
+    return displayedNameStartsWithInput.slice(0, limit);
+  }
+
+  // Second priority: url starts with input, excluding those already included
+  const urlStartsWithInput = options.filter(
+    (option) =>
+      option.url.toLowerCase().startsWith(inputLower) &&
+      !displayedNameStartsWithInput.includes(option)
+  );
+  if (displayedNameStartsWithInput.length > limit) {
+    return displayedNameStartsWithInput.slice(0, limit);
+  }
+  // Third priority: either displayedName or url contains the input but does not start with it,
+  // excluding those already included in the first two priorities
+  const nameOrUrlContainsInput = options.filter(
+    (option) =>
+      (option.displayedName.toLowerCase().includes(inputLower) ||
+        option.url.toLowerCase().includes(inputLower)) &&
+      !displayedNameStartsWithInput.includes(option) &&
+      !urlStartsWithInput.includes(option)
+  );
+
+  // Combine the three arrays, maintaining the priority order
+  const filteredOptions = [
+    ...displayedNameStartsWithInput,
+    ...urlStartsWithInput,
+    ...nameOrUrlContainsInput,
+  ];
+
+  // Optionally, limit the number of options to improve performance
+  return filteredOptions.slice(0, limit);
+};
+
+export const createCompanyDic = (value, companyDirectory) => {
+  // Assuming value can be a string or an object with properties like name, url, and displayedName
+  if (typeof value === "string") {
+    if (value.includes(".")) {
+      // check url
+      const company = companyDirectory.findCompanyByUrl(value);
+      return (
+        company || {
+          name: value.split(".")[0],
+          url: value,
+          displayedName: value.split(".")[0],
+        }
+      );
+    } else {
+      const company = companyDirectory.findCompanyByDisplayedName(value);
+      return (
+        company || { name: value, url: `${value}.com`, displayedName: value }
+      );
+    }
+  } else {
+    // Ensure displayedName is always set, defaulting to name if not provided
+    if (!value.displayedName) {
+      value.displayedName = value.name;
+    }
+    if (!value.name) {
+      value.name = value.displayedName.toLowerCase();
+    }
+    return value;
+  }
+};

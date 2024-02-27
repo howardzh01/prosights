@@ -38,6 +38,7 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
       fullCompanyInfoError: undefined,
     };
   }
+
   const companyNameList = companyDicList.map((company) => company.name);
   const companyDisplayedNameList = companyDicList.map(
     (company) => company.displayedName

@@ -1,6 +1,7 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import FundedEntitySearch from "./dashboard/FundedEntitySearch";
 import Image from "next/image";
 
 function InfoButton({ infoType }) {
@@ -46,7 +47,43 @@ function InfoButton({ infoType }) {
   );
 }
 
-export default function DefineNewCompanyModal({ show, toggleOff }) {
+export default function DefineNewCompanyModal({
+  show,
+  toggleOff,
+  setCompanyDic,
+  setCompanyCompetitors,
+  companyDirectory,
+}) {
+  const [companyName, setCompanyName] = useState("");
+  const [fundedEntity, setFundedEntity] = useState(
+    companyDirectory.findCompanyByUrl("")
+  );
+  const [linkedInURL, setLinkedInURL] = useState("");
+  const [websiteURL, setWebsiteURL] = useState("");
+  const [appID, setAppID] = useState("");
+
+  const atLeastOneFieldPopulated = () => {
+    return companyName || fundedEntity || linkedInURL || websiteURL || appID;
+  };
+
+  const handleGenerateReport = () => {
+    let linkedInSlug = "";
+    const linkedInPattern =
+      /(?:https?:\/\/)?(?:www\.)?linkedin\.com\/company\/([^\/?#]+)(?:\/|$)/;
+    const match = linkedInURL.match(linkedInPattern);
+    if (match) {
+      linkedInSlug = match[1];
+    }
+    setCompanyDic({
+      name: companyName,
+      displayedName: fundedEntity.displayedName,
+      appId: appID,
+      url: websiteURL,
+      linkedInSlug: linkedInSlug,
+    });
+    toggleOff();
+  };
+
   return (
     <Transition.Root show={show} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={toggleOff}>
@@ -115,6 +152,8 @@ export default function DefineNewCompanyModal({ show, toggleOff }) {
                       type="text"
                       placeholder="TikTok"
                       className="px-4 py-2 rounded-md bg-customGray-50 placeholder:text-customGray-300 text-customGray-800 focus:outline-none w-60 text-sm"
+                      value={companyName}
+                      onChange={(e) => setCompanyName(e.target.value)}
                     />
                   </div>
                   <div className="flex flex-row items-center pt-6 w-full justify-between">
@@ -125,11 +164,20 @@ export default function DefineNewCompanyModal({ show, toggleOff }) {
 
                       <InfoButton infoType="fundedEntity" />
                     </div>
-                    <input
+                    <div className="w-60">
+                      <FundedEntitySearch
+                        companyDirectory={companyDirectory}
+                        setCompany={setFundedEntity}
+                        setCompanyCompetitors={setCompanyCompetitors}
+                      />
+                    </div>
+                    {/* <input
                       type="text"
                       placeholder="ByteDance Ltd."
                       className="px-4 py-2 rounded-md bg-customGray-50 placeholder:text-customGray-300 text-customGray-800 focus:outline-none w-60 text-sm"
-                    />
+                      value={fundedEntity}
+                      onChange={(e) => setFundedEntity(e.target.value)}
+                    /> */}
                   </div>
                   <div className="flex flex-row items-center pt-6 w-full justify-between">
                     <div className="flex flex-row items-center">
@@ -143,6 +191,8 @@ export default function DefineNewCompanyModal({ show, toggleOff }) {
                       type="text"
                       placeholder="linkedin.com/company/tiktok/"
                       className="px-4 py-2 rounded-md bg-customGray-50 placeholder:text-customGray-300 text-customGray-800 focus:outline-none w-60 text-sm"
+                      value={linkedInURL}
+                      onChange={(e) => setLinkedInURL(e.target.value)}
                     />
                   </div>
                   <div className="flex flex-row items-center pt-6 w-full justify-between">
@@ -157,6 +207,8 @@ export default function DefineNewCompanyModal({ show, toggleOff }) {
                       type="text"
                       placeholder="tiktok.com"
                       className="px-4 py-2 rounded-md bg-customGray-50 placeholder:text-customGray-300 text-customGray-800 focus:outline-none w-60 text-sm"
+                      value={websiteURL}
+                      onChange={(e) => setWebsiteURL(e.target.value)}
                     />
                   </div>
                   <div className="flex flex-row items-center pt-6 w-full justify-between">
@@ -169,13 +221,25 @@ export default function DefineNewCompanyModal({ show, toggleOff }) {
                     </div>
                     <input
                       type="text"
-                      placeholder="1000600000000000"
+                      placeholder="1000600000575007"
                       className="px-4 py-2 rounded-md bg-customGray-50 placeholder:text-customGray-300 text-customGray-800 focus:outline-none w-60 text-sm"
+                      value={appID}
+                      onChange={(e) =>
+                        setAppID(e.target.value.replace(/[^0-9]/g, ""))
+                      }
                     />
                   </div>
                   <div
-                    className="flex flex-row mt-12 px-8 py-2 mx-auto bg-primary text-white rounded-md font-semibold cursor-pointer"
-                    onClick={toggleOff}
+                    className={`flex flex-row mt-12 px-8 py-2 mx-auto ${
+                      atLeastOneFieldPopulated()
+                        ? "bg-primary text-white cursor-pointer"
+                        : "bg-primaryLight text-white cursor-default"
+                    } rounded-md font-semibold`}
+                    onClick={
+                      atLeastOneFieldPopulated()
+                        ? handleGenerateReport
+                        : undefined
+                    }
                   >
                     Generate Report
                   </div>

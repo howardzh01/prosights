@@ -58,7 +58,7 @@ function GenericTimeScale({
       </div>
       <div className="flex items-center gap-1">
         {showTimescaleButtons && (
-          <div className="mr-2 flex items-center">
+          <div className="flex items-center">
             <button
               type="button"
               disabled={timescale === "quarterYear"}

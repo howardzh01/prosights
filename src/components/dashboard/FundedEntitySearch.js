@@ -8,11 +8,11 @@ import Image from "next/image";
 import Chip from "@mui/material/Chip";
 import CompanyLogoSkeleton from "./CompanyLogoSkeleton";
 
-export default function SearchBar({
+// NOTE: Near duplicate of src/components/dashboard/SearchBar.js with UI changes
+export default function FundedEntitySearch({
   companyDirectory,
   setCompany,
   setCompanyCompetitors,
-  darkMode,
 }) {
   const [value, setValue] = React.useState(null);
 
@@ -41,7 +41,7 @@ export default function SearchBar({
           setCompanyCompetitors([]);
           setValue(null);
         }}
-        clearOnBlur={true}
+        clearOnBlur={false}
         value={value}
         renderOption={(props, option, { selected }) => (
           <Box component="li" {...props}>
@@ -84,7 +84,7 @@ export default function SearchBar({
         renderInput={(params) => (
           <TextField
             {...params}
-            placeholder="Search target company URL"
+            placeholder="ByteDance"
             components={{
               ClearIndicator: () => null,
             }}
@@ -96,39 +96,39 @@ export default function SearchBar({
                 paddingTop: "2px", // Reduced top padding
                 paddingBottom: "2px", // Reduced bottom padding
                 fontFamily: "Inter",
-                color: darkMode ? "#ffffff" : "#000000",
+                color: "#000000",
               },
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Image
-                    src="/assets/search.svg"
-                    alt="User Avatar"
-                    width={64}
-                    height={64}
-                    className="w-4 ml-1"
-                  />
-                </InputAdornment>
-              ),
+              //   startAdornment: (
+              //     <InputAdornment position="start">
+              //       <Image
+              //         src="/assets/search.svg"
+              //         alt="User Avatar"
+              //         width={64}
+              //         height={64}
+              //         className="w-4 ml-1"
+              //       />
+              //     </InputAdornment>
+              //   ),
               endAdornment: <></>,
             }}
             sx={{
               "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: darkMode ? "#373B46" : "#FFFFFF", // Hide the default border
-                borderRadius: "0.5rem",
-                boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
+                borderColor: "#EFF1F5", // Hide the default border
+                // borderRadius: "0.5rem",
+                // boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
               },
               "& .MuiOutlinedInput-root": {
-                backgroundColor: darkMode ? "#373B46" : "#FFFFFF",
+                backgroundColor: "#EFF1F5",
                 borderRadius: "0.5rem",
-                opacity: 0.8,
+                opacity: 1,
                 fontSize: "0.75rem",
-                color: darkMode ? "#ffffff" : "#000000",
+                color: "#000000",
 
                 "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: darkMode ? "#4F5153" : "#FFFFFF", // border-customGray-50 on hover
+                  borderColor: "#FFFFFF", // border-customGray-50 on hover
                 },
                 "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  borderColor: darkMode ? "#4F5153" : "#FFFFFF", // border-customGray-50 when focused
+                  borderColor: "#FFFFFF", // border-customGray-50 when focused
                 },
               },
               "& .MuiInputBase-input::-webkit-search-cancel-button": {
@@ -137,7 +137,7 @@ export default function SearchBar({
               },
               "& .MuiInputBase-input::placeholder": {
                 // Targeting the placeholder
-                color: darkMode ? "#B4BCD4" : "#828BA4", // Placeholder color for dark and light mode
+                color: "#828BA4", // Placeholder color for dark and light mode
                 opacity: 1, // Ensure the color is not transparent
               },
             }}
