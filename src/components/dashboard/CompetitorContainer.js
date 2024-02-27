@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-// import CompetitorTags from "./CompetitorTags";
-import CompetitorSearchButton from "./CompetitorSearchButton";
-import SearchBar from "../../../legacy/components/SearchBar";
-import Image from "next/image";
+import CompetitorSearchBar from "./CompetitorSearchBar";
 
-function CompetitorContainer({ companyCompetitors, setCompanyCompetitors }) {
+function CompetitorContainer({
+  targetCompany,
+  companyDirectory,
+  companyCompetitors,
+  setCompanyCompetitors,
+}) {
   const handleDelete = (id) => {
     setCompanyCompetitors(companyCompetitors.filter((tag, ind) => ind !== id));
   };
@@ -19,10 +21,12 @@ function CompetitorContainer({ companyCompetitors, setCompanyCompetitors }) {
         />
       ))} */}
       <div className="flex flex-end w-300 mr-4">
-        <CompetitorSearchButton
+        <CompetitorSearchBar
+          targetCompany={targetCompany}
+          companyDirectory={companyDirectory}
           companyCompetitors={companyCompetitors}
           setCompanyCompetitors={setCompanyCompetitors}
-        ></CompetitorSearchButton>
+        ></CompetitorSearchBar>
       </div>
       {/* <div
         className="flex flex-row items-center"

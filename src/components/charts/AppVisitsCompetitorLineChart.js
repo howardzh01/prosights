@@ -12,7 +12,7 @@ import {
 } from "../../utils/Utils";
 import { convertToLineChartData } from "../../utils/ChartUtils";
 import GenericLine from "./templates/GenericLine";
-import { CHARTS } from "../../constants";
+import { CHARTS, INFO_HOVERS } from "../../constants";
 import Image from "next/image";
 
 function AppVisitsCompetitorLineChart({
@@ -48,7 +48,7 @@ function AppVisitsCompetitorLineChart({
         cutOffDate
       )}
       title={"Visits Growth"}
-      showDataLabels={timescale === "quarterYear"}
+      info={INFO_HOVERS.APP_USAGE.GROWTH_VS_PEERS}
       timescale={timescale}
       setTimescale={setTimeScale}
       location={country}
@@ -71,20 +71,16 @@ function AppVisitsCompetitorLineChart({
     ></GenericLine>
   );
 
-  switch (selectedChart) {
-    // if no selected chart, return all charts
-    default:
-      return (
-        <div>
-          <div className="h-fit mb-4">
-            <TwoColumnView
-              quarterGraph={trafficGrowth}
-              yearGraph={yearTrafficGrowth}
-            />
-          </div>
-        </div>
-      );
-  }
+  return (
+    <div>
+      <div className="h-fit mb-4">
+        <TwoColumnView
+          quarterGraph={trafficGrowth}
+          yearGraph={yearTrafficGrowth}
+        />
+      </div>
+    </div>
+  );
 }
 
 export default AppVisitsCompetitorLineChart;

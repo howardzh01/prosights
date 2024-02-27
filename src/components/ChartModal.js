@@ -5,8 +5,9 @@ import HeadCountChart from "./charts/HeadCountChart";
 import { CHARTS } from "../constants";
 import WebGeoTrafficChart from "./charts/WebGeoTrafficChart";
 import WebTrafficChart from "./charts/WebTrafficChart";
-import AppUsersChart from "./charts/AppUsersChart";
+import AppGrowthChart from "./charts/AppUsersChart";
 import WebTrafficByChannelChart from "./charts/WebTrafficByChannelChart";
+import AppLoyaltyPeersModalCharts from "./charts/AppLoyaltyPeersModalCharts";
 
 export default function ChartModal({
   open,
@@ -21,18 +22,11 @@ export default function ChartModal({
     case CHARTS.employeeCount:
       chart = <HeadCountChart headCountData={chartData} />;
       break;
+
     case CHARTS.trafficByGeo:
       chart = <WebGeoTrafficChart geoTrafficData={chartData} />;
       break;
-    // case CHARTS.traffic:
-    //   chart = (
-    //     <WebTrafficChart
-    //       trafficData={chartData}
-    //       selectedChart={CHARTS.traffic}
-    //       country={country}
-    //     />
-    //   );
-    //   break;
+
     case CHARTS.trafficActiveUsers:
       chart = (
         <WebTrafficChart
@@ -42,48 +36,70 @@ export default function ChartModal({
         />
       );
       break;
+
     case CHARTS.trafficByChannel:
-      chart = (
-        <WebTrafficByChannelChart
-          trafficData={chartData}
-          country={country}
-          selectedChart={CHARTS.trafficByChannel}
-        />
-      );
-      break;
     case CHARTS.trafficByDevice:
-      chart = (
-        <WebTrafficByChannelChart
-          trafficData={chartData}
-          country={country}
-          selectedChart={CHARTS.trafficByDevice}
-        />
-      );
-      break;
-    // case CHARTS.usersByDevice:
-    //   chart = (
-    //     <WebTrafficChart
-    //       trafficData={chartData}
-    //       selectedChart={CHARTS.usersByDevice}
-    //     />
-    //   );
-    //   break;
     case CHARTS.trafficByOrganicVsPaid:
       chart = (
         <WebTrafficByChannelChart
           trafficData={chartData}
           country={country}
-          selectedChart={CHARTS.trafficByOrganicVsPaid}
+          selectedChart={selectedChart}
         />
+      );
+      break;
+
+    case CHARTS.trafficCompsByChannel:
+    case CHARTS.trafficCompsByDevice:
+    case CHARTS.trafficCompsByOrganicVsPaid:
+    case CHARTS.trafficCompsByGeo:
+      const newSelectedChartMap = {
+        [CHARTS.trafficCompsByChannel]: CHARTS.trafficByChannel,
+        [CHARTS.trafficCompsByDevice]: CHARTS.trafficByDevice,
+        [CHARTS.trafficCompsByOrganicVsPaid]: CHARTS.trafficByOrganicVsPaid,
+      };
+      chart = (
+        // Adjust top margin to account for company name
+        <div className="space-y-12 mt-[-20px]">
+          {Object.entries(chartData).map(([displayedName, data], index) => (
+            <div key={index} className="">
+              {/* Margin bottom for spacing between charts */}
+              <h3 className="text-lg font-semibold mb-2">{displayedName}</h3>
+              {selectedChart === CHARTS.trafficCompsByGeo ? (
+                <WebGeoTrafficChart geoTrafficData={data} />
+              ) : (
+                <WebTrafficByChannelChart
+                  trafficData={data}
+                  country={country}
+                  selectedChart={newSelectedChartMap[selectedChart]}
+                />
+              )}
+            </div>
+          ))}
+        </div>
       );
       break;
 
     case CHARTS.appActiveUsers:
       chart = (
-        <AppUsersChart
+        <AppGrowthChart
           appData={chartData}
           country={country}
           selectedChart={CHARTS.appActiveUsers}
+          type="est_average_active_users"
+        />
+      );
+      break;
+
+    case CHARTS.appLTMRetentionM3:
+    case CHARTS.appLTMRetentionM6:
+    case CHARTS.appLTMTimePerUser:
+    case CHARTS.appLTMTimePerSession:
+      chart = (
+        <AppLoyaltyPeersModalCharts
+          multiCompanyAppData={chartData}
+          selectedChart={selectedChart}
+          country={country}
         />
       );
       break;
@@ -105,10 +121,10 @@ export default function ChartModal({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          <div className="fixed inset-0 bg-customGray-800 bg-opacity-50 transition-opacity" />
         </Transition.Child>
-        <div className="fixed inset-0 w-screen overflow-y-auto">
-          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+        <div className="fixed inset-0 w-screen">
+          <div className="flex h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -118,7 +134,7 @@ export default function ChartModal({
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-[80%] sm:p-6 sm:pt-16">
+              <Dialog.Panel className="relative overflow-y-auto max-h-[90%] transform rounded-lg px-8 bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-[80%]">
                 <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
                   <button
                     type="button"
@@ -129,7 +145,7 @@ export default function ChartModal({
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
                 </div>
-                <div className="">{chart}</div>
+                <div className="py-20">{chart}</div>
               </Dialog.Panel>
             </Transition.Child>
           </div>

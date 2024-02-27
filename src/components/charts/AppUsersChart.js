@@ -2,34 +2,47 @@ import { useState, useEffect } from "react";
 import GenericBarAndTable from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
 import { aggregateData, roundPeNumbers } from "../../utils/Utils";
-import { convertToGrowthChartData } from "../../utils/ChartUtils";
+import {
+  convertToGrowthChartData,
+  checkIfGrowthDataHasValuesGreaterThanOneMillion,
+} from "../../utils/ChartUtils";
 import GenericStackedBar from "./templates/GenericStackedBar";
-import { CHARTS } from "../../constants";
+import { CHARTS, INFO_HOVERS } from "../../constants";
 import Image from "next/image";
 
-function AppUsersChart({
+function AppGrowthChart({
   appData,
   country,
   selectedChart = null,
   cutOffDate = new Date("2019"),
+  type = "est_average_active_users", //other option is "est_download"
 }) {
-  // TODO: make this more compact later - probably 1 useState with an object containing all timescale states, or useReducer
   if (!appData) return null;
   const relevantAppData = appData["app_performance"];
   const [appTimescale, setAppTrafficTimescale] = useState("quarterYear");
-  const customUserGraph = (
+  const usersUnits = checkIfGrowthDataHasValuesGreaterThanOneMillion(
+    aggregateData(relevantAppData, type, "mean", "quarterYear")
+  )
+    ? "M"
+    : "K";
+  let chartTitle;
+  if (type === "est_average_active_users") {
+    chartTitle = "App Users";
+  } else if (type === "est_download") {
+    chartTitle = "App Downloads";
+  } else {
+    return null;
+  }
+  const customAppGrowthGraph = (
     <GenericBarAndTable
       data={convertToGrowthChartData(
-        aggregateData(
-          relevantAppData,
-          "est_average_active_users",
-          "mean",
-          appTimescale
-        ),
-        "App Users",
-        cutOffDate
+        aggregateData(relevantAppData, type, "mean", appTimescale),
+        chartTitle,
+        cutOffDate,
+        usersUnits
       )}
-      title={"App Users (M)"}
+      title={`Monthly ${chartTitle} (${usersUnits})`}
+      info={INFO_HOVERS.APP_USAGE.APP_USERS}
       showDataLabels={appTimescale !== "month"}
       timescale={appTimescale}
       setTimescale={setAppTrafficTimescale}
@@ -41,17 +54,13 @@ function AppUsersChart({
       location={country}
     />
   );
-  const yearUserGraph = (
+  const yearAppGrowthGraph = (
     <GenericBarAndTable
       data={convertToGrowthChartData(
-        aggregateData(
-          relevantAppData,
-          "est_average_active_users",
-          "mean",
-          "year"
-        ),
-        "App Users",
-        cutOffDate
+        aggregateData(relevantAppData, type, "mean", "year"),
+        chartTitle,
+        cutOffDate,
+        usersUnits
       )}
       showTimescaleButtons={false}
       showModalButtons={false}
@@ -65,8 +74,8 @@ function AppUsersChart({
     case CHARTS.appActiveUsers:
       return (
         <TwoColumnView
-          quarterGraph={customUserGraph}
-          yearGraph={yearUserGraph}
+          quarterGraph={customAppGrowthGraph}
+          yearGraph={yearAppGrowthGraph}
         />
       );
     default:
@@ -74,8 +83,8 @@ function AppUsersChart({
         <div>
           <div className="h-fit mb-8">
             <TwoColumnView
-              quarterGraph={customUserGraph}
-              yearGraph={yearUserGraph}
+              quarterGraph={customAppGrowthGraph}
+              yearGraph={yearAppGrowthGraph}
             />
           </div>
         </div>
@@ -83,4 +92,4 @@ function AppUsersChart({
   }
 }
 
-export default AppUsersChart;
+export default AppGrowthChart;

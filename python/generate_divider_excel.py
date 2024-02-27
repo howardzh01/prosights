@@ -12,5 +12,6 @@ stub = modal.Stub("generate_divider_excel")
 
 @stub.function(image=xlsxwriter_image)
 @modal.web_endpoint(method="POST")
-def generate_divider_excel(req, workbook, sheetName="Sheet1"):
-    workbook.add_worksheet(sheetName)
+def generate_divider_excel(req, workbook, sheetName="Sheet1", poweredBy=None, sheetTabColor="#FF0000"):
+    worksheet = workbook.add_worksheet(sheetName)
+    worksheet.set_tab_color(sheetTabColor)

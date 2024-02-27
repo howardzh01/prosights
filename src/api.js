@@ -1,5 +1,5 @@
 import api from "gpt-tokenizer/esm/encoding/cl100k_base";
-import { UN_M49_CONTINENTS, RELEVANT_CONTINENTS } from "./constants";
+import { UN_M49_CONTINENTS, RELEVANT_CONTINENTS, CONSTANTS } from "./constants";
 import { assert } from "./utils/Utils";
 import useSWR from "swr";
 import { data } from "autoprefixer";
@@ -34,9 +34,10 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
       companyDescriptionErrorPull: undefined,
       dataAIData: undefined,
       dataAIError: undefined,
+      fullCompanyInfo: undefined,
+      fullCompanyInfoError: undefined,
     };
   }
-
   const companyNameList = companyDicList.map((company) => company.name);
   const companyDisplayedNameList = companyDicList.map(
     (company) => company.displayedName
@@ -50,7 +51,12 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
 
   const { data: headCountData, error: headCountError } = useSWR(
     user && companyNameList
-      ? [companyNameList, `/api/private/getHeadCount`, user.id]
+      ? [
+          companyDicList.map((company) => company.linkedInSlug),
+          `/api/private/getHeadCount`,
+          user.id,
+          companyDicList,
+        ]
       : null,
     (args) => {
       return apiMultiCall(companyDisplayedNameList, getHeadCount, args);
@@ -60,7 +66,13 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
 
   const { data: webTrafficData, error: webTrafficError } = useSWR(
     user && companyNameList && country
-      ? [companyUrlList, `/api/private/getWebTrafficData`, user.id, country]
+      ? [
+          companyUrlList,
+          `/api/private/getWebTrafficData`,
+          user.id,
+          country,
+          companyDicList,
+        ]
       : null,
 
     (args) => {
@@ -76,6 +88,7 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
           `/api/private/getWebTrafficGeoData`,
           user.id,
           RELEVANT_CONTINENTS,
+          companyDicList,
         ]
       : null,
     (args) => {
@@ -84,10 +97,41 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
     { revalidateOnFocus: false }
   );
 
-  let crunchbaseDataPull,
-    crunchbaseErrorPull,
-    companyDescriptionPull,
-    companyDescriptionErrorPull;
+  // const { data: fullCompanyInfo, error: fullCompanyInfoError } = useSWR(
+  //   user && companyNameList
+  //     ? [companyUrlList, `/api/private/getMappingData`, user.id]
+  //     : null,
+  //   (args) => {
+  //     return apiMultiCall(companyDisplayedNameList, getFullCompanyInfo, args);
+  //   },
+  //   { revalidateOnFocus: false }
+  // );
+  const { data: companyDescriptionPull, error: companyDescriptionErrorPull } =
+    useSWR(
+      user &&
+        companyNameList &&
+        companyDicList.map((company) => company.Description)
+        ? [
+            companyNameList,
+            `/api/private/getCompanyDescription`,
+            companyDicList.map((company) => company.Description),
+          ]
+        : null,
+
+      async ([companyList, url, fullCompanyInfo]) => {
+        const promises = companyList.map((company, ind) =>
+          getCompanyDescription([company, url, user.id, fullCompanyInfo[ind]])
+        );
+        const results = await Promise.all(promises);
+        return companyDisplayedNameList.reduce((acc, company, index) => {
+          acc[company] = results[index];
+          return acc;
+        }, {});
+      },
+      { revalidateOnFocus: false }
+    );
+
+  let crunchbaseDataPull, crunchbaseErrorPull;
   if (enableCrunchbase) {
     const { data: crunchbaseData, error: crunchbaseError } = useSWR(
       user && companyCrunchbaseNameList
@@ -100,39 +144,42 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
     );
 
     // NOTE: companyDescription depends on crunchbase data
-    const { data: companyDescription, error: companyDescriptionError } = useSWR(
-      user && companyNameList && crunchbaseData
-        ? [
-            companyNameList,
-            `/api/private/getCompanyDescription`,
-            crunchbaseData,
-          ]
-        : null,
-
-      async ([companyList, url, crunchbaseData]) => {
-        const promises = companyList.map((company, ind) =>
-          getCompanyDescription([
-            company,
-            url,
-            user.id,
-            crunchbaseData[companyDisplayedNameList[ind]]["fields"][
-              "description"
-            ],
-          ])
-        );
-        const results = await Promise.all(promises);
-        return companyDisplayedNameList.reduce((acc, company, index) => {
-          acc[company] = results[index];
-          return acc;
-        }, {});
-      },
-      { revalidateOnFocus: false }
-    );
+    //     const { data: companyDescription, error: companyDescriptionError } = useSWR(
+    //       user && companyNameList && crunchbaseData
+    //         ? [
+    //             companyNameList,
+    //             `/api/private/getCompanyDescription`,
+    //             crunchbaseData,
+    //           ]
+    //         : null,
+    //
+    //       async ([companyList, url, crunchbaseData]) => {
+    //         const promises = companyList.map((company, ind) =>
+    //           getCompanyDescription([
+    //             company,
+    //             url,
+    //             user.id,
+    //             crunchbaseData[companyDisplayedNameList[ind]]["fields"][
+    //               "description"
+    //             ],
+    //           ])
+    //         );
+    //         const results = await Promise.all(promises);
+    //         return companyDisplayedNameList.reduce((acc, company, index) => {
+    //           acc[company] = results[index];
+    //           return acc;
+    //         }, {});
+    //       },
+    //       { revalidateOnFocus: false }
+    //     );
 
     crunchbaseDataPull = crunchbaseData;
     crunchbaseErrorPull = crunchbaseError;
-    companyDescriptionPull = companyDescription;
-    companyDescriptionErrorPull = companyDescriptionError;
+    // companyDescriptionPull = companyDescription;
+    // companyDescriptionErrorPull = companyDescriptionError;
+  } else {
+    crunchbaseDataPull = null;
+    crunchbaseErrorPull = null;
   }
 
   const { data: dataAIData, error: dataAIError } = useSWR(
@@ -142,6 +189,7 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
           `/api/private/getDataAI`,
           user.id,
           country,
+          companyDicList,
         ]
       : null,
     (args) => {
@@ -166,10 +214,9 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
   };
 }
 
-export const getHeadCount = async ([companyName, api_url, userId]) => {
+export const getHeadCount = async ([linkedInSlug, api_url, userId]) => {
   // expect `/api/private/getHeadCount`
-  // TODO: REMOVE IN FUTURE
-  if (companyName.toLowerCase() === "goat") {
+  if (!linkedInSlug) {
     return null;
   }
   const response = await fetch(api_url, {
@@ -179,7 +226,7 @@ export const getHeadCount = async ([companyName, api_url, userId]) => {
     },
     body: JSON.stringify({
       userId: userId,
-      companyName: companyName,
+      linkedInSlug: linkedInSlug,
     }),
   });
   if (!response.ok) {
@@ -204,18 +251,16 @@ export const getTrafficData = async ([
   api_url,
   userId,
   country,
+  dummy = null,
 ]) => {
   // expect `/api/private/getWebTrafficData`
   if (!companyUrl) {
     return null;
   }
-  const exportColumns =
-    "target,rank,visits,desktop_visits,mobile_visits,users,desktop_users,mobile_users,desktop_hits,mobile_hits,direct,search_organic,search_paid,social_organic,social_paid,referral,mail,display_ad,search,social,paid,unknown_channel,time_on_site,desktop_time_on_site,mobile_time_on_site,pages_per_visit,desktop_pages_per_visit,mobile_pages_per_visit,bounce_rate,desktop_bounce_rate,mobile_bounce_rate,desktop_share,mobile_share,accuracy,display_date,country,device_type";
 
   const bodyObj = {
     userId: userId,
     companyUrl: companyUrl,
-    exportColumns: exportColumns,
     country: country,
   };
   const response = await fetch(api_url, {
@@ -231,7 +276,7 @@ export const getTrafficData = async ([
   var data = await response.json();
   // transform data into {month: {key:value}}
   if (!data) {
-    return;
+    return null;
   }
   data = data.reduce((acc, item, i) => {
     if (!item || item.length === 0) {
@@ -258,7 +303,11 @@ export const getGeoTrafficData = async ([
   api_url,
   userId,
   relevant_continents,
+  companyDicList,
 ]) => {
+  if (!companyUrl) {
+    return null;
+  }
   //`/api/private/getWebTrafficGeoData`
   function getContinentName(continentItem) {
     // return continent name if exists and in relevant_continents else null
@@ -294,7 +343,7 @@ export const getGeoTrafficData = async ([
   // transform data into {month: {key:value}}
   if (!data) {
     console.log("No data for geotraffic", companyUrl);
-    return;
+    return null;
   }
 
   data = data.reduce((acc, monthItem, i) => {
@@ -332,6 +381,9 @@ export const getGeoTrafficData = async ([
 
 export const getCrunchbaseData = async ([companyName, api_url, userId]) => {
   // `/api/private/getCrunchbaseData`;
+  if (!companyName) {
+    return null;
+  }
   const response = await fetch(api_url, {
     method: "POST",
     headers: {
@@ -358,6 +410,9 @@ export const getCompanyDescription = async ([
   userId,
   crunchbaseDescription,
 ]) => {
+  if (!companyName) {
+    return null;
+  }
   //`/api/private/getCompanyDescription`
   // data["fields"]["description"]
   // Should include company_description + business_model
@@ -434,6 +489,34 @@ export const getDataAIData = async ([
     app_performance: sortedAppPerformanceData,
     retention: sortedRetentionData,
   };
+};
+
+export const getFullCompanyInfo = async ([companyUrl, api_url, userId]) => {
+  if (!companyUrl) {
+    return null;
+  }
+  const response = await fetch(api_url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      companyUrl: companyUrl,
+      csvUrl: CONSTANTS.MAPPINGS_CSV_URL,
+    }),
+  });
+  if (!response.ok) {
+    console.log(
+      "GET FULL COMPANY INFO ERROR",
+      response.status,
+      response.statusText
+    );
+    return null;
+  }
+  var data = await response.json();
+
+  // Make request to refine the company description
+  return data;
 };
 
 export const getExcelDownload = async (

@@ -7,7 +7,11 @@ import {
   fromUnderscoreCase,
   formatMoney,
   formatDealRound,
+  formatNumberToAbbreviation,
+  roundPeNumbers,
 } from "../../utils/Utils";
+import { INFO_HOVERS } from "../../constants";
+import { getCompanyDescription } from "../../api";
 import { US_STATE_TO_ABBREV } from "../../constants";
 import InvestorTable from "../InvestorTable";
 import InvestmentsTable from "../InvestmentsTable";
@@ -19,6 +23,7 @@ export const SelectedChartContext = createContext();
 export const ChartDataContext = createContext();
 
 function OverviewSection({
+  companyInfo, // Note: will be ""
   companyAbout,
   crunchbaseData,
   headCountData,
@@ -26,6 +31,8 @@ function OverviewSection({
   appData,
   country,
 }) {
+  const [showAboutPopup, setShowAboutPopup] = useState(false);
+  const [showBusinessModelPopup, setShowBusinessModelPopup] = useState(false);
   // headcountData comes sorted by date
   function formatCrunchbaseHeadcount(headcountRange) {
     // c_01001_05000 => 1001-5000
@@ -38,39 +45,106 @@ function OverviewSection({
       .map((num) => parseInt(num, 10))
       .join("-");
   }
-
-  const cbfields = crunchbaseData?.["fields"] || {};
-  let companyFoundedYear = cbfields["founded_on"]
-    ? new Date(cbfields["founded_on"]?.["value"]).getUTCFullYear()
+  let companyFoundedYear = companyInfo ? companyInfo["founded_in_year"] : "";
+  let rawCompanyHeadcount = headCountData
+    ? Object.values(headCountData).slice(-1)[0]["headcount"]
     : "";
-  let companyHeadcount = headCountData
-    ? Object.values(headCountData).slice(-1)[0]["headcount"].toLocaleString()
-    : undefined;
-  if (!headCountData) {
-    companyHeadcount = cbfields["num_employees_enum"]
-      ? formatCrunchbaseHeadcount(cbfields["num_employees_enum"])
+  if (!rawCompanyHeadcount) {
+    rawCompanyHeadcount = companyInfo?.["Employee Count (Jan 24)"]
+      ? parseInt(companyInfo["Employee Count (Jan 24)"])
       : "";
   }
+  let companyHeadcount = rawCompanyHeadcount
+    ? rawCompanyHeadcount > 10000
+      ? formatNumberToAbbreviation(rawCompanyHeadcount)
+      : roundPeNumbers(rawCompanyHeadcount)
+    : "";
+  let companyHeadquarters = companyInfo
+    ? companyInfo["headquarter_country"]
+    : "";
+  let companyTotalRaised = companyInfo
+    ? !companyInfo["Total Funding Amount (Amount)"]
+      ? ""
+      : `$${formatNumberToAbbreviation(
+          Math.round(companyInfo["Total Funding Amount (Amount)"])
+        )}`
+    : "";
+  let companyLastDealType = companyInfo
+    ? companyInfo["Funding Stage (Type)"].replace("Unfunded", "")
+    : "";
+  let companyLastFundedDate = companyInfo
+    ? companyInfo["Last Funded In (Date)"].replace(/(\d{2})(\d{2})$/, "'$2") // Jan 2021 -> Jan '21
+    : "";
 
-  let companyHeadquarters = cbfields["location_identifiers"]
-    ? `${cbfields["location_identifiers"][0]["value"]}, ${
-        US_STATE_TO_ABBREV[
-          cbfields["location_identifiers"][1]["value"].toLowerCase()
-        ]
-      }`
-    : "";
-  let companyValuation = cbfields["valuation"]?.["value_usd"]
-    ? "$" + formatMoney(cbfields["valuation"]["value_usd"])
-    : "";
+  //   const cbfields = crunchbaseData?.["fields"] || {};
+  //   let companyFoundedYear = cbfields["founded_on"]
+  //     ? new Date(cbfields["founded_on"]?.["value"]).getUTCFullYear()
+  //     : "";
+  //   let companyHeadcount = headCountData
+  //     ? Object.values(headCountData).slice(-1)[0]["headcount"].toLocaleString()
+  //     : undefined;
+  //   if (!headCountData) {
+  //     companyHeadcount = cbfields["num_employees_enum"]
+  //       ? formatCrunchbaseHeadcount(cbfields["num_employees_enum"])
+  //       : "";
+  //   }
+  //
+  //   let companyHeadquarters = cbfields["location_identifiers"]
+  //     ? `${cbfields["location_identifiers"][0]["value"]}, ${
+  //         US_STATE_TO_ABBREV[
+  //           cbfields["location_identifiers"][1]["value"].toLowerCase()
+  //         ]
+  //       }`
+  //     : "";
+  //   let companyValuation = cbfields["valuation"]?.["value_usd"]
+  //     ? "$" + formatMoney(cbfields["valuation"]["value_usd"])
+  //     : "";
+  //
+  //   let companyLastRoundSize = cbfields["last_equity_funding_total"]?.[
+  //     "value_usd"
+  //   ]
+  //     ? "$" + formatMoney(cbfields["last_equity_funding_total"]?.["value_usd"])
+  //     : "";
+  //   let companyLastDealType = cbfields["last_funding_type"]
+  //     ? formatDealRound(cbfields["last_funding_type"])
+  //     : "";
 
-  let companyLastRoundSize = cbfields["last_equity_funding_total"]?.[
-    "value_usd"
-  ]
-    ? "$" + formatMoney(cbfields["last_equity_funding_total"]?.["value_usd"])
-    : "";
-  let companyLastDealType = cbfields["last_funding_type"]
-    ? formatDealRound(cbfields["last_funding_type"])
-    : "";
+  //   let companyBusinessModel = "";
+  //
+  //   let companyDescription = companyInfo
+  //     ? getCompanyDescription([
+  //         companyInfo[
+  //           ("displayedName",
+  //           `/api/private/getCompanyDescription`,
+  //           "",
+  //           companyInfo["description"])
+  //         ],
+  //       ]).then((res) => {
+  //         console.log("got result", res);
+  //         companyBusinessModel = (
+  //           <div>
+  //             <ul className="list-disc pl-3">
+  //               {Object.entries(res?.["business_model"]).map(
+  //                 ([key, value], index) => (
+  //                   <li key={key}>
+  //                     <strong>
+  //                       {`${fromUnderscoreCase(key)}`}
+  //                       {index === 0 && <span> (primary)</span>}
+  //                       {index !== 0 && <span> (other)</span>}
+  //
+  //                       {": "}
+  //                     </strong>{" "}
+  //                     {value}
+  //                   </li>
+  //                 )
+  //               )}
+  //             </ul>
+  //           </div>
+  //         );
+  //         return res;
+  //       })
+  //     : "";
+  //   console.log("uh", companyDescription);
 
   /* Business Model */
   let companyBusinessModel = companyAbout && (
@@ -119,13 +193,39 @@ function OverviewSection({
       <div className="flex flex-row mt-4 section-indent w-full">
         {/* About & Business Model */}
         <div className="flex flex-col w-3/5 pr-16">
-          <div className="text-lg font-semibold text-gray-800">About</div>
+          <div className="relative flex flex-row items-center">
+            <div className="text-lg font-semibold text-gray-800 mr-2">
+              About
+            </div>
+            <div
+              className="group cursor-pointer"
+              onMouseOver={() => setShowAboutPopup(true)}
+              onMouseOut={() => setShowAboutPopup(false)}
+            >
+              <Image
+                src="/assets/info.svg"
+                alt="info"
+                width={128}
+                height={128}
+                className="w-4"
+              />
+            </div>
+            <div
+              id="infoPopup"
+              className="absolute block bg-customGray-700 text-white rounded-lg px-4 py-2 w-96 bottom-24 md:bottom-8 text-xs z-50"
+              style={{
+                display: showAboutPopup ? "block" : "none",
+              }}
+            >
+              {INFO_HOVERS.SUMMARY.ABOUT}
+            </div>
+          </div>
           {/* NOTE: companyAbout depends on crunchbase data */}
           {companyAbout ? (
             <p className="text-sm text-customGray-800 leading-relaxed mt-1">
               {companyAbout["company_description"]}
             </p>
-          ) : crunchbaseData === null ? (
+          ) : companyInfo === null ? (
             <p className="text-sm text-customGray-300 italic leading-relaxed mt-1">
               Description not available
             </p>
@@ -136,14 +236,38 @@ function OverviewSection({
               renting, and financing homes.
             </Skeleton>
           )}
-          <div className="text-lg font-semibold text-gray-800 mt-6">
-            Business Model
+          <div className="relative flex flex-row items-center mt-6">
+            <div className="text-lg font-semibold text-gray-800 mr-2">
+              Business Model
+            </div>
+            <div
+              className="group cursor-pointer"
+              onMouseOver={() => setShowBusinessModelPopup(true)}
+              onMouseOut={() => setShowBusinessModelPopup(false)}
+            >
+              <Image
+                src="/assets/info.svg"
+                alt="info"
+                width={128}
+                height={128}
+                className="w-4"
+              />
+            </div>
+            <div
+              id="infoPopup"
+              className="absolute block bg-customGray-700 text-white rounded-lg px-4 py-2 w-96 bottom-24 md:bottom-8 text-xs z-50"
+              style={{
+                display: showBusinessModelPopup ? "block" : "none",
+              }}
+            >
+              {INFO_HOVERS.SUMMARY.BUSINESS_MODEL}
+            </div>
           </div>
           {companyBusinessModel ? (
             <div className="text-sm text-customGray-800 whitespace-pre-line leading-relaxed mt-1">
               {companyBusinessModel}
             </div>
-          ) : crunchbaseData === null ? (
+          ) : companyInfo === null ? (
             <p className="text-sm text-customGray-300 italic leading-relaxed mt-1">
               Business model not available
             </p>
@@ -165,7 +289,7 @@ function OverviewSection({
             gridTemplateColumns: "min-content max-content 1fr",
             gridTemplateRows: "auto auto",
             columnGap: "2.5rem",
-            rowGap: "1rem",
+            rowGap: "1.5rem",
           }}
         >
           <div
@@ -175,7 +299,7 @@ function OverviewSection({
             <div className="text-primary font-bold text-4xl">
               {companyFoundedYear ? (
                 companyFoundedYear
-              ) : crunchbaseData === undefined ? (
+              ) : companyInfo === undefined ? (
                 <Skeleton className="text-primary font-bold text-4xl rounded-lg bg-customGray-50">
                   2005
                 </Skeleton>
@@ -194,7 +318,7 @@ function OverviewSection({
             <div className="text-primary font-bold text-4xl">
               {companyHeadcount ? (
                 companyHeadcount
-              ) : headCountData === undefined ? (
+              ) : companyInfo === undefined ? (
                 <Skeleton className="text-primary font-bold text-4xl rounded-lg bg-customGray-50">
                   7,901
                 </Skeleton>
@@ -213,7 +337,7 @@ function OverviewSection({
             <div className="text-primary font-bold text-4xl">
               {companyHeadquarters ? (
                 companyHeadquarters
-              ) : crunchbaseData === undefined ? (
+              ) : companyInfo === undefined ? (
                 <Skeleton className="text-primary font-bold text-4xl rounded-lg bg-customGray-50">
                   Seattle, WA
                 </Skeleton>
@@ -230,9 +354,9 @@ function OverviewSection({
             style={{ gridRow: "2", gridColumn: "1" }}
           >
             <div className="text-primary font-bold text-4xl">
-              {companyValuation ? (
-                companyValuation
-              ) : crunchbaseData === undefined ? (
+              {companyTotalRaised ? (
+                companyTotalRaised
+              ) : companyInfo === undefined ? (
                 <Skeleton className="text-primary font-bold text-4xl rounded-lg bg-customGray-50">
                   $350M
                 </Skeleton>
@@ -241,7 +365,7 @@ function OverviewSection({
               )}
             </div>
             <div className="text-sm text-customGray-500 font-light mt-1">
-              Valuation (Post)
+              Total Raised
             </div>
           </div>
           <div
@@ -249,9 +373,9 @@ function OverviewSection({
             style={{ gridRow: "2", gridColumn: "2" }}
           >
             <div className="text-primary font-bold text-4xl">
-              {companyLastRoundSize ? (
-                companyLastRoundSize
-              ) : crunchbaseData === undefined ? (
+              {companyLastFundedDate ? (
+                companyLastFundedDate
+              ) : companyInfo === undefined ? (
                 <Skeleton className="text-primary font-bold text-4xl rounded-lg bg-customGray-50">
                   $4.1M
                 </Skeleton>
@@ -260,7 +384,7 @@ function OverviewSection({
               )}
             </div>
             <div className="text-sm text-customGray-500 font-light mt-1">
-              Last Round Size
+              Last Funded Date
             </div>
           </div>
           <div
@@ -270,7 +394,7 @@ function OverviewSection({
             <div className="text-primary font-bold text-4xl">
               {companyLastDealType ? (
                 companyLastDealType
-              ) : crunchbaseData === undefined ? (
+              ) : companyInfo === undefined ? (
                 <Skeleton className="text-primary font-bold text-4xl rounded-lg bg-customGray-50">
                   Post-IPO
                 </Skeleton>

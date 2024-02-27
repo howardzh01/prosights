@@ -4,6 +4,7 @@ import GenericBarAndTable from "../charts/templates/GenericBar";
 // import TwoColumnView from "../charts/templates/TwoColumnView";
 import { CHARTS } from "../../constants";
 import { formatMoney } from "../../utils/Utils";
+import { INFO_HOVERS } from "../../constants";
 
 function HeadCountSignal({ headCountData, startCutoff = new Date("2019") }) {
   const [timescale, setTimescale] = useState("year");
@@ -41,6 +42,7 @@ function HeadCountSignal({ headCountData, startCutoff = new Date("2019") }) {
         ),
       }}
       title={"Headcount"}
+      info={INFO_HOVERS.SUMMARY.EMPLOYEE_HEADCOUNT}
       showDataLabels={timescale === "year"}
       timescale={timescale}
       setTimescale={setTimescale}

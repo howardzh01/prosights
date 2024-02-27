@@ -8,7 +8,7 @@ Chart.register(CHARTJS_COLOR_PLUGIN);
 import Image from "next/image";
 import GenericLocationDisplay from "./GenericLocationDisplay.js";
 
-function GenericLineChart({
+function GenericLine({
   data, // {chartData, tableData}
   showDataLabels = true,
   showTimescaleButtons = true,
@@ -16,6 +16,7 @@ function GenericLineChart({
   showTable = true,
   title = undefined, // Timescale component from here on
   location = "",
+  info = "",
   timescale,
   setTimescale,
   selectedChart,
@@ -26,6 +27,8 @@ function GenericLineChart({
   height = "h-84",
   legendPosition = "top",
   displayLegend = true,
+  tickType = "percentage",
+  beginAtZero = false,
 }) {
   const { chartData, tableData } = data;
   const options = {
@@ -78,14 +81,17 @@ function GenericLineChart({
       },
       // TODO: maybe display y-axis if timeline === "month" as data labels are turned off on monthly
       y: {
-        beginAtZero: false,
+        beginAtZero: beginAtZero,
         ticks: {
           callback: function (value) {
-            return value > 0
-              ? value + "%"
-              : value < 0
-              ? `(${-1 * value}%)`
-              : "--";
+            if (value == 0) return "--";
+            if (tickType === "percentage") {
+              return value > 0 ? value + "%" : `(${-1 * value}%)`;
+            } else if (tickType === "min") {
+              return value + " min";
+            } else {
+              return value;
+            }
           },
           // Set the minimum and maximum values explicitly if needed
           // min: -100, // Minimum value for y-axis
@@ -127,6 +133,7 @@ function GenericLineChart({
         selectedChart={selectedChart}
         rawChartData={rawChartData}
         title={title}
+        info={info}
         showTimescaleButtons={showTimescaleButtons}
         showModalButtons={showModalButtons}
       />
@@ -157,4 +164,4 @@ function GenericLineChart({
   );
 }
 
-export default GenericLineChart;
+export default GenericLine;

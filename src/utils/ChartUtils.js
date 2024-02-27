@@ -3,13 +3,19 @@ import {
   convertLabelToDate,
   getTableInfo,
   aggregateData,
+  preprocessAppDataTypes,
   fromUnderscoreCase,
   roundPeNumbers,
   normalizeStackedAggData,
   convertToGrowthData,
   calculateMean,
+  sumRelatedTableRows,
 } from "./Utils";
-import { CHARTS, CHARTJS_COLORS } from "../constants";
+import {
+  CHARTS,
+  CHARTJS_COLORS,
+  TRAFFIC_BY_CHANNEL_COLORS,
+} from "../constants";
 
 // Below are API data converters
 export function convertToHeadcountChartData(
@@ -25,14 +31,13 @@ export function convertToHeadcountChartData(
     "left"
   );
 
+  const processedValues = values.slice(cutoffIndex).map((item) => item ?? "--");
   const chartData = {
     labels: labels.slice(cutoffIndex),
     datasets: [
       {
         label: displayedLabel,
-        data: values
-          .map((item) => (item == null ? "--" : item))
-          .slice(cutoffIndex),
+        data: processedValues,
       },
     ],
   };
@@ -51,7 +56,27 @@ export function convertToHeadcountChartData(
   return { chartData: chartData, tableData: tableData };
 }
 
-export function convertToGrowthChartData(data, displayedLabel, dataCutoffDate) {
+export function checkIfGrowthDataHasValuesGreaterThanOneMillion(
+  data,
+  dataCutoffDate
+) {
+  let { labels, values, tableHeaders, tableLabels, growthPercentages } =
+    getTableInfo(data);
+  const cutoffIndex = findInsertIndex(
+    labels.map((x) => convertLabelToDate(x)),
+    dataCutoffDate,
+    "left"
+  );
+
+  return values.slice(cutoffIndex).some((x) => x > 1e6);
+}
+
+export function convertToGrowthChartData(
+  data,
+  displayedLabel,
+  dataCutoffDate,
+  units = null // Make sure either "M", "K", or null
+) {
   // input: {time_key: output_key}
   let { labels, values, tableHeaders, tableLabels, growthPercentages } =
     getTableInfo(data);
@@ -60,13 +85,22 @@ export function convertToGrowthChartData(data, displayedLabel, dataCutoffDate) {
     dataCutoffDate,
     "left"
   );
+
   const chartData = {
     labels: labels.slice(cutoffIndex),
     datasets: [
       {
-        label: displayedLabel + " (M)",
+        label:
+          displayedLabel +
+          `${units === "M" ? " (M)" : units === "K" ? " (K)" : ""}`,
         data: values
-          .map((item) => (item == null ? "--" : (item / 1e6).toFixed(1)))
+          .map((item) =>
+            item == null
+              ? "--"
+              : (
+                  item / (units === "M" ? 1e6 : units === "K" ? 1e3 : 1)
+                ).toFixed(1)
+          )
           .slice(cutoffIndex),
       },
     ],
@@ -177,6 +211,10 @@ export function convertToChannelDoughnutData(
         data: percentages,
         rawData: Object.values(sums),
         borderWidth: 1,
+        backgroundColor:
+          type === "traffic_by_channel"
+            ? Object.values(TRAFFIC_BY_CHANNEL_COLORS) // Order of values must be right
+            : null,
         // Here you could add backgroundColors and other properties as needed
       },
     ],
@@ -186,7 +224,16 @@ export function convertToChannelDoughnutData(
 function getRelevantTrafficKeys(type) {
   switch (type) {
     case "traffic_by_channel":
-      return ["direct", "mail", "social", "search", "referral", "display_ad"];
+      return [
+        "direct",
+        "mail",
+        "search_organic",
+        "social_organic",
+        "referral",
+        "search_paid",
+        "social_paid",
+        "display_ad",
+      ];
     case "traffic_by_device":
       return ["mobile_visits", "desktop_visits"];
     case "users_by_device":
@@ -208,7 +255,7 @@ function formatRelevantTrafficKeys(key) {
     social_organic: "Organic Social",
     search_paid: "Paid Search",
     social_paid: "Paid Social",
-    display_ad: "Display Ad",
+    display_ad: "Display Ads",
     unknown_channel: "Other",
   };
   if (key in displayedKeyMap) {
@@ -224,51 +271,34 @@ export function convertToChannelChartData(
   timescale,
   dataCutoffDate
 ) {
-  const paidTrafficKeys = ["search_paid", "social_paid", "display_ad"];
-  const paidTrafficRowName = "Paid Visits";
-  let relevant_keys,
-    condensePaidKeys = false;
+  const paidTrafficKeys = [
+    "referrals",
+    "search_paid",
+    "social_paid",
+    "display_ad",
+  ];
+  const paidTrafficRowName = "Total Paid";
+  const organicTrafficKeys = [
+    "direct",
+    "mail",
+    "search_organic",
+    "social_organic",
+  ];
+  const organicTrafficRowName = "Total Organic";
+  let trafficByChannelColors;
+  const relevant_keys = getRelevantTrafficKeys(type);
+
+  let addOrganicPaidRows = false;
   if (type === "traffic_by_channel") {
-    relevant_keys = [
-      "direct",
-      "mail",
-      "referral",
-      "search_organic",
-      "social_organic",
-      "search_paid",
-      "social_paid",
-      "display_ad",
-      "unknown_channel",
-    ];
-    condensePaidKeys = true;
-  } else {
-    relevant_keys = getRelevantTrafficKeys(type);
+    addOrganicPaidRows = true;
+    trafficByChannelColors = TRAFFIC_BY_CHANNEL_COLORS;
   }
-  // } else if (type === "traffic_by_device") {
-  //   relevant_keys = ["mobile_visits", "desktop_visits"];
-  // } else if (type === "users_by_device") {
-  //   relevant_keys = ["mobile_users", "desktop_users"];
-  // } else if (type === "traffic_by_organic_paid") {
-  //   relevant_keys = [
-  //     "search_organic",
-  //     "social_organic",
-  //     "search_paid",
-  //     "social_paid",
-  //   ];
-  // } else {
-  //   relevant_keys = [
-  //     "search_organic",
-  //     "social_organic",
-  //     "search_paid",
-  //     "social_paid",
-  //   ];
-  // }
 
   const aggData = relevant_keys.reduce((acc, key) => {
-    const displayedKey =
-      condensePaidKeys && paidTrafficKeys.includes(key)
-        ? paidTrafficRowName
-        : formatRelevantTrafficKeys(key);
+    const displayedKey = formatRelevantTrafficKeys(key);
+    // condensePaidKeys && paidTrafficKeys.includes(key)
+    //   ? paidTrafficRowName
+    //   : formatRelevantTrafficKeys(key);
 
     acc[displayedKey] = aggregateData(trafficData, key, "sum", timescale);
     return acc;
@@ -292,21 +322,51 @@ export function convertToChannelChartData(
           (x) => (x ? Number(roundPeNumbers(x)) : null) // this will convert null to 0
         ),
       rawData: Object.values(aggData[key]).slice(cutoffIndex),
+      backgroundColor: trafficByChannelColors?.[key], // If undefined, ChartJS will use default colors
       borderWidth: 1,
       label: key,
     })),
   };
-  // chartData.datasets = convertStackedChartDataToPercent(chartData.datasets); // convert to percent so bars add to 100%
+
+  let tableDatasets = chartData["datasets"];
+  if (addOrganicPaidRows) {
+    tableDatasets = JSON.parse(JSON.stringify(chartData["datasets"]));
+    for (const [rowName, relatedKeys] of [
+      [paidTrafficRowName, paidTrafficKeys],
+      [organicTrafficRowName, organicTrafficKeys],
+    ]) {
+      const lastOrganicKeyIndex = relevant_keys.lastIndexOf(
+        relatedKeys[relatedKeys.length - 1]
+      );
+      const newRowPosition = lastOrganicKeyIndex + 1; // Position after the last organic key
+      const newRow = JSON.parse(JSON.stringify(tableDatasets[0])); // Deep copy the first row
+      newRow.label = rowName;
+      newRow.data = sumRelatedTableRows(
+        tableDatasets,
+        relatedKeys.map((key) => formatRelevantTrafficKeys(key)),
+        "data"
+      );
+      newRow.rawData = sumRelatedTableRows(
+        tableDatasets,
+        relatedKeys.map((key) => formatRelevantTrafficKeys(key)),
+        "rawData"
+      );
+
+      // Insert the new row into the tableDatasets at the calculated position
+      tableDatasets.splice(newRowPosition, 0, newRow);
+    }
+  }
 
   let { tableHeaders, tableLabels } = getTableInfo(firstChannelData);
 
   const tableData = {
     tableHeaders: tableHeaders.slice(cutoffIndex),
     tableLabels: tableLabels.slice(cutoffIndex),
-    tableDatasets: [...chartData["datasets"]],
+    tableDatasets: tableDatasets,
     topBorderedRows: [paidTrafficRowName],
     highlightedRows: {
-      Direct: "bg-primaryLight",
+      // Direct: "bg-primaryLight",
+      [organicTrafficRowName]: "bg-customGray-75",
       [paidTrafficRowName]: "bg-customGray-75",
       // [totalTrafficRow.label]: "bg-customGray-75",
     },
@@ -366,14 +426,15 @@ export function convertToGeoMarketShareData(
 }
 
 export function convertToLineChartData(
-  trafficData,
+  dataByCompany,
   timescale,
   cutOffDate,
-  outputKey = "est_average_active_users"
+  outputKey = "est_average_active_users",
+  useGrowth = true
 ) {
-  const companyNames = Object.keys(trafficData);
+  const companyNames = Object.keys(dataByCompany);
   const aggData = companyNames.reduce((acc, key) => {
-    acc[key] = aggregateData(trafficData[key], outputKey, "mean", timescale);
+    acc[key] = aggregateData(dataByCompany[key], outputKey, "mean", timescale);
     return acc;
   }, {});
   // aggData: {company1: {timekey: visits}, company2: {timekey: visits}, ...}
@@ -385,14 +446,19 @@ export function convertToLineChartData(
     "left"
   );
 
-  const growthAggData = companyNames.reduce((acc, key) => {
-    acc[key] = convertToGrowthData(aggData[key], "number").slice(cutoffIndex);
+  const transformedAggData = companyNames.reduce((acc, key) => {
+    if (useGrowth) {
+      acc[key] = convertToGrowthData(aggData[key], "number").slice(cutoffIndex);
+    } else {
+      acc[key] = Object.values(aggData[key]).slice(cutoffIndex);
+    }
     return acc;
   }, {});
+
   const chartData = {
     labels: Object.keys(firstCompanyData).slice(cutoffIndex),
     datasets: Object.keys(aggData).map((key) => ({
-      data: Object.values(growthAggData[key]).map(
+      data: Object.values(transformedAggData[key]).map(
         (x) => (x ? Number(roundPeNumbers(x)) : null) // this will convert null to 0
       ),
       rawData: Object.values(aggData[key]).slice(cutoffIndex),
@@ -624,6 +690,10 @@ export function convertToTrafficBreakdownVsPeersData(
         ),
         rawData: Object.values(companyRawData).map((company) => company[key]),
         borderWidth: 1,
+        backgroundColor:
+          type === "traffic_by_channel"
+            ? TRAFFIC_BY_CHANNEL_COLORS[formatRelevantTrafficKeys(key)]
+            : null,
         label: formatRelevantTrafficKeys(key),
       })),
     ],
@@ -677,61 +747,26 @@ export function convertToAppUsageLoyaltyVsPeersData(
   type = CHARTS.appLTMTimePerUser
 ) {
   // const relevant_keys = getRelevantKeys(type);
-
+  const processedMultiCompanyData = preprocessAppDataTypes(
+    multiCompanyAppData,
+    type
+  );
   // Get the date 12 months ago from today
   const date12MonthsAgo = new Date();
   date12MonthsAgo.setMonth(date12MonthsAgo.getUTCMonth() - 13);
-
-  const companyAverages = {};
-
-  for (const [company, data] of Object.entries(multiCompanyAppData)) {
-    if (!data) continue;
-    let filteredData;
-    // Handle retentiion data differently
-    if (type === CHARTS.appLTMRetention) {
-      if (!data["retention"]) continue;
-      filteredData = Object.entries(data["retention"])
-        .filter(([time, data]) => new Date(time) >= date12MonthsAgo)
-        // .map(([time, data]) => data.est_percentage_active_days);
-        .reduce((obj, [time, data]) => {
-          let estD30Retention = data.filter(
-            (item) => item?.retention_days === 30
-          )?.[0]?.est_retention_value;
-          obj[time] = estD30Retention * 100;
-          return obj;
-        }, {});
-    } else {
-      if (!data["app_performance"]) continue;
-      filteredData = Object.entries(data["app_performance"])
-        .filter(([time, data]) => new Date(time) >= date12MonthsAgo)
-        // .map(([time, data]) => data.est_percentage_active_days);
-        .reduce((obj, [time, data]) => {
-          if (type === CHARTS.appLTMActiveDays) {
-            obj[time] =
-              data.est_percentage_active_days != null
-                ? data.est_percentage_active_days * 100
-                : null;
-          } else if (type === CHARTS.appLTMTimePerUser) {
-            obj[time] =
-              data.est_average_time_per_user != null
-                ? data.est_average_time_per_user / 60 / 1000
-                : null;
-          } else if (type === CHARTS.appLTMTimePerSession) {
-            obj[time] =
-              data.est_average_session_duration != null
-                ? data.est_average_session_duration / 60 / 1000
-                : null;
-          }
-          return obj;
-        }, {});
-    }
-
-    // console.log(Object.keys(filteredData).length);
-    companyAverages[company] = roundPeNumbers(
-      calculateMean(Object.values(filteredData))
-    );
-  }
-
+  const companyAverages = Object.keys(processedMultiCompanyData).reduce(
+    (acc, company) => {
+      acc[company] = roundPeNumbers(
+        calculateMean(
+          Object.entries(processedMultiCompanyData[company])
+            .filter(([time, data]) => new Date(time) >= date12MonthsAgo)
+            .map(([time, data]) => data)
+        )
+      );
+      return acc;
+    },
+    {}
+  );
   const datasets = [
     {
       label: "",
@@ -745,6 +780,41 @@ export function convertToAppUsageLoyaltyVsPeersData(
     labels: Object.keys(companyAverages), // Single label as we have separate datasets for each company
     datasets: datasets,
   };
+}
+
+export function convertToAppLoyaltyPeersLineData(
+  multiCompanyAppData,
+  timescale,
+  cutoffDate,
+  type = CHARTS.appLTMTimePerUser
+) {
+  const processedMultiCompanyData = preprocessAppDataTypes(
+    multiCompanyAppData,
+    type
+  );
+  // Convert from {company: {time: data}} -> {company: {time: {type: data}}} to use aggregateData() function
+  const convertedDict = Object.entries(processedMultiCompanyData).reduce(
+    (acc, [company, timeData]) => {
+      const convertedTimeData = Object.entries(timeData).reduce(
+        (timeAcc, [time, data]) => {
+          timeAcc[time] = { [type]: data };
+          return timeAcc;
+        },
+        {}
+      );
+
+      acc[company] = convertedTimeData;
+      return acc;
+    },
+    {}
+  );
+  return convertToLineChartData(
+    convertedDict,
+    timescale,
+    cutoffDate,
+    type,
+    false // useGrowth
+  );
 }
 
 // Below are Excel data converters
@@ -999,8 +1069,8 @@ export function convertAppUsageMarketShareVsPeersDataToExcelFormat(dataAI) {
 
 export function convertAppUsageLoyalUsersVsPeersDataToExcelFormat(dataAI) {
   const timeFrames = [
-    CHARTS.appLTMRetention,
-    CHARTS.appLTMActiveDays,
+    CHARTS.appLTMRetentionM3,
+    CHARTS.appLTMRetentionM6,
     CHARTS.appLTMTimePerUser,
     CHARTS.appLTMTimePerSession,
   ];

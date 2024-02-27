@@ -4,7 +4,7 @@ import TwoColumnView from "./templates/TwoColumnView";
 import { roundPeNumbers } from "../../utils/Utils";
 import { convertToChannelChartData } from "../../utils/ChartUtils";
 import GenericStackedBar from "./templates/GenericStackedBar";
-import { CHARTS } from "../../constants";
+import { CHARTS, INFO_HOVERS } from "../../constants";
 import Image from "next/image";
 
 function WebTrafficByChannelChart({
@@ -49,6 +49,7 @@ function WebTrafficByChannelChart({
         cutOffDate
       )}
       title={title}
+      info={INFO_HOVERS.TRAFFIC.CHANNEL}
       showDataLabels={trafficByChannelTimescale === "quarterYear"}
       timescale={trafficByChannelTimescale}
       setTimescale={setTrafficByChannelTimescale}

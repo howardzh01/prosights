@@ -15,6 +15,7 @@ function GenericBarAndTable({
   showModalButtons = false,
   showTable = true,
   title = undefined, // Timescale component from here on
+  info = "",
   location = "",
   lastTwelveMonthsView = false,
   timescale,
@@ -81,6 +82,7 @@ function GenericBarAndTable({
         selectedChart={selectedChart}
         rawChartData={rawChartData}
         title={title}
+        info={info}
         showTimescaleButtons={showTimescaleButtons}
         showModalButtons={showModalButtons}
       />
@@ -108,7 +110,7 @@ function GenericBarAndTable({
       </div>
 
       {showTable && (
-        <div>
+        <div className={`flex flex-row justify-start`}>
           {/* Default to use data if tableChartData is undefined */}
           <GenericTable
             tableData={tableData}

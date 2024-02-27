@@ -1,15 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import UserProfileButton from "../UserProfileButton";
+import { CONSTANTS } from "../../constants";
 
-function SideBar({
-  sections,
-  activeSections,
-  apiUsage,
-  navbarCalculatedHeight,
-}) {
+function SideBar({ sections, activeSections, apiUsage, stickyTopHeight }) {
   // Determine if we should extend the bar to cover multiple consecutive active sections
   const isSectionActive = (section) => activeSections[section.id];
+  const [showPopup, setShowPopup] = useState(false);
 
   // const isParentSectionActive = (section) => activeSections[section.id];
 
@@ -18,15 +15,15 @@ function SideBar({
     if (sectionElement) {
       // Temporarily set the scroll-margin-top to accommodate the navbar height
       const originalScrollMarginTop = sectionElement.style.scrollMarginTop;
-      sectionElement.style.scrollMarginTop = `${navbarCalculatedHeight}px`;
+      sectionElement.style.scrollMarginTop = `${stickyTopHeight}px`;
 
       sectionElement.scrollIntoView();
 
       // Reset the scroll-margin-top after scrolling
       // This delay ensures the scroll action completes before resetting the style
-      // setTimeout(() => {
-      //   sectionElement.style.scrollMarginTop = originalScrollMarginTop;
-      // }, 0);
+      setTimeout(() => {
+        sectionElement.style.scrollMarginTop = originalScrollMarginTop;
+      }, 0);
     }
   };
 
@@ -51,7 +48,8 @@ function SideBar({
         />
       </button>
       <p className="pt-3 text-white text-base font-semibold">
-        Queries Left: {apiUsage == null ? "--" : 200 - apiUsage}
+        Queries Left:{" "}
+        {apiUsage == null ? "--" : Math.max(0, CONSTANTS.API_LIMIT - apiUsage)}
       </p>
       <div className="mt-8 flex-grow relative overflow-y-auto overflow-x-hidden">
         {sections.map((section, index) => {
@@ -99,8 +97,38 @@ function SideBar({
           );
         })}
       </div>
-      <div className={`flex flex-row items-center pt-4`}>
+      <div
+        className={`flex flex-row z-50 items-center pt-4 w-full justify-between`}
+      >
         <UserProfileButton />
+        <div className="flex relative z-50">
+          <div
+            className="group cursor-pointer"
+            onMouseOver={() => setShowPopup(true)}
+            onMouseOut={() => setShowPopup(false)}
+          >
+            <Image
+              src={
+                showPopup
+                  ? "/assets/helpActive.svg"
+                  : "/assets/helpInactive.svg"
+              }
+              alt="Help Icon"
+              width={24}
+              height={24}
+              className="w-6 h-6"
+            />
+          </div>
+          <div
+            id="infoPopup"
+            className="absolute z-50 bg-customGray-700 text-white rounded-lg px-4 py-2 text-center w-52 bottom-12 -left-[11.5rem] text-sm"
+            style={{
+              display: showPopup ? "block" : "none",
+            }}
+          >
+            Call us at (312)-709-9987 and we'll help you ASAP
+          </div>
+        </div>
       </div>
     </div>
   );

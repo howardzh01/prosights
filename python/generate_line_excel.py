@@ -12,7 +12,7 @@ stub = modal.Stub("generate_line_excel")
 
 @stub.function(image=xlsxwriter_image)
 @modal.web_endpoint(method="POST")
-def generate_line_excel(req: List[Dict], workbook, sheetName="Sheet1"):
+def generate_line_excel(req: List[Dict], workbook, sheetName="Sheet1", poweredBy=None, sheetTabColor="#FF0000"):
     """
     'req' follows the structure:
 
@@ -41,6 +41,7 @@ def generate_line_excel(req: List[Dict], workbook, sheetName="Sheet1"):
     Each object in the array takes on the same format for ChartJS data.
     """
     worksheet = workbook.add_worksheet(sheetName)
+    worksheet.set_tab_color(sheetTabColor)
 
     # Default font format
     font_format = workbook.add_format({'font_name': 'Arial', 'font_size': 8, 'align': 'center', 'valign': 'vcenter'})
@@ -53,6 +54,15 @@ def generate_line_excel(req: List[Dict], workbook, sheetName="Sheet1"):
     # Starting cell
     row = 1
     col = 1
+
+    if poweredBy:
+        # Merge three cells for the "POWERED BY" text
+        header_format = workbook.add_format({'bold': True, 'font_name': 'Arial', 'font_size': 12})
+        powered_by_format = workbook.add_format({'italic': True, 'font_name': 'Arial', 'font_size': 8})
+        worksheet.merge_range('B2:D2', f"{sheetName}", header_format)
+        worksheet.merge_range('B3:D3', f"Powered by {poweredBy}", powered_by_format)
+        # Adjust the starting row for data entries if "POWERED BY" text is added
+        row += 3
 
     # Initialize the graph_row_index at the beginning of the function
     graph_row_index = 1

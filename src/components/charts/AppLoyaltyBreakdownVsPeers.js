@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { CHARTS, CHARTJS_COLORS } from "../../constants";
+import { CHARTS, CHARTJS_COLORS, INFO_HOVERS } from "../../constants";
 import Image from "next/image";
 import { convertToAppUsageLoyaltyVsPeersData } from "../../utils/ChartUtils";
 import GenericBarAndTable from "./templates/GenericBar";
@@ -14,76 +14,26 @@ function AppLoyaltyBreakdownVsPeers({
   // trafficData is of the form {company1: data, company2: data, ...}
   if (!multiCompanyAppData) return null;
 
-  // const chartOptions = {
-  //   plugins: {
-  //     chartJSColorPlugin: false,
-  //     legend: {
-  //       display: false,
-  //     },
-  //     datalabels: {
-  //       display: true,
-  //       anchor: "end",
-  //       align: "top",
-  //       // formatter: Math.round,
-  //     },
-  //   },
-  //   layout: {
-  //     padding: {
-  //       top: 15, // Adjust this value to increase or decrease the space
-  //     },
-  //   },
-  //   scales: {
-  //     x: {
-  //       grid: {
-  //         display: false, // Hides x-axis gridlines
-  //       },
-  //     },
-  //     // TODO: maybe display y-axis if timeline === "month" as data labels are turned off on monthly
-  //     y: {
-  //       display: false, // Hides the y-axis
-  //       grid: {
-  //         display: false, // Hides y-axis gridlines
-  //       },
-  //     },
-  //   },
-  // };
-
-  // function getRelevantKeys(type) {
-  //   switch (type) {
-  //     case "app_d30_retention":
-  //       return ["direct", "mail", "social", "search", "referral", "display_ad"];
-  //     case "app_percentage_active_days":
-  //       return "est_percentage_active_days";
-  //     case "app_average_user_time":
-  //       return ["mobile_users", "desktop_users"];
-  //     case "app_average_session_time":
-  //       return [
-  //         "search_organic",
-  //         "social_organic",
-  //         "search_paid",
-  //         "social_paid",
-  //       ];
-  //     default:
-  //       return [];
-  //   }
-  // }
-
-  let chartType, formatChartLabelFunction;
-  let title;
+  let formatChartLabelFunction;
+  let info;
   switch (selectedChart) {
-    case CHARTS.appLTMRetention:
+    case CHARTS.appLTMRetentionM3:
       formatChartLabelFunction = (value) => (value !== null ? `${value}%` : "");
+      info = INFO_HOVERS.APP_USAGE.M6_USAGE_RETENTION;
       break;
-    case CHARTS.appLTMActiveDays:
+    case CHARTS.appLTMRetentionM6:
       formatChartLabelFunction = (value) => (value !== null ? `${value}%` : "");
+      info = INFO_HOVERS.APP_USAGE.ACTIVE_DAYS;
       break;
     case CHARTS.appLTMTimePerUser:
       formatChartLabelFunction = (value) =>
         value !== null ? `${value} min` : "";
+      info = INFO_HOVERS.APP_USAGE.AVG_TIME_PER_USER;
       break;
     case CHARTS.appLTMTimePerSession:
       formatChartLabelFunction = (value) =>
         value !== null ? `${value} min` : "";
+      info = INFO_HOVERS.APP_USAGE.AVG_TIME_PER_SESSION;
       break;
     // if no selected chart, return by channel
     default:
@@ -102,15 +52,16 @@ function AppLoyaltyBreakdownVsPeers({
             tableData: null,
           }}
           title={selectedChart}
+          info={info}
           showTable={false}
           showDataLabels={true}
           showTimescaleButtons={false}
-          showModalButtons={false}
+          showModalButtons={true}
           location={country}
           lastTwelveMonthsView={true}
           timescale={"quarterYear"}
           setTimescale={null}
-          selectedChart={null}
+          selectedChart={selectedChart}
           rawChartData={multiCompanyAppData}
           height={"h-full"}
           useColorPlugin={false}

@@ -12,7 +12,7 @@ stub = modal.Stub("generate_doughnut_excel")
 
 @stub.function(image=xlsxwriter_image)
 @modal.web_endpoint(method="POST")
-def generate_doughnut_excel(req: Dict, workbook, sheetName="Sheet1"):
+def generate_doughnut_excel(req: Dict, workbook, sheetName="Sheet1", poweredBy=None, sheetTabColor="#FF0000"):
     """
     'req' follows the structure:
 
@@ -43,6 +43,7 @@ def generate_doughnut_excel(req: Dict, workbook, sheetName="Sheet1"):
     datasets = req.get("datasets", [])
 
     worksheet = workbook.add_worksheet(sheetName)
+    worksheet.set_tab_color(sheetTabColor)
 
     max_widths = [len(title) for title in columnTitles] + [len("Visits")]
 
@@ -53,6 +54,15 @@ def generate_doughnut_excel(req: Dict, workbook, sheetName="Sheet1"):
     center_format = workbook.add_format({'align': 'center', 'valign': 'vcenter', 'font_name': 'Arial', 'font_size': 8})
 
     current_row = 1
+
+    if poweredBy:
+        # Merge three cells for the "POWERED BY" text
+        header_format = workbook.add_format({'bold': True, 'font_name': 'Arial', 'font_size': 12})
+        powered_by_format = workbook.add_format({'italic': True, 'font_name': 'Arial', 'font_size': 8})
+        worksheet.merge_range('B2:D2', f"{sheetName}", header_format)
+        worksheet.merge_range('B3:D3', f"Powered by {poweredBy}", powered_by_format)
+        # Adjust the starting row for data entries if "POWERED BY" text is added
+        current_row += 3
 
     for index, dataset in enumerate(datasets):
         worksheet.write(current_row, 1, columnTitles[index], title_format)
@@ -71,7 +81,7 @@ def generate_doughnut_excel(req: Dict, workbook, sheetName="Sheet1"):
     for row_num in range(1, current_row):
         worksheet.set_row(row_num, None, default_font_format)
 
-    current_chart_row = 2  # Initialize the row for the data for the first chart
+    current_chart_row = 5 if poweredBy else 2  # Initialize the row for the data for the first chart
     current_graph_row = 2  # Initialize the row for the graph for the first chart
     for dataset in datasets:
         current_chart_row, current_graph_row = add_doughnut_chart_for_dataset(workbook, worksheet, dataset, current_chart_row, current_graph_row, sheetName)

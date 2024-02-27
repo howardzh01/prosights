@@ -4,10 +4,12 @@ import GenericStackedBar from "./templates/GenericStackedBar";
 import { generateQuarters } from "../../utils/Utils";
 import { CHARTS } from "../../constants";
 import Image from "next/image";
+import { INFO_HOVERS } from "../../constants";
 
 function WebTrafficBreakdownVsPeersGeography({
   geoTrafficData,
   relevant_continents,
+  selectedChart = CHARTS.trafficCompsByGeo,
 }) {
   if (!geoTrafficData) return null;
 
@@ -22,14 +24,16 @@ function WebTrafficBreakdownVsPeersGeography({
             ),
             tableData: null,
           }}
+          showModalButtons={true}
           showTable={false}
           title={"Geography"}
+          info={INFO_HOVERS.TRAFFIC.GEOGRAPHY}
           lastTwelveMonthsView={true}
           showDataLabels={true}
           showTimescaleButtons={false}
           timescale={"quarterYear"}
           setTimescale={null}
-          selectedChart={null}
+          selectedChart={selectedChart}
           rawChartData={geoTrafficData}
           height={"h-3/4"}
           legendPosition={"right"}

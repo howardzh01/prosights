@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { Skeleton } from "@nextui-org/react";
-import CountrySelector from "./CountrySelector"; // Adjust the import path as necessary
-import SearchBar from "./SearchBar"; // Adjust the import path as necessary
-import CompetitorContainer from "./CompetitorContainer"; // Adjust the import path as necessary
+import CountrySelector from "./CountrySelector";
+import SearchBar from "./SearchBar";
+import CompetitorContainer from "./CompetitorContainer";
+import CompanyLogoSkeleton from "./CompanyLogoSkeleton";
 
 const DashboardNavBar = ({
   companyDic,
@@ -17,18 +18,9 @@ const DashboardNavBar = ({
   setCompanyCompetitors,
   crunchbaseDataPull,
   activeLevel1SectionName,
-  setNavbarCalculatedHeight,
 }) => {
   const [showDownloadDropdown, setShowDownloadDropdown] = useState(false);
   const downloadDropdownRef = useRef(null);
-  const navbarRef = useRef(null);
-  // Compute NavBar Height
-  useEffect(() => {
-    if (navbarRef.current) {
-      const height = navbarRef.current.getBoundingClientRect().height;
-      setNavbarCalculatedHeight(height);
-    }
-  }, []); // Empty dependency array means this effect runs once after the initial render
 
   // Download dropdown
   useEffect(() => {
@@ -48,11 +40,7 @@ const DashboardNavBar = ({
     };
   }, [downloadDropdownRef]);
   return (
-    <div
-      ref={navbarRef}
-      // className="z-50 pt-4 pb-2 sticky top-0 bg-white w-full"
-      className="z-50 pt-4 pb-2 sticky top-0 bg-white w-full"
-    >
+    <div className="z-50 bg-white w-full">
       <div className="flex flex-row justify-between w-full items-center">
         <div className="flex flex-row items-center">
           {crunchbaseDataPull?.[companyDic.displayedName]?.["fields"]?.[
@@ -64,16 +52,16 @@ const DashboardNavBar = ({
                   "image_url"
                 ]
               }
-              className="w-10 h-10 mr-2 object-contain rounded-md"
+              className="w-9 h-9 mr-2 object-contain rounded-md"
               width={256}
               height={256}
               alt="Company Logo"
             />
           ) : crunchbaseDataPull === undefined ? (
-            <Skeleton className="w-10 h-10 mr-2 rounded-md bg-customGray-50" />
+            <Skeleton className="w-9 h-9 mr-2 rounded-md bg-customGray-50" />
           ) : (
-            <div className="w-10 h-10 mr-2 rounded-md bg-customGray-50 flex items-center justify-center">
-              <p className="text-sm text-customGray-200">--</p>
+            <div className="w-9 h-9 mr-2 text-2xl">
+              <CompanyLogoSkeleton name={companyDic.displayedName} />
             </div>
           )}
           <p className="text-3xl font-bold text-gray-800 pl-1">
@@ -138,14 +126,18 @@ const DashboardNavBar = ({
               ref={downloadDropdownRef} // Set the ref here
             >
               <div className="py-1" role="none">
-                {/* <button
+                <button
                   className="hover:cursor-pointer hover:text-primary px-4 py-2 text-sm"
                   role="menuitem"
                   tabIndex="-1"
-                  onClick={downloadPDF}
+                  onClick={() =>
+                    downloadPDF(
+                      `${companyDic.displayedName} - ${country} (Full Report)`
+                    )
+                  }
                 >
                   Download PDF
-                </button> */}
+                </button>
                 <button
                   className="hover:cursor-pointer hover:text-primary px-4 py-2 text-sm"
                   role="menuitem"
@@ -158,20 +150,22 @@ const DashboardNavBar = ({
             </div>
           </div>
 
-          <div className="ml-6 w-[24rem] 2xl:ml-16 2xl:w-[28rem] items-center">
+          {/* <div className="ml-6 w-[24rem] 2xl:ml-16 2xl:w-[28rem] items-center">
             <SearchBar
               companyDirectory={companyDirectory}
               setCompany={setCompanyDic}
               setCompanyCompetitors={setCompanyCompetitors}
             />
-          </div>
+          </div> */}
         </div>
         <CompetitorContainer
+          targetCompany={companyDic}
+          companyDirectory={companyDirectory}
           companyCompetitors={companyCompetitors}
           setCompanyCompetitors={setCompanyCompetitors}
         />
       </div>
-      <hr className="border-none h-px bg-black w-full mt-2" />
+      <hr className="border-none h-px bg-customGray-100 w-full mt-2" />
     </div>
   );
 };

@@ -12,7 +12,7 @@ stub = modal.Stub("generate_bar_excel")
 
 @stub.function(image=xlsxwriter_image)
 @modal.web_endpoint(method="POST")
-def generate_bar_excel(req: Dict, workbook, sheetName="Sheet1"):
+def generate_bar_excel(req: Dict, workbook, sheetName="Sheet1", poweredBy=None, sheetTabColor="#FF0000", showDataLabels=True):
     """
     'req' follows the structure:
 
@@ -47,6 +47,7 @@ def generate_bar_excel(req: Dict, workbook, sheetName="Sheet1"):
     titles = req.get("titles", None)
 
     worksheet = workbook.add_worksheet(sheetName)
+    worksheet.set_tab_color(sheetTabColor)
 
     # Initialize a list to keep track of the maximum width of each column.
     max_widths = [len(title) for title in columnTitles[0]]
@@ -62,6 +63,15 @@ def generate_bar_excel(req: Dict, workbook, sheetName="Sheet1"):
 
     # Current row after writing column titles.
     current_row = 1  # Adjust starting row to 2 for data entries
+
+    if poweredBy:
+        # Merge three cells for the "POWERED BY" text
+        header_format = workbook.add_format({'bold': True, 'font_name': 'Arial', 'font_size': 12})
+        powered_by_format = workbook.add_format({'italic': True, 'font_name': 'Arial', 'font_size': 8})
+        worksheet.merge_range('B2:D2', f"{sheetName}", header_format)
+        worksheet.merge_range('B3:D3', f"Powered by {poweredBy}", powered_by_format)
+        # Adjust the starting row for data entries if "POWERED BY" text is added
+        current_row += 3
     
     for dataset_index, dataset in enumerate(datasets):
         # Write column titles for each dataset section
@@ -97,13 +107,13 @@ def generate_bar_excel(req: Dict, workbook, sheetName="Sheet1"):
         worksheet.set_row(row_num, None, default_font_format)  # Apply to each data row
 
     # After writing all the data to the worksheet, add the charts for each dataset.
-    current_chart_row = 2  # Initialize the row for the data for the first chart
+    current_chart_row = 5 if poweredBy else 2  # Initialize the row for the data for the first chart
     current_graph_row = 2  # Initialize the row for the graph for the first chart
     for dataset_index, dataset in enumerate(datasets):
-        current_chart_row, current_graph_row = add_chart_for_dataset(worksheet, workbook, dataset, columnTitles[dataset_index], current_chart_row, current_graph_row, dataset_index, titles, sheetName)
+        current_chart_row, current_graph_row = add_chart_for_dataset(worksheet, workbook, dataset, columnTitles[dataset_index], current_chart_row, current_graph_row, dataset_index, titles, sheetName, showDataLabels)
 
 # Function to add a chart for a given dataset
-def add_chart_for_dataset(worksheet, workbook, dataset, columnTitles, data_starting_row, graph_starting_row, dataset_index, titles=None, sheet_name="Sheet1"):
+def add_chart_for_dataset(worksheet, workbook, dataset, columnTitles, data_starting_row, graph_starting_row, dataset_index, titles=None, sheet_name="Sheet1", showDataLabels=True):
     chart = workbook.add_chart({'type': 'column'})
     dataset_length = len(dataset[columnTitles[0]])
     data_start_row = data_starting_row + 1  # Data starts one row after the data_starting_row
@@ -117,7 +127,7 @@ def add_chart_for_dataset(worksheet, workbook, dataset, columnTitles, data_start
         'categories': f'={safe_sheet_name}!$B${data_start_row}:$B${data_end_row}',
         'values': f'={safe_sheet_name}!$C${data_start_row}:$C${data_end_row}',
         'data_labels': {
-            'value': True,
+            'value': showDataLabels,
             'position': 'outside_end',
             'font': {'name': 'Arial', 'size': 8, 'color': '#404040'}
         },

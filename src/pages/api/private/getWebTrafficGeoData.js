@@ -8,6 +8,7 @@ import {
   generateMonthsFromStartYear,
   reformatWebsiteUrl,
 } from "../../../utils/Utils.js";
+import { limitConcurrency } from "../../../utils/ConcurrencyUtils";
 
 export const config = {
   runtime: "edge",
@@ -26,6 +27,8 @@ const getSemrushGeoTraffic = async (
     display_date: displayDate,
     geo_type: geoType,
   });
+  const cacheKeyUrl = new URL(url);
+  cacheKeyUrl.searchParams.delete("key");
   const output = await cachedFetch({
     url: url,
     options: {
@@ -34,6 +37,7 @@ const getSemrushGeoTraffic = async (
     serviceSup: serviceSup,
     responseFormat: "text",
     tableName: "api_calls_semrush",
+    cacheKeyOverride: cacheKeyUrl.toString(),
   });
   return output;
 };
@@ -45,16 +49,24 @@ const handler = async (req) => {
   const reqJSON = await req.json();
   const { userId, companyUrl, geoType } = reqJSON;
   const displayDates = generateMonthsFromStartYear(2019); // array of format ["2023-10-01", ...]
-  const promises = displayDates.map(async (date) => {
-    const webTrafficData = await getSemrushGeoTraffic(
-      reformatWebsiteUrl(companyUrl),
-      date,
-      geoType
-    );
-    return parseSemrushOutput(webTrafficData);
+
+  // Create tasks for each date
+  const tasks = displayDates.map((date) => {
+    return () =>
+      getSemrushGeoTraffic(reformatWebsiteUrl(companyUrl), date, geoType).then(
+        (webTrafficData) => parseSemrushOutput(webTrafficData)
+      );
   });
 
-  const webTrafficHistoricalData = await Promise.all(promises);
+  // Use limitConcurrency to control the execution of tasks
+  const webTrafficHistoricalData = await limitConcurrency(tasks, 25, 5000)
+    .then((results) => {
+      return results;
+    })
+    .catch((error) => {
+      console.error("Error fetching web traffic geo data:", error);
+      return [];
+    });
   // console.log(webTrafficHistoricalData);
   return new Response(JSON.stringify(webTrafficHistoricalData), {
     status: 200,

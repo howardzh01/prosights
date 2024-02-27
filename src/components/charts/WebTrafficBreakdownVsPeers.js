@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import GenericStackedBar from "./templates/GenericStackedBar";
-import { CHARTS } from "../../constants";
+import { CHARTS, INFO_HOVERS } from "../../constants";
 import Image from "next/image";
 import { fromUnderscoreCase } from "../../utils/Utils";
 import { convertToTrafficBreakdownVsPeersData } from "../../utils/ChartUtils";
@@ -15,18 +15,22 @@ function WebTrafficBreakdownVsPeers({
 
   let chartType;
   let title;
+  let info;
   switch (selectedChart) {
-    case CHARTS.trafficByChannel:
+    case CHARTS.trafficCompsByChannel:
       chartType = "traffic_by_channel";
       title = "Channel";
+      info = INFO_HOVERS.TRAFFIC.CHANNEL;
       break;
-    case CHARTS.trafficByDevice:
+    case CHARTS.trafficCompsByDevice:
       chartType = "traffic_by_device";
       title = "Device";
+      info = INFO_HOVERS.TRAFFIC.DEVICE_BREAKDOWN;
       break;
-    case CHARTS.trafficByOrganicVsPaid:
+    case CHARTS.trafficCompsByOrganicVsPaid:
       chartType = "traffic_by_organic_paid";
       title = "Organic vs Paid";
+      info = INFO_HOVERS.TRAFFIC.ORGANIC_VS_PAID;
       break;
     // if no selected chart, return by channel
     default:
@@ -46,13 +50,15 @@ function WebTrafficBreakdownVsPeers({
           }}
           showTable={false}
           showDataLabels={true}
+          showModalButtons={true}
           showTimescaleButtons={false}
           title={title}
+          info={info}
           location={country}
           lastTwelveMonthsView={true}
           timescale={"quarterYear"}
           setTimescale={null}
-          selectedChart={null}
+          selectedChart={selectedChart}
           rawChartData={trafficData}
           height={"h-3/4"}
           legendPosition={"right"}

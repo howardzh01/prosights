@@ -34,7 +34,10 @@ def generate_master_excel(req: List):
         {
             type: "bar", // types: bar, line, doughnut, stacked, divider
             sheetName: "Sheet1",
+            sheetTabColor: "#FF0000",
             req: {...} // Follows the structure of the corresponding function
+            poweredBy: "Semrush",
+            showDataLabels: true // Optional only for bar
         },
         ...
     ]
@@ -53,7 +56,8 @@ def generate_master_excel(req: List):
         chart_type = request['type']
         if chart_type in chart_type_to_function:
             chart_function = chart_type_to_function[chart_type]
-            chart_function.local(request['req'], workbook, request['sheetName'])
+            extra_args = {'showDataLabels': request['showDataLabels']} if 'showDataLabels' in request and chart_type == 'bar' else {}
+            chart_function.local(request['req'], workbook, request['sheetName'], request['poweredBy'], request['sheetTabColor'], **extra_args)
 
     workbook.close()
     output.seek(0)

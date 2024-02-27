@@ -12,7 +12,7 @@ stub = modal.Stub("generate_stacked_excel")
 
 @stub.function(image=xlsxwriter_image)
 @modal.web_endpoint(method="POST")
-def generate_stacked_excel(req: List[Dict], workbook, sheetName="Sheet1"):
+def generate_stacked_excel(req: List[Dict], workbook, sheetName="Sheet1", poweredBy=None, sheetTabColor="#FF0000"):
     """
     'req' follows the structure:
 
@@ -51,6 +51,18 @@ def generate_stacked_excel(req: List[Dict], workbook, sheetName="Sheet1"):
     # Starting row for the first dataset's data
     data_start_row = 2
 
+    worksheet = workbook.add_worksheet(sheetName)
+    worksheet.set_tab_color(sheetTabColor)
+    
+    if poweredBy:
+        # Merge three cells for the "POWERED BY" text
+        header_format = workbook.add_format({'bold': True, 'font_name': 'Arial', 'font_size': 12})
+        powered_by_format = workbook.add_format({'italic': True, 'font_name': 'Arial', 'font_size': 8})
+        worksheet.merge_range('B2:D2', f"{sheetName}", header_format)
+        worksheet.merge_range('B3:D3', f"Powered by {poweredBy}", powered_by_format)
+        # Adjust the starting row for data entries if "POWERED BY" text is added
+        data_start_row += 3
+
     # Initialize a variable to track the chart position for the first chart
     chart_placement_row = None
 
@@ -58,10 +70,6 @@ def generate_stacked_excel(req: List[Dict], workbook, sheetName="Sheet1"):
         chartData = item['chartData']
         labels = chartData['labels']
         datasets = chartData['datasets']
-
-        # Only create a new worksheet for the first item, otherwise use the existing worksheet
-        if index == 0:
-            worksheet = workbook.add_worksheet(sheetName)
 
         # Column titles: "Date" followed by each dataset's label.
         columnTitles = [chartData.get("category", "Date")] + [dataset["label"] for dataset in datasets]

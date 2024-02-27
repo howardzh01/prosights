@@ -29,8 +29,9 @@ export async function cachedFetch({
   serviceSup,
   responseFormat = "json",
   tableName,
+  cacheKeyOverride = null,
 }) {
-  const cacheKey = url.toString() + JSON.stringify(options);
+  const cacheKey = cacheKeyOverride || url.toString();
 
   let { data: rows, error: error } = await serviceSup
     .from(tableName)
@@ -40,7 +41,7 @@ export async function cachedFetch({
 
   if (error || !rows || rows.length === 0) {
     if (error) {
-      console.log("Initial Fetch Error", error);
+      console.log("Initial Fetch Error", error, url);
     }
     let new_response;
     if (customFetchFunction) {
@@ -100,9 +101,10 @@ export async function cachedBucketFetch({
   serviceSup,
   responseFormat = "json",
   table_name,
+  cacheKeyOverride = null,
 }) {
   const topLevelBucketName = "api_calls";
-  const cacheKey = url.toString() + JSON.stringify(options);
+  const cacheKey = cacheKeyOverride || url.toString();
 
   let { data: rows, error: error } = await serviceSup
     .from(table_name)
