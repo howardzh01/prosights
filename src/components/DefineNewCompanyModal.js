@@ -55,7 +55,6 @@ export default function DefineNewCompanyModal({
   setCompanyCompetitors,
   companyDirectory,
 }) {
-  console.log("d", initialCompanyDic);
   const [companyName, setCompanyName] = useState(initialCompanyDic?.name || "");
   const [fundedEntity, setFundedEntity] = useState(
     initialCompanyDic?.displayedName || ""
@@ -65,7 +64,6 @@ export default function DefineNewCompanyModal({
   );
   const [websiteURL, setWebsiteURL] = useState(initialCompanyDic?.url || "");
   const [appID, setAppID] = useState(initialCompanyDic?.appId || "");
-  console.log(companyName, fundedEntity, linkedInURL, websiteURL, appID);
   const atLeastOneFieldPopulated = () => {
     return companyName || fundedEntity || linkedInURL || websiteURL || appID;
   };
@@ -87,20 +85,6 @@ export default function DefineNewCompanyModal({
     if (match) {
       linkedInSlug = match[1];
     }
-    // setCompanyDic({
-    //   name: null,
-    //   displayedName: null,
-    //   appId: null,
-    //   url: null,
-    //   linkedInSlug: null,
-    // });
-    console.log("E", {
-      name: companyName,
-      displayedName: fundedEntity,
-      appId: appID,
-      url: websiteURL,
-      linkedInSlug: linkedInSlug,
-    });
     setCompanyDic({
       name: companyName,
       displayedName: fundedEntity,

@@ -506,11 +506,6 @@ function Dashboard({
                     </div>
                   </div>
                   {/* Website Traffic */}
-                  {console.log(
-                    "web",
-                    webTrafficData,
-                    companyDic?.displayedName || companyDic?.name
-                  )}
                   <div className="w-full">
                     <WebsiteTrafficSection
                       company={companyDic?.displayedName || companyDic?.name}
