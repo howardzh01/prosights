@@ -243,14 +243,18 @@ export function preprocessAppDataTypes(
     if (!data) continue;
     let filteredData;
     // Handle retentiion data differently
-    if (type === CHARTS.appLTMRetention) {
+    if (
+      type === CHARTS.appLTMRetentionM3 ||
+      type === CHARTS.appLTMRetentionM6
+    ) {
+      const retentionMonths = type === CHARTS.appLTMRetentionM3 ? 3 : 6;
       if (!data["retention"]) continue;
       filteredData = Object.entries(data["retention"]).reduce(
         (obj, [time, data]) => {
-          let estD30Retention = data.filter(
-            (item) => item?.retention_days === 30
+          let estRetention = data.filter(
+            (item) => item?.retention_months === retentionMonths
           )?.[0]?.est_retention_value;
-          obj[time] = estD30Retention * 100;
+          obj[time] = estRetention * 100;
           return obj;
         },
         {}
@@ -260,12 +264,7 @@ export function preprocessAppDataTypes(
       filteredData = Object.entries(data["app_performance"])
         // .map(([time, data]) => data.est_percentage_active_days);
         .reduce((obj, [time, data]) => {
-          if (type === CHARTS.appLTMActiveDays) {
-            obj[time] =
-              data.est_percentage_active_days != null
-                ? data.est_percentage_active_days * 100
-                : null;
-          } else if (type === CHARTS.appLTMTimePerUser) {
+          if (type === CHARTS.appLTMTimePerUser) {
             obj[time] =
               data.est_average_time_per_user != null
                 ? data.est_average_time_per_user / 60 / 1000

@@ -1034,8 +1034,8 @@ export function convertAppUsageMarketShareVsPeersDataToExcelFormat(dataAI) {
 
 export function convertAppUsageLoyalUsersVsPeersDataToExcelFormat(dataAI) {
   const timeFrames = [
-    CHARTS.appLTMRetention,
-    CHARTS.appLTMActiveDays,
+    CHARTS.appLTMRetentionM3,
+    CHARTS.appLTMRetentionM6,
     CHARTS.appLTMTimePerUser,
     CHARTS.appLTMTimePerSession,
   ];

@@ -91,8 +91,8 @@ export default function ChartModal({
       );
       break;
 
-    case CHARTS.appLTMRetention:
-    case CHARTS.appLTMActiveDays:
+    case CHARTS.appLTMRetentionM3:
+    case CHARTS.appLTMRetentionM6:
     case CHARTS.appLTMTimePerUser:
     case CHARTS.appLTMTimePerSession:
       chart = (
@@ -134,7 +134,7 @@ export default function ChartModal({
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative overflow-y-auto max-h-[75%] transform rounded-lg px-8 bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-[80%]">
+              <Dialog.Panel className="relative overflow-y-auto max-h-[90%] transform rounded-lg px-8 bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-[80%]">
                 <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
                   <button
                     type="button"

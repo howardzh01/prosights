@@ -20,12 +20,12 @@ function AppLoyaltyPeersModalCharts({
   const [appLoyaltyTimeScale, setAppLoyaltyTimescale] = useState("quarterYear");
   let formatTableDataFunction, tickType;
   switch (selectedChart) {
-    case CHARTS.appLTMRetention:
+    case CHARTS.appLTMRetentionM3:
       formatTableDataFunction = (value) =>
         value !== null ? `${value}%` : "--";
       tickType = "percentage";
       break;
-    case CHARTS.appLTMActiveDays:
+    case CHARTS.appLTMRetentionM6:
       formatTableDataFunction = (value) =>
         value !== null ? `${value}%` : "--";
       tickType = "percentage";
