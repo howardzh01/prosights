@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import FundedEntitySearch from "./dashboard/FundedEntitySearch";
@@ -50,21 +50,32 @@ function InfoButton({ infoType }) {
 export default function DefineNewCompanyModal({
   show,
   toggleOff,
+  initialCompanyDic,
   setCompanyDic,
   setCompanyCompetitors,
   companyDirectory,
 }) {
-  const [companyName, setCompanyName] = useState("");
+  const [companyName, setCompanyName] = useState(initialCompanyDic?.name || "");
   const [fundedEntity, setFundedEntity] = useState(
-    companyDirectory.findCompanyByUrl("")
+    initialCompanyDic?.displayedName || ""
   );
-  const [linkedInURL, setLinkedInURL] = useState("");
-  const [websiteURL, setWebsiteURL] = useState("");
-  const [appID, setAppID] = useState("");
-
+  const [linkedInURL, setLinkedInURL] = useState(
+    `linkedin.com/company/${initialCompanyDic?.linkedInSlug || ""}/`
+  );
+  const [websiteURL, setWebsiteURL] = useState(initialCompanyDic?.url || "");
+  const [appID, setAppID] = useState(initialCompanyDic?.appId || "");
   const atLeastOneFieldPopulated = () => {
     return companyName || fundedEntity || linkedInURL || websiteURL || appID;
   };
+  useEffect(() => {
+    setCompanyName(initialCompanyDic?.name || "");
+    setFundedEntity(initialCompanyDic?.displayedName || "");
+    setLinkedInURL(
+      `linkedin.com/company/${initialCompanyDic?.linkedInSlug || ""}/`
+    );
+    setWebsiteURL(initialCompanyDic?.url || "");
+    setAppID(initialCompanyDic?.appId || "");
+  }, [initialCompanyDic]);
 
   const handleGenerateReport = () => {
     let linkedInSlug = "";
@@ -76,11 +87,12 @@ export default function DefineNewCompanyModal({
     }
     setCompanyDic({
       name: companyName,
-      displayedName: fundedEntity.displayedName,
+      displayedName: fundedEntity,
       appId: appID,
       url: websiteURL,
       linkedInSlug: linkedInSlug,
     });
+    setCompanyCompetitors([]);
     toggleOff();
   };
 
@@ -167,8 +179,10 @@ export default function DefineNewCompanyModal({
                     <div className="w-60">
                       <FundedEntitySearch
                         companyDirectory={companyDirectory}
-                        setCompany={setFundedEntity}
-                        setCompanyCompetitors={setCompanyCompetitors}
+                        setCompany={(company) => {
+                          setFundedEntity(company.displayedName);
+                        }}
+                        setCompanyCompetitors={() => {}}
                       />
                     </div>
                     {/* <input
