@@ -17,6 +17,7 @@ export default function SearchBar({
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState(emptyStateCompanyList || []);
   const [loading, setLoading] = useState(false); // Loading state
+  const [userDefinedOptions, setUserDefinedOptions] = useState([]); // State to hold user-defined companies
   // Directly using useEffect to handle debouncing
   const debounceTimeoutRef = useRef(); // Ref to hold debounce timeout
   // Debounce function to delay execution
@@ -24,6 +25,19 @@ export default function SearchBar({
     clearTimeout(debounceTimeoutRef.current);
     debounceTimeoutRef.current = setTimeout(func, delay);
   };
+
+  useEffect(() => {
+    // This code runs after the component has mounted, ensuring localStorage is available
+    const existingDicsString = localStorage.getItem("userDefinedCompanyDics");
+    const existingDics = existingDicsString
+      ? JSON.parse(existingDicsString)
+      : {};
+    const convertDicsToArray = Object.keys(existingDics).map((key) => {
+      // Add a "userDefined" property to the company object to differentiate it from the server results
+      return { ...existingDics[key], userDefined: true };
+    });
+    setUserDefinedOptions(convertDicsToArray);
+  }, []); // Empty dependency array means this effect runs once on mount
 
   useEffect(() => {
     if (!inputValue.trim()) {
@@ -68,10 +82,12 @@ export default function SearchBar({
         autoComplete={true}
         disableListWrap
         // options={companyDirectory.companyList} // Limit the options to the first 10 items
-        options={options}
+        options={[...userDefinedOptions, ...options]}
         getOptionLabel={(option) =>
           typeof option === "string"
             ? option
+            : option.userDefined
+            ? `${option.name} (User Defined) - ${option.url}`
             : `${option.displayedName} - ${option.url}`
         }
         clearIcon={null} // Removes the clear icon
@@ -91,10 +107,20 @@ export default function SearchBar({
         renderOption={(props, option, { selected }) => (
           <Box component="li" {...props}>
             <div className="w-5 h-5 mr-2 text-xs">
-              <CompanyLogoSkeleton name={option.displayedName} />
+              <CompanyLogoSkeleton
+                name={option.userDefined ? option.name : option.displayedName}
+              />
             </div>
             <span className="text-sm text-customGray-800">
-              <strong>{option.displayedName}</strong> - {option.url}
+              {option.userDefined ? (
+                <>
+                  <strong>{option.name}</strong> (User Defined) - {option.url}
+                </>
+              ) : (
+                <>
+                  <strong>{option.displayedName}</strong> - {option.url}
+                </>
+              )}
             </span>
           </Box>
         )}
