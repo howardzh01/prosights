@@ -1,22 +1,21 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
-import { filterOptions, createCompanyDic } from "../../utils/Utils";
+import { filterAndSortOptions, createCompanyDic } from "../../utils/Utils";
 import TextField from "@mui/material/TextField";
 import { Box, CircularProgress } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import Image from "next/image";
 import Chip from "@mui/material/Chip";
 import CompanyLogoSkeleton from "./CompanyLogoSkeleton";
-
 // IMPORTANT: every change here should be made in CompetitorSearchBar +
 export default function SearchBar({
-  companyDirectory,
+  emptyStateCompanyList,
   setCompany,
   setCompanyCompetitors,
   darkMode,
 }) {
   const [inputValue, setInputValue] = useState("");
-  const [options, setOptions] = useState([]);
+  const [options, setOptions] = useState(emptyStateCompanyList || []);
   const [loading, setLoading] = useState(false); // Loading state
   // Directly using useEffect to handle debouncing
   const debounceTimeoutRef = useRef(); // Ref to hold debounce timeout
@@ -28,7 +27,7 @@ export default function SearchBar({
 
   useEffect(() => {
     if (!inputValue.trim()) {
-      setOptions([]);
+      setOptions(emptyStateCompanyList || []);
       return;
     }
 
@@ -65,7 +64,7 @@ export default function SearchBar({
         freeSolo={false}
         autoHighlight={true} // only use if freesolo=false
         id="autcomplete-search"
-        // filterOptions={filterOptions}
+        filterOptions={filterAndSortOptions}
         autoComplete={true}
         disableListWrap
         // options={companyDirectory.companyList} // Limit the options to the first 10 items
@@ -78,7 +77,7 @@ export default function SearchBar({
         clearIcon={null} // Removes the clear icon
         onChange={(event, value) => {
           if (!value) return;
-          setCompany(createCompanyDic(value, companyDirectory));
+          setCompany(value);
           setCompanyCompetitors([]);
           setInputValue("");
         }}
@@ -127,7 +126,6 @@ export default function SearchBar({
                   />
                 </InputAdornment>
               ),
-              endAdornment: <></>,
             }}
             sx={{
               "& .MuiOutlinedInput-notchedOutline": {

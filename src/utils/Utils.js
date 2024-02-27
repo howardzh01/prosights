@@ -616,7 +616,7 @@ export function formatNumberToAbbreviation(number) {
   return number.toFixed(1);
 }
 
-export const filterOptions = (options, { inputValue }) => {
+export const filterAndSortOptions = (options, { inputValue }) => {
   const limit = 50;
   if (inputValue === "") {
     return options.slice(0, limit);

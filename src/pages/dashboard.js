@@ -18,7 +18,7 @@ import { CHARTS, CONSTANTS, SECTIONS } from "../constants";
 import CompetitorContainer from "../components/dashboard/CompetitorContainer";
 import { Skeleton } from "@nextui-org/react";
 import { CompanyDirectory } from "../components/dashboard/CompanyListDirectory";
-import { companyListFixed } from "../components/dashboard/CompanyList";
+import { companyListTop50 } from "../components/dashboard/CompanyList";
 import HeadcountIcon from "/public/assets/HeadcountIcon.svg";
 import CountrySelector from "../components/dashboard/CountrySelector";
 import DashboardNavbar from "../components/dashboard/DashboardNavBar";
@@ -50,7 +50,7 @@ export const ChartDataContext = createContext();
 function Dashboard({
   enableCrunchbase = false,
   enableOnlyWebTraffic,
-  initCompanyList = [],
+  initCompanyList = companyListTop50,
 }) {
   const { isSignedIn, user, isLoaded } = useUser();
   const [companyList, setCompanyList] = useState(initCompanyList);
@@ -332,7 +332,7 @@ function Dashboard({
           initialCompanyDic={companyDic}
           setCompanyDic={setCompanyDic}
           setCompanyCompetitors={setCompanyCompetitors}
-          companyDirectory={companyDirectory}
+          emptyStateCompanyList={companyList}
         />
         <div className="relative flex flex-row bg-customGray-900">
           {/* Sidebar */}
@@ -359,7 +359,7 @@ function Dashboard({
                 </div>
                 <div className="w-[30rem] 2xl:w-[34rem] mx-auto">
                   <SearchBar
-                    companyDirectory={companyDirectory}
+                    emptyStateCompanyList={companyList}
                     setCompany={setCompanyDic}
                     setCompanyCompetitors={setCompanyCompetitors}
                     darkMode={true}
@@ -397,7 +397,7 @@ function Dashboard({
                     setCountry={setCountry}
                     downloadPDF={downloadPDF}
                     downloadExcel={downloadExcel}
-                    companyDirectory={companyDirectory}
+                    emptyStateCompanyList={companyList}
                     setCompanyDic={setCompanyDic}
                     companyCompetitors={companyCompetitors}
                     setCompanyCompetitors={setCompanyCompetitors}
@@ -544,7 +544,7 @@ function Dashboard({
               </div>
             ) : (
               <EmptyState
-                companyDirectory={companyDirectory}
+                emptyStateCompanyList={companyList}
                 setCompanyDic={setCompanyDic}
                 setCompanyCompetitors={setCompanyCompetitors}
               />

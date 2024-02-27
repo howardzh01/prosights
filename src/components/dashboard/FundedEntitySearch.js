@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
-import { filterOptions, createCompanyDic } from "../../utils/Utils";
+import { filterAndSortOptions, createCompanyDic } from "../../utils/Utils";
 import TextField from "@mui/material/TextField";
 import { Box, CircularProgress } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -10,12 +10,12 @@ import CompanyLogoSkeleton from "./CompanyLogoSkeleton";
 
 // NOTE: Near duplicate of src/components/dashboard/SearchBar.js with UI changes
 export default function FundedEntitySearch({
-  companyDirectory,
+  emptyStateCompanyList,
   setCompany,
   setCompanyCompetitors,
 }) {
   const [inputValue, setInputValue] = useState("");
-  const [options, setOptions] = useState([]);
+  const [options, setOptions] = useState(emptyStateCompanyList || []);
   const [loading, setLoading] = useState(false); // Loading state
   // Directly using useEffect to handle debouncing
   const debounceTimeoutRef = useRef(); // Ref to hold debounce timeout
@@ -27,7 +27,7 @@ export default function FundedEntitySearch({
 
   useEffect(() => {
     if (!inputValue.trim()) {
-      setOptions([]);
+      setOptions(emptyStateCompanyList || []);
       return;
     }
 

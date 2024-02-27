@@ -12,7 +12,7 @@ const DashboardNavBar = ({
   setCountry,
   downloadPDF,
   downloadExcel,
-  companyDirectory,
+  emptyStateCompanyList,
   setCompanyDic,
   companyCompetitors,
   setCompanyCompetitors,
@@ -160,7 +160,7 @@ const DashboardNavBar = ({
         </div>
         <CompetitorContainer
           targetCompany={companyDic}
-          companyDirectory={companyDirectory}
+          emptyStateCompanyList={emptyStateCompanyList}
           companyCompetitors={companyCompetitors}
           setCompanyCompetitors={setCompanyCompetitors}
         />

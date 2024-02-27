@@ -6,14 +6,16 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Image from "next/image";
 import Chip from "@mui/material/Chip";
 import CompanyLogoSkeleton from "./CompanyLogoSkeleton";
+import filterAndSortOptions from "../../utils/Utils";
 
 export default function CompetitorSearchBar({
   targetCompany, //TODO: remove target company from searchbar
+  emptyStateCompanyList,
   companyCompetitors,
   setCompanyCompetitors,
 }) {
   const [inputValue, setInputValue] = useState("");
-  const [options, setOptions] = useState([]);
+  const [options, setOptions] = useState(emptyStateCompanyList || []);
   const [loading, setLoading] = useState(false); // Loading state
   // Directly using useEffect to handle debouncing
   const debounceTimeoutRef = useRef(); // Ref to hold debounce timeout
@@ -25,7 +27,7 @@ export default function CompetitorSearchBar({
 
   useEffect(() => {
     if (!inputValue.trim()) {
-      setOptions([]);
+      setOptions(emptyStateCompanyList || []);
       return;
     }
 
@@ -62,7 +64,13 @@ export default function CompetitorSearchBar({
       limitTags={4}
       autoHighlight={true} // only use if freesolo=false
       id="multiple-limit-tags"
-      options={options}
+      options={
+        // Displayed name of the target company cannot match competitor
+        options.filter(
+          (x) => x.displayedName !== targetCompany.displayedName
+        ) || []
+      }
+      filterOptions={filterAndSortOptions}
       getOptionLabel={(option) => `${option.displayedName} - ${option.url}`}
       onChange={(event, value) => {
         if (!value) return;

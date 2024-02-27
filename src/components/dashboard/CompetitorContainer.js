@@ -3,7 +3,7 @@ import CompetitorSearchBar from "./CompetitorSearchBar";
 
 function CompetitorContainer({
   targetCompany,
-  companyDirectory,
+  emptyStateCompanyList,
   companyCompetitors,
   setCompanyCompetitors,
 }) {
@@ -23,7 +23,7 @@ function CompetitorContainer({
       <div className="flex flex-end w-300 mr-4">
         <CompetitorSearchBar
           targetCompany={targetCompany}
-          companyDirectory={companyDirectory}
+          emptyStateCompanyList={emptyStateCompanyList}
           companyCompetitors={companyCompetitors}
           setCompanyCompetitors={setCompanyCompetitors}
         ></CompetitorSearchBar>
