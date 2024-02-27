@@ -61,9 +61,7 @@ export default function DefineNewCompanyModal({
   //     initialCompanyDic ? `${initialCompanyDic.name} (V2)` : ""
   //   );
   const [companyName, setCompanyName] = useState(initialCompanyDic?.name || "");
-  const [fundedEntity, setFundedEntity] = useState(
-    initialCompanyDic?.displayedName || ""
-  );
+  const [fundedEntity, setFundedEntity] = useState(initialCompanyDic || "");
   const [linkedInURL, setLinkedInURL] = useState(
     `linkedin.com/company/${initialCompanyDic?.linkedInSlug || ""}/`
   );
@@ -92,8 +90,11 @@ export default function DefineNewCompanyModal({
       linkedInSlug = match[1];
     }
     setCompanyDic({
+      // Funded entity is a companyDic that contains a lot of info we need (e.g. employee count, total funding amount, etc.)
+      ...fundedEntity,
+      // Rewriting the companyDic with the new info for some fields
+      Description: "",
       name: companyName,
-      displayedName: fundedEntity,
       appId: appID,
       url: websiteURL,
       linkedInSlug: linkedInSlug,
@@ -210,7 +211,7 @@ export default function DefineNewCompanyModal({
                       <FundedEntitySearch
                         companyDirectory={companyDirectory}
                         setCompany={(company) => {
-                          setFundedEntity(company.displayedName);
+                          setFundedEntity(company);
                         }}
                         setCompanyCompetitors={() => {}}
                       />

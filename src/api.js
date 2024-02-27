@@ -55,6 +55,7 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
           companyDicList.map((company) => company.linkedInSlug),
           `/api/private/getHeadCount`,
           user.id,
+          companyDicList,
         ]
       : null,
     (args) => {
@@ -105,7 +106,6 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
   //   },
   //   { revalidateOnFocus: false }
   // );
-  console.log(companyDicList);
   const { data: companyDescriptionPull, error: companyDescriptionErrorPull } =
     useSWR(
       user &&
@@ -189,6 +189,7 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
           `/api/private/getDataAI`,
           user.id,
           country,
+          companyDicList,
         ]
       : null,
     (args) => {

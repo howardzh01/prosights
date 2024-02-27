@@ -28,6 +28,7 @@ function GenericLine({
   legendPosition = "top",
   displayLegend = true,
   tickType = "percentage",
+  beginAtZero = false,
 }) {
   const { chartData, tableData } = data;
   const options = {
@@ -80,7 +81,7 @@ function GenericLine({
       },
       // TODO: maybe display y-axis if timeline === "month" as data labels are turned off on monthly
       y: {
-        beginAtZero: false,
+        beginAtZero: beginAtZero,
         ticks: {
           callback: function (value) {
             if (value == 0) return "--";

@@ -71,7 +71,7 @@ export default function FundedEntitySearch({
           if (!value) return;
           setCompany(value);
           setCompanyCompetitors([]);
-          setInputValue("");
+          // setInputValue("");
         }}
         onInputChange={(event, newInputValue) => {
           setInputValue(newInputValue);
