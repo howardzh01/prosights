@@ -17,8 +17,6 @@ export default function ChartModal({
   country,
 }) {
   let chart;
-  console.log("huh", selectedChart);
-
   switch (selectedChart) {
     case CHARTS.employeeCount:
       chart = <HeadCountChart headCountData={chartData} />;

@@ -1013,6 +1013,20 @@ export function convertTrafficBreakdownVsPeersDataToExcelFormat(
   return result;
 }
 
+export function convertAppDownloadsChartDataToExcelFormat(
+  appData,
+  dataCutoffDate
+) {
+  return convertBarGraphToExcelFormat(
+    appData,
+    "est_download",
+    "sum",
+    "Downloads",
+    dataCutoffDate,
+    convertToGrowthChartData
+  );
+}
+
 export function convertAppUsersChartDataToExcelFormat(appData, dataCutoffDate) {
   return convertBarGraphToExcelFormat(
     appData,

@@ -7,6 +7,7 @@ import {
   convertTrafficGrowthVsPeersChartDataToExcelFormat,
   convertTrafficMarketShareVsPeersDataToExcelFormat,
   convertTrafficBreakdownVsPeersDataToExcelFormat,
+  convertAppDownloadsChartDataToExcelFormat,
   convertAppUsersChartDataToExcelFormat,
   convertAppUsageGrowthVsPeersChartDataToExcelFormat,
   convertAppUsageMarketShareVsPeersDataToExcelFormat,
@@ -212,6 +213,19 @@ export function downloadExcelBuilder(
   ) {
     appUsageSectionBuilder.push({
       type: "bar",
+      sheetName: "App Downloads",
+      sheetTabColor: "#FFFFCC",
+      req: convertAppDownloadsChartDataToExcelFormat(
+        dataAIData[companyDic?.displayedName || companyDic?.name][
+          "app_performance"
+        ],
+        dataCutoffDate
+      ),
+      poweredBy: "Data AI",
+      showDataLabels: false,
+    });
+    appUsageSectionBuilder.push({
+      type: "bar",
       sheetName: "App Users",
       sheetTabColor: "#FFFFCC",
       req: convertAppUsersChartDataToExcelFormat(
@@ -243,14 +257,14 @@ export function downloadExcelBuilder(
           dataCutoffDate
         ),
         poweredBy: "Data AI",
-      },
-      {
-        type: "bar",
-        sheetName: "App Loyalty vs. Peers",
-        sheetTabColor: "#FFFFCC",
-        req: convertAppUsageLoyalUsersVsPeersDataToExcelFormat(dataAIData),
-        poweredBy: "Data AI",
       }
+      // {
+      //   type: "bar",
+      //   sheetName: "App Loyalty vs. Peers",
+      //   sheetTabColor: "#FFFFCC",
+      //   req: convertAppUsageLoyalUsersVsPeersDataToExcelFormat(dataAIData),
+      //   poweredBy: "Data AI",
+      // }
     );
   }
   const dividerBuilder = (name, tabColor) => ({
