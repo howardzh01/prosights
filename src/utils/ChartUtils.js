@@ -1105,6 +1105,6 @@ export function convertAppUsageLoyalUsersVsPeersDataToExcelFormat(dataAI) {
     }),
     differentColors: true,
     titles: timeFrames,
-    sheetName: "Loyalty vs. Peers",
+    sheetName: "Engagement vs. Peers",
   };
 }

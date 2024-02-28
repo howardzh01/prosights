@@ -167,10 +167,10 @@ function AppUsageSection({
           )}
         </div>
 
-        <div id="Loyalty vs. Peers" className="content-section mt-8">
+        <div id="Engagement vs. Peers" className="content-section mt-8">
           <div className="flex flex-row items-center mb-3">
             <p className="text-lg font-semibold text-gray-800 mr-2">
-              Loyalty vs. Peers
+              Engagement vs. Peers
             </p>
           </div>
 
@@ -181,7 +181,7 @@ function AppUsageSection({
             ) : !multiCompanyAppData[company] ? (
               <div className="w-full h-80 rounded-lg mt-2 mb-6 bg-customGray-50 flex items-center justify-center">
                 <p className="text-sm text-customGray-200">
-                  No App Loyalty vs. Peers Data Available
+                  No App Engagement vs. Peers Data Available
                 </p>
               </div>
             ) : (

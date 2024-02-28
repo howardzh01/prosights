@@ -278,8 +278,8 @@ export const SECTIONS = [
     level: 2,
   },
   {
-    title: "Loyalty vs. Peers",
-    id: "Loyalty vs. Peers",
+    title: "Engagement vs. Peers",
+    id: "Engagement vs. Peers",
     parentId: "App Usage",
     level: 2,
   },
