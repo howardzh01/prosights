@@ -67,8 +67,8 @@ export default function DefineNewCompanyModal({
   );
   const [websiteURL, setWebsiteURL] = useState(initialCompanyDic?.url || "");
   const [appID, setAppID] = useState(initialCompanyDic?.appId || "");
-  const atLeastOneFieldPopulated = () => {
-    return fundedEntity && (companyName || linkedInURL || websiteURL || appID);
+  const requiredFieldsMet = () => {
+    return fundedEntity;
   };
 
   useEffect(() => {
@@ -211,6 +211,7 @@ export default function DefineNewCompanyModal({
                     <div className="flex flex-row items-center">
                       <p className="text-base font-medium text-customGray-800 pr-2">
                         Funded Entity
+                        <span className="text-red-500"> *</span>
                       </p>
 
                       <InfoButton infoType="fundedEntity" />
@@ -286,14 +287,12 @@ export default function DefineNewCompanyModal({
                   </div>
                   <div
                     className={`flex flex-row mt-12 px-6 py-2 mx-auto ${
-                      atLeastOneFieldPopulated()
+                      requiredFieldsMet()
                         ? "bg-primary text-white cursor-pointer hover:bg-blue-600 transition duration-300"
                         : "bg-primaryLight text-white cursor-default"
                     } rounded-md font-semibold`}
                     onClick={
-                      atLeastOneFieldPopulated()
-                        ? handleGenerateReport
-                        : undefined
+                      requiredFieldsMet() ? handleGenerateReport : undefined
                     }
                   >
                     Save and Run Analysis
