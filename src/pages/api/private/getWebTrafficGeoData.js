@@ -19,7 +19,6 @@ const getSemrushGeoTraffic = async (
   displayDate,
   geoType = "country"
 ) => {
-  return;
   // export all columns. will yield traffic + users
   const url = new URL("https://api.semrush.com/analytics/ta/api/v3/geo");
   url.search = new URLSearchParams({
