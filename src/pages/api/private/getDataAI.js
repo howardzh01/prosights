@@ -159,14 +159,16 @@ const customDataAIFetch = async (url, options) => {
           response.status,
           response.statusText
         );
+        return;
       } else {
         console.warn(
           `Fetch DataAI Report Error on i=${i}`,
           response.status,
           response.statusText
         );
+        await sleep(1000);
+        continue;
       }
-      return;
     }
     report = await response.json();
     if (report["report_status"] === "done") {
