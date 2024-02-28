@@ -48,7 +48,7 @@ function AppUsageSection({
               height={256}
             />
           </a>
-          <select
+          {/* <select
             className="ml-4 px-2 h-10 text-customGray-500 rounded-md font-nunitoSans text-base font-medium text-left focus:outline-none focus:ring-0 hover:text-primary hover:cursor-pointer"
             value={selectedApp}
             onChange={(e) => setSelectedApp(e.target.value)}
@@ -58,7 +58,7 @@ function AppUsageSection({
                 {appName}
               </option>
             ))}
-          </select>
+          </select> */}
         </div>
         <div className="flex flex-row items-center ml-4">
           <span className="mr-2 italic text-sm text-[#C3C3C3]">Powered by</span>

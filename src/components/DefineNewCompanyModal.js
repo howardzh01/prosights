@@ -18,8 +18,7 @@ function InfoButton({ infoType }) {
       "Specify the LinkedIn URL you wish to analyze in the Headcount section. ",
     websiteURL:
       "Specify the website URL you wish to analyze in the Website Traffic section.",
-    appID:
-      "Specify the Data.ai app ID (unified, iOS, Google Play) you wish to analyze in the App Usage section.",
+    appID: "Specify the app name you wish to analyze in the App Usage section.",
   };
 
   return (
