@@ -6,7 +6,7 @@ export const config = {
   runtime: "edge",
 };
 const BUCKET_VERSION = "v2";
-const FORCE_REFETCH = true; // FOR TESTING
+const FORCE_REFETCH = false; // FOR TESTING
 
 const getGPTDescriptions = async (
   companyName,
