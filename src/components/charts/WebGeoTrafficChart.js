@@ -9,7 +9,6 @@ function WebGeoTrafficChart({
   selectedChart = null,
   cutOffDate = new Date("2019"),
 }) {
-  if (!geoTrafficData) return null;
   const [trafficByGeoTimescale, setTrafficByGeoTimescale] =
     useState("quarterYear");
 

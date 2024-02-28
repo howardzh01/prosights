@@ -72,17 +72,29 @@ const calcRestOfWorldAppPerformance = (worldData, usData) => {
     (x, y) => x - y
   );
   if (!restOfWorldAppPerformance) {
-    console.log(restOfWorldAppPerformance, "restOfWorldAppPerformance");
-
     console.log("Misaligned keys or other issue in first merge operation");
-    return null;
+    const nullReversedWeights = reversed_weighted_average_keys.reduce(
+      (acc, key) => {
+        acc[key] = null;
+        return acc;
+      },
+      {}
+    );
+    return { ...restOfWorldAppPerformance, ...nullReversedWeights };
   }
 
   const restOfWorldUsers =
     restOfWorldAppPerformance["est_average_active_users"];
   if (restOfWorldUsers == null) {
     console.log("Null values encountered in restOfWorldUsers");
-    return null;
+    const nullReversedWeights = reversed_weighted_average_keys.reduce(
+      (acc, key) => {
+        acc[key] = null;
+        return acc;
+      },
+      {}
+    );
+    return { ...restOfWorldAppPerformance, ...nullReversedWeights };
   }
 
   // Second merge operation based on weighted averages
