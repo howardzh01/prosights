@@ -24,7 +24,6 @@ function WebsiteTrafficSection({
   // Expect webTrafficDic = {company1: trafficData, company2: trafficData, ...}
   const webTrafficData = webTrafficDic?.[company];
   const webTrafficGeoData = webTrafficGeoDic?.[company];
-  console.log("hi", webTrafficData);
 
   // NOTE: many checks are reliant on previous checks failing, so first check is usually making sure previous one failed
   // Growth section state checks
