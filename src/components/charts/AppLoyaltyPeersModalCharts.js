@@ -44,46 +44,50 @@ function AppLoyaltyPeersModalCharts({
   }
 
   const appLoyaltyPeersLineChart = (
-    <GenericLine
-      data={convertToAppLoyaltyPeersLineData(
-        multiCompanyAppData,
-        appLoyaltyTimeScale,
-        cutOffDate,
-        selectedChart,
-        false
-      )}
-      title={selectedChart}
-      timescale={appLoyaltyTimeScale}
-      setTimescale={setAppLoyaltyTimescale}
-      location={country}
-      // selectedChart={CHARTS.trafficByChannel}
-      rawChartData={multiCompanyAppData}
-      formatTableDataFunction={formatTableDataFunction}
-      showDataLabels={true}
-      showTimescaleButtons={true}
-      showModalButtons={false}
-      selectedChart={selectedChart}
-      height={"h-full"}
-      tickType={tickType}
-      beginAtZero={true}
-    />
+    <div className="h-[26rem]">
+      <GenericLine
+        data={convertToAppLoyaltyPeersLineData(
+          multiCompanyAppData,
+          appLoyaltyTimeScale,
+          cutOffDate,
+          selectedChart,
+          false
+        )}
+        title={selectedChart}
+        timescale={appLoyaltyTimeScale}
+        setTimescale={setAppLoyaltyTimescale}
+        location={country}
+        // selectedChart={CHARTS.trafficByChannel}
+        rawChartData={multiCompanyAppData}
+        formatTableDataFunction={formatTableDataFunction}
+        showDataLabels={true}
+        showTimescaleButtons={true}
+        showModalButtons={false}
+        selectedChart={selectedChart}
+        height={"h-full"}
+        tickType={tickType}
+        beginAtZero={true}
+      />
+    </div>
   );
   const yearAppLoyaltyPeersLineChart = (
-    <GenericLine
-      data={convertToAppLoyaltyPeersLineData(
-        multiCompanyAppData,
-        "year",
-        cutOffDate,
-        selectedChart,
-        false
-      )}
-      showTimescaleButtons={false}
-      showModalButtons={false}
-      scrollStart={"right"}
-      formatTableDataFunction={formatTableDataFunction}
-      tickType={tickType}
-      beginAtZero={true}
-    />
+    <div className="h-[26rem]">
+      <GenericLine
+        data={convertToAppLoyaltyPeersLineData(
+          multiCompanyAppData,
+          "year",
+          cutOffDate,
+          selectedChart,
+          false
+        )}
+        showTimescaleButtons={false}
+        showModalButtons={false}
+        scrollStart={"right"}
+        formatTableDataFunction={formatTableDataFunction}
+        tickType={tickType}
+        beginAtZero={true}
+      />
+    </div>
   );
   return (
     <div>
