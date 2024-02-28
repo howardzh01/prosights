@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { RELEVANT_CONTINENTS, CHARTS, COUNTRY_LIST } from "../../constants";
 import WebGeoTrafficDoughnut from "../charts/WebGeoTrafficDoughnut";
 import WebTrafficDoughnut from "../charts/WebTrafficDoughnut";
@@ -19,6 +19,9 @@ function AppUsageSection({
   downloadExcel,
   companyCompetitors,
 }) {
+  let listOfApps = ["Candy Crush", "Solitaire", "Justin's Mom"];
+  const [selectedApp, setSelectedApp] = useState("US");
+
   return (
     <div className="flex flex-col w-full mt-12 pb-8">
       <div
@@ -45,6 +48,17 @@ function AppUsageSection({
               height={256}
             />
           </a>
+          <select
+            className="ml-4 px-2 h-10 text-customGray-500 rounded-md font-nunitoSans text-base font-medium text-left focus:outline-none focus:ring-0 hover:text-primary hover:cursor-pointer"
+            value={selectedApp}
+            onChange={(e) => setSelectedApp(e.target.value)}
+          >
+            {listOfApps.map((appName, index) => (
+              <option key={index} value={appName}>
+                {appName}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="flex flex-row items-center ml-4">
           <span className="mr-2 italic text-sm text-[#C3C3C3]">Powered by</span>

@@ -4,7 +4,7 @@ import { COUNTRY_LIST } from "../../constants";
 const CountrySelector = ({ country, setCountry }) => {
   return (
     <select
-      className="h-10 text-customGray-500 rounded-md font-nunitoSans text-sm font-normal text-left focus:outline-none focus:ring-0"
+      className="h-10 text-customGray-500 rounded-md font-nunitoSans text-sm font-normal text-left focus:outline-none focus:ring-0 hover:text-primary hover:cursor-pointer"
       value={country}
       onChange={(e) => setCountry(e.target.value)}
     >
