@@ -67,6 +67,7 @@ export default function DefineNewCompanyModal({
     `linkedin.com/company/${initialCompanyDic?.linkedInSlug || ""}/`
   );
   const [websiteURL, setWebsiteURL] = useState(initialCompanyDic?.url || "");
+  const [appName, setAppName] = useState("");
   const [appID, setAppID] = useState(initialCompanyDic?.appId || "");
   const requiredFieldsMet = () => {
     return fundedEntity;
@@ -79,6 +80,7 @@ export default function DefineNewCompanyModal({
       `linkedin.com/company/${initialCompanyDic?.linkedInSlug || ""}/`
     );
     setWebsiteURL(initialCompanyDic?.url || "");
+    setAppName(initialCompanyDic?.appName || "");
     setAppID(initialCompanyDic?.appId || "");
   }, [initialCompanyDic]);
 
@@ -271,16 +273,17 @@ export default function DefineNewCompanyModal({
                   <div className="flex flex-row items-center pt-6 w-full justify-between">
                     <div className="flex flex-row items-center">
                       <p className="text-base font-medium text-customGray-800 pr-2">
-                        App ID
+                        App Name
                       </p>
 
                       <InfoButton infoType="appID" />
                     </div>
                     <div className="w-60">
                       <AppIDSearch
-                        initialAppID={appID}
+                        initialAppName={appName}
                         emptyStateCompanyList={[]}
                         setAppID={(appID) => {
+                          setAppName(appID.UNIFIED_PRODUCT_NAME);
                           setAppID(appID.UNIFIED_PRODUCT_KEY);
                         }}
                       />

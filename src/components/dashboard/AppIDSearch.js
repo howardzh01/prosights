@@ -10,11 +10,11 @@ import CompanyLogoSkeleton from "./CompanyLogoSkeleton";
 
 // NOTE: Near duplicate of src/components/dashboard/SearchBar.js and FundedEntitySearch with UI changes
 export default function AppIDSearch({
-  initialAppID,
+  initialAppName,
   emptyStateCompanyList,
   setAppID,
 }) {
-  const [inputValue, setInputValue] = useState(initialAppID);
+  const [inputValue, setInputValue] = useState(initialAppName);
   const [options, setOptions] = useState(emptyStateCompanyList || []);
   const [loading, setLoading] = useState(false); // Loading state
   // Directly using useEffect to handle debouncing
