@@ -34,7 +34,9 @@ function WebsiteTrafficSection({
   // Growth section state checks
   const webTrafficDataUndefinedCheck = webTrafficData === undefined;
   const noGrowthDataAvailableCheck =
-    !webTrafficDataUndefinedCheck && Object.keys(webTrafficData).length === 0;
+    (!webTrafficDataUndefinedCheck &&
+      Object.keys(webTrafficData).length === 0) ||
+    webTrafficData === null;
 
   // Visits breakdown state checks
   const webTrafficGeoDataExistsCheck =
@@ -44,6 +46,7 @@ function WebsiteTrafficSection({
   const noWebTrafficGeoDataAvailableCheck =
     !webTrafficGeoDataExistsCheck &&
     webTrafficGeoData !== undefined &&
+    webTrafficGeoData !== null &&
     Object.keys(webTrafficGeoData).length === 0;
   const webTrafficDataExistsCheck =
     webTrafficData !== undefined &&
@@ -52,6 +55,7 @@ function WebsiteTrafficSection({
   const noWebTrafficDataAvailableCheck =
     !webTrafficDataExistsCheck &&
     webTrafficData !== undefined &&
+    webTrafficData !== null &&
     Object.keys(webTrafficData).length === 0;
 
   // Quality over time state checks
@@ -64,32 +68,44 @@ function WebsiteTrafficSection({
 
   // Growth vs. Peers state checks
   const webTrafficDicIsLoading =
-    webTrafficDic === undefined || Object.keys(webTrafficDic).length === 0;
+    webTrafficDic === undefined ||
+    (webTrafficDic !== null && Object.keys(webTrafficDic).length === 0);
   const noGrowthVsPeersDataAvailableCheck =
-    !webTrafficDicIsLoading && Object.keys(webTrafficDic[company]).length === 0;
+    !webTrafficDicIsLoading &&
+    (webTrafficDic === null ||
+      !(company in webTrafficDic) ||
+      Object.keys(webTrafficDic[company]).length === 0);
 
   // Market share vs. Peers state checks
   const noCompetitorsCheck = companyCompetitors.length === 0;
   const competitorDataLoading =
     !noCompetitorsCheck &&
-    (webTrafficDic === undefined || Object.keys(webTrafficDic).length === 0);
+    (webTrafficDic === undefined ||
+      (webTrafficDic !== null && Object.keys(webTrafficDic).length === 0));
   const noMarketShareVsPeersDataAvailableCheck =
     !noCompetitorsCheck &&
     !competitorDataLoading &&
-    Object.keys(webTrafficDic[company]).length === 0;
+    (webTrafficDic === null ||
+      !(company in webTrafficDic) ||
+      Object.keys(webTrafficDic[company]).length === 0);
 
   // Breakdown vs. Peers state checks
   const geographyBreakdownVsPeersDataLoading =
     webTrafficGeoDic === undefined ||
-    Object.keys(webTrafficGeoDic).length === 0;
+    (webTrafficGeoDic !== null && Object.keys(webTrafficGeoDic).length === 0);
   const noGeographyBreakdownVsPeersDataAvailableCheck =
     !geographyBreakdownVsPeersDataLoading &&
-    Object.keys(webTrafficGeoDic[company]).length === 0;
+    (webTrafficGeoDic === null ||
+      !(company in webTrafficGeoDic) ||
+      Object.keys(webTrafficGeoDic[company]).length === 0);
   const trafficBreakdownVsPeersDataLoading =
-    webTrafficDic === undefined || Object.keys(webTrafficDic).length === 0;
+    webTrafficDic === undefined ||
+    (webTrafficDic !== null && Object.keys(webTrafficDic).length === 0);
   const noTrafficBreakdownVsPeersDataAvailableCheck =
     !trafficBreakdownVsPeersDataLoading &&
-    Object.keys(webTrafficDic[company]).length === 0;
+    (webTrafficDic === null ||
+      !(company in webTrafficDic) ||
+      Object.keys(webTrafficDic[company]).length === 0);
 
   return (
     <div className="flex flex-col w-full mt-12">
