@@ -21,7 +21,6 @@ const exportColumns =
 
 const getSemrushWebTraffic = async (companyUrl, displayDate, country) => {
   // Rest of World Case
-  return;
   if (country === "ROW") {
     const [worldData, usData] = await Promise.all([
       getSemrushWebTraffic(companyUrl, displayDate, "WW"),
