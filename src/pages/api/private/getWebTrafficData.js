@@ -85,8 +85,7 @@ const handler = async (req) => {
   });
 
   // Limit to 20 concurrent tasks with a 5-second timeout
-  console.log(tasks.length);
-  const webTrafficHistoricalData = await limitConcurrency(tasks, 48, 5000)
+  const webTrafficHistoricalData = await limitConcurrency(tasks, 20, 5000)
     .then((results) => {
       return results;
     })
