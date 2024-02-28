@@ -63,13 +63,16 @@ function CompetitorOverviewSection({
           : "--",
         companyHeadcount: companyHeadcount ? companyHeadcount : "--",
         companyTotalRaised: companyInfo[companyName]
-          ? !companyInfo[companyName]["Total Funding Amount (Amount)"]
-            ? "--"
-            : `$${formatNumberToAbbreviation(
+          ? companyInfo[companyName]["Total Funding Amount (Amount)"] &&
+            Math.round(
+              companyInfo[companyName]["Total Funding Amount (Amount)"]
+            ) != 0
+            ? `$${formatNumberToAbbreviation(
                 Math.round(
                   companyInfo[companyName]["Total Funding Amount (Amount)"]
                 )
               )}`
+            : "--"
           : "",
         companyLastFundedDate: companyInfo[companyName]
           ? companyInfo[companyName]["Last Funded In (Date)"]
@@ -78,7 +81,7 @@ function CompetitorOverviewSection({
           : "--",
         companyLastDealType: companyInfo[companyName]
           ? companyInfo[companyName]?.["Funding Stage (Type)"]?.replace(
-              "Unfunded",
+              "Unfunded" || "--",
               "--"
             )
           : "--",

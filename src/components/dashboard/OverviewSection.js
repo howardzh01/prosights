@@ -63,9 +63,9 @@ function OverviewSection({
   let companyHeadquarters = companyInfo
     ? companyInfo["headquarter_country"]
     : "";
-  console.log(companyInfo["Total Funding Amount (Amount)"]);
   let companyTotalRaised = companyInfo
-    ? companyInfo["Total Funding Amount (Amount)"]
+    ? companyInfo["Total Funding Amount (Amount)"] &&
+      Math.round(companyInfo["Total Funding Amount (Amount)"]) != 0
       ? `$${formatNumberToAbbreviation(
           Math.round(companyInfo["Total Funding Amount (Amount)"])
         )}`

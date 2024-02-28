@@ -291,8 +291,8 @@ export const companyListTop50 = [
     name: "ByteDance",
     url: "bytedance.com",
     displayedName: "ByteDance",
-    appId: "1000600000441032",
-    appName: "Toutiao",
+    appId: "1000600000575007",
+    appName: "TikTok",
     linkedInSlug: "bytedance",
     Description:
       "ByteDance is an internet technology company that operates creative content platforms.",
