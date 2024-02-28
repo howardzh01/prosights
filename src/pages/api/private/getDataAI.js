@@ -2,7 +2,6 @@
 import { serviceSup, cachedBucketFetch } from "../../../utils/Supabase.js";
 import { sleep } from "../../../utils/BackendUtils.js";
 import { mergeAndOperate } from "../../../utils/Utils.js";
-import _ from "lodash";
 
 const disableDataAI = false;
 export const config = {
