@@ -18,37 +18,41 @@ function WebTrafficCompetitorLineCharts({
   if (!multiCompanyTrafficData) return null;
 
   const trafficGrowth = (
-    <GenericLine
-      data={convertToLineChartData(
-        multiCompanyTrafficData,
-        timescale,
-        cutOffDate,
-        "visits"
-      )}
-      title={"Visits Growth"}
-      info={INFO_HOVERS.TRAFFIC.GROWTH_VS_PEERS}
-      showDataLabels={timescale === "quarterYear"}
-      timescale={timescale}
-      setTimescale={setTimeScale}
-      // selectedChart={CHARTS.trafficByChannel}
-      rawChartData={multiCompanyTrafficData}
-      formatTableDataFunction={(x) => (x ? roundPeNumbers(x) + "%" : "--")}
-      location={country}
-    ></GenericLine>
+    <div className="h-[26rem]">
+      <GenericLine
+        data={convertToLineChartData(
+          multiCompanyTrafficData,
+          timescale,
+          cutOffDate,
+          "visits"
+        )}
+        title={"Visits Growth"}
+        info={INFO_HOVERS.TRAFFIC.GROWTH_VS_PEERS}
+        showDataLabels={timescale === "quarterYear"}
+        timescale={timescale}
+        setTimescale={setTimeScale}
+        // selectedChart={CHARTS.trafficByChannel}
+        rawChartData={multiCompanyTrafficData}
+        formatTableDataFunction={(x) => (x ? roundPeNumbers(x) + "%" : "--")}
+        location={country}
+      ></GenericLine>
+    </div>
   );
   const yearTrafficGrowth = (
-    <GenericLine
-      data={convertToLineChartData(
-        multiCompanyTrafficData,
-        "year",
-        cutOffDate,
-        "visits"
-      )}
-      showTimescaleButtons={false}
-      showModalButtons={false}
-      scrollStart={"right"}
-      formatTableDataFunction={(x) => (x ? roundPeNumbers(x) + "%" : "--")}
-    ></GenericLine>
+    <div className="h-[26rem]">
+      <GenericLine
+        data={convertToLineChartData(
+          multiCompanyTrafficData,
+          "year",
+          cutOffDate,
+          "visits"
+        )}
+        showTimescaleButtons={false}
+        showModalButtons={false}
+        scrollStart={"right"}
+        formatTableDataFunction={(x) => (x ? roundPeNumbers(x) + "%" : "--")}
+      ></GenericLine>
+    </div>
   );
   switch (selectedChart) {
     // if no selected chart, return all charts

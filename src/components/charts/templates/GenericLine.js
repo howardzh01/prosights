@@ -60,7 +60,6 @@ function GenericLine({
           // ... other label options
         },
         padding: {
-          top: 10, // Adjust the top padding
           bottom: 40, // Adjust the bottom padding to push the graph down
         },
       },
