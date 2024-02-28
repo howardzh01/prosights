@@ -95,7 +95,6 @@ export default function DefineNewCompanyModal({
       // Rewriting the companyDic with the new info for some fields
       Description: "",
       name: companyName,
-      displayedName: fundedEntity,
       appId: appID,
       url: websiteURL,
       linkedInSlug: linkedInSlug,
@@ -117,6 +116,7 @@ export default function DefineNewCompanyModal({
       "userDefinedCompanyDics",
       JSON.stringify(existingDics)
     );
+    window.dispatchEvent(new CustomEvent("userDefinedCompanyDicsUpdated"));
   };
 
   return (
@@ -219,7 +219,7 @@ export default function DefineNewCompanyModal({
                       <FundedEntitySearch
                         emptyStateCompanyList={emptyStateCompanyList}
                         setCompany={(company) => {
-                          setFundedEntity(company.displayedName);
+                          setFundedEntity(company);
                         }}
                         setCompanyCompetitors={() => {}}
                       />

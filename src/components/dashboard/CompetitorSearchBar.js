@@ -28,16 +28,39 @@ export default function CompetitorSearchBar({
   };
 
   useEffect(() => {
-    // This code runs after the component has mounted, ensuring localStorage is available
-    const existingDicsString = localStorage.getItem("userDefinedCompanyDics");
-    const existingDics = existingDicsString
-      ? JSON.parse(existingDicsString)
-      : {};
-    const convertDicsToArray = Object.keys(existingDics).map((key) => {
-      // Add a "userDefined" property to the company object to differentiate it from the server results
-      return { ...existingDics[key], userDefined: true };
-    });
-    setUserDefinedOptions(convertDicsToArray);
+    // Function to load and set user-defined options from local storage
+    const loadUserDefinedOptions = () => {
+      const existingDicsString = localStorage.getItem("userDefinedCompanyDics");
+      const existingDics = existingDicsString
+        ? JSON.parse(existingDicsString)
+        : {};
+      const convertDicsToArray = Object.keys(existingDics).map((key) => ({
+        ...existingDics[key],
+        userDefined: true,
+      }));
+      setUserDefinedOptions(convertDicsToArray);
+    };
+
+    // Load initially
+    loadUserDefinedOptions();
+
+    // Set up event listener for subsequent updates
+    const handleStorageUpdate = () => {
+      loadUserDefinedOptions();
+    };
+
+    window.addEventListener(
+      "userDefinedCompanyDicsUpdated",
+      handleStorageUpdate
+    );
+
+    // Clean up
+    return () => {
+      window.removeEventListener(
+        "userDefinedCompanyDicsUpdated",
+        handleStorageUpdate
+      );
+    };
   }, []); // Empty dependency array means this effect runs once on mount
 
   useEffect(() => {
@@ -79,11 +102,7 @@ export default function CompetitorSearchBar({
       limitTags={4}
       autoHighlight={true} // only use if freesolo=false
       id="multiple-limit-tags"
-      options={
-        [...userDefinedOptions, ...options].filter(
-          (x) => x.displayedName !== targetCompany.displayedName
-        ) || []
-      } // Remove options where displayedName matches the target company
+      options={[...userDefinedOptions, ...options]} // Remove options where displayedName matches the target company
       getOptionLabel={(option) =>
         typeof option === "string"
           ? option
