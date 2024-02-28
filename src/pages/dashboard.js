@@ -57,7 +57,7 @@ function Dashboard({
 
   const companyDirectory = new CompanyDirectory(companyList);
   const [companyDic, setCompanyDic] = useState(
-    companyDirectory.findCompanyByUrl("stockx.com")
+    companyDirectory.findCompanyByUrl("")
   );
   const [country, setCountry] = useState("US");
   const [companyCompetitors, setCompanyCompetitors] = useState([]); // Array of company names
