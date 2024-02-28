@@ -26,7 +26,7 @@ const getGPTDescriptions = async (
   if (category === "companyDescription") {
     systemPrompt += `\n\nWhat's the company description in 1 sentence. Keep it as concise as possible. Never include date or where it was founded. Crunchbase descriptions can be lacking in information or too verbose so please incorporate your knowledge to create a simple and focused description. Return in json form with key value pair "${category}" and the value as the description.`;
   } else {
-    systemPrompt += `\n\n What is the business model? Each point should describe distinct core revenue segments of the company, specifically how it makes money. Only the top 10% most complex companies should have 3 bullet points each 1 sentence. List the largest revenue stream first and never list minor revenue streams.  Return this as a JSON of with key "${category}". Bullet points for business_model should be representented where key has spaces between words and value is the revenue stream.`;
+    systemPrompt += `\n\n What is the business model? Each point should describe distinct core revenue segments of the company, specifically how it makes money. Only the top 10% most complex companies should have 3 bullet points each 1 sentence. List the largest revenue stream first and never list minor revenue streams.  Return this as a JSON of with key "${category}". Bullet points for business_model should be representented where key has spaces between words and value is the revenue stream. Do not say "I do not have access to future data" and try your best`;
   }
   const payload = {
     model: CONSTANTS.MODEL_VERSION,

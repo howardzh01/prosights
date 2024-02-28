@@ -2,6 +2,7 @@ import { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import FundedEntitySearch from "./dashboard/FundedEntitySearch";
+import AppIDSearch from "./dashboard/AppIDSearch";
 import Image from "next/image";
 
 function InfoButton({ infoType }) {
@@ -17,8 +18,7 @@ function InfoButton({ infoType }) {
       "Specify the LinkedIn URL you wish to analyze in the Headcount section. ",
     websiteURL:
       "Specify the website URL you wish to analyze in the Website Traffic section.",
-    appID:
-      "Specify the Data.ai app ID (unified, iOS, Google Play) you wish to analyze in the App Usage section.",
+    appID: "Specify the app name you wish to analyze in the App Usage section.",
   };
 
   return (
@@ -66,6 +66,7 @@ export default function DefineNewCompanyModal({
     `linkedin.com/company/${initialCompanyDic?.linkedInSlug || ""}/`
   );
   const [websiteURL, setWebsiteURL] = useState(initialCompanyDic?.url || "");
+  const [appName, setAppName] = useState("");
   const [appID, setAppID] = useState(initialCompanyDic?.appId || "");
   const requiredFieldsMet = () => {
     return fundedEntity;
@@ -78,6 +79,7 @@ export default function DefineNewCompanyModal({
       `linkedin.com/company/${initialCompanyDic?.linkedInSlug || ""}/`
     );
     setWebsiteURL(initialCompanyDic?.url || "");
+    setAppName(initialCompanyDic?.appName || "");
     setAppID(initialCompanyDic?.appId || "");
   }, [initialCompanyDic]);
 
@@ -270,20 +272,21 @@ export default function DefineNewCompanyModal({
                   <div className="flex flex-row items-center pt-6 w-full justify-between">
                     <div className="flex flex-row items-center">
                       <p className="text-base font-medium text-customGray-800 pr-2">
-                        App ID
+                        App Name
                       </p>
 
                       <InfoButton infoType="appID" />
                     </div>
-                    <input
-                      type="text"
-                      placeholder="1000600000575007"
-                      className="px-4 py-2 rounded-md bg-customGray-50 placeholder:text-customGray-300 text-customGray-800 focus:outline-none w-60 text-sm"
-                      value={appID}
-                      onChange={(e) =>
-                        setAppID(e.target.value.replace(/[^0-9]/g, ""))
-                      }
-                    />
+                    <div className="w-60">
+                      <AppIDSearch
+                        initialAppName={appName}
+                        emptyStateCompanyList={[]}
+                        setAppID={(appID) => {
+                          setAppName(appID.UNIFIED_PRODUCT_NAME);
+                          setAppID(appID.UNIFIED_PRODUCT_KEY);
+                        }}
+                      />
+                    </div>
                   </div>
                   <div
                     className={`flex flex-row mt-12 px-6 py-2 mx-auto ${

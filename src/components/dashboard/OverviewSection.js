@@ -64,7 +64,8 @@ function OverviewSection({
     ? companyInfo["headquarter_country"]
     : "";
   let companyTotalRaised = companyInfo
-    ? companyInfo["Total Funding Amount (Amount)"]
+    ? companyInfo["Total Funding Amount (Amount)"] &&
+      Math.round(companyInfo["Total Funding Amount (Amount)"]) != 0
       ? `$${formatNumberToAbbreviation(
           Math.round(companyInfo["Total Funding Amount (Amount)"])
         )}`

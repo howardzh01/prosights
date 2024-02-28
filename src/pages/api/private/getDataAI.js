@@ -2,6 +2,7 @@
 import { serviceSup, cachedBucketFetch } from "../../../utils/Supabase.js";
 import { sleep } from "../../../utils/BackendUtils.js";
 import { mergeAndOperate } from "../../../utils/Utils.js";
+import _ from "lodash";
 
 const disableDataAI = false;
 export const config = {
@@ -70,17 +71,30 @@ const calcRestOfWorldAppPerformance = (worldData, usData) => {
     merged_on,
     (x, y) => x - y
   );
-
   if (!restOfWorldAppPerformance) {
     console.log("Misaligned keys or other issue in first merge operation");
-    return null;
+    const nullReversedWeights = reversed_weighted_average_keys.reduce(
+      (acc, key) => {
+        acc[key] = null;
+        return acc;
+      },
+      {}
+    );
+    return { ...restOfWorldAppPerformance, ...nullReversedWeights };
   }
 
   const restOfWorldUsers =
     restOfWorldAppPerformance["est_average_active_users"];
   if (restOfWorldUsers == null) {
     console.log("Null values encountered in restOfWorldUsers");
-    return null;
+    const nullReversedWeights = reversed_weighted_average_keys.reduce(
+      (acc, key) => {
+        acc[key] = null;
+        return acc;
+      },
+      {}
+    );
+    return { ...restOfWorldAppPerformance, ...nullReversedWeights };
   }
 
   // Second merge operation based on weighted averages
@@ -129,15 +143,32 @@ const customDataAIFetch = async (url, options) => {
   // };
 
   let report;
+  let retries = 3;
   await sleep(1000); // sleep 2 second
   for (let i = 0; i < 10; i++) {
-    await sleep(1000); // sleep 1 second
+    await sleep(2000); // sleep 1 second
     const response = await fetch(
       `https://api.data.ai/v2.0/portfolio/fetch-data?report_id=${outputReport["report_id"]}`,
       options
     );
     if (!response.ok) {
-      return;
+      retries -= 1;
+      if (retries === 0) {
+        console.error(
+          "Fetch DataAI Report Error",
+          response.status,
+          response.statusText
+        );
+        return;
+      } else {
+        console.warn(
+          `Fetch DataAI Report Error on i=${i}`,
+          response.status,
+          response.statusText
+        );
+        await sleep(1000);
+        continue;
+      }
     }
     report = await response.json();
     if (report["report_status"] === "done") {
