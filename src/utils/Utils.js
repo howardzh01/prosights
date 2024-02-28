@@ -401,13 +401,13 @@ export function roundPeNumbers(amount, decimalZero = true) {
 
   let result;
   const absAmount = Math.abs(amount);
-  // Converting everything to integers
-  result = Number(absAmount).toFixed(0);
-  // if (absAmount < 1e1) {
-  //   result = Number(absAmount).toFixed(1);
-  // } else {
-  //   result = Number(absAmount).toFixed(0);
-  // }
+  // // Converting everything to integers
+  // result = Number(absAmount).toFixed(0);
+  if (absAmount < 1e1) {
+    result = Number(absAmount).toFixed(1);
+  } else {
+    result = Number(absAmount).toFixed(0);
+  }
   // Add commas as thousand separators
   if (Number(result) >= 1000) {
     result = Number(result).toLocaleString();
