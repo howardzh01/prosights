@@ -15,6 +15,7 @@ import WebTrafficCompetitorLineCharts from "../charts/WebTrafficCompetitorLineCh
 
 function WebsiteTrafficSection({
   company,
+  companyDic,
   country,
   webTrafficDic,
   webTrafficGeoDic,
@@ -22,6 +23,10 @@ function WebsiteTrafficSection({
   companyCompetitors,
 }) {
   // Expect webTrafficDic = {company1: trafficData, company2: trafficData, ...}
+  const companyURLs = [
+    ...(companyDic?.url ? [companyDic.url] : []),
+    ...companyCompetitors.map((c) => c.url).filter((url) => url !== undefined),
+  ];
   const webTrafficData = webTrafficDic?.[company];
   const webTrafficGeoData = webTrafficGeoDic?.[company];
 
@@ -114,6 +119,25 @@ function WebsiteTrafficSection({
               height={256}
             />
           </a>
+          <div className="flex flex-row pl-6">
+            {companyURLs.map((url, index) => {
+              const formattedUrl =
+                url.startsWith("http://") || url.startsWith("https://")
+                  ? url
+                  : `https://${url}`;
+              return (
+                <a
+                  key={index}
+                  href={formattedUrl}
+                  className="text-customGray-300 hover:text-primary hover:border-primary text-sm mr-4 px-4 py-1 border-1 border-customGray-100 rounded-lg"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {url}
+                </a>
+              );
+            })}
+          </div>
         </div>
         <div className="flex flex-row items-center ml-4">
           <span className="mr-2 italic text-sm text-[#C3C3C3]">Powered by</span>
