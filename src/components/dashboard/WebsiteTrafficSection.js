@@ -232,7 +232,7 @@ function WebsiteTrafficSection({
             )} */}
           </div>
         </div>
-        <div id="Quality Over Time" className="content-section mt-8">
+        {/* <div id="Quality Over Time" className="content-section mt-8">
           <div className="flex flex-row items-center mb-3">
             <p className="text-lg font-semibold text-gray-800 mr-2">
               Quality Over Time
@@ -252,7 +252,7 @@ function WebsiteTrafficSection({
           ) : (
             <Skeleton className="w-full h-80 rounded-lg bg-customGray-50" />
           )}
-        </div>
+        </div> */}
 
         <div id="Traffic Growth vs. Peers" className="content-section mt-8">
           <div className="flex flex-row items-center mb-3">
