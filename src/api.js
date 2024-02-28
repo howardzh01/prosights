@@ -30,8 +30,10 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
       webTrafficGeoError: undefined,
       crunchbaseDataPull: undefined,
       crunchbaseErrorPull: undefined,
-      companyDescriptionPull: undefined,
-      companyDescriptionErrorPull: undefined,
+      gptCompanyDescription: undefined,
+      gptCompanyDescriptionError: undefined,
+      gptBusinessModel: undefined,
+      gptBusinessModelError: undefined,
       dataAIData: undefined,
       dataAIError: undefined,
       fullCompanyInfo: undefined,
@@ -47,6 +49,9 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
   );
   const companyCrunchbaseNameList = companyDicList.map(
     (company) => company.cbSlug || company.name
+  );
+  const companyDescriptionList = companyDicList.map(
+    (company) => company.Description || ""
   );
 
   const { data: headCountData, error: headCountError } = useSWR(
@@ -106,21 +111,25 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
   //   },
   //   { revalidateOnFocus: false }
   // );
-  const { data: companyDescriptionPull, error: companyDescriptionErrorPull } =
+  const { data: gptCompanyDescription, error: gptCompanyDescriptionError } =
     useSWR(
-      user &&
-        companyNameList &&
-        companyDicList.map((company) => company.Description)
+      user && companyNameList && companyDescriptionList
         ? [
             companyNameList,
             `/api/private/getCompanyDescription`,
-            companyDicList.map((company) => company.Description),
+            companyDescriptionList,
+            "companyDescription",
           ]
         : null,
-
-      async ([companyList, url, fullCompanyInfo]) => {
+      async ([companyList, url, fullCompanyInfo, category]) => {
         const promises = companyList.map((company, ind) =>
-          getCompanyDescription([company, url, user.id, fullCompanyInfo[ind]])
+          getCompanyDescription([
+            company,
+            url,
+            user.id,
+            fullCompanyInfo[ind],
+            category,
+          ])
         );
         const results = await Promise.all(promises);
         return companyDisplayedNameList.reduce((acc, company, index) => {
@@ -130,6 +139,33 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
       },
       { revalidateOnFocus: false }
     );
+  const { data: gptBusinessModel, error: gptBusinessModelError } = useSWR(
+    user && companyNameList && companyDescriptionList
+      ? [
+          companyNameList,
+          `/api/private/getCompanyDescription`,
+          companyDescriptionList,
+          "businessModel",
+        ]
+      : null,
+    async ([companyList, url, fullCompanyInfo, category]) => {
+      const promises = companyList.map((company, ind) =>
+        getCompanyDescription([
+          company,
+          url,
+          user.id,
+          fullCompanyInfo[ind],
+          category,
+        ])
+      );
+      const results = await Promise.all(promises);
+      return companyDisplayedNameList.reduce((acc, company, index) => {
+        acc[company] = results[index];
+        return acc;
+      }, {});
+    },
+    { revalidateOnFocus: false }
+  );
 
   let crunchbaseDataPull, crunchbaseErrorPull;
   if (enableCrunchbase) {
@@ -207,8 +243,10 @@ export function getApiData(user, companyDicList, country, enableCrunchbase) {
     webTrafficGeoError,
     crunchbaseDataPull,
     crunchbaseErrorPull,
-    companyDescriptionPull,
-    companyDescriptionErrorPull,
+    gptCompanyDescription,
+    gptCompanyDescriptionError,
+    gptBusinessModel,
+    gptBusinessModelError,
     dataAIData,
     dataAIError,
   };
@@ -409,6 +447,7 @@ export const getCompanyDescription = async ([
   api_url,
   userId,
   crunchbaseDescription,
+  category = "companyDescription", // businessModel
 ]) => {
   if (!companyName) {
     return null;
@@ -424,17 +463,19 @@ export const getCompanyDescription = async ([
     body: JSON.stringify({
       companyName: companyName,
       crunchbaseDescription: crunchbaseDescription,
+      category: category,
     }),
   });
   if (!descriptionResponse.ok) {
     console.log(descriptionResponse.status);
   }
   const content = await descriptionResponse.text();
+  // return content;
   const json_content = JSON.parse(content);
-  assert(
-    "company_description" in json_content && "business_model" in json_content,
-    "Missing company_description or business_model"
-  );
+  // assert(
+  //   "company_description" in json_content && "business_model" in json_content,
+  //   "Missing company_description or business_model"
+  // );
   return json_content;
 };
 

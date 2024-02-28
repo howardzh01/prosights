@@ -401,6 +401,8 @@ export function roundPeNumbers(amount, decimalZero = true) {
 
   let result;
   const absAmount = Math.abs(amount);
+  // // Converting everything to integers
+  // result = Number(absAmount).toFixed(0);
   if (absAmount < 1e1) {
     result = Number(absAmount).toFixed(1);
   } else {
@@ -416,6 +418,7 @@ export function roundPeNumbers(amount, decimalZero = true) {
   }
   return result;
 }
+
 // CRUNCHBASE API UTILS
 export function formatDealRound(dealRound) {
   // secondary_market -> Secondary
@@ -616,7 +619,7 @@ export function formatNumberToAbbreviation(number) {
   return number.toFixed(1);
 }
 
-export const filterOptions = (options, { inputValue }) => {
+export const filterAndSortOptions = (options, { inputValue }) => {
   const limit = 50;
   if (inputValue === "") {
     return options.slice(0, limit);

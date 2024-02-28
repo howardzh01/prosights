@@ -15,6 +15,7 @@ import WebTrafficCompetitorLineCharts from "../charts/WebTrafficCompetitorLineCh
 
 function WebsiteTrafficSection({
   company,
+  companyDic,
   country,
   webTrafficDic,
   webTrafficGeoDic,
@@ -22,8 +23,89 @@ function WebsiteTrafficSection({
   companyCompetitors,
 }) {
   // Expect webTrafficDic = {company1: trafficData, company2: trafficData, ...}
+  const companyURLs = [
+    ...(companyDic?.url ? [companyDic.url] : []),
+    ...companyCompetitors.map((c) => c.url).filter((url) => url !== undefined),
+  ];
   const webTrafficData = webTrafficDic?.[company];
   const webTrafficGeoData = webTrafficGeoDic?.[company];
+
+  // NOTE: many checks are reliant on previous checks failing, so first check is usually making sure previous one failed
+  // Growth section state checks
+  const webTrafficDataUndefinedCheck = webTrafficData === undefined;
+  const noGrowthDataAvailableCheck =
+    (!webTrafficDataUndefinedCheck &&
+      Object.keys(webTrafficData).length === 0) ||
+    webTrafficData === null;
+
+  // Visits breakdown state checks
+  const webTrafficGeoDataExistsCheck =
+    webTrafficGeoData !== undefined &&
+    webTrafficGeoData !== null &&
+    Object.keys(webTrafficGeoData).length !== 0;
+  const noWebTrafficGeoDataAvailableCheck =
+    !webTrafficGeoDataExistsCheck &&
+    webTrafficGeoData !== undefined &&
+    webTrafficGeoData !== null &&
+    Object.keys(webTrafficGeoData).length === 0;
+  const webTrafficDataExistsCheck =
+    webTrafficData !== undefined &&
+    webTrafficData !== null &&
+    Object.keys(webTrafficData).length !== 0;
+  const noWebTrafficDataAvailableCheck =
+    !webTrafficDataExistsCheck &&
+    webTrafficData !== undefined &&
+    webTrafficData !== null &&
+    Object.keys(webTrafficData).length === 0;
+
+  // Quality over time state checks
+  const qualityOverTimeDataExistsCheck =
+    webTrafficData !== undefined && Object.keys(webTrafficData).length !== 0;
+  const noQualityOverTimeDataAvailableCheck =
+    !qualityOverTimeDataExistsCheck &&
+    webTrafficData !== undefined &&
+    Object.keys(webTrafficData).length === 0;
+
+  // Growth vs. Peers state checks
+  const webTrafficDicIsLoading =
+    webTrafficDic === undefined ||
+    (webTrafficDic !== null && Object.keys(webTrafficDic).length === 0);
+  const noGrowthVsPeersDataAvailableCheck =
+    !webTrafficDicIsLoading &&
+    (webTrafficDic === null ||
+      !(company in webTrafficDic) ||
+      Object.keys(webTrafficDic[company]).length === 0);
+
+  // Market share vs. Peers state checks
+  const noCompetitorsCheck = companyCompetitors.length === 0;
+  const competitorDataLoading =
+    !noCompetitorsCheck &&
+    (webTrafficDic === undefined ||
+      (webTrafficDic !== null && Object.keys(webTrafficDic).length === 0));
+  const noMarketShareVsPeersDataAvailableCheck =
+    !noCompetitorsCheck &&
+    !competitorDataLoading &&
+    (webTrafficDic === null ||
+      !(company in webTrafficDic) ||
+      Object.keys(webTrafficDic[company]).length === 0);
+
+  // Breakdown vs. Peers state checks
+  const geographyBreakdownVsPeersDataLoading =
+    webTrafficGeoDic === undefined ||
+    (webTrafficGeoDic !== null && Object.keys(webTrafficGeoDic).length === 0);
+  const noGeographyBreakdownVsPeersDataAvailableCheck =
+    !geographyBreakdownVsPeersDataLoading &&
+    (webTrafficGeoDic === null ||
+      !(company in webTrafficGeoDic) ||
+      Object.keys(webTrafficGeoDic[company]).length === 0);
+  const trafficBreakdownVsPeersDataLoading =
+    webTrafficDic === undefined ||
+    (webTrafficDic !== null && Object.keys(webTrafficDic).length === 0);
+  const noTrafficBreakdownVsPeersDataAvailableCheck =
+    !trafficBreakdownVsPeersDataLoading &&
+    (webTrafficDic === null ||
+      !(company in webTrafficDic) ||
+      Object.keys(webTrafficDic[company]).length === 0);
 
   return (
     <div className="flex flex-col w-full mt-12">
@@ -53,6 +135,25 @@ function WebsiteTrafficSection({
               height={256}
             />
           </a>
+          <div className="flex flex-row pl-6">
+            {companyURLs.map((url, index) => {
+              const formattedUrl =
+                url.startsWith("http://") || url.startsWith("https://")
+                  ? url
+                  : `https://${url}`;
+              return (
+                <a
+                  key={index}
+                  href={formattedUrl}
+                  className="text-customGray-300 hover:text-primary hover:border-primary text-sm mr-4 px-4 py-1 border-1 border-customGray-100 rounded-lg"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {url}
+                </a>
+              );
+            })}
+          </div>
         </div>
         <div className="flex flex-row items-center ml-4">
           <span className="mr-2 italic text-sm text-[#C3C3C3]">Powered by</span>
@@ -72,9 +173,9 @@ function WebsiteTrafficSection({
           <div className="flex flex-row items-center mb-3">
             <p className="text-lg font-semibold text-gray-800 mr-2">Growth</p>
           </div>
-          {webTrafficData === undefined ? (
+          {webTrafficDataUndefinedCheck ? (
             <Skeleton className="w-full mt-2 mb-6 h-80 rounded-lg bg-customGray-50" />
-          ) : Object.keys(webTrafficData).length === 0 ? (
+          ) : noGrowthDataAvailableCheck ? (
             <div className="w-full h-80 rounded-lg mt-2 mb-6 bg-customGray-50 flex items-center justify-center">
               <p className="text-sm text-customGray-200">
                 No Growth Data Available
@@ -91,17 +192,14 @@ function WebsiteTrafficSection({
             </p>
           </div>
           <div className="flex flex-row items-center justify-between w-full space-x-8">
-            {webTrafficGeoData !== undefined &&
-            webTrafficGeoData !== null &&
-            Object.keys(webTrafficGeoData).length !== 0 ? (
+            {webTrafficGeoDataExistsCheck ? (
               <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6">
                 <WebGeoTrafficDoughnut
                   geoTrafficData={webTrafficGeoData}
                   relevant_continents={RELEVANT_CONTINENTS}
                 />
               </div>
-            ) : webTrafficGeoData !== undefined &&
-              Object.keys(webTrafficGeoData).length === 0 ? (
+            ) : noWebTrafficGeoDataAvailableCheck ? (
               <div className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50">
                 <div className="flex flex-col items-center justify-center h-full">
                   <p className="text-sm text-customGray-200">
@@ -112,9 +210,7 @@ function WebsiteTrafficSection({
             ) : (
               <Skeleton className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
             )}
-            {webTrafficData !== undefined &&
-            webTrafficData !== null &&
-            Object.keys(webTrafficData).length !== 0 ? (
+            {webTrafficDataExistsCheck ? (
               <div className="inline-block rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6">
                 <WebTrafficDoughnut
                   trafficData={webTrafficData}
@@ -122,8 +218,7 @@ function WebsiteTrafficSection({
                   selectedChart={CHARTS.trafficByDevice}
                 />
               </div>
-            ) : webTrafficData !== undefined &&
-              Object.keys(webTrafficData).length === 0 ? (
+            ) : noWebTrafficDataAvailableCheck ? (
               <div className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50">
                 <div className="flex flex-col items-center justify-center h-full">
                   <p className="text-sm text-customGray-200">
@@ -134,9 +229,7 @@ function WebsiteTrafficSection({
             ) : (
               <Skeleton className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
             )}
-            {webTrafficData !== undefined &&
-            webTrafficData !== null &&
-            Object.keys(webTrafficData).length !== 0 ? (
+            {webTrafficDataExistsCheck ? (
               <div className="inline-block w-[30rem] rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] bg-white border border-customGray-50 px-6 pt-3 pb-6">
                 <WebTrafficDoughnut
                   trafficData={webTrafficData}
@@ -144,8 +237,7 @@ function WebsiteTrafficSection({
                   selectedChart={CHARTS.trafficByChannel}
                 />
               </div>
-            ) : webTrafficData !== undefined &&
-              Object.keys(webTrafficData).length === 0 ? (
+            ) : noWebTrafficDataAvailableCheck ? (
               <div className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50">
                 <div className="flex flex-col items-center justify-center h-full">
                   <p className="text-sm text-customGray-200">
@@ -180,20 +272,18 @@ function WebsiteTrafficSection({
             )} */}
           </div>
         </div>
-        <div id="Quality Over Time" className="content-section mt-8">
+        {/* <div id="Quality Over Time" className="content-section mt-8">
           <div className="flex flex-row items-center mb-3">
             <p className="text-lg font-semibold text-gray-800 mr-2">
               Quality Over Time
             </p>
           </div>
-          {webTrafficData !== undefined &&
-          Object.keys(webTrafficData).length !== 0 ? (
+          {qualityOverTimeDataExistsCheck ? (
             <WebTrafficByChannelChart
               trafficData={webTrafficData}
               country={country}
             ></WebTrafficByChannelChart>
-          ) : webTrafficData !== undefined &&
-            Object.keys(webTrafficData).length === 0 ? (
+          ) : noQualityOverTimeDataAvailableCheck ? (
             <div className="w-full h-80 rounded-lg mt-2 mb-6 bg-customGray-50 flex items-center justify-center">
               <p className="text-sm text-customGray-200">
                 No Quality Over Time Data Available
@@ -202,7 +292,7 @@ function WebsiteTrafficSection({
           ) : (
             <Skeleton className="w-full h-80 rounded-lg bg-customGray-50" />
           )}
-        </div>
+        </div> */}
 
         <div id="Traffic Growth vs. Peers" className="content-section mt-8">
           <div className="flex flex-row items-center mb-3">
@@ -210,10 +300,9 @@ function WebsiteTrafficSection({
               Growth vs. Peers
             </p>
           </div>
-          {webTrafficDic === undefined ||
-          Object.keys(webTrafficDic).length === 0 ? (
+          {webTrafficDicIsLoading ? (
             <Skeleton className="w-full mt-2 mb-6 h-80 rounded-lg bg-customGray-50" />
-          ) : Object.keys(webTrafficDic[company]).length === 0 ? (
+          ) : noGrowthVsPeersDataAvailableCheck ? (
             <div className="w-full h-80 rounded-lg mt-2 mb-6 bg-customGray-50 flex items-center justify-center">
               <p className="text-sm text-customGray-200">
                 No Growth vs. Peers Data Available
@@ -235,19 +324,18 @@ function WebsiteTrafficSection({
               Market Share vs. Peers
             </p>
           </div>
-          {companyCompetitors.length === 0 ? (
+          {noCompetitorsCheck ? (
             <div className="w-full h-80 rounded-lg bg-transparent flex items-center justify-center">
               <p className="text-2xl font-medium text-customGray-150">
                 Add Competitors to Compare
               </p>
             </div>
-          ) : webTrafficDic === undefined ||
-            Object.keys(webTrafficDic).length === 0 ? (
+          ) : competitorDataLoading ? (
             <Skeleton className="w-full mt-2 mb-6 h-80 rounded-lg bg-customGray-50" />
-          ) : Object.keys(webTrafficDic[company]).length === 0 ? (
+          ) : noMarketShareVsPeersDataAvailableCheck ? (
             <div className="w-full h-80 rounded-lg mt-2 mb-6 bg-customGray-50 flex items-center justify-center">
               <p className="text-sm text-customGray-200">
-                No Growth vs. Peers Data Available
+                No Market Share vs. Peers Data Available
               </p>
             </div>
           ) : (
@@ -264,10 +352,9 @@ function WebsiteTrafficSection({
             </p>
           </div>
           <div className="space-x-8 flex flex-row items-center justify-between w-full">
-            {webTrafficGeoDic === undefined ||
-            Object.keys(webTrafficGeoDic).length === 0 ? (
+            {geographyBreakdownVsPeersDataLoading ? (
               <Skeleton className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
-            ) : Object.keys(webTrafficGeoDic[company]).length === 0 ? (
+            ) : noGeographyBreakdownVsPeersDataAvailableCheck ? (
               <div className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50">
                 <div className="flex flex-col items-center justify-center h-full">
                   <p className="text-sm text-customGray-200">
@@ -284,10 +371,9 @@ function WebsiteTrafficSection({
                 />
               </div>
             )}
-            {webTrafficDic === undefined ||
-            Object.keys(webTrafficDic).length === 0 ? (
+            {trafficBreakdownVsPeersDataLoading ? (
               <Skeleton className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
-            ) : Object.keys(webTrafficDic[company]).length === 0 ? (
+            ) : noTrafficBreakdownVsPeersDataAvailableCheck ? (
               <div className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50">
                 <div className="flex flex-col items-center justify-center h-full">
                   <p className="text-sm text-customGray-200">
@@ -304,10 +390,9 @@ function WebsiteTrafficSection({
                 />
               </div>
             )}
-            {webTrafficDic === undefined ||
-            Object.keys(webTrafficDic).length === 0 ? (
+            {trafficBreakdownVsPeersDataLoading ? (
               <Skeleton className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50" />
-            ) : Object.keys(webTrafficDic[company]).length === 0 ? (
+            ) : noTrafficBreakdownVsPeersDataAvailableCheck ? (
               <div className="inline-block w-96 h-64 px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-50 border border-customGray-50">
                 <div className="flex flex-col items-center justify-center h-full">
                   <p className="text-sm text-customGray-200">

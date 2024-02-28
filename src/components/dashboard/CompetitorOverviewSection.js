@@ -56,7 +56,7 @@ function CompetitorOverviewSection({
         logo: "--",
         name: companyName,
         companyAbout: companyDescriptions[companyName]
-          ? companyDescriptions[companyName].company_description
+          ? companyDescriptions[companyName]?.["companyDescription"]
           : "--",
         companyHeadquarters: companyInfo[companyName]
           ? companyInfo[companyName]["headquarter_country"]
@@ -77,7 +77,7 @@ function CompetitorOverviewSection({
             : "--"
           : "--",
         companyLastDealType: companyInfo[companyName]
-          ? companyInfo[companyName]["Funding Stage (Type)"].replace(
+          ? companyInfo[companyName]?.["Funding Stage (Type)"]?.replace(
               "Unfunded",
               "--"
             )

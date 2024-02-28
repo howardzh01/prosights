@@ -3,7 +3,7 @@ import Image from "next/image";
 import SearchBar from "./SearchBar";
 
 const EmptyState = ({
-  companyDirectory,
+  emptyStateCompanyList,
   setCompanyDic,
   setCompanyCompetitors,
 }) => {
@@ -42,7 +42,7 @@ const EmptyState = ({
           {/* Search Bar */}
           <div className="content-section w-[36rem] pt-4">
             <SearchBar
-              companyDirectory={companyDirectory}
+              emptyStateCompanyList={emptyStateCompanyList}
               setCompany={setCompanyDic}
               setCompanyCompetitors={setCompanyCompetitors}
             />

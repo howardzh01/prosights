@@ -31,7 +31,7 @@ export async function limitConcurrency(tasks, limit, timeout) {
       })
       .catch((error) => {
         // Handle timeout or other errors
-        console.error(error);
+        console.error(error, task);
         active = active.filter((p) => p !== promise);
         // Depending on your use case, you might want to throw the error,
         // return a specific value, or simply log the error.

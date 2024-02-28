@@ -18,7 +18,7 @@ import { CHARTS, CONSTANTS, SECTIONS } from "../constants";
 import CompetitorContainer from "../components/dashboard/CompetitorContainer";
 import { Skeleton } from "@nextui-org/react";
 import { CompanyDirectory } from "../components/dashboard/CompanyListDirectory";
-import { companyListFixed } from "../components/dashboard/CompanyList";
+import { companyListTop50 } from "../components/dashboard/CompanyList";
 import HeadcountIcon from "/public/assets/HeadcountIcon.svg";
 import CountrySelector from "../components/dashboard/CountrySelector";
 import DashboardNavbar from "../components/dashboard/DashboardNavBar";
@@ -50,7 +50,7 @@ export const ChartDataContext = createContext();
 function Dashboard({
   enableCrunchbase = false,
   enableOnlyWebTraffic,
-  initCompanyList = [],
+  initCompanyList = companyListTop50,
 }) {
   const { isSignedIn, user, isLoaded } = useUser();
   const [companyList, setCompanyList] = useState(initCompanyList);
@@ -300,7 +300,8 @@ function Dashboard({
     webTrafficGeoError,
     crunchbaseDataPull,
     crunchbaseErrorPull,
-    companyDescriptionPull,
+    gptCompanyDescription,
+    gptBusinessModel,
     companyDescriptionErrorPull,
     dataAIData,
     dataAIError,
@@ -332,7 +333,7 @@ function Dashboard({
           initialCompanyDic={companyDic}
           setCompanyDic={setCompanyDic}
           setCompanyCompetitors={setCompanyCompetitors}
-          companyDirectory={companyDirectory}
+          emptyStateCompanyList={companyList}
         />
         <div className="relative flex flex-row bg-customGray-900">
           {/* Sidebar */}
@@ -359,7 +360,7 @@ function Dashboard({
                 </div>
                 <div className="w-[30rem] 2xl:w-[34rem] mx-auto">
                   <SearchBar
-                    companyDirectory={companyDirectory}
+                    emptyStateCompanyList={companyList}
                     setCompany={setCompanyDic}
                     setCompanyCompetitors={setCompanyCompetitors}
                     darkMode={true}
@@ -397,7 +398,7 @@ function Dashboard({
                     setCountry={setCountry}
                     downloadPDF={downloadPDF}
                     downloadExcel={downloadExcel}
-                    companyDirectory={companyDirectory}
+                    emptyStateCompanyList={companyList}
                     setCompanyDic={setCompanyDic}
                     companyCompetitors={companyCompetitors}
                     setCompanyCompetitors={setCompanyCompetitors}
@@ -413,8 +414,11 @@ function Dashboard({
                   >
                     <OverviewSection
                       companyInfo={fullCompanyInfo?.[companyDic.displayedName]}
-                      companyAbout={
-                        companyDescriptionPull?.[companyDic.displayedName]
+                      gptCompanyDescription={
+                        gptCompanyDescription?.[companyDic.displayedName]
+                      }
+                      gptBusinessModel={
+                        gptBusinessModel?.[companyDic.displayedName]
                       }
                       crunchbaseData={
                         crunchbaseDataPull?.[companyDic.displayedName]
@@ -435,7 +439,7 @@ function Dashboard({
                     <CompetitorOverviewSection
                       companyInfo={fullCompanyInfo}
                       companyDic={companyDic}
-                      companyDescriptions={companyDescriptionPull}
+                      companyDescriptions={gptCompanyDescription}
                       crunchbaseData={crunchbaseDataPull} // {companyName: null} if no data
                       headCountData={headCountData}
                       companyCompetitors={companyCompetitors}
@@ -469,6 +473,18 @@ function Dashboard({
                             height={256}
                           />
                         </a>
+                        <div className="flex flex-row pl-6">
+                          {companyDic && companyDic.linkedInSlug && (
+                            <a
+                              href={`https://linkedin.com/company/${companyDic.linkedInSlug}`}
+                              className="text-customGray-300 hover:text-primary hover:border-primary text-sm mr-4 px-4 py-1 border-1 border-customGray-100 rounded-lg"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {`linkedin.com/company/${companyDic.linkedInSlug}`}
+                            </a>
+                          )}
+                        </div>
                       </div>
                       <div className="flex flex-row items-center ml-4">
                         <span className="mr-2 italic text-sm text-[#C3C3C3]">
@@ -515,6 +531,7 @@ function Dashboard({
                   <div className="w-full">
                     <WebsiteTrafficSection
                       company={companyDic?.displayedName || companyDic?.name}
+                      companyDic={companyDic}
                       country={country}
                       webTrafficDic={webTrafficData}
                       webTrafficGeoDic={webTrafficGeoData}
@@ -544,7 +561,7 @@ function Dashboard({
               </div>
             ) : (
               <EmptyState
-                companyDirectory={companyDirectory}
+                emptyStateCompanyList={companyList}
                 setCompanyDic={setCompanyDic}
                 setCompanyCompetitors={setCompanyCompetitors}
               />

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { RELEVANT_CONTINENTS, CHARTS, COUNTRY_LIST } from "../../constants";
 import WebGeoTrafficDoughnut from "../charts/WebGeoTrafficDoughnut";
 import WebTrafficDoughnut from "../charts/WebTrafficDoughnut";
@@ -19,6 +19,9 @@ function AppUsageSection({
   downloadExcel,
   companyCompetitors,
 }) {
+  let listOfApps = ["Candy Crush", "Solitaire", "Justin's Mom"];
+  const [selectedApp, setSelectedApp] = useState("US");
+
   return (
     <div className="flex flex-col w-full mt-12 pb-8">
       <div
@@ -45,6 +48,17 @@ function AppUsageSection({
               height={256}
             />
           </a>
+          <select
+            className="ml-4 px-2 h-10 text-customGray-500 rounded-md font-nunitoSans text-base font-medium text-left focus:outline-none focus:ring-0 hover:text-primary hover:cursor-pointer"
+            value={selectedApp}
+            onChange={(e) => setSelectedApp(e.target.value)}
+          >
+            {listOfApps.map((appName, index) => (
+              <option key={index} value={appName}>
+                {appName}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="flex flex-row items-center ml-4">
           <span className="mr-2 italic text-sm text-[#C3C3C3]">Powered by</span>
@@ -153,10 +167,10 @@ function AppUsageSection({
           )}
         </div>
 
-        <div id="Loyalty vs. Peers" className="content-section mt-8">
+        <div id="Engagement vs. Peers" className="content-section mt-8">
           <div className="flex flex-row items-center mb-3">
             <p className="text-lg font-semibold text-gray-800 mr-2">
-              Loyalty vs. Peers
+              Engagement vs. Peers
             </p>
           </div>
 
@@ -167,7 +181,7 @@ function AppUsageSection({
             ) : !multiCompanyAppData[company] ? (
               <div className="w-full h-80 rounded-lg mt-2 mb-6 bg-customGray-50 flex items-center justify-center">
                 <p className="text-sm text-customGray-200">
-                  No App Loyalty vs. Peers Data Available
+                  No App Engagement vs. Peers Data Available
                 </p>
               </div>
             ) : (

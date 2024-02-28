@@ -33,7 +33,7 @@ export const TRAFFIC_BY_CHANNEL_COLORS = {
   "Organic Social": "rgba(255,153,24,1)",
   Referral: "rgba(166,99,255,1)",
   "Paid Search": "rgba(255,203,52,1)",
-  "Paid Social": "rgba(31,20,80,0.2)",
+  "Paid Social": "rgba(246,66,217,1)",
   "Display Ads": "rgba(192,128,0,1)",
 };
 
@@ -236,12 +236,6 @@ export const SECTIONS = [
     level: 2,
   },
   {
-    title: "Quality Over Time",
-    id: "Quality Over Time",
-    parentId: "Website Traffic",
-    level: 2,
-  },
-  {
     title: "Growth vs. Peers",
     id: "Traffic Growth vs. Peers",
     parentId: "Website Traffic",
@@ -284,8 +278,8 @@ export const SECTIONS = [
     level: 2,
   },
   {
-    title: "Loyalty vs. Peers",
-    id: "Loyalty vs. Peers",
+    title: "Engagement vs. Peers",
+    id: "Engagement vs. Peers",
     parentId: "App Usage",
     level: 2,
   },

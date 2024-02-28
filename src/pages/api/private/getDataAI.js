@@ -154,8 +154,7 @@ const mergeDataAIPulls = (data) => {
     Object.keys(currentItem).forEach((key) => {
       if (key === "retention") {
         currentItem[key] = currentItem[key].filter((retentionData) => {
-          retentionData.granularity == "monthly" &&
-            [(3, 6)].includes(retentionData?.retention_months); // Only return months 3 or 6 retention
+          return [3, 6].includes(retentionData?.retention_months); // Only return months 3 or 6 retention
         });
       }
       if (!acc[key]) {

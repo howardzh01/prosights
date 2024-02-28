@@ -1013,6 +1013,20 @@ export function convertTrafficBreakdownVsPeersDataToExcelFormat(
   return result;
 }
 
+export function convertAppDownloadsChartDataToExcelFormat(
+  appData,
+  dataCutoffDate
+) {
+  return convertBarGraphToExcelFormat(
+    appData,
+    "est_download",
+    "sum",
+    "Downloads",
+    dataCutoffDate,
+    convertToGrowthChartData
+  );
+}
+
 export function convertAppUsersChartDataToExcelFormat(appData, dataCutoffDate) {
   return convertBarGraphToExcelFormat(
     appData,
@@ -1091,6 +1105,6 @@ export function convertAppUsageLoyalUsersVsPeersDataToExcelFormat(dataAI) {
     }),
     differentColors: true,
     titles: timeFrames,
-    sheetName: "Loyalty vs. Peers",
+    sheetName: "Engagement vs. Peers",
   };
 }

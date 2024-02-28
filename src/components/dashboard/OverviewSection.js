@@ -24,7 +24,8 @@ export const ChartDataContext = createContext();
 
 function OverviewSection({
   companyInfo, // Note: will be ""
-  companyAbout,
+  gptCompanyDescription,
+  gptBusinessModel,
   crunchbaseData,
   headCountData,
   webTrafficData,
@@ -63,17 +64,21 @@ function OverviewSection({
     ? companyInfo["headquarter_country"]
     : "";
   let companyTotalRaised = companyInfo
-    ? !companyInfo["Total Funding Amount (Amount)"]
-      ? ""
-      : `$${formatNumberToAbbreviation(
+    ? companyInfo["Total Funding Amount (Amount)"]
+      ? `$${formatNumberToAbbreviation(
           Math.round(companyInfo["Total Funding Amount (Amount)"])
         )}`
+      : ""
     : "";
   let companyLastDealType = companyInfo
-    ? companyInfo["Funding Stage (Type)"].replace("Unfunded", "")
+    ? companyInfo["Funding Stage (Type)"]
+      ? companyInfo["Funding Stage (Type)"].replace("Unfunded", "")
+      : ""
     : "";
   let companyLastFundedDate = companyInfo
-    ? companyInfo["Last Funded In (Date)"].replace(/(\d{2})(\d{2})$/, "'$2") // Jan 2021 -> Jan '21
+    ? companyInfo["Last Funded In (Date)"]
+      ? companyInfo["Last Funded In (Date)"].replace(/(\d{2})(\d{2})$/, "'$2") // Jan 2021 -> Jan '21
+      : ""
     : "";
 
   //   const cbfields = crunchbaseData?.["fields"] || {};
@@ -147,10 +152,10 @@ function OverviewSection({
   //   console.log("uh", companyDescription);
 
   /* Business Model */
-  let companyBusinessModel = companyAbout && (
+  let companyBusinessModel = gptBusinessModel && (
     <div>
       <ul className="list-disc pl-3">
-        {Object.entries(companyAbout?.["business_model"]).map(
+        {Object.entries(gptBusinessModel["businessModel"]).map(
           ([key, value], index) => (
             <li key={key}>
               <strong>
@@ -221,9 +226,9 @@ function OverviewSection({
             </div>
           </div>
           {/* NOTE: companyAbout depends on crunchbase data */}
-          {companyAbout ? (
+          {gptCompanyDescription ? (
             <p className="text-sm text-customGray-800 leading-relaxed mt-1">
-              {companyAbout["company_description"]}
+              {gptCompanyDescription["companyDescription"]}
             </p>
           ) : companyInfo === null ? (
             <p className="text-sm text-customGray-300 italic leading-relaxed mt-1">

@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { aggregateData, formatMoney, roundPeNumbers } from "../../utils/Utils";
+import {
+  aggregateData,
+  formatMoney,
+  roundPeNumbers,
+  formatNumberToAbbreviation,
+} from "../../utils/Utils";
 import GenericBarAndTable from "./templates/GenericBar";
 import TwoColumnView from "./templates/TwoColumnView";
 import { CHARTS } from "../../constants";
@@ -34,7 +39,7 @@ function HeadCountChart({ headCountData, cutOffDate = new Date("2019") }) {
       selectedChart={CHARTS.employeeCount}
       rawChartData={headCountData}
       showModalButtons={false}
-      formatChartLabelFunction={formatMoney}
+      formatChartLabelFunction={formatNumberToAbbreviation}
       formatTableDataFunction={roundPeNumbers}
       location="Worldwide"
     />
@@ -46,7 +51,7 @@ function HeadCountChart({ headCountData, cutOffDate = new Date("2019") }) {
       showTimescaleButtons={false}
       showModalButtons={false}
       scrollStart={"right"}
-      formatChartLabelFunction={formatMoney}
+      formatChartLabelFunction={formatNumberToAbbreviation}
       formatTableDataFunction={roundPeNumbers}
     />
   );

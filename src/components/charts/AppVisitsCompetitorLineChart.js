@@ -41,34 +41,39 @@ function AppVisitsCompetitorLineChart({
   if (!multiCompanyAppData) return null;
 
   const trafficGrowth = (
-    <GenericLine
-      data={convertToLineChartData(
-        multiCompanyAppPerformance,
-        timescale,
-        cutOffDate
-      )}
-      title={"Visits Growth"}
-      info={INFO_HOVERS.APP_USAGE.GROWTH_VS_PEERS}
-      timescale={timescale}
-      setTimescale={setTimeScale}
-      location={country}
-      // selectedChart={CHARTS.trafficByChannel}
-      rawChartData={multiCompanyAppData}
-      formatTableDataFunction={(x) => (x ? roundPeNumbers(x) + "%" : "--")}
-    ></GenericLine>
+    <div className="h-[26rem]">
+      <GenericLine
+        data={convertToLineChartData(
+          multiCompanyAppPerformance,
+          timescale,
+          cutOffDate,
+          "est_download"
+        )}
+        title={"Downloads Growth"}
+        info={INFO_HOVERS.APP_USAGE.GROWTH_VS_PEERS}
+        timescale={timescale}
+        setTimescale={setTimeScale}
+        location={country}
+        // selectedChart={CHARTS.trafficByChannel}
+        rawChartData={multiCompanyAppData}
+        formatTableDataFunction={(x) => (x ? roundPeNumbers(x) + "%" : "--")}
+      ></GenericLine>
+    </div>
   );
   const yearTrafficGrowth = (
-    <GenericLine
-      data={convertToLineChartData(
-        multiCompanyAppPerformance,
-        "year",
-        cutOffDate
-      )}
-      showTimescaleButtons={false}
-      showModalButtons={false}
-      scrollStart={"right"}
-      formatTableDataFunction={(x) => (x ? roundPeNumbers(x) + "%" : "--")}
-    ></GenericLine>
+    <div className="h-[26rem]">
+      <GenericLine
+        data={convertToLineChartData(
+          multiCompanyAppPerformance,
+          "year",
+          cutOffDate
+        )}
+        showTimescaleButtons={false}
+        showModalButtons={false}
+        scrollStart={"right"}
+        formatTableDataFunction={(x) => (x ? roundPeNumbers(x) + "%" : "--")}
+      ></GenericLine>
+    </div>
   );
 
   return (
