@@ -8,7 +8,7 @@ const handler = async (req) => {
   const reqJSON = await req.json();
   const { query } = reqJSON;
   let { data: urlRows, error: urlErrors } = await serviceSup
-    .from("mappings")
+    .from("mappings_v2")
     .select()
     .or(`url.ilike.%${query}%,displayedName.ilike.%${query}%`)
     .limit(40);

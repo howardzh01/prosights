@@ -82,13 +82,14 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Seed",
     "Last Funded In (Date)": "Dec 2023",
     "Employee Count (Jan 24)": "1413",
+    candidate_app_name_id_pairs: [["ChatGPT", 1000600000851487]],
   },
   {
     name: "WeWork",
     url: "wework.com",
     displayedName: "WeWork",
-    appId: null,
-    appName: null,
+    appId: "1000600000806450",
+    appName: "WeWork On Demand",
     linkedInSlug: "wework",
     Description:
       "WeWork is a platform for creators that transforms buildings into dynamic environments for creativity, focus, and collaboration.",
@@ -98,6 +99,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Public",
     "Last Funded In (Date)": "Jan 2023",
     "Employee Count (Jan 24)": "5868",
+    candidate_app_name_id_pairs: [["WeWork On Demand", 1000600000806450]],
   },
   {
     name: "Sword Health",
@@ -114,6 +116,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series D",
     "Last Funded In (Date)": "Nov 2021",
     "Employee Count (Jan 24)": "766",
+    candidate_app_name_id_pairs: [],
   },
   {
     name: "Hinge Health",
@@ -130,6 +133,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series E",
     "Last Funded In (Date)": "Oct 2021",
     "Employee Count (Jan 24)": "1579",
+    candidate_app_name_id_pairs: [["Hinge Health", 1000600000815130]],
   },
   {
     name: "Maven Clinic",
@@ -146,6 +150,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series E",
     "Last Funded In (Date)": "Nov 2022",
     "Employee Count (Jan 24)": "957",
+    candidate_app_name_id_pairs: [],
   },
   {
     name: "Ro Health",
@@ -162,6 +167,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Unfunded",
     "Last Funded In (Date)": null,
     "Employee Count (Jan 24)": "539",
+    candidate_app_name_id_pairs: [],
   },
   {
     name: "Hims",
@@ -178,6 +184,10 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Public",
     "Last Funded In (Date)": "Jan 2021",
     "Employee Count (Jan 24)": "987",
+    candidate_app_name_id_pairs: [
+      ["Hims: Telehealth for Men", 1000600000833636],
+      ["hers", 1000600000852492],
+    ],
   },
   {
     name: "Talkspace",
@@ -194,6 +204,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Public",
     "Last Funded In (Date)": "Jun 2021",
     "Employee Count (Jan 24)": "926",
+    candidate_app_name_id_pairs: [["Talkspace", 1000600000536414]],
   },
   {
     name: "BetterHelp",
@@ -210,6 +221,10 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Merged or Acquired",
     "Last Funded In (Date)": null,
     "Employee Count (Jan 24)": "3312",
+    candidate_app_name_id_pairs: [
+      ["BetterHelp", 1000600000566396],
+      ["ReGain", 1000600000594852],
+    ],
   },
   {
     name: "Cerebral",
@@ -226,6 +241,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series C",
     "Last Funded In (Date)": "Dec 2021",
     "Employee Count (Jan 24)": "894",
+    candidate_app_name_id_pairs: [],
   },
   {
     name: "Headspace",
@@ -242,6 +258,10 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series C",
     "Last Funded In (Date)": "Jul 2023",
     "Employee Count (Jan 24)": "1427",
+    candidate_app_name_id_pairs: [
+      ["Headspace", 1000600000457477],
+      ["Headspace Care", 1000600000803662],
+    ],
   },
   {
     name: "TikTok",
@@ -258,13 +278,21 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Unfunded",
     "Last Funded In (Date)": null,
     "Employee Count (Jan 24)": "58501",
+    candidate_app_name_id_pairs: [
+      ["Vigo Video", 1000600000545257],
+      ["TikTok", 1000600000575007],
+      ["TikTok Now", 1000600000840749],
+      ["TikTok Music", 1000600000853158],
+      ["Tiktok Seller", 1000800000134421],
+      ["TikTok Live Wallpaper", 1000600000652770],
+    ],
   },
   {
     name: "ByteDance",
     url: "bytedance.com",
     displayedName: "ByteDance",
-    appId: null,
-    appName: null,
+    appId: "1000600000441032",
+    appName: "Toutiao",
     linkedInSlug: "bytedance",
     Description:
       "ByteDance is an internet technology company that operates creative content platforms.",
@@ -274,6 +302,35 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Private Equity",
     "Last Funded In (Date)": "Mar 2023",
     "Employee Count (Jan 24)": "39295",
+    candidate_app_name_id_pairs: [
+      ["Toutiao", 1000600000441032],
+      ["Xigua Video", 1000600000593590],
+      ["\u6709\u67ff", 1000600000861576],
+      ["Tomato Novel", 1000600000756843],
+      ["\u756a\u8304\u7545\u542c", 1000600000801236],
+      ["\u5b66\u6d6a", 1000600000818229],
+      ["Lark", 1000600000766064],
+      ["Pipixia", 1000600000653581],
+      ["Faceu", 1000600000527119],
+      ["Ulike", 1000600000650686],
+      ["CapCut", 1000600000750914],
+      ["Wobble Man", 1000600000777963],
+      ["Mr. Bone", 1000600000796197],
+      ["Momoyu", 1000600000805918],
+      ["Hypic - Photo Editor & AI Art", 1000600000848932],
+      ["\u4f4f\u5c0f\u5e2e", 1000600000804179],
+      ["Lemon8", 1000600000800152],
+      ["\u6296\u97f3\u6765\u5ba2", 1000600000834972],
+      [
+        "\u6296\u5e97-\u5546\u5bb6\u79fb\u52a8\u5de5\u4f5c\u53f0",
+        1000800000139704,
+      ],
+      ["\u8c46\u5305", 1000600000857796],
+      ["TikTok", 1000600000575007],
+      ["\u61c2\u8f66\u5e1d", 1000600000645086],
+      ["Vigo Video", 1000600000545257],
+      ["\u9192\u56fe", 1000600000787319],
+    ],
   },
   {
     name: "Reibus",
@@ -291,6 +348,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series B",
     "Last Funded In (Date)": "Dec-22",
     "Employee Count (Jan 24)": "166",
+    candidate_app_name_id_pairs: [],
   },
   {
     name: "LegalZoom",
@@ -307,6 +365,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Public",
     "Last Funded In (Date)": "Sep 2023",
     "Employee Count (Jan 24)": "1410",
+    candidate_app_name_id_pairs: [],
   },
   {
     name: "ZenBusiness",
@@ -323,6 +382,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series C",
     "Last Funded In (Date)": "Sep 2022",
     "Employee Count (Jan 24)": "397",
+    candidate_app_name_id_pairs: [],
   },
   {
     name: "Klarna",
@@ -339,6 +399,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Private Equity",
     "Last Funded In (Date)": "Jul 2022",
     "Employee Count (Jan 24)": "5665",
+    candidate_app_name_id_pairs: [["Klarna", 1000600000594772]],
   },
   {
     name: "Flexport",
@@ -355,6 +416,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series E",
     "Last Funded In (Date)": "Jan 2024",
     "Employee Count (Jan 24)": "3160",
+    candidate_app_name_id_pairs: [],
   },
   {
     name: "Gympass",
@@ -371,6 +433,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series F",
     "Last Funded In (Date)": "Aug 2023",
     "Employee Count (Jan 24)": "3026",
+    candidate_app_name_id_pairs: [["GymPass", 1000600000583352]],
   },
   {
     name: "Tinder",
@@ -387,6 +450,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Unknown Funding Round",
     "Last Funded In (Date)": "Oct 2017",
     "Employee Count (Jan 24)": "952",
+    candidate_app_name_id_pairs: [["Tinder", 1000600000001791]],
   },
   {
     name: "Bumble",
@@ -403,6 +467,11 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Public",
     "Last Funded In (Date)": "Mar 2023",
     "Employee Count (Jan 24)": "1709",
+    candidate_app_name_id_pairs: [
+      ["Bumble App", 1000600000525199],
+      ["Bumble For Friends", 1000600000853520],
+      ["Badoo", 1000600000000153],
+    ],
   },
   {
     name: "DoorDash (doordash.com)",
@@ -419,6 +488,11 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Public",
     "Last Funded In (Date)": "Jun 2020",
     "Employee Count (Jan 24)": "52460",
+    candidate_app_name_id_pairs: [
+      ["DoorDash", 1000600000438925],
+      ["DoorDash Driver", 1000600000757020],
+      ["DoorDash - Business Manager", 1000800000231708],
+    ],
   },
   {
     name: "Uber",
@@ -435,6 +509,16 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Public",
     "Last Funded In (Date)": "Sep 2020",
     "Employee Count (Jan 24)": "88843",
+    candidate_app_name_id_pairs: [
+      ["Uber", 1000600000002718],
+      ["Postmates", 1000600000457455],
+      ["Uber Eats", 1000600000529877],
+      ["Uber Driver", 1000600000551778],
+      ["Uber Freight", 1000600000560672],
+      ["Uber Eats for Restaurants", 1000600000742876],
+      ["Uber Eats Manager", 1000800000009216],
+      ["UberFLEET", 1000600000560670],
+    ],
   },
   {
     name: "GoPuff",
@@ -451,6 +535,10 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Private Equity",
     "Last Funded In (Date)": "May 2022",
     "Employee Count (Jan 24)": "3612",
+    candidate_app_name_id_pairs: [
+      ["Gopuff", 1000600000607119],
+      ["Gopuff Driver", 1000800000159705],
+    ],
   },
   {
     name: "Reddit",
@@ -467,6 +555,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Merged or Acquired",
     "Last Funded In (Date)": "Aug 2021",
     "Employee Count (Jan 24)": "3115",
+    candidate_app_name_id_pairs: [["Reddit", 1000600000532208]],
   },
   {
     name: "X (twitter.com)",
@@ -483,6 +572,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Unknown Funding Round",
     "Last Funded In (Date)": "Jun 2022",
     "Employee Count (Jan 24)": "2109",
+    candidate_app_name_id_pairs: [["X", 1000600000000356]],
   },
   {
     name: "Turo",
@@ -499,6 +589,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series E",
     "Last Funded In (Date)": "Aug 2023",
     "Employee Count (Jan 24)": "1621",
+    candidate_app_name_id_pairs: [["Turo", 1000600000442258]],
   },
   {
     name: "StockX",
@@ -515,6 +606,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series E",
     "Last Funded In (Date)": "Apr 2021",
     "Employee Count (Jan 24)": "1434",
+    candidate_app_name_id_pairs: [["StockX", 1000600000607381]],
   },
   {
     name: "Fetch Rewards",
@@ -531,6 +623,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series E",
     "Last Funded In (Date)": "Apr 2022",
     "Employee Count (Jan 24)": "844",
+    candidate_app_name_id_pairs: [["Fetch", 1000600000767173]],
   },
   {
     name: "Whoop (whoop.com)",
@@ -547,6 +640,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series F",
     "Last Funded In (Date)": "Aug 2021",
     "Employee Count (Jan 24)": "755",
+    candidate_app_name_id_pairs: [["WHOOP", 1000600000809381]],
   },
   {
     name: "Whatnot",
@@ -563,6 +657,9 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series D",
     "Last Funded In (Date)": "Jul 2022",
     "Employee Count (Jan 24)": "683",
+    candidate_app_name_id_pairs: [
+      ["Whatnot: Buy Sell Go Live", 1000600000804927],
+    ],
   },
   {
     name: "Misfits Market",
@@ -579,6 +676,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series C",
     "Last Funded In (Date)": "Apr 2023",
     "Employee Count (Jan 24)": "423",
+    candidate_app_name_id_pairs: [["Misfits Market", 1000600000849458]],
   },
   {
     name: "ezCater",
@@ -595,6 +693,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series D",
     "Last Funded In (Date)": "Dec 2021",
     "Employee Count (Jan 24)": "880",
+    candidate_app_name_id_pairs: [],
   },
   {
     name: "Roofstock",
@@ -611,6 +710,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series E",
     "Last Funded In (Date)": "Mar 2022",
     "Employee Count (Jan 24)": "386",
+    candidate_app_name_id_pairs: [],
   },
   {
     name: "Spotter (spotter.la)",
@@ -627,13 +727,14 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series D",
     "Last Funded In (Date)": "Feb-22",
     "Employee Count (Jan 24)": "218",
+    candidate_app_name_id_pairs: [],
   },
   {
     name: "Papa",
     url: "papa.com",
     displayedName: "Papa",
-    appId: null,
-    appName: null,
+    appId: "1000600000846780",
+    appName: "Papa Pal: Find flexible work",
     linkedInSlug: "papainc",
     Description:
       "Papa is a company that provides companionship and care to older adults and their families.",
@@ -643,13 +744,16 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Unknown Funding Round",
     "Last Funded In (Date)": "Jan 2021",
     "Employee Count (Jan 24)": "918",
+    candidate_app_name_id_pairs: [
+      ["Papa Pal: Find flexible work", 1000600000846780],
+    ],
   },
   {
     name: "Sorare",
     url: "sorare.com",
     displayedName: "Sorare",
-    appId: null,
-    appName: null,
+    appId: "1000600000841589",
+    appName: "Sorare: Fantasy Soccer",
     linkedInSlug: "sorare",
     Description:
       "Sorare is a global fantasy football game where players can buy, trade, and play with official digital cards.",
@@ -659,6 +763,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series B",
     "Last Funded In (Date)": "Sep 2021",
     "Employee Count (Jan 24)": "213",
+    candidate_app_name_id_pairs: [["Sorare: Fantasy Soccer", 1000600000841589]],
   },
   {
     name: "Carta (carta.com)",
@@ -675,6 +780,9 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series G",
     "Last Funded In (Date)": "Aug 2021",
     "Employee Count (Jan 24)": "1934",
+    candidate_app_name_id_pairs: [
+      ["Carta - Manage your equity", 1000800000175037],
+    ],
   },
   {
     name: "Zazzle",
@@ -691,13 +799,14 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series B",
     "Last Funded In (Date)": "May 2012",
     "Employee Count (Jan 24)": "1089",
+    candidate_app_name_id_pairs: [],
   },
   {
     name: "Strava",
     url: "strava.com",
     displayedName: "Strava",
-    appId: "1000600000448216",
-    appName: "Strava Run",
+    appId: "1000600000439904",
+    appName: "Strava Running and Cycling",
     linkedInSlug: "strava-inc.",
     Description:
       "Strava is an online network where runners and cyclists can record their activities, compare performance, and compete with their community.",
@@ -707,6 +816,11 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series F",
     "Last Funded In (Date)": "Nov-20",
     "Employee Count (Jan 24)": "481",
+    candidate_app_name_id_pairs: [
+      ["Strava Running and Cycling", 1000600000439904],
+      ["FATMAP", 1000600000779599],
+      ["Recover Athletics", 1000600000850608],
+    ],
   },
   {
     name: "Fooda",
@@ -723,6 +837,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series C",
     "Last Funded In (Date)": "Nov 2023",
     "Employee Count (Jan 24)": "442",
+    candidate_app_name_id_pairs: [["Fooda", 1000600000644981]],
   },
   {
     name: "OnXmaps",
@@ -739,6 +854,11 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series B",
     "Last Funded In (Date)": "Oct 2022",
     "Employee Count (Jan 24)": "399",
+    candidate_app_name_id_pairs: [
+      ["HUNT App", 1000600000441628],
+      ["onX Offroad", 1000600000787098],
+      ["onX Backcountry GPS Trail Maps", 1000600000809366],
+    ],
   },
   {
     name: "Cameo",
@@ -755,6 +875,9 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series C",
     "Last Funded In (Date)": "Mar 2021",
     "Employee Count (Jan 24)": "319",
+    candidate_app_name_id_pairs: [
+      ["Cameo - Personalized Shoutouts", 1000600000674900],
+    ],
   },
   {
     name: "Hinge",
@@ -771,6 +894,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Merged or Acquired",
     "Last Funded In (Date)": "Dec 2014",
     "Employee Count (Jan 24)": "318",
+    candidate_app_name_id_pairs: [["Hinge", 1000600000450503]],
   },
   {
     name: "TodayTix",
@@ -787,6 +911,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Private Equity",
     "Last Funded In (Date)": "May 2019",
     "Employee Count (Jan 24)": "266",
+    candidate_app_name_id_pairs: [["TodayTix", 1000600000597845]],
   },
   {
     name: "Masterworks",
@@ -803,6 +928,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series A",
     "Last Funded In (Date)": "Oct 2021",
     "Employee Count (Jan 24)": "250",
+    candidate_app_name_id_pairs: [],
   },
   {
     name: "Gametime",
@@ -819,6 +945,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series B",
     "Last Funded In (Date)": "May 2022",
     "Employee Count (Jan 24)": "228",
+    candidate_app_name_id_pairs: [["Gametime", 1000600000513636]],
   },
   {
     name: "Chowbus",
@@ -835,6 +962,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series A",
     "Last Funded In (Date)": "Aug 2023",
     "Employee Count (Jan 24)": "164",
+    candidate_app_name_id_pairs: [["Chowbus", 1000600000608494]],
   },
   {
     name: "Nanit",
@@ -851,6 +979,7 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series C",
     "Last Funded In (Date)": "Feb 2021",
     "Employee Count (Jan 24)": "118",
+    candidate_app_name_id_pairs: [["Nanit", 1000600000770194]],
   },
   {
     name: "Raise.com",
@@ -867,5 +996,6 @@ export const companyListTop50 = [
     "Funding Stage (Type)": "Series C",
     "Last Funded In (Date)": "Jan 2020",
     "Employee Count (Jan 24)": "95",
+    candidate_app_name_id_pairs: [],
   },
 ];
