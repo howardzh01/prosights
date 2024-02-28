@@ -17,6 +17,7 @@ export default function ChartModal({
   country,
 }) {
   let chart;
+  console.log("huh", selectedChart);
 
   switch (selectedChart) {
     case CHARTS.employeeCount:
@@ -145,6 +146,14 @@ export default function ChartModal({
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
                 </div>
+                {(selectedChart === CHARTS.trafficByGeo ||
+                  selectedChart === CHARTS.trafficCompsByGeo) && (
+                  <p className="mt-6 text-red-500 w-full text-center">
+                    <strong>NOTE:</strong> Historical data prior to 2023 is not
+                    available within your current subscription. Please consider
+                    upgrading to the ProSights premium tier.
+                  </p>
+                )}
                 <div className="py-20">{chart}</div>
               </Dialog.Panel>
             </Transition.Child>
