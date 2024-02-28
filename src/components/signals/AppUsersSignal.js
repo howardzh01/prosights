@@ -44,7 +44,7 @@ function AppUsersSignal({ appData, country, cutOffDate = new Date("2019") }) {
       rawChartData={appData}
       scrollStart={"right"}
       location={country}
-      formatChartLabelFunction={roundPeNumbers}
+      //   formatChartLabelFunction={roundPeNumbers}
       formatTableDataFunction={roundPeNumbers}
     />
   );

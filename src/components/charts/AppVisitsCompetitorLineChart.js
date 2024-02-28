@@ -46,9 +46,10 @@ function AppVisitsCompetitorLineChart({
         data={convertToLineChartData(
           multiCompanyAppPerformance,
           timescale,
-          cutOffDate
+          cutOffDate,
+          "est_download"
         )}
-        title={"Visits Growth"}
+        title={"Downloads Growth"}
         info={INFO_HOVERS.APP_USAGE.GROWTH_VS_PEERS}
         timescale={timescale}
         setTimescale={setTimeScale}

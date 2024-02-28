@@ -20,8 +20,9 @@ function AppGrowthChart({
   if (!appData) return null;
   const relevantAppData = appData["app_performance"];
   const [appTimescale, setAppTrafficTimescale] = useState("quarterYear");
+  const agg = type === "est_average_active_users" ? "mean" : "sum";
   const usersUnits = checkIfGrowthDataHasValuesGreaterThanOneMillion(
-    aggregateData(relevantAppData, type, "mean", "quarterYear")
+    aggregateData(relevantAppData, type, agg, "quarterYear")
   )
     ? "M"
     : "K";
@@ -36,12 +37,14 @@ function AppGrowthChart({
   const customAppGrowthGraph = (
     <GenericBarAndTable
       data={convertToGrowthChartData(
-        aggregateData(relevantAppData, type, "mean", appTimescale),
+        aggregateData(relevantAppData, type, agg, appTimescale),
         chartTitle,
         cutOffDate,
         usersUnits
       )}
-      title={`Monthly ${chartTitle} (${usersUnits})`}
+      title={`${
+        type === "est_average_active_users" ? "Monthly" : ""
+      } ${chartTitle} (${usersUnits})`}
       info={INFO_HOVERS.APP_USAGE.APP_USERS}
       showDataLabels={appTimescale !== "month"}
       timescale={appTimescale}
@@ -49,7 +52,7 @@ function AppGrowthChart({
       // showTimescaleButtons={false}
       rawChartData={relevantAppData}
       showModalButtons={false}
-      formatChartLabelFunction={roundPeNumbers}
+      // formatChartLabelFunction={roundPeNumbers}
       formatTableDataFunction={roundPeNumbers}
       location={country}
     />
@@ -57,7 +60,7 @@ function AppGrowthChart({
   const yearAppGrowthGraph = (
     <GenericBarAndTable
       data={convertToGrowthChartData(
-        aggregateData(relevantAppData, type, "mean", "year"),
+        aggregateData(relevantAppData, type, agg, "year"),
         chartTitle,
         cutOffDate,
         usersUnits
@@ -65,7 +68,7 @@ function AppGrowthChart({
       showTimescaleButtons={false}
       showModalButtons={false}
       scrollStart={"right"}
-      formatChartLabelFunction={roundPeNumbers}
+      // formatChartLabelFunction={roundPeNumbers}
       formatTableDataFunction={roundPeNumbers}
     />
   );

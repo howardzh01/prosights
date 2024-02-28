@@ -38,7 +38,7 @@ function WebUsersSignal({
       rawChartData={webTrafficData}
       scrollStart={"right"}
       location={country}
-      formatChartLabelFunction={roundPeNumbers}
+      //   formatChartLabelFunction={roundPeNumbers}
       formatTableDataFunction={roundPeNumbers}
     />
   );
