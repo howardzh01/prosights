@@ -24,7 +24,8 @@ export const ChartDataContext = createContext();
 
 function OverviewSection({
   companyInfo, // Note: will be ""
-  companyAbout,
+  gptCompanyDescription,
+  gptBusinessModel,
   crunchbaseData,
   headCountData,
   webTrafficData,
@@ -151,10 +152,10 @@ function OverviewSection({
   //   console.log("uh", companyDescription);
 
   /* Business Model */
-  let companyBusinessModel = companyAbout && (
+  let companyBusinessModel = gptBusinessModel && (
     <div>
       <ul className="list-disc pl-3">
-        {Object.entries(companyAbout?.["business_model"]).map(
+        {Object.entries(gptBusinessModel["businessModel"]).map(
           ([key, value], index) => (
             <li key={key}>
               <strong>
@@ -225,9 +226,9 @@ function OverviewSection({
             </div>
           </div>
           {/* NOTE: companyAbout depends on crunchbase data */}
-          {companyAbout ? (
+          {gptCompanyDescription ? (
             <p className="text-sm text-customGray-800 leading-relaxed mt-1">
-              {companyAbout["company_description"]}
+              {gptCompanyDescription["companyDescription"]}
             </p>
           ) : companyInfo === null ? (
             <p className="text-sm text-customGray-300 italic leading-relaxed mt-1">

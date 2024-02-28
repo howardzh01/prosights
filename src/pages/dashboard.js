@@ -300,7 +300,8 @@ function Dashboard({
     webTrafficGeoError,
     crunchbaseDataPull,
     crunchbaseErrorPull,
-    companyDescriptionPull,
+    gptCompanyDescription,
+    gptBusinessModel,
     companyDescriptionErrorPull,
     dataAIData,
     dataAIError,
@@ -413,8 +414,11 @@ function Dashboard({
                   >
                     <OverviewSection
                       companyInfo={fullCompanyInfo?.[companyDic.displayedName]}
-                      companyAbout={
-                        companyDescriptionPull?.[companyDic.displayedName]
+                      gptCompanyDescription={
+                        gptCompanyDescription?.[companyDic.displayedName]
+                      }
+                      gptBusinessModel={
+                        gptBusinessModel?.[companyDic.displayedName]
                       }
                       crunchbaseData={
                         crunchbaseDataPull?.[companyDic.displayedName]
@@ -435,7 +439,7 @@ function Dashboard({
                     <CompetitorOverviewSection
                       companyInfo={fullCompanyInfo}
                       companyDic={companyDic}
-                      companyDescriptions={companyDescriptionPull}
+                      companyDescriptions={gptCompanyDescription}
                       crunchbaseData={crunchbaseDataPull} // {companyName: null} if no data
                       headCountData={headCountData}
                       companyCompetitors={companyCompetitors}

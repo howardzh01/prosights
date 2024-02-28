@@ -69,15 +69,17 @@ export async function cachedFetch({
       data = await new_response.text();
       if (data.includes("ERROR")) {
         // semrush will sometimes output ERRORs as strings
+        console.error("Semrush Error", data);
         return;
       }
     } else {
       return;
     }
 
-    if (!data || data.length === 0) {
-      return;
-    }
+    // KEEP if you want to see empty data in cache
+    // if (!data || data.length === 0) {
+    //   return;
+    // }
 
     const { error: insertError } = await serviceSup.from(tableName).insert({
       query: cacheKey,
@@ -141,7 +143,7 @@ export async function cachedBucketFetch({
       } else if (responseFormat === "text") {
         data = await new_response.text();
         if (data.includes("ERROR")) {
-          // semrush will sometimes output ERRORs as strings
+          console.error("Semrush Error", data);
           return;
         }
       } else {
