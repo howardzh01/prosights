@@ -72,7 +72,6 @@ function AppGrowthChart({
       formatTableDataFunction={roundPeNumbers}
     />
   );
-
   switch (selectedChart) {
     case CHARTS.appActiveUsers:
       return (

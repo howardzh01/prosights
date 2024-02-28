@@ -177,6 +177,10 @@ export const aggregateData = (
       } else if (agg === "last") {
         acc[timeInput] = data.last;
       }
+      // HACKY: need to actualy check whether null. It should never be 0
+      if (acc[timeInput] == 0) {
+        acc[timeInput] = null;
+      }
     }
     return acc;
   }, {});

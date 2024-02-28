@@ -12,6 +12,7 @@ const handler = async (req) => {
     .select()
     .or(`url.ilike.%${query}%,displayedName.ilike.%${query}%`)
     .limit(40);
+
   if (urlErrors) {
     console.error("Error fetching companies:", urlErrors);
     return new Response(JSON.stringify([]), {

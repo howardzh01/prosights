@@ -338,8 +338,7 @@ export const companyListTop50 = [
     displayedName: "Reibus",
     appId: null,
     appName: null,
-    linkedInSlug:
-      "reibus%3Ftrk%3Dpublic_profile_experience-item_profile-section-card_subtitle-click",
+    linkedInSlug: "reibus",
     Description:
       "Reibus is a B2B digital marketplace for industrial materials.",
     headquarter_country: "USA",
@@ -682,8 +681,8 @@ export const companyListTop50 = [
     name: "ezCater",
     url: "ezcater.com",
     displayedName: "ezCater",
-    appId: null,
-    appName: null,
+    appId: "1000600000703097",
+    appName: "ezCater",
     linkedInSlug: "ezcater",
     Description:
       "EzCater is an online catering marketplace that allows individuals to order food from local caterers.",

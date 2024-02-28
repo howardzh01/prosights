@@ -6,7 +6,7 @@ export const config = {
   runtime: "edge",
 };
 const BUCKET_VERSION = "v2";
-const FORCE_REFETCH = true; // FOR TESTING
+const FORCE_REFETCH = false; // FOR TESTING
 
 const getGPTDescriptions = async (
   companyName,
@@ -132,7 +132,7 @@ const handler = async (req) => {
 
   if (gptContentError || FORCE_REFETCH) {
     console.log(
-      `${BUCKET_VERSION}/${category}/${rows[0].id}.json not in company_descriptions bucket or REFETCHED`,
+      `${BUCKET_VERSION}/${category}/${rows[0].id}.json not in company_descriptions bucket or because REFETCHED is ${FORCE_REFETCH}`,
       gptContentError
     );
     const content = await retrieveAndUpload(
