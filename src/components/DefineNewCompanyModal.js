@@ -2,6 +2,7 @@ import { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import FundedEntitySearch from "./dashboard/FundedEntitySearch";
+import AppIDSearch from "./dashboard/AppIDSearch";
 import Image from "next/image";
 
 function InfoButton({ infoType }) {
@@ -275,15 +276,15 @@ export default function DefineNewCompanyModal({
 
                       <InfoButton infoType="appID" />
                     </div>
-                    <input
-                      type="text"
-                      placeholder="1000600000575007"
-                      className="px-4 py-2 rounded-md bg-customGray-50 placeholder:text-customGray-300 text-customGray-800 focus:outline-none w-60 text-sm"
-                      value={appID}
-                      onChange={(e) =>
-                        setAppID(e.target.value.replace(/[^0-9]/g, ""))
-                      }
-                    />
+                    <div className="w-60">
+                      <AppIDSearch
+                        initialAppID={appID}
+                        emptyStateCompanyList={[]}
+                        setAppID={(appID) => {
+                          setAppID(appID.UNIFIED_PRODUCT_KEY);
+                        }}
+                      />
+                    </div>
                   </div>
                   <div
                     className={`flex flex-row mt-12 px-6 py-2 mx-auto ${
