@@ -5,9 +5,8 @@ import { serviceSup } from "../../../utils/Supabase.js";
 export const config = {
   runtime: "edge",
 };
-const VERSION = "v2";
-const table_name = "companiesv2";
-const FORCE_REFETCH = false; // FOR TESTING
+const BUCKET_VERSION = "v2";
+const FORCE_REFETCH = true; // FOR TESTING
 
 const getGPTDescriptions = async (
   companyName,
@@ -27,7 +26,7 @@ const getGPTDescriptions = async (
   if (category === "companyDescription") {
     systemPrompt += `\n\nWhat's the company description in 1 sentence. Keep it as concise as possible. Never include date or where it was founded. Crunchbase descriptions can be lacking in information or too verbose so please incorporate your knowledge to create a simple and focused description. Return in json form with key value pair "${category}" and the value as the description.`;
   } else {
-    systemPrompt += `\n\n What is the business modeleach point should describe distinct core revenue segments of the company, specifically how it makes money. Only the top 10% most complex companies should have 3 bullet points each 1 sentence. List the largest revenue stream first and never list minor revenue streams.  Return this as a JSON of with key "${category}". Bullet points for business_model should be representented where key is a short name and value is the revenue stream. `;
+    systemPrompt += `\n\n What is the business model? Each point should describe distinct core revenue segments of the company, specifically how it makes money. Only the top 10% most complex companies should have 3 bullet points each 1 sentence. List the largest revenue stream first and never list minor revenue streams.  Return this as a JSON of with key "${category}". Bullet points for business_model should be representented where key has spaces between words and value is the revenue stream.`;
   }
   const payload = {
     model: CONSTANTS.MODEL_VERSION,
@@ -76,7 +75,7 @@ const retrieveAndUpload = async (
     const { data: bucketData, error: bucketError } = await serviceSup.storage
       .from("company_descriptions")
       .upload(
-        `${VERSION}/${category}/${rows[0].id}.json`,
+        `${BUCKET_VERSION}/${category}/${rows[0].id}.json`,
         JSON.stringify({ content: content }),
         {
           cacheControl: "3600",
@@ -96,6 +95,10 @@ const handler = async (req) => {
   if (category !== "companyDescription" && category !== "businessModel") {
     return new Response("Invalid type", { status: 400 });
   }
+  const table_name =
+    category === "companyDescription"
+      ? `company_descriptions_${BUCKET_VERSION}`
+      : `business_models_${BUCKET_VERSION}`;
   let { data: rows, error: error } = await serviceSup
     .from(table_name)
     .select()
@@ -125,11 +128,11 @@ const handler = async (req) => {
 
   const { data: gptContent, error: gptContentError } = await serviceSup.storage
     .from("company_descriptions")
-    .download(`${VERSION}/${category}/${rows[0].id}.json`);
+    .download(`${BUCKET_VERSION}/${category}/${rows[0].id}.json`);
 
   if (gptContentError || FORCE_REFETCH) {
     console.log(
-      `${VERSION}/${category}/${rows[0].id}.json not in company_descriptions bucket or REFETCHED`,
+      `${BUCKET_VERSION}/${category}/${rows[0].id}.json not in company_descriptions bucket or REFETCHED`,
       gptContentError
     );
     const content = await retrieveAndUpload(
