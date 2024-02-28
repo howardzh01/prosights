@@ -175,6 +175,7 @@ export default function SearchBar({
                   />
                 </InputAdornment>
               ),
+              endAdornment: <></>,
             }}
             sx={{
               "& .MuiOutlinedInput-notchedOutline": {
