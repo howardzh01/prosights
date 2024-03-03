@@ -2,6 +2,7 @@ import React, { useDebugValue, useEffect, useState } from "react";
 import HeadCountSignal from "../signals/HeadCountSignal";
 import WebUsersSignal from "../signals/WebUsersSignal";
 import AppUsersSignal from "../signals/AppUsersSignal";
+import AssetQualityGrade from "../dashboard/AssetQualityGrade";
 import { createContext } from "react";
 import {
   fromUnderscoreCase,
@@ -413,6 +414,9 @@ function OverviewSection({
             </div>
           </div>
         </div>
+      </div>
+      <div className="flex flex-row mt-6">
+        <AssetQualityGrade trafficData={webTrafficData} />
       </div>
       {/* Funding and M&A Tables */}
       {/* <div className="flex mt-6 ml-4 justify-between w-full">

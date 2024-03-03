@@ -5,6 +5,7 @@ import { CHARTS, INFO_HOVERS } from "../../constants";
 
 function WebGeoTrafficDoughnut({ geoTrafficData, relevant_continents }) {
   if (!geoTrafficData) return null;
+  console.log("loool", convertToGeoDoughnutData(geoTrafficData, "traffic"));
 
   return (
     <div>
