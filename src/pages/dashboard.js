@@ -427,6 +427,11 @@ function Dashboard({
                       webTrafficData={
                         webTrafficData?.[companyDic.displayedName]
                       }
+                      webTrafficGeoData={
+                        webTrafficGeoData?.[companyDic.displayedName]
+                      }
+                      multiCompanyAppData={dataAIData}
+                      companyName={companyDic.displayedName}
                       appData={dataAIData?.[companyDic.displayedName]}
                       country={country}
                     />

@@ -3,18 +3,24 @@ import {
   convertToGrowthChartData,
   convertToChannelDoughnutData,
   convertToGeoDoughnutData,
+  convertToAppUsageLoyaltyVsPeersData,
 } from "../../utils/ChartUtils";
+import { CHARTS } from "../../constants";
 import { aggregateData } from "../../utils/Utils";
 
 const AssetQualityGrade = ({
   trafficData,
-  geoTrafficData,
+  webTrafficGeoData,
+  multiCompanyAppData,
+  companyName,
   cutOffDate = new Date("2019"),
 }) => {
   let usersAssetQuality = null;
   let organicWebTrafficQuality = null;
   let directWebTrafficQuality = null;
   let internationalWebTrafficQuality = null;
+  let userTimeQuality = null;
+  let m6RetentionQuality = null;
 
   // Calculation for users asset quality
   if (trafficData) {
@@ -87,8 +93,8 @@ const AssetQualityGrade = ({
   }
 
   // Calculation for outside US web traffic quality
-  if (geoTrafficData) {
-    const geoData = convertToGeoDoughnutData(geoTrafficData, "traffic");
+  if (webTrafficGeoData) {
+    const geoData = convertToGeoDoughnutData(webTrafficGeoData, "traffic");
 
     const northAmericaIndex = geoData.labels.indexOf("North America");
     const ltmOutsideNorthAmericaPercentage =
@@ -102,10 +108,48 @@ const AssetQualityGrade = ({
         : 1;
   }
 
+  if (multiCompanyAppData) {
+    const timeUsageData = convertToAppUsageLoyaltyVsPeersData(
+      multiCompanyAppData,
+      CHARTS.appLTMTimePerUser
+    );
+
+    const companyIndex = timeUsageData.labels.indexOf(companyName);
+    const ltmTimeUsage =
+      Number(timeUsageData.datasets[0].data[companyIndex]) || null;
+    userTimeQuality = ltmTimeUsage
+      ? ltmTimeUsage >= 25
+        ? 2
+        : ltmTimeUsage <= 10
+        ? 0
+        : 1
+      : null;
+  }
+
+  if (multiCompanyAppData) {
+    const retentionData = convertToAppUsageLoyaltyVsPeersData(
+      multiCompanyAppData,
+      CHARTS.appLTMRetentionM6
+    );
+
+    const companyIndex = retentionData.labels.indexOf(companyName);
+    const ltmM6Retention =
+      Number(retentionData.datasets[0].data[companyIndex]) || null;
+    m6RetentionQuality = ltmM6Retention
+      ? ltmM6Retention >= 25
+        ? 2
+        : ltmM6Retention <= 15
+        ? 0
+        : 1
+      : null;
+  }
+
   console.log("usersAssetQuality", usersAssetQuality);
   console.log("organicWebTrafficQuality", organicWebTrafficQuality);
   console.log("directWebTrafficQuality", directWebTrafficQuality);
   console.log("internationalWebTrafficQuality", internationalWebTrafficQuality);
+  console.log("userTimeQuality", userTimeQuality);
+  console.log("m6RetentionQuality", m6RetentionQuality);
 
   return <div></div>;
 };

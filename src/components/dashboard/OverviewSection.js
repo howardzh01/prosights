@@ -30,6 +30,9 @@ function OverviewSection({
   crunchbaseData,
   headCountData,
   webTrafficData,
+  webTrafficGeoData,
+  multiCompanyAppData,
+  companyName,
   appData,
   country,
 }) {
@@ -416,7 +419,12 @@ function OverviewSection({
         </div>
       </div>
       <div className="flex flex-row mt-6">
-        <AssetQualityGrade trafficData={webTrafficData} />
+        <AssetQualityGrade
+          trafficData={webTrafficData}
+          webTrafficGeoData={webTrafficGeoData}
+          multiCompanyAppData={multiCompanyAppData}
+          companyName={companyName}
+        />
       </div>
       {/* Funding and M&A Tables */}
       {/* <div className="flex mt-6 ml-4 justify-between w-full">
