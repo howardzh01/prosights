@@ -2,7 +2,7 @@ import React, { useDebugValue, useEffect, useState } from "react";
 import HeadCountSignal from "../signals/HeadCountSignal";
 import WebUsersSignal from "../signals/WebUsersSignal";
 import AppUsersSignal from "../signals/AppUsersSignal";
-import Grade from "./Grade";
+import SmartSummary from "./SmartSummary";
 import { createContext } from "react";
 import {
   fromUnderscoreCase,
@@ -420,7 +420,7 @@ function OverviewSection({
       </div>
       <div className="flex flex-col mt-6 ml-4">
         <div className="text-lg font-semibold text-gray-800">Smart Summary</div>
-        <Grade
+        <SmartSummary
           headcountData={headCountData}
           trafficData={webTrafficData}
           webTrafficGeoData={webTrafficGeoData}
