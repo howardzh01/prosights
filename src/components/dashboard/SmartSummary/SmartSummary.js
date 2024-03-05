@@ -1,5 +1,6 @@
 import React from "react";
 import Grade from "./Grade";
+import AISummary from "./AISummary";
 import {
   convertToChartData,
   convertToGrowthChartData,
@@ -7,9 +8,9 @@ import {
   convertToGeoDoughnutData,
   convertToAppUsageLoyaltyVsPeersData,
   convertToAppLoyaltyPeersLineData,
-} from "../../utils/ChartUtils";
-import { CHARTS } from "../../constants";
-import { aggregateData } from "../../utils/Utils";
+} from "../../../utils/ChartUtils";
+import { CHARTS } from "../../../constants";
+import { aggregateData } from "../../../utils/Utils";
 
 const SmartSummary = ({
   headcountData,
@@ -31,6 +32,7 @@ const SmartSummary = ({
     trafficDataLoading ||
     webTrafficGeoDataLoading ||
     multiCompanyAppDataLoading;
+
   //////////////////////////////////////////////
   //                                          //
   //                                          //
@@ -442,11 +444,44 @@ const SmartSummary = ({
   // console.log("Overall grade", overallScore);
 
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-row w-full justify-center space-x-12 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-25 border border-customGray-50 py-6 mt-4">
       <Grade
         overallScore={overallScore}
         netAssetQualityScore={netAssetQualityScore}
         netMomentumScore={netMomentumScore}
+        dataLoading={dataLoading}
+      />
+      <AISummary
+        companyName={companyName}
+        usersAssetQuality={usersAssetQuality}
+        usersToVisitsRatio={Math.round(usersToVisitsRatio)}
+        organicWebTrafficQuality={organicWebTrafficQuality}
+        ltmOrganicPercentage={Math.round(ltmOrganicPercentage)}
+        directWebTrafficQuality={directWebTrafficQuality}
+        ltmDirectPercentage={Math.round(ltmDirectPercentage)}
+        geographyWebTrafficQuality={geographyWebTrafficQuality}
+        largestShare={Math.round(largestShare)}
+        userTimeQuality={userTimeQuality}
+        ltmTimeUsage={Math.round(ltmTimeUsage)}
+        m6RetentionQuality={m6RetentionQuality}
+        ltmM6Retention={Math.round(ltmM6Retention)}
+        netAssetQualityScore={netAssetQualityScore}
+        m6RetentionMomentum={m6RetentionMomentum}
+        retentionYearPercentageChange={Math.round(
+          retentionYearPercentageChange
+        )}
+        headcountMomentum={headcountMomentum}
+        headcountYearPercentageChange={Math.round(
+          headcountYearPercentageChange
+        )}
+        trafficMomentum={trafficMomentum}
+        trafficYearPercentageChange={Math.round(trafficYearPercentageChange)}
+        appDownloadsMomentum={appDownloadsMomentum}
+        appYearPercentageChange={Math.round(appYearPercentageChange)}
+        userTimeMomentum={userTimeMomentum}
+        usersYearPercentageChange={Math.round(usersYearPercentageChange)}
+        netMomentumScore={netMomentumScore}
+        overallScore={overallScore}
         dataLoading={dataLoading}
       />
     </div>

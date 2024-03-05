@@ -292,8 +292,8 @@ export const systemPrompt = (
   usersYearPercentageChange,
   netMomentumScore,
   overallScore
-) => {
-  `For ${companyName}, your job is to list 5 strengths and 5 weaknesses for the company based on the following inputs:
+) =>
+  `For ${companyName}, your job is to list 5 strengths and 5 weaknesses for the company based on the following inputs. Note that there is no need to list any strengths/weaknesses on the overall grade, asset quality grade, or momentum grade. You only need to list strengths/weaknesses based on the bullet points listed. Professional investors, CEOs of Series A and B companies, and Private Equity investors will be reading your response.
     
     ###########
     Overall grade of the company (average of "Asset Quality Grade" and "Momentum"): ${overallScore} / 100
@@ -328,88 +328,87 @@ export const systemPrompt = (
 
     Your response should be a JSON object with the following format:
     {
-    strengths: [
-        {
-        header: String,
-        text: String,
-        },
-        ... 5 total objects, representing 5 strengths
-    ],
-    weaknesses: [
-        {
-        header: String,
-        text: String,
-        },
-        ... 5 total objects, representing 5 weaknesses
-    ],
-    }
-
-    Here is an example. Given an input: 
-
-    Overall Grade = 45 / 100
-
-    Asset Quality Grade = 75 / 100
-    1.	Good Mobile users (mobile web + app) represents ~60% of total users, suggesting strong engagement and better positioned for newer generations
-    2.	Good ~90% of website traffic comes from organic channels, suggesting strong brand recognition and customer loyalty
-    3.	Good ~50% of website traffic comes from direct (i.e., type in exact URL without passing through another source like Google search), suggesting strong customer loyalty
-    4.	Good ~50% of the website visits coming from outside of the US, suggesting a diverse customer base
-    5.	Neutral Average time per user each month of 15 minutes suggests an okay value prop
-    6.	Bad M6 app retention at 10% suggests low stickiness  
-
-    Momentum = 20 / 100
-    1.	Neutral M6 app usage retention from the time of first download has remained relatively flat at ~10%
-    2.	Neutral  Headcount has remained flat in the past year, suggesting StockX likely expects a bearish outlook
-    3.	Bad Last year’s website visits was lower than pre-CV years, suggesting the business is seeing either increased competition and/or suffering from adverse macro trends
-    4.	Bad Last year’s app downloads was lower than pre-CV years, suggesting the business is seeing either increased competition and/or suffering from adverse macro trends
-    5.	Bad Average Time per User has declined ~45%, from 27 min per month to 15 min
-
-    An acceptable output is:
-    {
         strengths: [
             {
-                header: "Strong Mobile Engagement",
-                text: "Approximately 60% of total users engage through mobile platforms, indicating robust engagement with newer generations and a responsive mobile experience.",
+            header: String,
+            text: String,
             },
-            {
-                header: "High Organic Website Traffic",
-                text: "Around 90% of website traffic comes from organic channels, indicating strong brand recognition and customer loyalty without heavy reliance on paid advertising.",
-            },
-            {
-                header: "Direct Website Traffic",
-                text: "Roughly 50% of website traffic originates directly, indicating strong customer loyalty and brand affinity, as users are directly typing in the URL rather than being referred from other sources.",
-            },
-            {
-                header: "Diverse International Customer Base",
-                text: "Half of the website visits come from outside the US, indicating a diverse and global customer base, which can provide stability and growth opportunities.",
-            },
-            {
-                header: "Market Position in Sneaker Resale",
-                text: "StockX operates in a growing market segment within sneaker resale and streetwear, with a strong brand presence and recognition among enthusiasts.",
-            },
+            ... 5 total objects, representing 5 strengths
         ],
         weaknesses: [
             {
-                header: "Low App Retention",
-                text: "App retention after six months is only at 10%, indicating challenges in retaining users over time and potentially lower customer lifetime value.",
+            header: String,
+            text: String,
             },
-            {
-                header: "Flat App Usage Retention",
-                text: "Despite efforts, app usage retention from the time of first download has remained relatively flat, suggesting difficulties in driving long-term engagement and usage.",
-            },
-            {
-                header: "Declining User Engagement",
-                text: "Average time per user has declined significantly by approximately 45%, indicating potential challenges in maintaining user interest and interaction with the platform.",
-            },
-            {
-                header: "Decreased Website and App Metrics",
-                text: "Both website visits and app downloads have declined compared to pre-COVID years, which may indicate increased competition or challenges in attracting and retaining users",
-            },
-            {
-                header: "Market Competitiveness",
-                text: "StockX operates in a competitive market with other online resale platforms and e-commerce giants, which could pose challenges to maintaining market share and profitability.",
-            },
+            ... 5 total objects, representing 5 weaknesses
         ],
     }
     
     Now return the JSON object and nothing else. Be extremely concise and to the point. Don't yap.`;
-};
+
+//     Here is an example. Given an input:
+//
+//     Overall Grade = 45 / 100
+//
+//     Asset Quality Grade = 75 / 100
+//     1.	Good Mobile users (mobile web + app) represents ~60% of total users, suggesting strong engagement and better positioned for newer generations
+//     2.	Good ~90% of website traffic comes from organic channels, suggesting strong brand recognition and customer loyalty
+//     3.	Good ~50% of website traffic comes from direct (i.e., type in exact URL without passing through another source like Google search), suggesting strong customer loyalty
+//     4.	Good ~50% of the website visits coming from outside of the US, suggesting a diverse customer base
+//     5.	Neutral Average time per user each month of 15 minutes suggests an okay value prop
+//     6.	Bad M6 app retention at 10% suggests low stickiness
+//
+//     Momentum = 20 / 100
+//     1.	Neutral M6 app usage retention from the time of first download has remained relatively flat at ~10%
+//     2.	Neutral  Headcount has remained flat in the past year, suggesting StockX likely expects a bearish outlook
+//     3.	Bad Last year’s website visits was lower than pre-CV years, suggesting the business is seeing either increased competition and/or suffering from adverse macro trends
+//     4.	Bad Last year’s app downloads was lower than pre-CV years, suggesting the business is seeing either increased competition and/or suffering from adverse macro trends
+//     5.	Bad Average Time per User has declined ~45%, from 27 min per month to 15 min
+//
+//     An acceptable output is:
+//     {
+//         strengths: [
+//             {
+//                 header: "Strong Mobile Engagement",
+//                 text: "Approximately 60% of total users engage through mobile platforms, indicating robust engagement with newer generations and a responsive mobile experience.",
+//             },
+//             {
+//                 header: "High Organic Website Traffic",
+//                 text: "Around 90% of website traffic comes from organic channels, indicating strong brand recognition and customer loyalty without heavy reliance on paid advertising.",
+//             },
+//             {
+//                 header: "Direct Website Traffic",
+//                 text: "Roughly 50% of website traffic originates directly, indicating strong customer loyalty and brand affinity, as users are directly typing in the URL rather than being referred from other sources.",
+//             },
+//             {
+//                 header: "Diverse International Customer Base",
+//                 text: "Half of the website visits come from outside the US, indicating a diverse and global customer base, which can provide stability and growth opportunities.",
+//             },
+//             {
+//                 header: "Market Position in Sneaker Resale",
+//                 text: "StockX operates in a growing market segment within sneaker resale and streetwear, with a strong brand presence and recognition among enthusiasts.",
+//             },
+//         ],
+//         weaknesses: [
+//             {
+//                 header: "Low App Retention",
+//                 text: "App retention after six months is only at 10%, indicating challenges in retaining users over time and potentially lower customer lifetime value.",
+//             },
+//             {
+//                 header: "Flat App Usage Retention",
+//                 text: "Despite efforts, app usage retention from the time of first download has remained relatively flat, suggesting difficulties in driving long-term engagement and usage.",
+//             },
+//             {
+//                 header: "Declining User Engagement",
+//                 text: "Average time per user has declined significantly by approximately 45%, indicating potential challenges in maintaining user interest and interaction with the platform.",
+//             },
+//             {
+//                 header: "Decreased Website and App Metrics",
+//                 text: "Both website visits and app downloads have declined compared to pre-COVID years, which may indicate increased competition or challenges in attracting and retaining users",
+//             },
+//             {
+//                 header: "Market Competitiveness",
+//                 text: "StockX operates in a competitive market with other online resale platforms and e-commerce giants, which could pose challenges to maintaining market share and profitability.",
+//             },
+//         ],
+//     }

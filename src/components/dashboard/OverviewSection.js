@@ -2,7 +2,7 @@ import React, { useDebugValue, useEffect, useState } from "react";
 import HeadCountSignal from "../signals/HeadCountSignal";
 import WebUsersSignal from "../signals/WebUsersSignal";
 import AppUsersSignal from "../signals/AppUsersSignal";
-import SmartSummary from "./SmartSummary";
+import SmartSummary from "./SmartSummary/SmartSummary";
 import { createContext } from "react";
 import {
   fromUnderscoreCase,
@@ -38,6 +38,7 @@ function OverviewSection({
 }) {
   const [showAboutPopup, setShowAboutPopup] = useState(false);
   const [showBusinessModelPopup, setShowBusinessModelPopup] = useState(false);
+  const [showSmartSummaryPopup, setShowSmartSummaryPopup] = useState(false);
   // headcountData comes sorted by date
   function formatCrunchbaseHeadcount(headcountRange) {
     // c_01001_05000 => 1001-5000
@@ -419,7 +420,42 @@ function OverviewSection({
         </div>
       </div>
       <div className="flex flex-col mt-6 ml-4">
-        <div className="text-lg font-semibold text-gray-800">Smart Summary</div>
+        <div className="flex flex-row items-center relative">
+          <p className="font-semibold text-lg text-customGray-800 mr-2 flex flex-row items-center">
+            <span>
+              <Image
+                src="/assets/sparkles.svg"
+                alt="info"
+                width={128}
+                height={128}
+                className="w-5 mr-2"
+              />
+            </span>
+            Smart Summary
+          </p>
+          <div
+            className="group cursor-pointer"
+            onMouseOver={() => setShowSmartSummaryPopup(true)}
+            onMouseOut={() => setShowSmartSummaryPopup(false)}
+          >
+            <Image
+              src="/assets/info.svg"
+              alt="info"
+              width={128}
+              height={128}
+              className="w-4"
+            />
+          </div>
+          <div
+            id="infoPopup"
+            className="absolute block bg-customGray-700 text-white rounded-lg px-4 py-2 w-96 bottom-24 md:bottom-8 text-xs z-50"
+            style={{
+              display: showSmartSummaryPopup ? "block" : "none",
+            }}
+          >
+            {INFO_HOVERS.SUMMARY.SMART_SUMMARY}
+          </div>
+        </div>
         <SmartSummary
           headcountData={headCountData}
           trafficData={webTrafficData}

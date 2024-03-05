@@ -358,6 +358,21 @@ export const INFO_HOVERS = {
         and tailored to investor preferences.
       </span>
     ),
+    SMART_SUMMARY: (
+      <span>
+        <strong>Field:</strong> AI-generated summary of the company that
+        includes a grading score, strengths, and weaknesses
+        <br />
+        <br />
+        <strong>Grade:</strong> Based on a variety of data including headcount,
+        web traffic, app data, and more, our AI calculates an asset quality and
+        momentum score. The overall grade is the average of those two scores.
+        <br />
+        <br />
+        <strong>Strengths/Weaknesses:</strong> A quick AI summary of the
+        strengths and weaknesses based on the data available.
+      </span>
+    ),
     EMPLOYEE_HEADCOUNT: (
       <span>
         <strong>Metric:</strong> Estimated number of full-time employees at the
