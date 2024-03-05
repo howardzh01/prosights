@@ -26,11 +26,17 @@ const Grade = ({
   //                                          //
   //////////////////////////////////////////////
   let usersAssetQuality = null;
+  let usersToVisitsRatio = null;
   let organicWebTrafficQuality = null;
+  let ltmOrganicPercentage = null;
   let directWebTrafficQuality = null;
+  let ltmDirectPercentage = null;
   let geographyWebTrafficQuality = null;
+  let largestShare = null;
   let userTimeQuality = null;
+  let ltmTimeUsage = null;
   let m6RetentionQuality = null;
+  let ltmM6Retention = null;
 
   // Calculation for users asset quality
   if (trafficData) {
@@ -59,7 +65,7 @@ const Grade = ({
           visitsData.chartData.datasets[0].data.length - 1
         ]
       ) || null;
-    const usersToVisitsRatio =
+    usersToVisitsRatio =
       ltmUserCount && ltmVisitsCount ? ltmUserCount / ltmVisitsCount : null;
 
     usersAssetQuality = usersToVisitsRatio
@@ -82,7 +88,7 @@ const Grade = ({
     const organicSocialIndex = visitsData.labels.indexOf("Organic Social");
     const directIndex = visitsData.labels.indexOf("Direct");
     const mailIndex = visitsData.labels.indexOf("Mail");
-    const ltmOrganicPercentage =
+    ltmOrganicPercentage =
       visitsData.datasets[0].data[organicSearchIndex] +
       visitsData.datasets[0].data[organicSocialIndex] +
       visitsData.datasets[0].data[mailIndex] +
@@ -100,7 +106,7 @@ const Grade = ({
     );
 
     const directIndex = visitsData.labels.indexOf("Direct");
-    const ltmDirectPercentage = visitsData.datasets[0].data[directIndex];
+    ltmDirectPercentage = visitsData.datasets[0].data[directIndex];
 
     directWebTrafficQuality =
       ltmDirectPercentage >= 50 ? 2 : ltmDirectPercentage <= 30 ? 0 : 1;
@@ -111,21 +117,20 @@ const Grade = ({
     const geoData = convertToGeoDoughnutData(webTrafficGeoData, "traffic");
 
     // Finding the largest %
-    const largestShare = Math.max(...geoData.datasets[0].data);
+    largestShare = Math.max(...geoData.datasets[0].data);
 
     geographyWebTrafficQuality =
       largestShare <= 50 ? 2 : largestShare >= 80 ? 0 : 1;
   }
 
-  if (multiCompanyAppData) {
+  if (multiCompanyAppData && multiCompanyAppData[companyName]) {
     const timeUsageData = convertToAppUsageLoyaltyVsPeersData(
       multiCompanyAppData,
       CHARTS.appLTMTimePerUser
     );
 
     const companyIndex = timeUsageData.labels.indexOf(companyName);
-    const ltmTimeUsage =
-      Number(timeUsageData.datasets[0].data[companyIndex]) || null;
+    ltmTimeUsage = Number(timeUsageData.datasets[0].data[companyIndex]) || null;
     userTimeQuality = ltmTimeUsage
       ? ltmTimeUsage >= 30
         ? 2
@@ -142,7 +147,7 @@ const Grade = ({
     );
 
     const companyIndex = retentionData.labels.indexOf(companyName);
-    const ltmM6Retention =
+    ltmM6Retention =
       Number(retentionData.datasets[0].data[companyIndex]) || null;
     m6RetentionQuality = ltmM6Retention
       ? ltmM6Retention >= 25
@@ -153,22 +158,12 @@ const Grade = ({
       : null;
   }
 
-  const netScore = [
-    usersAssetQuality,
-    organicWebTrafficQuality,
-    directWebTrafficQuality,
-    geographyWebTrafficQuality,
-    userTimeQuality,
-    m6RetentionQuality,
-  ].reduce((acc, val) => acc + val, 0);
-  const netScorePercentage = (netScore / 12) * 100;
-
-  console.log("usersAssetQuality", usersAssetQuality);
-  console.log("organicWebTrafficQuality", organicWebTrafficQuality);
-  console.log("directWebTrafficQuality", directWebTrafficQuality);
-  console.log("geographyWebTrafficQuality", geographyWebTrafficQuality);
-  console.log("userTimeQuality", userTimeQuality);
-  console.log("m6RetentionQuality", m6RetentionQuality);
+  // console.log("usersAssetQuality", usersAssetQuality);
+  // console.log("organicWebTrafficQuality", organicWebTrafficQuality);
+  // console.log("directWebTrafficQuality", directWebTrafficQuality);
+  // console.log("geographyWebTrafficQuality", geographyWebTrafficQuality);
+  // console.log("userTimeQuality", userTimeQuality);
+  // console.log("m6RetentionQuality", m6RetentionQuality);
 
   ///////////////////////////////////
   //                               //
@@ -178,13 +173,18 @@ const Grade = ({
   //                               //
   ///////////////////////////////////
   let m6RetentionMomentum = null;
+  let retentionYearPercentageChange = null;
   let headcountMomentum = null;
+  let headcountYearPercentageChange = null;
   let trafficMomentum = null;
+  let trafficYearPercentageChange = null;
   let appDownloadsMomentum = null;
+  let appYearPercentageChange = null;
   let userTimeMomentum = null;
+  let usersYearPercentageChange = null;
 
   // Calculation for M6 Retention Momentum
-  if (multiCompanyAppData) {
+  if (multiCompanyAppData && multiCompanyAppData[companyName]) {
     const m6RetentionData = convertToAppLoyaltyPeersLineData(
       multiCompanyAppData,
       "year",
@@ -207,7 +207,7 @@ const Grade = ({
         m6RetentionData.chartData.datasets[companyIndex].data.length - 2
       ]
     ) {
-      const yearPercentageChange =
+      retentionYearPercentageChange =
         (m6RetentionData.chartData.datasets[companyIndex].data[
           m6RetentionData.chartData.datasets[companyIndex].data.length - 1
         ] -
@@ -218,7 +218,11 @@ const Grade = ({
           m6RetentionData.chartData.datasets[companyIndex].data.length - 2
         ];
       m6RetentionMomentum =
-        yearPercentageChange >= 0.1 ? 2 : yearPercentageChange <= -0.1 ? 0 : 1;
+        retentionYearPercentageChange >= 0.1
+          ? 2
+          : retentionYearPercentageChange <= -0.1
+          ? 0
+          : 1;
     }
   }
 
@@ -239,7 +243,7 @@ const Grade = ({
         headcountYearData.datasets[0].data.length - 2
       ]
     ) {
-      const yearPercentageChange =
+      headcountYearPercentageChange =
         (headcountYearData.datasets[0].data[
           headcountYearData.datasets[0].data.length - 1
         ] -
@@ -251,7 +255,11 @@ const Grade = ({
         ];
 
       headcountMomentum =
-        yearPercentageChange >= 0.1 ? 2 : yearPercentageChange <= 0 ? 0 : 1;
+        headcountYearPercentageChange >= 0.1
+          ? 2
+          : headcountYearPercentageChange <= 0
+          ? 0
+          : 1;
     }
   }
 
@@ -273,7 +281,7 @@ const Grade = ({
       ] &&
       visitsData.chartData.datasets[0].data[index2019]
     ) {
-      const yearPercentageChange =
+      trafficYearPercentageChange =
         (visitsData.chartData.datasets[0].data[
           visitsData.chartData.datasets[0].data.length - 1
         ] -
@@ -281,12 +289,16 @@ const Grade = ({
         visitsData.chartData.datasets[0].data[index2019];
 
       trafficMomentum =
-        yearPercentageChange >= 1.5 ? 2 : yearPercentageChange <= 1 ? 0 : 1;
+        trafficYearPercentageChange >= 1.5
+          ? 2
+          : trafficYearPercentageChange <= 1
+          ? 0
+          : 1;
     }
   }
 
   // Calculation for app downloads momentum
-  if (multiCompanyAppData) {
+  if (multiCompanyAppData && multiCompanyAppData[companyName]) {
     const appDownloadsData = convertToGrowthChartData(
       aggregateData(
         multiCompanyAppData[companyName]["app_performance"],
@@ -308,7 +320,7 @@ const Grade = ({
       ] &&
       appDownloadsData.chartData.datasets[0].data[index2019]
     ) {
-      const yearPercentageChange =
+      appYearPercentageChange =
         (appDownloadsData.chartData.datasets[0].data[
           appDownloadsData.chartData.datasets[0].data.length - 1
         ] -
@@ -316,12 +328,16 @@ const Grade = ({
         appDownloadsData.chartData.datasets[0].data[index2019];
 
       appDownloadsMomentum =
-        yearPercentageChange >= 1.5 ? 2 : yearPercentageChange <= 1 ? 0 : 1;
+        appYearPercentageChange >= 1.5
+          ? 2
+          : appYearPercentageChange <= 1
+          ? 0
+          : 1;
     }
   }
 
   // Calculation for user time momentum
-  if (multiCompanyAppData) {
+  if (multiCompanyAppData && multiCompanyAppData[companyName]) {
     const timeUsageData = convertToAppLoyaltyPeersLineData(
       multiCompanyAppData,
       "year",
@@ -343,7 +359,7 @@ const Grade = ({
         timeUsageData.chartData.datasets[companyIndex].rawData.length - 2
       ]
     ) {
-      const yearPercentageChange =
+      usersYearPercentageChange =
         (timeUsageData.chartData.datasets[companyIndex].rawData[
           timeUsageData.chartData.datasets[companyIndex].rawData.length - 1
         ] -
@@ -355,17 +371,105 @@ const Grade = ({
         ];
 
       userTimeMomentum =
-        yearPercentageChange >= 0.1 ? 2 : yearPercentageChange <= 0 ? 0 : 1;
+        usersYearPercentageChange >= 0.1
+          ? 2
+          : usersYearPercentageChange <= 0
+          ? 0
+          : 1;
     }
   }
 
-  console.log("m6RetentionMomentum", m6RetentionMomentum);
-  console.log("headcountMomentum", headcountMomentum);
-  console.log("trafficMomentum", trafficMomentum);
-  console.log("appDownloadsMomentum", appDownloadsMomentum);
-  console.log("userTimeMomentum", userTimeMomentum);
+  // console.log("m6RetentionMomentum", m6RetentionMomentum);
+  // console.log("headcountMomentum", headcountMomentum);
+  // console.log("trafficMomentum", trafficMomentum);
+  // console.log("appDownloadsMomentum", appDownloadsMomentum);
+  // console.log("userTimeMomentum", userTimeMomentum);
 
-  return <div></div>;
+  /////////////////////////////////////
+  //                                 //
+  //                                 //
+  // ALL CALCULATIONS FOR NET SCORES //
+  //                                 //
+  //                                 //
+  /////////////////////////////////////
+  // Calculating net asset quality score
+  const qualityScores = [
+    usersAssetQuality,
+    organicWebTrafficQuality,
+    directWebTrafficQuality,
+    geographyWebTrafficQuality,
+    userTimeQuality,
+    m6RetentionQuality,
+  ];
+
+  const validScores = qualityScores.filter((val) => val !== null);
+  const netAssetQualityScore =
+    (validScores.reduce((acc, val) => acc + val, 0) /
+      (2 * validScores.length)) *
+    100;
+
+  // Calculating net momentum score
+  const momentumScores = [
+    m6RetentionMomentum,
+    headcountMomentum,
+    trafficMomentum,
+    appDownloadsMomentum,
+    userTimeMomentum,
+  ];
+  const validMomentumScores = momentumScores.filter((val) => val !== null);
+  const netMomentumScore =
+    (validMomentumScores.reduce((acc, val) => acc + val, 0) /
+      (2 * validMomentumScores.length)) *
+    100;
+
+  const overallScore = (netAssetQualityScore + netMomentumScore) / 2;
+
+  // console.log("netAssetQualityScore", netAssetQualityScore);
+  // console.log("netMomentumScore", netMomentumScore);
+  // console.log("Overall grade", overallScore);
+
+  const getColor = (score) => {
+    if (score >= 60) {
+      return "text-green-500";
+    } else if (score >= 30) {
+      return "text-yellow-500";
+    } else {
+      return "text-red-500";
+    }
+  };
+
+  return (
+    <div className="flex flex-col space-y-4 mt-4">
+      <div className="flex flex-col">
+        <p
+          className={`text-3xl font-bold ${getColor(Math.round(overallScore))}`}
+        >
+          {Math.round(overallScore)}%
+        </p>
+        <p className="text-sm text-customGray-500">Overall Grade</p>
+      </div>
+      <div className="flex flex-col">
+        <p
+          className={`text-3xl font-bold ${getColor(
+            Math.round(netAssetQualityScore)
+          )}`}
+        >
+          {Math.round(netAssetQualityScore)}%
+        </p>
+        <p className="text-sm text-customGray-500">Asset Quality</p>
+      </div>
+      <div className="flex flex-col">
+        <p
+          className={`text-3xl font-bold ${getColor(
+            Math.round(netMomentumScore)
+          )}`}
+        >
+          {Math.round(netMomentumScore)}%
+        </p>
+        <p className="text-sm text-customGray-500">Momentum</p>
+      </div>
+    </div>
+  );
 };
 
 export default Grade;
