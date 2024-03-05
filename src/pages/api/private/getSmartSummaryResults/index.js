@@ -12,7 +12,7 @@ const FORCE_REFETCH = false; // FOR TESTING
 const getSmartSummaryResults = async (
   companyName,
   usersAssetQuality,
-  usersToVisitsRatio,
+  mobilePercentage,
   organicWebTrafficQuality,
   ltmOrganicPercentage,
   directWebTrafficQuality,
@@ -47,7 +47,7 @@ const getSmartSummaryResults = async (
         content: systemPrompt(
           companyName,
           usersAssetQuality,
-          usersToVisitsRatio,
+          mobilePercentage,
           organicWebTrafficQuality,
           ltmOrganicPercentage,
           directWebTrafficQuality,
@@ -95,7 +95,7 @@ const getSmartSummaryResults = async (
 const retrieveAndUpload = async (
   companyName,
   usersAssetQuality,
-  usersToVisitsRatio,
+  mobilePercentage,
   organicWebTrafficQuality,
   ltmOrganicPercentage,
   directWebTrafficQuality,
@@ -125,7 +125,7 @@ const retrieveAndUpload = async (
     (await getSmartSummaryResults(
       companyName,
       usersAssetQuality,
-      usersToVisitsRatio,
+      mobilePercentage,
       organicWebTrafficQuality,
       ltmOrganicPercentage,
       directWebTrafficQuality,
@@ -171,7 +171,7 @@ const handler = async (req) => {
   const {
     companyName,
     usersAssetQuality,
-    usersToVisitsRatio,
+    mobilePercentage,
     organicWebTrafficQuality,
     ltmOrganicPercentage,
     directWebTrafficQuality,
@@ -221,7 +221,7 @@ const handler = async (req) => {
     const content = await retrieveAndUpload(
       companyName,
       usersAssetQuality,
-      usersToVisitsRatio,
+      mobilePercentage,
       organicWebTrafficQuality,
       ltmOrganicPercentage,
       directWebTrafficQuality,
@@ -262,7 +262,7 @@ const handler = async (req) => {
     const content = await retrieveAndUpload(
       companyName,
       usersAssetQuality,
-      usersToVisitsRatio,
+      mobilePercentage,
       organicWebTrafficQuality,
       ltmOrganicPercentage,
       directWebTrafficQuality,

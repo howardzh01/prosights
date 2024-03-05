@@ -1,7 +1,7 @@
 // Prompts for each bullet point in Asset Quality Grade
 export const userAssetsQualityPrompt = (
   usersAssetQuality,
-  usersToVisitsRatio
+  mobilePercentage
 ) => {
   if (usersAssetQuality === null) {
     return `N/A`;
@@ -13,9 +13,7 @@ export const userAssetsQualityPrompt = (
       : usersAssetQuality === 1
       ? "Neutral"
       : "Bad"
-  }) Mobile users (mobile web + app) represents ~${
-    usersToVisitsRatio * 100
-  }% of total users, suggesting ${
+  }) Mobile visits represents ~${mobilePercentage}% of total visits, suggesting ${
     usersAssetQuality === 2 ? "strong" : usersAssetQuality === 1 ? "ok" : "bad"
   } engagement and ${
     usersAssetQuality === 2
@@ -268,7 +266,7 @@ export const userTimeMomentumPrompt = (
 export const systemPrompt = (
   companyName,
   usersAssetQuality,
-  usersToVisitsRatio,
+  mobilePercentage,
   organicWebTrafficQuality,
   ltmOrganicPercentage,
   directWebTrafficQuality,
@@ -299,7 +297,7 @@ export const systemPrompt = (
     Overall grade of the company (average of "Asset Quality Grade" and "Momentum"): ${overallScore} / 100
 
     Asset Quality Grade = ${netAssetQualityScore} / 100
-    1. ${userAssetsQualityPrompt(usersAssetQuality, usersToVisitsRatio)}
+    1. ${userAssetsQualityPrompt(usersAssetQuality, mobilePercentage)}
     2. ${organicWebTrafficQualityPrompt(
       organicWebTrafficQuality,
       ltmOrganicPercentage

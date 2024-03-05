@@ -9,7 +9,7 @@ Params format, which is almost the same as what is fed into the API call (just d
 {
     companyName,
     usersAssetQuality,
-    usersToVisitsRatio,
+    mobilePercentage,
     organicWebTrafficQuality,
     ltmOrganicPercentage,
     directWebTrafficQuality,

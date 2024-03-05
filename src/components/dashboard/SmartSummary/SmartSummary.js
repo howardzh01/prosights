@@ -41,7 +41,7 @@ const SmartSummary = ({
   //                                          //
   //////////////////////////////////////////////
   let usersAssetQuality = null;
-  let usersToVisitsRatio = null;
+  let mobilePercentage = null;
   let organicWebTrafficQuality = null;
   let ltmOrganicPercentage = null;
   let directWebTrafficQuality = null;
@@ -55,41 +55,16 @@ const SmartSummary = ({
 
   // Calculation for users asset quality
   if (trafficData) {
-    // Calculation for Users to Visits Ratio
-    const visitsData = convertToGrowthChartData(
-      aggregateData(trafficData, "visits", "sum", "year"),
-      "Visits",
-      cutOffDate,
-      "K"
+    // Calculation for percent that are mobile
+    const visitsData = convertToChannelDoughnutData(
+      trafficData,
+      "traffic_by_device"
     );
-    const usersData = convertToGrowthChartData(
-      aggregateData(trafficData, "users", "sum", "year"),
-      "Users",
-      cutOffDate,
-      "K"
-    );
-    const ltmUserCount =
-      Number(
-        usersData.chartData.datasets[0].data[
-          usersData.chartData.datasets[0].data.length - 1
-        ]
-      ) || null;
-    const ltmVisitsCount =
-      Number(
-        visitsData.chartData.datasets[0].data[
-          visitsData.chartData.datasets[0].data.length - 1
-        ]
-      ) || null;
-    usersToVisitsRatio =
-      ltmUserCount && ltmVisitsCount ? ltmUserCount / ltmVisitsCount : null;
 
-    usersAssetQuality = usersToVisitsRatio
-      ? usersToVisitsRatio >= 0.8
-        ? 2
-        : usersToVisitsRatio <= 0.5
-        ? 0
-        : 1
-      : null;
+    const mobileIndex = visitsData.labels.indexOf("Mobile Visits");
+    mobilePercentage = visitsData.datasets[0].data[mobileIndex];
+    usersAssetQuality =
+      mobilePercentage >= 40 ? 2 : mobilePercentage <= 20 ? 0 : 1;
   }
 
   // Calculation for organic web traffic quality
@@ -454,7 +429,7 @@ const SmartSummary = ({
       <AISummary
         companyName={companyName}
         usersAssetQuality={usersAssetQuality}
-        usersToVisitsRatio={Math.round(usersToVisitsRatio)}
+        mobilePercentage={Math.round(mobilePercentage)}
         organicWebTrafficQuality={organicWebTrafficQuality}
         ltmOrganicPercentage={Math.round(ltmOrganicPercentage)}
         directWebTrafficQuality={directWebTrafficQuality}
