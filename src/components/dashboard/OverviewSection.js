@@ -418,7 +418,8 @@ function OverviewSection({
           </div>
         </div>
       </div>
-      <div className="flex flex-row mt-6">
+      <div className="flex flex-row mt-6 ml-4">
+        <div className="text-lg font-semibold text-gray-800">Smart Summary</div>
         <AssetQualityGrade
           trafficData={webTrafficData}
           webTrafficGeoData={webTrafficGeoData}

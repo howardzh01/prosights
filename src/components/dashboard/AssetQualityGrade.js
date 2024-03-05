@@ -18,7 +18,7 @@ const AssetQualityGrade = ({
   let usersAssetQuality = null;
   let organicWebTrafficQuality = null;
   let directWebTrafficQuality = null;
-  let internationalWebTrafficQuality = null;
+  let geographyWebTrafficQuality = null;
   let userTimeQuality = null;
   let m6RetentionQuality = null;
 
@@ -70,9 +70,13 @@ const AssetQualityGrade = ({
 
     const organicSearchIndex = visitsData.labels.indexOf("Organic Search");
     const organicSocialIndex = visitsData.labels.indexOf("Organic Social");
+    const directIndex = visitsData.labels.indexOf("Direct");
+    const mailIndex = visitsData.labels.indexOf("Mail");
     const ltmOrganicPercentage =
       visitsData.datasets[0].data[organicSearchIndex] +
-      visitsData.datasets[0].data[organicSocialIndex];
+      visitsData.datasets[0].data[organicSocialIndex] +
+      visitsData.datasets[0].data[mailIndex] +
+      visitsData.datasets[0].data[directIndex];
 
     organicWebTrafficQuality =
       ltmOrganicPercentage >= 80 ? 2 : ltmOrganicPercentage <= 50 ? 0 : 1;
@@ -92,20 +96,15 @@ const AssetQualityGrade = ({
       ltmDirectPercentage >= 50 ? 2 : ltmDirectPercentage <= 30 ? 0 : 1;
   }
 
-  // Calculation for outside US web traffic quality
+  // Calculation for country web traffic quality
   if (webTrafficGeoData) {
     const geoData = convertToGeoDoughnutData(webTrafficGeoData, "traffic");
 
-    const northAmericaIndex = geoData.labels.indexOf("North America");
-    const ltmOutsideNorthAmericaPercentage =
-      1 - geoData.datasets[0].data[northAmericaIndex];
+    // Finding the largest %
+    const largestShare = Math.max(...geoData.datasets[0].data);
 
-    internationalWebTrafficQuality =
-      ltmOutsideNorthAmericaPercentage >= 50
-        ? 2
-        : ltmOutsideNorthAmericaPercentage <= 20
-        ? 0
-        : 1;
+    geographyWebTrafficQuality =
+      largestShare <= 50 ? 2 : largestShare >= 80 ? 0 : 1;
   }
 
   if (multiCompanyAppData) {
@@ -118,7 +117,7 @@ const AssetQualityGrade = ({
     const ltmTimeUsage =
       Number(timeUsageData.datasets[0].data[companyIndex]) || null;
     userTimeQuality = ltmTimeUsage
-      ? ltmTimeUsage >= 25
+      ? ltmTimeUsage >= 30
         ? 2
         : ltmTimeUsage <= 10
         ? 0
@@ -144,10 +143,20 @@ const AssetQualityGrade = ({
       : null;
   }
 
+  const netScore = [
+    usersAssetQuality,
+    organicWebTrafficQuality,
+    directWebTrafficQuality,
+    geographyWebTrafficQuality,
+    userTimeQuality,
+    m6RetentionQuality,
+  ].reduce((acc, val) => acc + val, 0);
+  const netScorePercentage = (netScore / 12) * 100;
+
   console.log("usersAssetQuality", usersAssetQuality);
   console.log("organicWebTrafficQuality", organicWebTrafficQuality);
   console.log("directWebTrafficQuality", directWebTrafficQuality);
-  console.log("internationalWebTrafficQuality", internationalWebTrafficQuality);
+  console.log("geographyWebTrafficQuality", geographyWebTrafficQuality);
   console.log("userTimeQuality", userTimeQuality);
   console.log("m6RetentionQuality", m6RetentionQuality);
 
