@@ -17,6 +17,29 @@ import {
   TRAFFIC_BY_CHANNEL_COLORS,
 } from "../constants";
 
+export function convertToChartData(data, startCutoff) {
+  // input: {time_key: output_key}
+  let filteredData = Object.fromEntries(
+    Object.entries(data).filter(
+      (data) => new Date(data[0]) >= new Date(startCutoff)
+    )
+  );
+  return {
+    labels: Object.keys(filteredData),
+    datasets: [
+      {
+        // label: "Total Employee (#)",
+        data: Object.values(filteredData),
+        backgroundColor: "rgba(0, 154, 255, 1)",
+        // borderColor: "rgba(75, 192, 192, 1)",
+        borderWidth: 0,
+        // barThickness: 24,
+        barPercentage: 0.7,
+      },
+    ],
+  };
+}
+
 // Below are API data converters
 export function convertToHeadcountChartData(
   data,

@@ -5,40 +5,19 @@ import GenericBarAndTable from "../charts/templates/GenericBar";
 import { CHARTS } from "../../constants";
 import { formatMoney } from "../../utils/Utils";
 import { INFO_HOVERS } from "../../constants";
+import { convertToChartData } from "../../utils/ChartUtils";
 
 function HeadCountSignal({ headCountData, startCutoff = new Date("2019") }) {
   const [timescale, setTimescale] = useState("year");
 
   if (!headCountData) return null;
 
-  function convertToChartData(data) {
-    // input: {time_key: output_key}
-    let filteredData = Object.fromEntries(
-      Object.entries(data).filter(
-        (data) => new Date(data[0]) >= new Date(startCutoff)
-      )
-    );
-    return {
-      labels: Object.keys(filteredData),
-      datasets: [
-        {
-          // label: "Total Employee (#)",
-          data: Object.values(filteredData),
-          backgroundColor: "rgba(0, 154, 255, 1)",
-          // borderColor: "rgba(75, 192, 192, 1)",
-          borderWidth: 0,
-          // barThickness: 24,
-          barPercentage: 0.7,
-        },
-      ],
-    };
-  }
-
   const yearHeadCountGraph = (
     <GenericBarAndTable
       data={{
         chartData: convertToChartData(
-          aggregateData(headCountData, "headcount", "last", timescale)
+          aggregateData(headCountData, "headcount", "last", timescale),
+          startCutoff
         ),
       }}
       title={"Headcount"}

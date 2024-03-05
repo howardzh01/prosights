@@ -2,7 +2,7 @@ import React, { useDebugValue, useEffect, useState } from "react";
 import HeadCountSignal from "../signals/HeadCountSignal";
 import WebUsersSignal from "../signals/WebUsersSignal";
 import AppUsersSignal from "../signals/AppUsersSignal";
-import AssetQualityGrade from "../dashboard/AssetQualityGrade";
+import Grade from "./Grade";
 import { createContext } from "react";
 import {
   fromUnderscoreCase,
@@ -420,7 +420,8 @@ function OverviewSection({
       </div>
       <div className="flex flex-row mt-6 ml-4">
         <div className="text-lg font-semibold text-gray-800">Smart Summary</div>
-        <AssetQualityGrade
+        <Grade
+          headcountData={headCountData}
           trafficData={webTrafficData}
           webTrafficGeoData={webTrafficGeoData}
           multiCompanyAppData={multiCompanyAppData}
