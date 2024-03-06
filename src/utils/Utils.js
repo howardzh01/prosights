@@ -724,3 +724,29 @@ export function sumRelatedTableRows(
     return acc;
   }, []);
 }
+
+export async function fetchCompetitorDic(competitorsUrls) {
+  try {
+    // Map each URL to a promise that fetches the search results and gets the top result
+    const searchPromises = competitorsUrls.map(async (url) => {
+      const response = await fetch("/api/private/getSearchResults", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ query: url }),
+      });
+      const results = await response.json();
+      // Assuming the results are sorted in some order where the first result is the "top" one
+      return results[0]; // Return the top result for each competitor URL
+    });
+
+    // Wait for all promises to resolve
+    const topCompetitors = await Promise.all(searchPromises);
+    // Filter out any undefined or null results in case some searches don't return results
+    return topCompetitors.filter(Boolean);
+  } catch (error) {
+    console.error("Error fetching top competitors:", error);
+    return []; // Return an empty array in case of error
+  }
+}

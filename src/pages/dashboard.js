@@ -28,7 +28,7 @@ import {
   downloadPDF,
   downloadExcelBuilder,
 } from "../utils/FrontendDownloadUtils";
-import { fetchCompanyList } from "../utils/BackendUtils";
+import { fetchCompetitorDic } from "../utils/Utils";
 
 export const SelectedChartContext = createContext();
 export const ChartDataContext = createContext();
@@ -208,25 +208,27 @@ function Dashboard({
     }
   }, []);
 
-  // useEffect(() => {
-  //   const competitorsMap = {
-  //     "stockx.com": ["grailed.com"],
-  //     "tcs.com": ["amazon.com"],
-  //     stockx: ["goat", "grailed"],
-  //     goat: ["stockx", "grailed"],
-  //     grailed: ["stockx", "goat"],
-  //     tinder: ["bumble"],
-  //     bumble: ["tinder"],
-  //   };
-  //   const competitors = competitorsMap?.[companyDic?.url];
-  //   if (competitors) {
-  //     setCompanyCompetitors(
-  //       competitors.map((url) => companyDirectory.findCompanyByUrl(url))
-  //     );
-  //   } else {
-  //     setCompanyCompetitors([]);
-  //   }
-  // }, [companyDic]);
+  useEffect(() => {
+    const competitorsMap = {
+      "ticketmaster.com": ["stubhub.com", "seatgeek.com", "feverup.com"],
+      "stockx.com": ["grailed.com"],
+      "openai.com": ["grailed.com"],
+      "tcs.com": ["amazon.com"],
+      stockx: ["goat", "grailed"],
+      goat: ["stockx", "grailed"],
+      grailed: ["stockx", "goat"],
+      tinder: ["bumble"],
+      bumble: ["tinder"],
+    };
+    const competitors = competitorsMap?.[companyDic?.url];
+    if (competitors) {
+      fetchCompetitorDic(competitors).then((competitorDic) => {
+        setCompanyCompetitors(competitorDic);
+      });
+    } else {
+      setCompanyCompetitors([]);
+    }
+  }, [companyDic]);
 
   useEffect(() => {
     if (!user) return;
