@@ -210,6 +210,7 @@ function Dashboard({
 
   useEffect(() => {
     const competitorsMap = {
+      "seatgeek.com": ["ticketmaster.com", "stubhub.com", "vividseats.com"],
       "ticketmaster.com": ["stubhub.com", "seatgeek.com", "feverup.com"],
       "stockx.com": ["grailed.com"],
       "openai.com": ["grailed.com"],
