@@ -126,7 +126,7 @@ const DashboardNavBar = ({
               ref={downloadDropdownRef} // Set the ref here
             >
               <div className="py-1" role="none">
-                {/* <button
+                <button
                   className="hover:cursor-pointer hover:text-primary px-4 py-2 text-sm"
                   role="menuitem"
                   tabIndex="-1"
@@ -137,7 +137,7 @@ const DashboardNavBar = ({
                   }
                 >
                   Download PDF
-                </button> */}
+                </button>
                 <button
                   className="hover:cursor-pointer hover:text-primary px-4 py-2 text-sm"
                   role="menuitem"
