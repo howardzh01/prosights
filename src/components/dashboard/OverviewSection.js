@@ -419,7 +419,7 @@ function OverviewSection({
           </div>
         </div>
       </div>
-      <div className="flex flex-col mt-6 ml-4">
+      {/* <div className="flex flex-col mt-6 ml-4">
         <div className="flex flex-row items-center relative">
           <p className="font-semibold text-lg text-customGray-800 mr-2 flex flex-row items-center">
             Market & Competitive Landscape
@@ -437,15 +437,6 @@ function OverviewSection({
               className="w-4"
             />
           </div>
-          {/* <div
-            id="infoPopup"
-            className="absolute block bg-customGray-700 text-white rounded-lg px-4 py-2 w-96 bottom-24 md:bottom-8 text-xs z-50"
-            style={{
-              display: showSmartSummaryPopup ? "block" : "none",
-            }}
-          >
-            {INFO_HOVERS.SUMMARY.SMART_SUMMARY}
-          </div> */}
         </div>
         <div className="w-full px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-25 border border-customGray-50 h-full mt-2">
           <Image
@@ -475,15 +466,6 @@ function OverviewSection({
               className="w-4"
             />
           </div>
-          {/* <div
-            id="infoPopup"
-            className="absolute block bg-customGray-700 text-white rounded-lg px-4 py-2 w-96 bottom-24 md:bottom-8 text-xs z-50"
-            style={{
-              display: showSmartSummaryPopup ? "block" : "none",
-            }}
-          >
-            {INFO_HOVERS.SUMMARY.SMART_SUMMARY}
-          </div> */}
         </div>
         <div className="w-full px-6 py-4 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.03),0_4px_6px_rgba(34,42,53,0.02),0_24px_68px_rgba(47,48,55,0.03),0_2px_3px_rgba(0,0,0,0.02)] bg-customGray-25 border border-customGray-50 h-full mt-2">
           <Image
@@ -494,7 +476,7 @@ function OverviewSection({
             className="w-full"
           />
         </div>
-      </div>
+      </div> */}
       <div className="flex flex-col mt-6 ml-4">
         <div className="flex flex-row items-center relative">
           <p className="font-semibold text-lg text-customGray-800 mr-2 flex flex-row items-center">
@@ -532,20 +514,20 @@ function OverviewSection({
             {INFO_HOVERS.SUMMARY.SMART_SUMMARY}
           </div>
         </div>
-        {/* <SmartSummary
+        <SmartSummary
           headcountData={headCountData}
           trafficData={webTrafficData}
           webTrafficGeoData={webTrafficGeoData}
           multiCompanyAppData={multiCompanyAppData}
           companyName={companyName}
-        /> */}
-        <Image
+        />
+        {/* <Image
           src="/assets/smartSummary.svg"
           alt="info"
           width={1024}
           height={512}
           className="w-full mt-2"
-        />
+        /> */}
       </div>
       {/* Funding and M&A Tables */}
       {/* <div className="flex mt-6 ml-4 justify-between w-full">
