@@ -122,7 +122,12 @@ const AISummary = (params) => {
           </div> */}
         </div>
         {params.dataLoading || summaryLoading ? (
-          <Skeleton className="w-full h-72 rounded-lg bg-customGray-50" />
+          <div className="flex flex-col">
+            <p className="text-sm text-customGray-300 italic mb-3">
+              This can take up to a minute to load...
+            </p>
+            <Skeleton className="w-full h-64 rounded-lg bg-customGray-50" />
+          </div>
         ) : (
           <ul className="list-disc pl-5 space-y-2">
             {strengths.map((strength) => (
@@ -163,7 +168,12 @@ const AISummary = (params) => {
           </div> */}
         </div>
         {params.dataLoading || summaryLoading ? (
-          <Skeleton className="w-full h-72 rounded-lg bg-customGray-50" />
+          <div className="flex flex-col">
+            <p className="text-sm text-customGray-300 italic mb-3">
+              This can take up to a minute to load...
+            </p>
+            <Skeleton className="w-full h-64 rounded-lg bg-customGray-50" />
+          </div>
         ) : (
           <ul className="list-disc pl-5 space-y-2">
             {weaknesses.map((weakness) => (

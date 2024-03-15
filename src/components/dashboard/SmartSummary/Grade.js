@@ -51,7 +51,7 @@ const Grade = ({
         <Skeleton className="w-full h-72 mt-4 rounded-lg bg-customGray-50" />
       ) : (
         <div className="flex flex-col space-y-6 mt-4">
-          <div className="flex flex-col">
+          {/* <div className="flex flex-col">
             <p
               className={`text-3xl font-bold ${getColor(
                 Math.round(overallScore)
@@ -74,7 +74,7 @@ const Grade = ({
             <p className="text-sm font-light text-customGray-500">
               Asset Quality
             </p>
-          </div>
+          </div> */}
           <div className="flex flex-col">
             <p
               className={`text-3xl font-bold ${getColor(
