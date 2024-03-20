@@ -147,7 +147,7 @@ function AppUsageSection({
           {companyCompetitors.length === 0 ? (
             <div className="w-full h-80 rounded-lg bg-transparent flex items-center justify-center">
               <p className="text-2xl font-medium text-customGray-150">
-                Add Competitors to Compare
+                Add Competitors on Top Right to Compare
               </p>
             </div>
           ) : multiCompanyAppData === undefined ||
