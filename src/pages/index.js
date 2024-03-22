@@ -108,17 +108,16 @@ function App() {
                 </p>
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 md:mb-12 text-center">
-                Research Platform Built <br className="hidden md:flex" /> by{" "}
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#009AFF] to-[#B84CEB]">
-                  Private Equity
+                  {" "}
+                  AI Enterprise Search <br className="hidden md:flex" />
                 </span>{" "}
-                Investors.
+                Built for Investors.
               </h1>
-              <p className="mb-16 md:mb-20 text-sm md:text-lg lg:text-xl font-light md:max-w-3xl lg:max-w-5xl text-center leading-relaxed md:leading-relaxed">
-                Aggregate the best alternative data solutions to support the
-                entire deal process: origination, diligence, and portfolio
-                monitoring. Our interface gives quicker, better insights that
-                are easily shared.
+              <p className="mb-16 md:mb-20 text-sm md:text-lg lg:text-xl font-light md:max-w-2xl lg:max-w-4xl text-center leading-relaxed md:leading-relaxed">
+                Aggregate internal and external data into a consistent dashboard
+                view, making it easy to benchmark companies in a standardized
+                format.
               </p>
               <div className="flex items-center">
                 <a
