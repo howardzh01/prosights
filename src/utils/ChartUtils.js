@@ -342,7 +342,7 @@ export function convertToChannelChartData(
       data: Object.values(percentAggData[key])
         .slice(cutoffIndex)
         .map(
-          (x) => (x ? Number(roundPeNumbers(x)) : null) // this will convert null to 0
+          (x) => (x ? Number(roundPeNumbers(x, { removeComma: true })) : null) // this will convert null to 0
         ),
       rawData: Object.values(aggData[key]).slice(cutoffIndex),
       backgroundColor: trafficByChannelColors?.[key], // If undefined, ChartJS will use default colors
@@ -421,7 +421,7 @@ export function convertToGeoMarketShareData(
     labels: Object.keys(firstChannelData),
     datasets: Object.keys(aggData).map((key) => ({
       data: Object.values(percentAggData[key]).map(
-        (x) => (x ? Number(roundPeNumbers(x)) : null) // this will convert null to 0
+        (x) => (x ? Number(roundPeNumbers(x, { removeComma: true })) : null) // this will convert null to 0
       ),
       rawData: Object.values(aggData[key]),
       borderWidth: 1,
@@ -482,7 +482,7 @@ export function convertToLineChartData(
     labels: Object.keys(firstCompanyData).slice(cutoffIndex),
     datasets: Object.keys(aggData).map((key) => ({
       data: Object.values(transformedAggData[key]).map(
-        (x) => (x ? Number(roundPeNumbers(x)) : null) // this will convert null to 0
+        (x) => (x ? Number(roundPeNumbers(x, { removeComma: true })) : null) // this will convert null to 0
       ),
       rawData: Object.values(aggData[key]).slice(cutoffIndex),
       borderWidth: 2,
@@ -522,7 +522,7 @@ export function convertToMarketShareData(
     labels: Object.keys(firstChannelData),
     datasets: Object.keys(aggData).map((key) => ({
       data: Object.values(percentAggData[key]).map(
-        (x) => (x ? Number(roundPeNumbers(x)) : null) // this will convert null to 0
+        (x) => (x ? Number(roundPeNumbers(x, { removeComma: true })) : null) // this will convert null to 0
       ),
       rawData: Object.values(aggData[key]),
       borderWidth: 1,
@@ -741,7 +741,7 @@ export function convertToAppUsageMarketShareVsPeersData(
     labels: Object.keys(firstChannelData),
     datasets: Object.keys(aggData).map((key) => ({
       data: Object.values(percentAggData[key]).map(
-        (x) => (x ? Number(roundPeNumbers(x)) : null) // this will convert null to 0
+        (x) => (x ? Number(roundPeNumbers(x, { removeComma: true })) : null) // this will convert null to 0
       ),
       rawData: Object.values(aggData[key]),
       borderWidth: 1,
@@ -779,11 +779,14 @@ export function convertToAppUsageLoyaltyVsPeersData(
   date12MonthsAgo.setMonth(date12MonthsAgo.getUTCMonth() - 13);
   const companyAverages = Object.keys(processedMultiCompanyData).reduce(
     (acc, company) => {
-      acc[company] = roundPeNumbers(
-        calculateMean(
-          Object.entries(processedMultiCompanyData[company])
-            .filter(([time, data]) => new Date(time) >= date12MonthsAgo)
-            .map(([time, data]) => data)
+      acc[company] = Number(
+        roundPeNumbers(
+          calculateMean(
+            Object.entries(processedMultiCompanyData[company])
+              .filter(([time, data]) => new Date(time) >= date12MonthsAgo)
+              .map(([time, data]) => data)
+          ),
+          { removeComma: true }
         )
       );
       return acc;

@@ -213,7 +213,7 @@ function Dashboard({
       "seatgeek.com": ["ticketmaster.com", "stubhub.com", "vividseats.com"],
       "ticketmaster.com": ["stubhub.com", "seatgeek.com", "feverup.com"],
       "stockx.com": ["grailed.com"],
-      "openai.com": ["grailed.com"],
+      "openai.com": ["anthropic.com", "deepmind.com"],
       "tcs.com": ["amazon.com"],
       stockx: ["goat", "grailed"],
       goat: ["stockx", "grailed"],

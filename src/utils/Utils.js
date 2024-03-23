@@ -395,7 +395,10 @@ export function formatMoney(amount) {
   return result % 1 === 0 ? result.toFixed(0) + unit : result.toFixed(1) + unit;
 }
 
-export function roundPeNumbers(amount, decimalZero = true) {
+export function roundPeNumbers(
+  amount,
+  { decimalZero = true, removeComma = false } = {}
+) {
   // make numbers 1 decimal if <10 else integers
   if (decimalZero && amount == 0) return "0.0"; // == because no type conversion
   if (!amount) {
@@ -413,7 +416,7 @@ export function roundPeNumbers(amount, decimalZero = true) {
     result = Number(absAmount).toFixed(0);
   }
   // Add commas as thousand separators
-  if (Number(result) >= 1000) {
+  if (Number(result) >= 1000 && !removeComma) {
     result = Number(result).toLocaleString();
   }
   // Prepend a minus sign if the original amount was negative

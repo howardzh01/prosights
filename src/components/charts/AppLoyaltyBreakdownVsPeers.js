@@ -5,6 +5,7 @@ import { convertToAppUsageLoyaltyVsPeersData } from "../../utils/ChartUtils";
 import GenericBarAndTable from "./templates/GenericBar";
 import { Bar } from "react-chartjs-2";
 import Chart from "chart.js/auto";
+import { roundPeNumbers } from "../../utils/Utils";
 
 function AppLoyaltyBreakdownVsPeers({
   multiCompanyAppData,
@@ -18,21 +19,23 @@ function AppLoyaltyBreakdownVsPeers({
   let info;
   switch (selectedChart) {
     case CHARTS.appLTMRetentionM3:
-      formatChartLabelFunction = (value) => (value !== null ? `${value}%` : "");
+      formatChartLabelFunction = (value) =>
+        value !== null ? `${roundPeNumbers(value)}%` : "";
       info = INFO_HOVERS.APP_USAGE.M6_USAGE_RETENTION;
       break;
     case CHARTS.appLTMRetentionM6:
-      formatChartLabelFunction = (value) => (value !== null ? `${value}%` : "");
+      formatChartLabelFunction = (value) =>
+        value !== null ? `${roundPeNumbers(value)}%` : "";
       info = INFO_HOVERS.APP_USAGE.ACTIVE_DAYS;
       break;
     case CHARTS.appLTMTimePerUser:
       formatChartLabelFunction = (value) =>
-        value !== null ? `${value} min` : "";
+        value !== null ? `${roundPeNumbers(value)} min` : "";
       info = INFO_HOVERS.APP_USAGE.AVG_TIME_PER_USER;
       break;
     case CHARTS.appLTMTimePerSession:
       formatChartLabelFunction = (value) =>
-        value !== null ? `${value} min` : "";
+        value !== null ? `${roundPeNumbers(value)} min` : "";
       info = INFO_HOVERS.APP_USAGE.AVG_TIME_PER_SESSION;
       break;
     // if no selected chart, return by channel
@@ -66,6 +69,7 @@ function AppLoyaltyBreakdownVsPeers({
           height={"h-full"}
           useColorPlugin={false}
           formatChartLabelFunction={formatChartLabelFunction}
+          formatTableDataFunction={roundPeNumbers}
         />
         {/* <Bar
           data={convertToChannelChartData(multiCompanyAppData, chartType)}

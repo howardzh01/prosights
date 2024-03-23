@@ -22,20 +22,22 @@ function AppLoyaltyPeersModalCharts({
   switch (selectedChart) {
     case CHARTS.appLTMRetentionM3:
       formatTableDataFunction = (value) =>
-        value !== null ? `${value}%` : "--";
+        value !== null ? `${roundPeNumbers(value)}%` : "--";
       tickType = "percentage";
       break;
     case CHARTS.appLTMRetentionM6:
       formatTableDataFunction = (value) =>
-        value !== null ? `${value}%` : "--";
+        value !== null ? `${roundPeNumbers(value)}%` : "--";
       tickType = "percentage";
       break;
     case CHARTS.appLTMTimePerUser:
-      formatTableDataFunction = (value) => (value !== null ? `${value}` : "--");
+      formatTableDataFunction = (value) =>
+        value !== null ? `${roundPeNumbers(value)}` : "--";
       tickType = "min";
       break;
     case CHARTS.appLTMTimePerSession:
-      formatTableDataFunction = (value) => (value !== null ? `${value}` : "--");
+      formatTableDataFunction = (value) =>
+        value !== null ? `${roundPeNumbers(value)}` : "--";
       tickType = "min";
       break;
     // if no selected chart, return by channel
