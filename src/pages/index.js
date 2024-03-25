@@ -5,13 +5,17 @@ import Navbar from "../components/Navbar";
 import { useInView } from "react-intersection-observer";
 import { useUser } from "@clerk/clerk-react";
 import { useRouter } from "next/router";
+import WaitlistForm from "../components/landingPage/WaitlistForm";
 
 function App() {
   const { ref, inView } = useInView({
     triggerOnce: false, // Change this to false if you want the animation to trigger again whenever it comes in view
   });
   const { isSignedIn, user, isLoaded } = useUser();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
+  const waitlistModalRef = useRef();
+
   const router = useRouter();
   const credentialImagesMobile = [
     "/assets/credentialsLogos/permira.png",
@@ -33,8 +37,12 @@ function App() {
   ];
   const today = new Date().toLocaleDateString("en-CA"); // Get today's date in yyyy-mm-dd format
 
-  const handleVideoModal = () => {
-    setIsModalOpen(!isModalOpen);
+  const toggleVideoModal = () => {
+    setIsVideoModalOpen(!isVideoModalOpen);
+  };
+
+  const toggleWaitlistModal = () => {
+    setIsWaitlistModalOpen(!isWaitlistModalOpen);
   };
 
   useEffect(() => {
@@ -46,28 +54,50 @@ function App() {
   // Add this useEffect hook to handle the Escape key press
   useEffect(() => {
     const closeOnEscapeKey = (e) => {
-      if (e.key === "Escape") setIsModalOpen(false);
+      if (e.key === "Escape") {
+        setIsVideoModalOpen(false);
+        setIsWaitlistModalOpen(false);
+      }
     };
     document.body.addEventListener("keydown", closeOnEscapeKey);
     return () => document.body.removeEventListener("keydown", closeOnEscapeKey);
   }, []);
+  const handleClickOutside = (event) => {
+    if (
+      isWaitlistModalOpen &&
+      waitlistModalRef.current &&
+      !waitlistModalRef.current.contains(event.target)
+    ) {
+      setIsWaitlistModalOpen(false);
+    }
+  };
+  useEffect(() => {
+    // Event listener to close the waitlist modal if clicked outside
+
+    // Attach the event listener to the document
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Remove the event listener on cleanup
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isWaitlistModalOpen]); // Empty dependency array ensures this only runs on mount and unmount
 
   return (
     isLoaded &&
     !isSignedIn && (
       <div className="flex flex-col items-center justify-between min-h-screen">
         <div className="flex-grow flex flex-col items-center">
-          {/* {isModalOpen && (
+          {/* {isVideoModalOpen && (
             <div
               className="fixed z-50 top-0 left-0 px-8 w-full h-full flex items-center justify-center bg-customGray-800 bg-opacity-90"
-              onClick={handleVideoModal}
+              onClick={toggleVideoModal}
             >
               <div
                 className="drop-shadow-lg flex flex-row items-center justify-center w-3/4"
                 onClick={(e) => e.stopPropagation()} // Add this line
               >
                 <button
-                  onClick={handleVideoModal}
+                  onClick={toggleVideoModal}
                   className="absolute z-50 top-3 right-2 text-4xl text-customGray-300 hover:text-customGray-100 transition duration-300"
                 >
                   &times;
@@ -79,6 +109,14 @@ function App() {
               </div>
             </div>
           )} */}
+          {isWaitlistModalOpen && (
+            <div className="z-50">
+              <WaitlistForm
+                toggleWaitlistModal={toggleWaitlistModal}
+                waitlistModalRef={waitlistModalRef}
+              />
+            </div>
+          )}
           <div
             className="hidden md:flex md:h-[750px] w-full absolute top-0 left-0 bg-cover bg-center bg-customGray-800"
             style={{
@@ -99,7 +137,7 @@ function App() {
               backgroundImage: "url('/assets/backgroundPatternUberLight.svg')",
             }}
           />
-          <div className="z-50 m-0 px-2">
+          <div className="z-10 m-0 px-2">
             <Navbar />
             <div className="flex flex-col items-center text-customGray-50 mt-8 md:mt-16 bg-opacity-50 pb-16">
               <div className="mb-4 md:mb-6">
@@ -119,15 +157,13 @@ function App() {
                 view, making it easy to benchmark companies in a standardized
                 format.
               </p>
-              <div className="flex items-center">
-                <a
-                  href={`https://calendly.com/aaron-guo/30min?date=${today}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
+              <div className="flex items-center space-x-4 md:space-x-8">
+                <div
+                  onClick={toggleWaitlistModal}
                   className="flex flex-row items-center bg-primary text-customGray-50 py-2 px-4 md:px-6 rounded-md hover:bg-blue-600 drop-shadow-lg transition duration-300"
                 >
-                  <p className="mr-2 md:mr-4 text-sm md:text-lg text-white font-normal">
-                    Book a Demo
+                  <p className="mr-2 md:mr-3 text-sm md:text-lg text-white font-normal">
+                    Join Waitlist
                   </p>
                   <Image
                     src="/assets/topRightArrow.png"
@@ -136,9 +172,28 @@ function App() {
                     width={64}
                     height={64}
                   />
+                </div>
+                <a
+                  href={`https://calendly.com/aaron-guo/30min?date=${today}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex justify-center underline"
+
+                  // className="flex flex-row items-center bg-primary text-customGray-50 py-2 px-4 md:px-6 rounded-md hover:bg-blue-600 drop-shadow-lg transition duration-300"
+                >
+                  <p className="mr-2 md:mr-4 text-sm md:text-md text-white font-normal">
+                    Book a Demo
+                  </p>
+                  {/* <Image
+                    src="/assets/topRightArrow.png"
+                    alt="Go"
+                    className="w-2 h-2 md:w-3 md:h-3"
+                    width={64}
+                    height={64}
+                  /> */}
                 </a>
                 {/* <Link
-                  onClick={handleVideoModal}
+                  onClick={toggleVideoModal}
                   href=""
                   className="group flex flex-row items-center rounded-md"
                 >

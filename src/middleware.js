@@ -15,5 +15,9 @@ export default authMiddleware({
 });
 
 export const config = {
-  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/(api|trpc)(.*)"],
+  matcher: [
+    "/((?!.+\\.[\\w]+$|_next|api/public/).*)", // Exclude /api/public from the matcher
+    "/api/private/(.*)", // Apply middleware to /api/private routes
+    "/trpc/(.*)", // Apply middleware to /trpc routes
+  ],
 };
